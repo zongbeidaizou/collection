@@ -4,7 +4,6 @@ import 'package:bounty_hunter/login/widgets/my_text_field.dart';
 import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
-import 'package:bounty_hunter/store/store_router.dart';
 import 'package:bounty_hunter/util/change_notifier_manage.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
@@ -12,7 +11,7 @@ import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 import 'package:flutter_gen/gen_l10n/deer_localizations.dart';
 import 'package:sp_util/sp_util.dart';
-
+import '../../routers/routers.dart';
 import '../login_router.dart';
 
 /// design/1注册登录/index.html
@@ -74,7 +73,7 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
   
   void _login() {
     SpUtil.putString(Constant.phone, _nameController.text);
-    NavigatorUtils.push(context, StoreRouter.auditPage);
+    NavigatorUtils.push(context, Routes.home);
   }
   
   @override

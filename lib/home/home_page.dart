@@ -10,6 +10,8 @@ import 'package:bounty_hunter/widgets/double_tap_back_exit_app.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:provider/provider.dart';
 
+import '../account/page/account_record_list_page.dart';
+
 class Home extends StatefulWidget {
 
   const Home({super.key});
@@ -23,7 +25,7 @@ class _HomeState extends State<Home> with RestorationMixin{
   static const double _imageSize = 25.0;
 
   late List<Widget> _pageList;
-  final List<String> _appBarTitles = ['订单', '商品', '统计', '店铺'];
+  final List<String> _appBarTitles = ['Cases', 'Logs', 'Commission', 'Account'];
   final PageController _pageController = PageController();
 
   HomeProvider provider = HomeProvider();
@@ -47,7 +49,7 @@ class _HomeState extends State<Home> with RestorationMixin{
     _pageList = [
       const OrderPage(),
       const GoodsPage(),
-      const StatisticsPage(),
+      const AccountRecordListPage(),
       const ShopPage(),
     ];
   }

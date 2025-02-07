@@ -1,3 +1,6 @@
+import 'package:bounty_hunter/shop/widgets/pie2.dart';
+import 'package:bounty_hunter/util/screen_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/account/account_router.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
@@ -12,30 +15,58 @@ import 'package:bounty_hunter/shop/shop_router.dart';
 import 'package:bounty_hunter/util/image_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/bar.dart';
+import '../widgets/level_bar.dart';
+import '../widgets/line.dart';
+import '../widgets/pie.dart';
 
 /// design/6店铺-账户/index.html#artboard0
 class ShopPage extends StatefulWidget {
-
   const ShopPage({
     super.key,
     this.isAccessibilityTest = false,
   });
 
   final bool isAccessibilityTest;
-  
+
   @override
   _ShopPageState createState() => _ShopPageState();
 }
 
-class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPagePresenter>, AutomaticKeepAliveClientMixin<ShopPage> implements ShopIMvpView {
-  
+class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPagePresenter>, AutomaticKeepAliveClientMixin<ShopPage>, SingleTickerProviderStateMixin implements ShopIMvpView {
   final List<String> _menuTitle = ['账户流水', '资金管理', '提现账号'];
   final List<String> _menuImage = ['zhls', 'zjgl', 'txzh'];
   final List<String> _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh'];
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _colorAnimation = ColorTween(
+      begin: Colors.yellowAccent,
+      end: Colors.blueAccent,
+    ).animate(_controller);
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   UserProvider provider = UserProvider();
-  
+
   @override
   void setUser(UserEntity? user) {
     provider.setUser(user);
@@ -43,21 +74,48 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   bool get isAccessibilityTest => widget.isAccessibilityTest;
-  
+
   @override
   Widget build(BuildContext context) {
+    final bool isDark = context.isDark;
     super.build(context);
     final Color? iconColor = ThemeUtils.getIconColor(context);
     final Widget line = Container(
-      height: 0.6, 
-      width: double.infinity, 
-      margin: const EdgeInsets.only(left: 16.0), 
+      height: 0.6,
+      width: double.infinity,
+      margin: const EdgeInsets.only(left: 16.0),
       child: Gaps.line,
     );
+
+    Widget flashingBorder = Container(
+      width: 66,
+      height: 66,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blueAccent.withOpacity(0.1),
+      ),
+      child: SizedBox.shrink(),
+    ).animate(onPlay: (controller) => controller.repeat())
+        .shimmer(duration: 2600.ms, color: Colors.yellow[900])
+        .animate() // this wraps the previous Animate in another Animate
+        .fadeIn(duration: 2600.ms, curve: Curves.easeOutCirc);
+
     return ChangeNotifierProvider<UserProvider>(
       create: (_) => provider,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colours.app_main,
+          flexibleSpace: isDark
+              ? Container(
+                  height: 115.0,
+                  color: Colors.black,
+                )
+              : Container(
+                  height: 115.0,
+                  color: Colors.indigoAccent,
+                ),
           actions: <Widget>[
             IconButton(
               tooltip: '消息',
@@ -87,98 +145,360 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
             )
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Gaps.vGap12,
-            Consumer<UserProvider>(
-              builder: (_, provider, child) {
-                final Widget header = Stack(
-                  children: <Widget>[
-                    const SizedBox(width: double.infinity, height: 56.0),
-                    const Text(
-                      '官方直营店',
-                      style: TextStyles.textBold24,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isDark
+                  ? [Colors.black, Colors.grey]
+                  : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.52), Colors.indigoAccent.withOpacity(0.44), Colors.indigoAccent.withOpacity(0.3)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // level
+                Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LevelBar(
+                      amountProgress: [],
+                      levelProgress: [],
+                      points: [],
+                      tips: 'your current hunt level is lv.1 with 4% of amount, collection more 5000 can touch lv2 with 6% of amount',
+                    )),
+                // 名人堂
+                MergeSemantics(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Hall of Fame',
+                          style: TextStyles.textBold18,
+                        ),
+                        InkWell(
+                          onTap: () => NavigatorUtils.push(context, ShopRouter.allHallPage),
+                          child: Text(
+                            'See all2 >>',
+                            style: TextStyle(color: Colors.black54, fontSize: 10, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      right: 0.0,
-                      child: CircleAvatar(
-                        radius: 28.0,
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: ImageUtils.getImageProvider(provider.user?.avatarUrl, holderImg: 'shop/tx'),
-                      ),
-                    ),
-                    child!,
-                  ],
-                );
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: MergeSemantics(
-                    child: header,
                   ),
-                );
-              },
-              child: const Positioned(
-                top: 38.0,
-                left: 0.0,
-                child: Row(
-                  children: <Widget>[
-                    LoadAssetImage('shop/zybq', width: 40.0, height: 16.0,),
-                    Gaps.hGap8,
-                    Text('店铺账号:15000000000', style: TextStyles.textSize12)
-                  ],
                 ),
-              ),
-            ),
-            Gaps.vGap24,
-            line,
-            Gaps.vGap24,
-            const MergeSemantics(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '账户',
-                  style: TextStyles.textBold18,
+                Container(
+                  height: 110,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      Color iconColor = Colors.transparent;
+                      if (index == 0) {
+                        iconColor = Colors.yellow.withOpacity(0.8);
+                      } else if (index == 1) {
+                        iconColor = Color(0xFFC0C0C0).withOpacity(0.8);
+                      } else if (index == 2) {
+                        iconColor = Color(0xFFB87333).withOpacity(0.8);
+                      }
+                      return index < 3 ? AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+            
+                        return Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: <Widget>[
+            /*                                Animate(
+                                    effects: [MoveEffect(), ScaleEffect()],
+                                    child: flashingBorder,
+                                  ),*/
+                                  Animate(
+                                    effects: [FadeEffect(), ScaleEffect()],
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.transparent
+                                          /*color: _colorAnimation.value!,
+                                          width: 4.0,*/
+                                        ),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 28.0,
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                      ),
+                                    ).animate(onPlay: (controller) => controller.repeat())
+                                        .shimmer(duration: 2200.ms, color: Colors.white.withOpacity(0.5))
+                                        .animate() // this wraps the previous Animate in another Animate
+                                        .fadeIn(duration: 2200.ms, curve: Curves.easeOutQuad)
+                                        .slide(),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Icon(
+                                      Icons.emoji_events_rounded,
+                                      color: iconColor,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8.0),
+                              Text('${(15 - index) / 10}K'),
+                            ],
+                          ),
+                        );
+                      }) :
+                      Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.transparent!,
+                                      width: 4.0,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 28.0,
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Icon(
+                                    Icons.emoji_events_rounded,
+                                    color: iconColor,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8.0),
+                            Text('${(15 - index) / 10}K'),
+                          ],
+                        ),
+                      );
+            
+                    },
+                  ),
                 ),
-              ),
-            ),
-            _ShopFunctionModule(
-              data: _menuTitle,
-              image: _menuImage,
-              darkImage: _menuDarkImage,
-              onItemClick: (index) {
-                if (index == 0) {
-                  NavigatorUtils.push(context, AccountRouter.accountRecordListPage);
-                } else if (index == 1) {
-                  NavigatorUtils.push(context, AccountRouter.accountPage);
-                } else if (index == 2) {
-                  NavigatorUtils.push(context, AccountRouter.withdrawalAccountPage);
-                }
-              },
-            ),
-            line,
-            Gaps.vGap24,
-            const MergeSemantics(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '店铺',
-                  style: TextStyles.textBold18,
+                // 统计
+                LineChartSample1(),
+                // BarChartSample3(),
+                Container(
+                  height: 208,
+                  padding: EdgeInsets.all(10),
+                  child: ListView.separated(
+                    separatorBuilder: (BuildContext context, int index) {
+                      // 定义分隔器
+                      return Container(
+                        width: 6.4, //
+                        // color: Colors.blue.withOpacity(0.1),// 分隔器高度，即每个元素之间的留白大小
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                /*                          gradient: LinearGradient(
+                            // colors:  [Color(0xFF8C9EFF),Colors.limeAccent],
+                            colors:  [Colors.white,Colors.white],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),*/
+                          color: Colors.white.withOpacity(0.42),
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(54.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                              topRight: Radius.circular(11.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(color: Colors.transparent, offset: const Offset(0.1, 0.1), blurRadius: 100.0),
+                          ],
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.71,
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                GaugeTemperatureMonitorExample(),
+                                Expanded(
+                                    child: Container(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text("2023 W30 Bonus"),
+                                        ],
+                                      ),
+                                      Gaps.vGap12,
+                                      Row(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(right: 4.0),
+                                                width: 3.4,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueAccent.withOpacity(0.2),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 26,
+                                                child: Text(
+                                                  "lv.1:",
+                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                                                ),
+                                              ),
+                                              Text("400", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                            ],
+                                          ),
+                                          Gaps.hGap4,
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(right: 4.0),
+                                                width: 3.4,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueAccent.withOpacity(0.6),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 29,
+                                                child: Text(
+                                                  "lv.2:",
+                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                                                ),
+                                              ),
+                                              Text("600", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Gaps.vGap10,
+                                      Row(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(right: 4.0),
+                                                width: 3.4,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blueAccent.withOpacity(0.9),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 26,
+                                                child: Text(
+                                                  "lv.3:",
+                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                                                ),
+                                              ),
+                                              Text("700", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                            ],
+                                          ),
+                                          Gaps.hGap4,
+                                          Row(
+                                            children: [
+                                              Container(
+                                                margin: const EdgeInsets.only(right: 4.0),
+                                                width: 3.4,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromRGBO(238, 79, 34, 0.65),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 29,
+                                                child: Text(
+                                                  "loss:",
+                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                                                ),
+                                              ),
+                                              Text("1444", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                              ],
+                            ),
+                            Gaps.line,
+                            Gaps.line,
+                            Gaps.vGap10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                              // 排名
+                              Row(
+                                children: [
+                                  SvgPicture.asset(width: 22, height: 22, "assets/images/customer-rate-svgrepo-com.svg",),
+                                  Gaps.hGap5,
+                                  Text("2/4", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                ],
+                              ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(width: 22, height: 22, "assets/images/favourite-star-svgrepo-com.svg",),
+                                    Gaps.hGap5,
+                                    Text("lv.2", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(width: 22, height: 22, "assets/images/money-card-credit-card-svgrepo-com.svg",),
+                                    Gaps.hGap5,
+                                    Text("3641", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(width: 22, height: 22, "assets/images/off-button-power-button-svgrepo-com.svg",),
+                                    Gaps.hGap5,
+                                    Text("2000", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                                  ],
+                                ),
+            
+            
+                            ],)
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
+                // Expanded(child: Gaps.empty),
+              ],
             ),
-            /// 使用Flexible防止溢出
-            Flexible(
-              child: _ShopFunctionModule(
-                data: const ['店铺设置'],
-                image: const ['dpsz'],
-                darkImage: const ['dark_dpsz'],
-                onItemClick: (index) {
-                  NavigatorUtils.push(context, ShopRouter.shopSettingPage);
-                },
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -189,23 +509,21 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   ShopPagePresenter createPresenter() => ShopPagePresenter();
- 
 }
 
 class _ShopFunctionModule extends StatelessWidget {
-
   const _ShopFunctionModule({
     required this.onItemClick,
     required this.data,
     required this.image,
     required this.darkImage,
   });
-  
+
   final void Function(int index) onItemClick;
   final List<String> data;
   final List<String> image;
   final List<String> darkImage;
-  
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -237,4 +555,16 @@ class _ShopFunctionModule extends StatelessWidget {
       },
     );
   }
+}
+
+class BorderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    // 可以调整Path来定义边框形状
+    Path path = Path()..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(12)));
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

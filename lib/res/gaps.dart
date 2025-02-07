@@ -6,6 +6,7 @@ import 'package:bounty_hunter/res/resources.dart';
 class Gaps {
   
   /// 水平间隔
+  static const Widget hGap2 = SizedBox(width: Dimens.gap_dp2);
   static const Widget hGap4 = SizedBox(width: Dimens.gap_dp4);
   static const Widget hGap5 = SizedBox(width: Dimens.gap_dp5);
   static const Widget hGap8 = SizedBox(width: Dimens.gap_dp8);

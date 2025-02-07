@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/shop/page/all_hall_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:bounty_hunter/routers/i_router.dart';
 
@@ -13,6 +14,7 @@ class ShopRouter implements IRouterProvider{
   static String shopPage = '/shop';
   static String shopSettingPage = '/shop/shopSetting';
   static String messagePage = '/shop/message';
+  static String allHallPage = '/shop/allHall';
   static String freightConfigPage = '/shop/freightConfig';
   static String addressSelectPage = '/shop/addressSelect';
   static String inputTextPage = '/shop/inputText';
@@ -22,6 +24,7 @@ class ShopRouter implements IRouterProvider{
     router.define(shopPage, handler: Handler(handlerFunc: (_, __) => const ShopPage()));
     router.define(shopSettingPage, handler: Handler(handlerFunc: (_, __) => const ShopSettingPage()));
     router.define(messagePage, handler: Handler(handlerFunc: (_, __) => const MessagePage()));
+    router.define(allHallPage, handler: Handler(handlerFunc: (_, __) => const AllHallPage()));
     router.define(freightConfigPage, handler: Handler(handlerFunc: (_, __) => const FreightConfigPage()));
     router.define(addressSelectPage, handler: Handler(handlerFunc: (_, __) => const AddressSelectPage()));
     router.define(inputTextPage, handler: Handler(handlerFunc: (context, params) {

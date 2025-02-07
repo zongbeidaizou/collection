@@ -183,11 +183,11 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                     ),
                     indicatorColor: Colors.transparent,
                     tabs: const <Widget>[
-                      _TabView(0, '新订单'),
-                      _TabView(1, '待配送'),
-                      _TabView(2, '待完成'),
-                      _TabView(3, '已完成'),
-                      _TabView(4, '已取消'),
+                      _TabView(0, 'Untracked'),
+                      _TabView(1, 'Tracked'),
+                      _TabView(2, 'Flagged'),
+                      _TabView(3, 'Completed'),
+                      _TabView(3, 'Completed'),
                     ],
                     onTap: (index) {
                       if (!mounted) {
@@ -242,7 +242,7 @@ class _TabView extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          width: 46.0,
+          width: 70.0,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: <Widget>[
@@ -251,7 +251,7 @@ class _TabView extends StatelessWidget {
               imgList[index][0] : 
               imgList[index][1], width: 24.0, height: 24.0,),
               Gaps.vGap4,
-              Text(text),
+              Text(text,style: TextStyle( fontSize: 12),),
             ],
           ),
         ),
@@ -264,7 +264,7 @@ class _TabView extends StatelessWidget {
             ),
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.5, vertical: 2.0),
-              child: Text('10', style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp12),),
+              child: Text('130', style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp12),),
             ),
           ) : Gaps.empty,
         )

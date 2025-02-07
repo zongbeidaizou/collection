@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_2d_amap/flutter_2d_amap.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/shop/shop_router.dart';
@@ -177,8 +176,6 @@ class _ShopSettingPageState extends State<ShopSettingPage> {
             onTap: () {
               NavigatorUtils.pushResult(context, ShopRouter.addressSelectPage, (result) {
                 setState(() {
-                  final PoiSearch model = result as PoiSearch;
-                  _address = '${model.provinceName.nullSafe} ${model.cityName.nullSafe} ${model.adName.nullSafe} ${model.title.nullSafe}';
                 });
               });
             },

@@ -1,8 +1,12 @@
+import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import '../../goods/goods_router.dart';
 import '../../order/page/order_page.dart';
+import '../../routers/fluro_navigator.dart';
+import '../../widgets/load_image.dart';
 
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
@@ -14,11 +18,37 @@ class AccountRecordListPage extends StatefulWidget {
 }
 
 class _AccountRecordListPageState extends State<AccountRecordListPage> {
+  final GlobalKey _addKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    final bool isDark = context.isDark;
+    final Color? iconColor = ThemeUtils.getIconColor(context);
+
     return Scaffold(
-      appBar: const MyAppBar(
-        centerTitle: '账户流水',
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colours.app_main,
+        flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
+          width: context.width,
+          height: 115.0,
+          fit: BoxFit.fill,
+        ),
+        // toolbarHeight: 30,
+        title: Text("Commission Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        actions: <Widget>[
+          IconButton(
+            tooltip: 'Search',
+            onPressed: () {},
+            icon: LoadAssetImage(
+              'goods/search',
+              key: const Key('search'),
+              width: 24.0,
+              // height: 24.0,
+              color: iconColor,
+            ),
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: [
@@ -70,7 +100,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> {
         index: i,
         child: Stack(
           children: <Widget>[
-            Text(i.isEven ? '采购订单结算营收' : '提现'),
+            Text( 'BV34k0k64sji20'),
             Positioned(
               top: 0.0,
               right: 0.0,
@@ -89,7 +119,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> {
             Positioned(
               bottom: 0.0,
               right: 0.0,
-              child: Text('余额：20.00', style: Theme.of(context).textTheme.titleSmall),
+              child: Text('lv.1 4% of total amount 2000', style: Theme.of(context).textTheme.titleSmall),
             ),
           ],
         ),

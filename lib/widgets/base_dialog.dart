@@ -12,13 +12,15 @@ class BaseDialog extends StatelessWidget {
     this.title,
     this.onPressed,
     this.hiddenTitle = false,
-    required this.child
+    required this.child,
+    this.width = 270,
   });
 
   final String? title;
   final VoidCallback? onPressed;
   final Widget child;
   final bool hiddenTitle;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class BaseDialog extends StatelessWidget {
       context: context,
       child: Center(
         child: SizedBox(
-          width: 270.0,
+          width: width,
           child: content,
         ),
       ),

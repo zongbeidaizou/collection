@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -48,6 +49,9 @@ class DioUtils {
       validateStatus: (_) {
         // 不使用http状态码判断状态，使用AdapterInterceptor来处理（适用于标准REST风格）
         return true;
+      },
+      headers: {
+        HttpHeaders.acceptHeader: "application/json",
       },
       baseUrl: _baseUrl,
 //      contentType: Headers.formUrlEncodedContentType, // 适用于post form表单提交
@@ -120,7 +124,7 @@ class DioUtils {
     CancelToken? cancelToken,
     Options? options,
   }) {
-    return _request<T>(method.value, url,
+    return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19026",
       data: params,
       queryParameters: queryParameters,
       options: options,
@@ -170,16 +174,16 @@ class DioUtils {
 
   void _cancelLogPrint(dynamic e, String url) {
     if (e is DioException && CancelToken.isCancel(e)) {
-      Log.e('取消请求接口： $url');
+      Log.e('❌\x1B[31m取消请求接口： $url\x1B[0m');
     }
   }
 
   void _onError(int? code, String msg, NetErrorCallback? onError) {
     if (code == null) {
       code = ExceptionHandle.unknown_error;
-      msg = '未知异常';
+      msg = 'unknown error.';
     }
-    Log.e('接口请求异常： code: $code, mag: $msg');
+    Log.e('❌\x1B[31m接口请求异常： code: $code, mag: $msg\x1B[0m');
     onError?.call(code, msg);
   }
 }

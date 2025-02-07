@@ -11,7 +11,6 @@ import 'package:bounty_hunter/routers/not_found_page.dart';
 import 'package:bounty_hunter/setting/setting_router.dart';
 import 'package:bounty_hunter/shop/shop_router.dart';
 import 'package:bounty_hunter/statistics/statistics_router.dart';
-import 'package:bounty_hunter/store/store_router.dart';
 
 class Routes {
 
@@ -45,7 +44,7 @@ class Routes {
     _listRouter.add(LoginRouter());
     _listRouter.add(GoodsRouter());
     _listRouter.add(OrderRouter());
-    _listRouter.add(StoreRouter());
+    // _listRouter.add(StoreRouter());
     _listRouter.add(AccountRouter());
     _listRouter.add(SettingRouter());
     _listRouter.add(StatisticsRouter());

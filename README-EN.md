@@ -1,4 +1,4 @@
-# Flutter Deer
+# Flutter BountyHunter
 
 <img src="preview/logo.jpg"/>
 
@@ -60,11 +60,11 @@ For the Android version, kindly click on the link provided: [Download here](http
 
 As for iOS, you will need to download and run the code on your own.
 
-For web experience, please visit: https://simplezhli.github.io/flutter_deer/
+For web experience, please visit: https://simplezhli.github.io/bounty_hunter/
 
 ## The project's operational environment.
 
-[![flutter_deer driver](https://github.com/simplezhli/flutter_deer/actions/workflows/flutter-drive.yml/badge.svg?branch=master)](https://github.com/simplezhli/flutter_deer/actions/workflows/flutter-drive.yml)
+[![bounty_hunter driver](https://github.com/simplezhli/bounty_hunter/actions/workflows/flutter-drive.yml/badge.svg?branch=master)](https://github.com/simplezhli/bounty_hunter/actions/workflows/flutter-drive.yml)
 
     1. Flutter version 3.27.0
 
@@ -88,37 +88,37 @@ For web experience, please visit: https://simplezhli.github.io/flutter_deer/
 
 ## Summary of Experience
 
-- [Flutter开发中的一些Tips(一)](https://weilu.blog.csdn.net/article/details/90546727)
+- [Flutter开发中的一些Tips(一)](https://dasewan.blog.csdn.net/article/details/90546727)
 
-- [Flutter开发中的一些Tips(二)](https://weilu.blog.csdn.net/article/details/94849020)
+- [Flutter开发中的一些Tips(二)](https://dasewan.blog.csdn.net/article/details/94849020)
 
-- [Flutter开发中的一些Tips(三)](https://weilu.blog.csdn.net/article/details/100108123)
+- [Flutter开发中的一些Tips(三)](https://dasewan.blog.csdn.net/article/details/100108123)
 
-- [Flutter适配深色模式（DarkMode）](https://weilu.blog.csdn.net/article/details/102531559)
+- [Flutter适配深色模式（DarkMode）](https://dasewan.blog.csdn.net/article/details/102531559)
 
-- [说说Flutter中的RepaintBoundary](https://weilu.blog.csdn.net/article/details/103452637)
+- [说说Flutter中的RepaintBoundary](https://dasewan.blog.csdn.net/article/details/103452637)
 
-- [说说Flutter中的Semantics](https://weilu.blog.csdn.net/article/details/103823259)
+- [说说Flutter中的Semantics](https://dasewan.blog.csdn.net/article/details/103823259)
 
-- [说说Flutter中最熟悉的陌生人 —— Key](https://weilu.blog.csdn.net/article/details/104745624)
+- [说说Flutter中最熟悉的陌生人 —— Key](https://dasewan.blog.csdn.net/article/details/104745624)
 
-- [说说Flutter中的无名英雄 —— Focus](https://weilu.blog.csdn.net/article/details/107132031)
+- [说说Flutter中的无名英雄 —— Focus](https://dasewan.blog.csdn.net/article/details/107132031)
 
-- [Flutter性能优化实践 —— UI篇](https://weilu.blog.csdn.net/article/details/106046434)
+- [Flutter性能优化实践 —— UI篇](https://dasewan.blog.csdn.net/article/details/106046434)
 
-- [玩玩Flutter的拖拽——实现一款万能遥控器](https://weilu.blog.csdn.net/article/details/105237677)
+- [玩玩Flutter的拖拽——实现一款万能遥控器](https://dasewan.blog.csdn.net/article/details/105237677)
 
-- [玩玩Flutter Web —— 实现高德地图插件](https://weilu.blog.csdn.net/article/details/106465792)
+- [玩玩Flutter Web —— 实现高德地图插件](https://dasewan.blog.csdn.net/article/details/106465792)
 
-- [在GitHub Actions上进行Flutter 的测试和部署](https://weilu.blog.csdn.net/article/details/114744416)
+- [在GitHub Actions上进行Flutter 的测试和部署](https://dasewan.blog.csdn.net/article/details/114744416)
 
-- [Flutter动画曲线Curves 效果一览](https://weilu.blog.csdn.net/article/details/95632571)
+- [Flutter动画曲线Curves 效果一览](https://dasewan.blog.csdn.net/article/details/95632571)
 
-- [Flutter状态管理之Riverpod](https://weilu.blog.csdn.net/article/details/108352306)
+- [Flutter状态管理之Riverpod](https://dasewan.blog.csdn.net/article/details/108352306)
 
-- [【译】正确操作Dart中的字符串](https://weilu.blog.csdn.net/article/details/107857569)
+- [【译】正确操作Dart中的字符串](https://dasewan.blog.csdn.net/article/details/107857569)
 
-- [【译】学习Flutter中新的Navigator和Router系统](https://weilu.blog.csdn.net/article/details/108902282)
+- [【译】学习Flutter中新的Navigator和Router系统](https://dasewan.blog.csdn.net/article/details/108902282)
     
 ## Tripartite library used
 
@@ -149,7 +149,7 @@ For web experience, please visit: https://simplezhli.github.io/flutter_deer/
 | [vibration](https://github.com/benjamindean/flutter_vibration)     | **Vibration** |
 | [lottie](https://github.com/xvrh/lottie-flutter)     | **Animation effects** |
 
-For details, please refer to the [pubspec.yaml](https://github.com/simplezhli/flutter_deer/blob/master/pubspec.yaml) file.  
+For details, please refer to the [pubspec.yaml](https://github.com/simplezhli/bounty_hunter/blob/master/pubspec.yaml) file.  
 
 ## Plan:
 

@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_deer/goods/page/goods_edit_page.dart';
-import 'package:flutter_deer/goods/page/goods_page.dart';
-import 'package:flutter_deer/goods/page/goods_size_page.dart';
-import 'package:flutter_deer/main.dart';
-import 'package:flutter_deer/res/constant.dart';
+import 'package:bounty_hunter/goods/page/goods_edit_page.dart';
+import 'package:bounty_hunter/goods/page/goods_page.dart';
+import 'package:bounty_hunter/goods/page/goods_size_page.dart';
+import 'package:bounty_hunter/main.dart';
+import 'package:bounty_hunter/res/constant.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/login/page/login_page.dart';
-import 'package:flutter_deer/login/page/register_page.dart';
-import 'package:flutter_deer/login/page/reset_password_page.dart';
-import 'package:flutter_deer/login/page/sms_login_page.dart';
-import 'package:flutter_deer/login/page/update_password_page.dart';
-import 'package:flutter_deer/main.dart';
-import 'package:flutter_deer/setting/provider/theme_provider.dart';
+import 'package:bounty_hunter/login/page/login_page.dart';
+import 'package:bounty_hunter/login/page/register_page.dart';
+import 'package:bounty_hunter/login/page/reset_password_page.dart';
+import 'package:bounty_hunter/login/page/sms_login_page.dart';
+import 'package:bounty_hunter/login/page/update_password_page.dart';
+import 'package:bounty_hunter/main.dart';
+import 'package:bounty_hunter/setting/provider/theme_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

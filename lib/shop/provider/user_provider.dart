@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/shop/models/user_entity.dart';
+import 'package:bounty_hunter/shop/models/user_entity.dart';
 
 class UserProvider extends ChangeNotifier {
 

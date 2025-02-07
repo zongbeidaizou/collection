@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_deer/demo/lottie/bunny.dart';
+import 'package:bounty_hunter/demo/lottie/bunny.dart';
 import 'package:lottie/lottie.dart';
 
 /// Android版实现：https://github.com/omarsahl/Flopsy

@@ -1,6 +1,6 @@
 
 
-import 'package:flutter_deer/demo/overlay/route/my_navigator_observer.dart';
+import 'package:bounty_hunter/demo/overlay/route/my_navigator_observer.dart';
 
 class Application {
   static late MyNavigatorObserver navigatorObserver;

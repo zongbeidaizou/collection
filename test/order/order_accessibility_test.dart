@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/order/page/order_info_page.dart';
-import 'package:flutter_deer/order/page/order_page.dart';
-import 'package:flutter_deer/order/page/order_track_page.dart';
+import 'package:bounty_hunter/order/page/order_info_page.dart';
+import 'package:bounty_hunter/order/page/order_page.dart';
+import 'package:bounty_hunter/order/page/order_track_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

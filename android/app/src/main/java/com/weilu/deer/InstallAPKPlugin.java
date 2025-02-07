@@ -1,4 +1,4 @@
-package com.weilu.deer;
+package com.dasewan.bounty_hunter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
 
 /**
- * @author weilu
+ * @author dasewan
  */
 public class InstallAPKPlugin implements FlutterPlugin {
   

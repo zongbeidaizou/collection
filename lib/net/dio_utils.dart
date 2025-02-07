@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_deer/res/constant.dart';
-import 'package:flutter_deer/util/log_utils.dart';
+import 'package:bounty_hunter/res/constant.dart';
+import 'package:bounty_hunter/util/log_utils.dart';
 import 'base_entity.dart';
 import 'error_handle.dart';
 
@@ -33,7 +33,7 @@ typedef NetSuccessCallback<T> = void Function(T data);
 typedef NetSuccessListCallback<T> = void Function(List<T> data);
 typedef NetErrorCallback = void Function(int code, String msg);
 
-/// @weilu https://github.com/simplezhli
+/// @dasewan https://github.com/simplezhli
 class DioUtils {
 
   factory DioUtils() => _singleton;

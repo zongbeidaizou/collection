@@ -1,5 +1,5 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter_deer/routers/i_router.dart';
+import 'package:bounty_hunter/routers/i_router.dart';
 
 import 'page/store_audit_page.dart';
 import 'page/store_audit_result_page.dart';

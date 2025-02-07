@@ -1,12 +1,12 @@
 
 import 'dart:convert' as convert;
 import 'package:common_utils/common_utils.dart';
-import 'package:flutter_deer/res/constant.dart';
+import 'package:bounty_hunter/res/constant.dart';
 
 /// 输出Log工具类
 class Log {
 
-  static const String tag = 'DEER-LOG';
+  static const String tag = 'BOUNTYHUNTER-LOG';
 
   static void init() {
     LogUtil.init(isDebug: !Constant.inProduction, maxLen: 512);

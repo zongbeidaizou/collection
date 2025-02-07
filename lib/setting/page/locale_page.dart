@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/constant.dart';
-import 'package:flutter_deer/setting/provider/locale_provider.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/res/constant.dart';
+import 'package:bounty_hunter/setting/provider/locale_provider.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 

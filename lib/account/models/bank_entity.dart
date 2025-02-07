@@ -1,6 +1,6 @@
 import 'package:azlistview/azlistview.dart';
-import 'package:flutter_deer/generated/json/bank_entity.g.dart';
-import 'package:flutter_deer/generated/json/base/json_field.dart';
+import 'package:bounty_hunter/generated/json/bank_entity.g.dart';
+import 'package:bounty_hunter/generated/json/base/json_field.dart';
 
 @JsonSerializable()
 class BankEntity with ISuspensionBean {

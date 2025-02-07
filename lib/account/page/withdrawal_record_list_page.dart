@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import '../../order/page/order_page.dart';
 
 /// design/6店铺-账户/index.html#artboard19
@@ -59,7 +59,7 @@ class _WithdrawalRecordListPageState extends State<WithdrawalRecordListPage> {
   Widget _buildItem(int i) {
     final Widget content = Stack(
       children: <Widget>[
-        Text(i.isEven ? '微信（唯鹿）' : '工商（尾号:4562 李一）'),
+        Text(i.isEven ? '微信（大色玩）' : '工商（尾号:4562 李一）'),
         const Positioned(
           top: 0.0,
           right: 0.0,

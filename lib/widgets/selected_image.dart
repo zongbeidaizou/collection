@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/device_utils.dart';
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SelectedImage extends StatefulWidget {

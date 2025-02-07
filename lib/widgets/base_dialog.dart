@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/device_utils.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
 
 /// 自定义dialog的模板
 class BaseDialog extends StatelessWidget {

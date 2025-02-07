@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/demo/navigator/book_entity.dart';
+import 'package:bounty_hunter/demo/navigator/book_entity.dart';
 
 class BooksAppState extends ChangeNotifier {
 

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_deer/net/net.dart';
-import 'package:flutter_deer/shop/models/user_entity.dart';
+import 'package:bounty_hunter/net/net.dart';
+import 'package:bounty_hunter/shop/models/user_entity.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,7 +17,7 @@ void main() {
       await DioUtils.instance.requestNetwork<UserEntity>(
         Method.get, HttpApi.users, 
         onSuccess: (data) {
-          expect(data?.name, '唯鹿');
+          expect(data?.name, '大色玩');
         },
         onError: (code, msg) {
           debugPrint('$code, $msg');

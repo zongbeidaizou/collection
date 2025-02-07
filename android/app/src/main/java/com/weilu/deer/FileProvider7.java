@@ -1,4 +1,4 @@
-package com.weilu.deer;
+package com.dasewan.bounty_hunter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +10,8 @@ import java.io.File;
 import androidx.core.content.FileProvider;
 
 /**
- * @author weilu
- * 作者：weilu on 2017/6/20 14:44
+ * @author dasewan
+ * 作者：dasewan on 2017/6/20 14:44
  */
 
 public class FileProvider7 {
@@ -27,7 +27,7 @@ public class FileProvider7 {
     }
 
     private static Uri getUriForFile24(Context context, File file) {
-        return FileProvider.getUriForFile(context, context.getPackageName() + ".Deer", file);
+        return FileProvider.getUriForFile(context, context.getPackageName() + ".BountyHunter", file);
     }
 
     public static void setIntentDataAndType(Context context, Intent intent, String type, File file, boolean writeAble) {

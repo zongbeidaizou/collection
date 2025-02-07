@@ -1,5 +1,5 @@
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
-import 'package:flutter_deer/account/models/bank_entity.dart';
+import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
+import 'package:bounty_hunter/account/models/bank_entity.dart';
 import 'package:azlistview/azlistview.dart';
 
 

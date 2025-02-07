@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/goods_router.dart';
-import 'package:flutter_deer/goods/page/goods_list_page.dart';
-import 'package:flutter_deer/goods/provider/goods_page_provider.dart';
-import 'package:flutter_deer/goods/widgets/goods_add_menu.dart';
-import 'package:flutter_deer/goods/widgets/goods_sort_menu.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/popup_window.dart';
+import 'package:bounty_hunter/goods/goods_router.dart';
+import 'package:bounty_hunter/goods/page/goods_list_page.dart';
+import 'package:bounty_hunter/goods/provider/goods_page_provider.dart';
+import 'package:bounty_hunter/goods/widgets/goods_add_menu.dart';
+import 'package:bounty_hunter/goods/widgets/goods_sort_menu.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/popup_window.dart';
 import 'package:provider/provider.dart';
 
 

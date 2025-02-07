@@ -1,5 +1,5 @@
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
-import 'package:flutter_deer/goods/models/goods_sort_entity.dart';
+import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
+import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 
 GoodsSortEntity $GoodsSortEntityFromJson(Map<String, dynamic> json) {
 	final GoodsSortEntity goodsSortEntity = GoodsSortEntity();

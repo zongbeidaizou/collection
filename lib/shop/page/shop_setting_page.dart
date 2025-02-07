@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_2d_amap/flutter_2d_amap.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/shop/shop_router.dart';
-import 'package:flutter_deer/shop/widgets/pay_type_dialog.dart';
-import 'package:flutter_deer/shop/widgets/price_input_dialog.dart';
-import 'package:flutter_deer/shop/widgets/send_type_dialog.dart';
-import 'package:flutter_deer/util/other_utils.dart';
-import 'package:flutter_deer/widgets/click_item.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
-import 'package:flutter_deer/widgets/my_scroll_view.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/shop/shop_router.dart';
+import 'package:bounty_hunter/shop/widgets/pay_type_dialog.dart';
+import 'package:bounty_hunter/shop/widgets/price_input_dialog.dart';
+import 'package:bounty_hunter/shop/widgets/send_type_dialog.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/widgets/click_item.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
+import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 
 /// design/7店铺-店铺配置/index.html#artboard17
 class ShopSettingPage extends StatefulWidget {

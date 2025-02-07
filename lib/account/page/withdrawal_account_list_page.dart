@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/account/models/withdrawal_account_model.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/account/models/withdrawal_account_model.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
 
 import '../account_router.dart';
 
@@ -26,7 +26,7 @@ class _WithdrawalAccountListPageState extends State<WithdrawalAccountListPage> {
     super.initState();
     _list.clear();
     _list.add(WithdrawalAccountModel('尾号5236 李艺', '工商银行', 0, '123'));
-    _list.add(WithdrawalAccountModel('唯鹿', '微信', 1, ''));
+    _list.add(WithdrawalAccountModel('大色玩', '微信', 1, ''));
   }
   
   @override

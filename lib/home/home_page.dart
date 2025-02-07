@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/page/goods_page.dart';
-import 'package:flutter_deer/home/provider/home_provider.dart';
-import 'package:flutter_deer/order/page/order_page.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/shop/page/shop_page.dart';
-import 'package:flutter_deer/statistics/page/statistics_page.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/double_tap_back_exit_app.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
+import 'package:bounty_hunter/goods/page/goods_page.dart';
+import 'package:bounty_hunter/home/provider/home_provider.dart';
+import 'package:bounty_hunter/order/page/order_page.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/shop/page/shop_page.dart';
+import 'package:bounty_hunter/statistics/page/statistics_page.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/double_tap_back_exit_app.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {

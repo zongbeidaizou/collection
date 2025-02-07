@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/input_formatter/number_text_input_formatter.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/input_formatter/number_text_input_formatter.dart';
 
 /// 封装输入框
 class TextFieldItem extends StatelessWidget {

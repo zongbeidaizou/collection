@@ -1,7 +1,7 @@
 import 'package:fluro/fluro.dart';
-import 'package:flutter_deer/routers/i_router.dart';
-import 'package:flutter_deer/setting/page/locale_page.dart';
-import 'package:flutter_deer/setting/page/theme_page.dart';
+import 'package:bounty_hunter/routers/i_router.dart';
+import 'package:bounty_hunter/setting/page/locale_page.dart';
+import 'package:bounty_hunter/setting/page/theme_page.dart';
 
 import 'page/about_page.dart';
 import 'page/account_manager_page.dart';

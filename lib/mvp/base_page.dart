@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/mvp/base_presenter.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/log_utils.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
-import 'package:flutter_deer/widgets/progress_dialog.dart';
+import 'package:bounty_hunter/mvp/base_presenter.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/log_utils.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:bounty_hunter/widgets/progress_dialog.dart';
 import 'mvps.dart';
 
 mixin BasePageMixin<T extends StatefulWidget, P extends BasePresenter> on State<T> implements IMvpView {

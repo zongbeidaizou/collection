@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/demo/demo_page.dart';
-import 'package:flutter_deer/res/constant.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/setting/provider/locale_provider.dart';
-import 'package:flutter_deer/setting/provider/theme_provider.dart';
-import 'package:flutter_deer/setting/widgets/exit_dialog.dart';
-import 'package:flutter_deer/setting/widgets/update_dialog.dart';
-import 'package:flutter_deer/util/app_navigator.dart';
-import 'package:flutter_deer/util/device_utils.dart';
-import 'package:flutter_deer/widgets/click_item.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/demo/demo_page.dart';
+import 'package:bounty_hunter/res/constant.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/setting/provider/locale_provider.dart';
+import 'package:bounty_hunter/setting/provider/theme_provider.dart';
+import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
+import 'package:bounty_hunter/setting/widgets/update_dialog.dart';
+import 'package:bounty_hunter/util/app_navigator.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/widgets/click_item.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -70,8 +70,8 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: _showExitDialog,
               ),
               if (Device.isMobile) ClickItem(
-                title: 'Deer Web版',
-                onTap: () => NavigatorUtils.goWebViewPage(context, 'Flutter Deer', 'https://simplezhli.github.io/flutter_deer/'),
+                title: 'BountyHunter Web版',
+                onTap: () => NavigatorUtils.goWebViewPage(context, 'Flutter BountyHunter', 'https://simplezhli.github.io/bounty_hunter/'),
               ),
               ClickItem(
                 title: '其他Demo',

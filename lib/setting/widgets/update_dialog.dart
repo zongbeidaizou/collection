@@ -4,14 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:flustars_flutter3/flustars_flutter3.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/other_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
-import 'package:flutter_deer/util/version_utils.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:bounty_hunter/util/version_utils.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
 
 
 class UpdateDialog extends StatefulWidget {
@@ -151,7 +151,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
       setInitDir(initStorageDir: true);
       await DirectoryUtil.getInstance();
       DirectoryUtil.createStorageDirSync(category: 'Download');
-      final String path = DirectoryUtil.getStoragePath(fileName: 'deer', category: 'Download', format: 'apk').nullSafe;
+      final String path = DirectoryUtil.getStoragePath(fileName: 'dasewan', category: 'Download', format: 'apk').nullSafe;
       final File file = File(path);
       /// 链接可能会失效
       await Dio().download('http://imtt.dd.qq.com/16891/apk/FF9625F40FD26F015F4CDED37B6B66AE.apk',

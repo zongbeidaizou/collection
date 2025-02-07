@@ -1,8 +1,8 @@
 # https://medium.com/flutter-community/run-flutter-driver-tests-on-github-actions-13c639c7e4ab
 # https://github.com/nazarcybulskij/CI_CD_Flutter_Demo
-# https://weilu.blog.csdn.net/article/details/114744416
+# https://dasewan.blog.csdn.net/article/details/114744416
 # Name of your workflow.
-name: flutter_deer driver
+name: bounty_hunter driver
 
 # Trigger the workflow on push or pull request.
 on: [push, pull_request]

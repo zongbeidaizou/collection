@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.weilu" "\0"
+            VALUE "CompanyName", "com.dasewan" "\0"
             VALUE "FileDescription", "A new Flutter project." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_deer" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.weilu. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_deer.exe" "\0"
-            VALUE "ProductName", "flutter_deer" "\0"
+            VALUE "InternalName", "bounty_hunter" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 com.dasewan. All rights reserved." "\0"
+            VALUE "OriginalFilename", "bounty_hunter.exe" "\0"
+            VALUE "ProductName", "bounty_hunter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

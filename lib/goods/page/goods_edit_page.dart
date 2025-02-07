@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/provider/goods_sort_provider.dart';
-import 'package:flutter_deer/goods/widgets/goods_sort_bottom_sheet.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/device_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/util/toast_utils.dart';
-import 'package:flutter_deer/widgets/click_item.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
-import 'package:flutter_deer/widgets/my_scroll_view.dart';
-import 'package:flutter_deer/widgets/selected_image.dart';
-import 'package:flutter_deer/widgets/text_field_item.dart';
+import 'package:bounty_hunter/goods/provider/goods_sort_provider.dart';
+import 'package:bounty_hunter/goods/widgets/goods_sort_bottom_sheet.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:bounty_hunter/widgets/click_item.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
+import 'package:bounty_hunter/widgets/my_scroll_view.dart';
+import 'package:bounty_hunter/widgets/selected_image.dart';
+import 'package:bounty_hunter/widgets/text_field_item.dart';
 
 import '../goods_router.dart';
 

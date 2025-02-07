@@ -1,5 +1,5 @@
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
-import 'package:flutter_deer/order/models/search_entity.dart';
+import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
+import 'package:bounty_hunter/order/models/search_entity.dart';
 
 SearchEntity $SearchEntityFromJson(Map<String, dynamic> json) {
 	final SearchEntity searchEntity = SearchEntity();

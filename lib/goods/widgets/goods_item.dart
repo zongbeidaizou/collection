@@ -1,12 +1,12 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/models/goods_item_entity.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/device_utils.dart';
-import 'package:flutter_deer/util/other_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
+import 'package:bounty_hunter/goods/models/goods_item_entity.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
 
 import 'menu_reveal.dart';
 

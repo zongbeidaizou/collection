@@ -1,6 +1,6 @@
-import 'package:flutter_deer/mvp/base_page.dart';
-import 'package:flutter_deer/mvp/base_page_presenter.dart';
-import 'package:flutter_deer/mvp/base_presenter.dart';
+import 'package:bounty_hunter/mvp/base_page.dart';
+import 'package:bounty_hunter/mvp/base_page_presenter.dart';
+import 'package:bounty_hunter/mvp/base_presenter.dart';
 
 /// 管理多个Presenter，实现复用。
 class PowerPresenter<IMvpView> extends BasePresenter {

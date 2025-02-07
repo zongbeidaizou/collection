@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
+import 'package:bounty_hunter/res/resources.dart';
 
 /// 加载中的弹框
 class ProgressDialog extends Dialog {

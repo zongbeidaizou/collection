@@ -37,7 +37,7 @@ maven {
 完整举例子：
 
 ```
-flutter build apk --target-platform android-arm64 --obfuscate --split-debug-info=/flutter_deer/
+flutter build apk --target-platform android-arm64 --obfuscate --split-debug-info=/bounty_hunter/
 ```
 
 ## 历史问题

@@ -1,15 +1,15 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/order/page/order_list_page.dart';
-import 'package:flutter_deer/order/provider/order_page_provider.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/screen_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_card.dart';
-import 'package:flutter_deer/widgets/my_flexible_space_bar.dart';
+import 'package:bounty_hunter/order/page/order_list_page.dart';
+import 'package:bounty_hunter/order/provider/order_page_provider.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/screen_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_card.dart';
+import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../order_router.dart';
@@ -58,7 +58,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     super.dispose();
   }
 
-  /// https://github.com/simplezhli/flutter_deer/issues/194
+  /// https://github.com/simplezhli/bounty_hunter/issues/194
   @override
   // ignore: must_call_super
   void didChangeDependencies() {

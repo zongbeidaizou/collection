@@ -1,5 +1,5 @@
 ---
-name: deer issue template
+name: dasewan issue template
 about: 请确保使用最新的代码并详细阅读了readme和查找了已有的issue，避免提出重复的问题。
 title: ''
 labels: ''

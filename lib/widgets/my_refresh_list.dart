@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/state_layout.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/state_layout.dart';
 
 /// 封装下拉刷新与加载更多
 class DeerListView extends StatefulWidget {

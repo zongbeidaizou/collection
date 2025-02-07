@@ -1,16 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/statistics/widgets/selected_date.dart';
-import 'package:flutter_deer/util/date_utils.dart' as date;
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
-import 'package:flutter_deer/widgets/my_card.dart';
-import 'package:flutter_deer/widgets/pie_chart/pie_chart.dart';
-import 'package:flutter_deer/widgets/pie_chart/pie_data.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/statistics/widgets/selected_date.dart';
+import 'package:bounty_hunter/util/date_utils.dart' as date;
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/widgets/my_card.dart';
+import 'package:bounty_hunter/widgets/pie_chart/pie_chart.dart';
+import 'package:bounty_hunter/widgets/pie_chart/pie_data.dart';
 
 /// design/5统计/index.html#artboard11
 class GoodsStatisticsPage extends StatefulWidget {

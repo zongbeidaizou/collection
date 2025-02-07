@@ -1,8 +1,8 @@
 import 'dart:math' as math show sin, pi, sqrt;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
 
 /// https://medium.com/flutterdevs/ripple-animation-in-flutter-3421cbd66a18
 class RipplesAnimationPage extends StatefulWidget {

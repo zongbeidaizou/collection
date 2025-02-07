@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/order/page/order_page.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/statistics/statistics_router.dart';
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/util/screen_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
-import 'package:flutter_deer/widgets/my_card.dart';
-import 'package:flutter_deer/widgets/my_flexible_space_bar.dart';
+import 'package:bounty_hunter/order/page/order_page.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/statistics/statistics_router.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/screen_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/my_card.dart';
+import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 
 
 /// design/5统计/index.html

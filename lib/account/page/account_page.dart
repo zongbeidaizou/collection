@@ -1,11 +1,11 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/account/widgets/rise_number_text.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/image_utils.dart';
-import 'package:flutter_deer/widgets/click_item.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/account/widgets/rise_number_text.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/widgets/click_item.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
 
 import '../account_router.dart';
 

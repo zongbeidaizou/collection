@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// @weilu https://github.com/simplezhli/flutter_deer
+/// @dasewan https://github.com/simplezhli/bounty_hunter
 /// 
 /// 便于管理ChangeNotifier，不用重复写模板代码。
 /// 之前：

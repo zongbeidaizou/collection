@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/demo/widgets/neumorphic.dart';
+import 'package:bounty_hunter/demo/widgets/neumorphic.dart';
 
 class TestPage extends StatefulWidget {
 

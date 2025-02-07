@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/demo/navigator/books_app_state.dart';
-import 'package:flutter_deer/demo/navigator/delegate/inner_router_delegate.dart';
+import 'package:bounty_hunter/demo/navigator/books_app_state.dart';
+import 'package:bounty_hunter/demo/navigator/delegate/inner_router_delegate.dart';
 
 // Widget that contains the AdaptiveNavigationScaffold
 class AppShell extends StatefulWidget {

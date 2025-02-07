@@ -156,7 +156,7 @@ class BezierChartState extends State<BezierChart>
   bool _displayIndicator = false;
 
   ///padding for leading and trailing of the chart
-  // TODO(weilu): 修改处 horizontalPadding = 50.0;
+  // TODO(dasewan): 修改处 horizontalPadding = 50.0;
   final double horizontalPadding = 11.0;
 
   ///spacing between each datapoint
@@ -755,7 +755,7 @@ class BezierChartState extends State<BezierChart>
 //      _buildXDataPoints();
 //      _computeSeries();
 //    }
-    // TODO(weilu): 修改处
+    // TODO(dasewan): 修改处
     if (oldWidget.series != widget.series) {
       _currentBezierChartScale = widget.bezierChartScale;
       _buildXDataPoints();
@@ -797,7 +797,7 @@ class BezierChartState extends State<BezierChart>
       label: '长按查看详细数据',
       child: Container(
         decoration: BoxDecoration(
-          // TODO(weilu): 修改处
+          // TODO(dasewan): 修改处
 //        color: widget.config.backgroundGradient != null
 //            ? null
 //            : widget.config.backgroundColor,
@@ -1295,7 +1295,7 @@ class _BezierChartPainter extends CustomPainter {
       if (config.showDataPoints) {
         //draw data points
         //Data points won't work until Flutter team fix this issue : https://github.com/flutter/flutter/issues/32218
-//        if (!kIsWeb) { // TODO(weilu): web已支持
+//        if (!kIsWeb) { // TODO(dasewan): web已支持
           canvas.drawPoints(
               PointMode.points,
               dataPoints,
@@ -1374,7 +1374,7 @@ class _BezierChartPainter extends CustomPainter {
       //calculate the total lenght of the lines
       List<TextSpan> textValues = [];
       List<Offset> centerCircles = [];
-      // TODO(weilu): 修改处 infoHeight / (8.75)
+      // TODO(dasewan): 修改处 infoHeight / (8.75)
       double space =
           10 - ((infoHeight / (4)) * _currentCustomValues.length);
       infoHeight =
@@ -1411,7 +1411,7 @@ class _BezierChartPainter extends CustomPainter {
         textAlign: TextAlign.center,
         text: TextSpan(
           text: _getInfoTitleText(),
-          // TODO(weilu): 修改处 9.5
+          // TODO(dasewan): 修改处 9.5
           style: config.bubbleIndicatorTitleStyle.copyWith(fontSize: 5.0),
           children: textValues,
         ),
@@ -1637,7 +1637,7 @@ class _BezierChartPainter extends CustomPainter {
 //          oldDelegate.verticalIndicatorPosition != verticalIndicatorPosition ||
 //          oldDelegate.scrollOffset != scrollOffset ||
 //          oldDelegate.showIndicator != showIndicator;
-  // TODO(weilu): 修改处
+  // TODO(dasewan): 修改处
   oldDelegate.series != series || oldDelegate.verticalIndicatorPosition != verticalIndicatorPosition;
 }
 

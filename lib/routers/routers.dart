@@ -1,17 +1,17 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/account/account_router.dart';
-import 'package:flutter_deer/goods/goods_router.dart';
-import 'package:flutter_deer/home/home_page.dart';
-import 'package:flutter_deer/home/webview_page.dart';
-import 'package:flutter_deer/login/login_router.dart';
-import 'package:flutter_deer/order/order_router.dart';
-import 'package:flutter_deer/routers/i_router.dart';
-import 'package:flutter_deer/routers/not_found_page.dart';
-import 'package:flutter_deer/setting/setting_router.dart';
-import 'package:flutter_deer/shop/shop_router.dart';
-import 'package:flutter_deer/statistics/statistics_router.dart';
-import 'package:flutter_deer/store/store_router.dart';
+import 'package:bounty_hunter/account/account_router.dart';
+import 'package:bounty_hunter/goods/goods_router.dart';
+import 'package:bounty_hunter/home/home_page.dart';
+import 'package:bounty_hunter/home/webview_page.dart';
+import 'package:bounty_hunter/login/login_router.dart';
+import 'package:bounty_hunter/order/order_router.dart';
+import 'package:bounty_hunter/routers/i_router.dart';
+import 'package:bounty_hunter/routers/not_found_page.dart';
+import 'package:bounty_hunter/setting/setting_router.dart';
+import 'package:bounty_hunter/shop/shop_router.dart';
+import 'package:bounty_hunter/statistics/statistics_router.dart';
+import 'package:bounty_hunter/store/store_router.dart';
 
 class Routes {
 

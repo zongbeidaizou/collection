@@ -1,4 +1,4 @@
-package com.weilu.deer;
+package com.dasewan.bounty_hunter;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 
 /**
- * @author weilu
+ * @author dasewan
  */
 public class MainActivity extends FlutterActivity {
 

@@ -10,7 +10,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
 
   // https://leanflutter.org/zh/blog/making-the-app-single-instanced
-  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", L"flutter_deer");
+  HWND hwnd = ::FindWindow(L"FLUTTER_RUNNER_WIN32_WINDOW", L"bounty_hunter");
   if (hwnd != NULL) {
     ::ShowWindow(hwnd, SW_NORMAL);
     ::SetForegroundWindow(hwnd);
@@ -38,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(&run_loop, project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.CreateAndShow(L"flutter_deer", origin, size)) {
+  if (!window.CreateAndShow(L"bounty_hunter", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

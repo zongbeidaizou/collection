@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
 
 
-/// 博客：https://weilu.blog.csdn.net/article/details/107132031
+/// 博客：https://dasewan.blog.csdn.net/article/details/107132031
 class FocusDemoPage extends StatefulWidget {
   const FocusDemoPage({super.key, required this.title});
 

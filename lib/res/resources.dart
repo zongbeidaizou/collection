@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_deer/widgets/load_image.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 
 export 'colors.dart';
 export 'dimens.dart';

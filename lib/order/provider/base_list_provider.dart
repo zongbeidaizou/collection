@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/widgets/state_layout.dart';
+import 'package:bounty_hunter/widgets/state_layout.dart';
 
 class BaseListProvider<T> extends ChangeNotifier {
 

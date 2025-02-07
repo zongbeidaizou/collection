@@ -1,5 +1,5 @@
-import 'package:flutter_deer/generated/json/base/json_convert_content.dart';
-import 'package:flutter_deer/res/constant.dart';
+import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
+import 'package:bounty_hunter/res/constant.dart';
 
 class BaseEntity<T> {
 

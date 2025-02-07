@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/account/account_router.dart';
-import 'package:flutter_deer/account/models/bank_entity.dart';
-import 'package:flutter_deer/account/models/city_entity.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/util/other_utils.dart';
-import 'package:flutter_deer/util/theme_utils.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
-import 'package:flutter_deer/widgets/my_scroll_view.dart';
-import 'package:flutter_deer/widgets/selected_item.dart';
-import 'package:flutter_deer/widgets/text_field_item.dart';
+import 'package:bounty_hunter/account/account_router.dart';
+import 'package:bounty_hunter/account/models/bank_entity.dart';
+import 'package:bounty_hunter/account/models/city_entity.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
+import 'package:bounty_hunter/widgets/my_scroll_view.dart';
+import 'package:bounty_hunter/widgets/selected_item.dart';
+import 'package:bounty_hunter/widgets/text_field_item.dart';
 
 
 /// design/6店铺-账户/index.html#artboard29

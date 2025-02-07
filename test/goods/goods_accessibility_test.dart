@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/goods/page/goods_edit_page.dart';
-import 'package:flutter_deer/goods/page/goods_page.dart';
-import 'package:flutter_deer/goods/page/goods_search_page.dart';
-import 'package:flutter_deer/goods/page/goods_size_edit_page.dart';
-import 'package:flutter_deer/goods/page/goods_size_page.dart';
-import 'package:flutter_deer/setting/provider/theme_provider.dart';
+import 'package:bounty_hunter/goods/page/goods_edit_page.dart';
+import 'package:bounty_hunter/goods/page/goods_page.dart';
+import 'package:bounty_hunter/goods/page/goods_search_page.dart';
+import 'package:bounty_hunter/goods/page/goods_size_edit_page.dart';
+import 'package:bounty_hunter/goods/page/goods_size_page.dart';
+import 'package:bounty_hunter/setting/provider/theme_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

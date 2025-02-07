@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_deer/account/models/withdrawal_account_model.dart';
-import 'package:flutter_deer/account/widgets/withdrawal_account_item.dart';
-import 'package:flutter_deer/res/resources.dart';
-import 'package:flutter_deer/routers/fluro_navigator.dart';
-import 'package:flutter_deer/widgets/my_app_bar.dart';
-import 'package:flutter_deer/widgets/my_button.dart';
-import 'package:flutter_deer/widgets/state_layout.dart';
+import 'package:bounty_hunter/account/models/withdrawal_account_model.dart';
+import 'package:bounty_hunter/account/widgets/withdrawal_account_item.dart';
+import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/widgets/my_app_bar.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
+import 'package:bounty_hunter/widgets/state_layout.dart';
 
 import '../account_router.dart';
 
@@ -28,7 +28,7 @@ class _WithdrawalAccountPageState extends State<WithdrawalAccountPage> {
   void initState() {
     super.initState();
     _list.clear();
-    _list.add(WithdrawalAccountModel('唯鹿', '微信', 1, ''));
+    _list.add(WithdrawalAccountModel('大色玩', '微信', 1, ''));
     _list.add(WithdrawalAccountModel('李*', '工商银行', 0, '**** **** **** 5236'));
     _list.add(WithdrawalAccountModel('李*', '工商银行', 0, '**** **** **** 2165'));
   }
@@ -61,7 +61,7 @@ class _WithdrawalAccountPageState extends State<WithdrawalAccountPage> {
       axisAlignment: 1.0,
       sizeFactor: animation,
       child: WithdrawalAccountItem(
-        key: ObjectKey(data), /// 这里注意必须添加key，原因见： https://weilu.blog.csdn.net/article/details/104745624
+        key: ObjectKey(data), /// 这里注意必须添加key，原因见： https://dasewan.blog.csdn.net/article/details/104745624
         data: data,
         onLongPress: () => _showDeleteBottomSheet(index),
       ),

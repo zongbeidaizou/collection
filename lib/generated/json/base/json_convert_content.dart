@@ -9,6 +9,7 @@ import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
+import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
 
@@ -176,6 +177,14 @@ class JsonConvert {
       return data.map<CollectionOrderData>((Map<String, dynamic> e) =>
           CollectionOrderData.fromJson(e)).toList() as M;
     }
+    if (<ProductEntity>[] is M) {
+      return data.map<ProductEntity>((Map<String, dynamic> e) =>
+          ProductEntity.fromJson(e)).toList() as M;
+    }
+    if (<ProductData>[] is M) {
+      return data.map<ProductData>((Map<String, dynamic> e) =>
+          ProductData.fromJson(e)).toList() as M;
+    }
     if (<SearchEntity>[] is M) {
       return data.map<SearchEntity>((Map<String, dynamic> e) =>
           SearchEntity.fromJson(e)).toList() as M;
@@ -224,6 +233,8 @@ class JsonConvertClassCollection {
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
     (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
     (CollectionOrderData).toString(): CollectionOrderData.fromJson,
+    (ProductEntity).toString(): ProductEntity.fromJson,
+    (ProductData).toString(): ProductData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,
     (SearchItems).toString(): SearchItems.fromJson,
     (SearchItemsOwner).toString(): SearchItemsOwner.fromJson,

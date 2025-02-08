@@ -12,6 +12,7 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/collection_order_entity.dart';
+import '../../models/product_entity.dart';
 import '../../shop/widgets/price_input_dialog.dart';
 import '../order_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +33,7 @@ class OrderItem extends StatelessWidget {
     required this.tabIndex,
     required this.index,
     required this.item,
+    required this.products,
     this.inList = true,
   });
 
@@ -39,6 +41,7 @@ class OrderItem extends StatelessWidget {
   final int index;
   final bool inList;
   final CollectionOrderData item;
+  final List<ProductData> products;
 
   
   @override
@@ -91,8 +94,8 @@ class OrderItem extends StatelessWidget {
         Row(
           children: <Widget>[
 
-            const Expanded(
-              child: Text('Hello Cash',                 style: TextStyle(
+            Expanded(
+              child: Text(products.firstWhere((product) => product.id == item.AJProductId).bName ?? '',                 style: const TextStyle(
                 fontSize: Dimens.font_sp14,
                 fontWeight: FontWeight.w500,
               ),),

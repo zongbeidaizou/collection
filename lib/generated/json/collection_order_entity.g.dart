@@ -248,10 +248,14 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aHS2CollectionAmount != null) {
     collectionOrderData.aHS2CollectionAmount = aHS2CollectionAmount;
   }
-  final int? aFS3CollectionAmount = jsonConvert.convert<int>(
-      json['a_f_s3_collection_amount']);
-  if (aFS3CollectionAmount != null) {
-    collectionOrderData.aFS3CollectionAmount = aFS3CollectionAmount;
+  final int? aIS3CollectionAmount = jsonConvert.convert<int>(
+      json['a_i_s3_collection_amount']);
+  if (aIS3CollectionAmount != null) {
+    collectionOrderData.aIS3CollectionAmount = aIS3CollectionAmount;
+  }
+  final int? AJProductId = jsonConvert.convert<int>(json['a_j_product_id']);
+  if (AJProductId != null) {
+    collectionOrderData.AJProductId = AJProductId;
   }
   return collectionOrderData;
 }
@@ -293,7 +297,8 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_f_s0_collection_amount'] = entity.aFS0CollectionAmount;
   data['a_g_s1_collection_amount'] = entity.aGS1CollectionAmount;
   data['a_h_s2_collection_amount'] = entity.aHS2CollectionAmount;
-  data['a_f_s3_collection_amount'] = entity.aFS3CollectionAmount;
+  data['a_i_s3_collection_amount'] = entity.aIS3CollectionAmount;
+  data['a_j_product_id'] = entity.AJProductId;
   return data;
 }
 
@@ -333,7 +338,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? aFS0CollectionAmount,
     int? aGS1CollectionAmount,
     int? aHS2CollectionAmount,
-    int? aFS3CollectionAmount,
+    int? aIS3CollectionAmount,
+    int? AJProductId,
   }) {
     return CollectionOrderData()
       ..aBorrowId = aBorrowId ?? this.aBorrowId
@@ -374,7 +380,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aFS0CollectionAmount = aFS0CollectionAmount ?? this.aFS0CollectionAmount
       ..aGS1CollectionAmount = aGS1CollectionAmount ?? this.aGS1CollectionAmount
       ..aHS2CollectionAmount = aHS2CollectionAmount ?? this.aHS2CollectionAmount
-      ..aFS3CollectionAmount = aFS3CollectionAmount ??
-          this.aFS3CollectionAmount;
+      ..aIS3CollectionAmount = aIS3CollectionAmount ?? this.aIS3CollectionAmount
+      ..AJProductId = AJProductId ?? this.AJProductId;
   }
 }

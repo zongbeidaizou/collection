@@ -9,6 +9,7 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/collection_order_entity.dart';
+import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../iview/order_list_page_iview.dart';
 
@@ -37,6 +38,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   int _index = 0;
   List<CollectionOrderData> _list = <CollectionOrderData>[];
   List<CollectionOrderData> _listNew = <CollectionOrderData>[];
+  List<ProductData> _product = <ProductData>[];
   late OrderListPagePresenter _orderListPagePresenter;
   
   @override
@@ -95,12 +97,12 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return index < _list.length ?
-                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index],) :
+                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product,) :
                 MoreWidget(_list.length, _hasMore(), 10);
                 return index < _list.length ? 
                 (index % 5 == 0 ? 
                     const OrderTagItem(date: '2021年2月5日', orderTotal: 4) :
-                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index],)
+                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product,)
                 ) : 
                 MoreWidget(_list.length, _hasMore(), 10);
               },
@@ -112,9 +114,17 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
     );
   }
   @override
+  void setProduct(List<ProductData> product) {
+    setState(() {
+      _product = product;
+    });
+  }
+
+  @override
   void onRefresh() {
     _onRefresh();
   }
+
   Future<void> _onRefresh() async {
     _list = await _orderListPagePresenter.index(1, true);
     setState(() {
@@ -143,6 +153,8 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
       _isLoading = false;
     });
   }
+
+
 
 
 

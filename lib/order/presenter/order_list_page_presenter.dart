@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
+import '../../models/product_entity.dart';
 import '../iview/order_list_page_iview.dart';
 
 
@@ -16,6 +17,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await product(false);
       view.onRefresh();
     });
   }
@@ -26,8 +28,6 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     List<CollectionOrderData> _list = <CollectionOrderData>[];
     FormData formData = FormData.fromMap({"page": page});
     await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page}, onSuccess: (data) async {
-      // Map<String, dynamic> allDeviceInfo = {};
-      // Map<String, dynamic> dynamicInfo = {};
       if (data != null) {
         _list =  data.data!;
       }
@@ -38,6 +38,19 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       }
     });
     return _list;
+  }
+
+  Future<void> product( bool isShowDialog) async {
+    await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
+      if (data != null) {
+        view.setProduct(data.data!);
+      }
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
   }
  
 }

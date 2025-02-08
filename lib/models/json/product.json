@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "id": 9,
+      "b_name": "Speed Fund"
+    },
+    {
+      "id": 8,
+      "b_name": "Harakakopa"
+    },
+    {
+      "id": 7,
+      "b_name": "Flash Wallet"
+    },
+    {
+      "id": 6,
+      "b_name": "Smart Cash"
+    },
+    {
+      "id": 5,
+      "b_name": "RCredit"
+    },
+    {
+      "id": 4,
+      "b_name": "PreCash"
+    },
+    {
+      "id": 3,
+      "b_name": "Fast Money"
+    },
+    {
+      "id": 2,
+      "b_name": "We Loan"
+    },
+    {
+      "id": 1,
+      "b_name": "Otter Loan"
+    }
+  ],
+  "success": true,
+  "errorMessage": "A aFChannelRepository retrieved successfully",
+  "total": 9
+}

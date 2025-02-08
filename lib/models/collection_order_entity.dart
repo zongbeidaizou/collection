@@ -97,8 +97,10 @@ class CollectionOrderData {
 	int? aGS1CollectionAmount = 0;
 	@JSONField(name: "a_h_s2_collection_amount")
 	int? aHS2CollectionAmount = 0;
-	@JSONField(name: "a_f_s3_collection_amount")
-	int? aFS3CollectionAmount = 0;
+	@JSONField(name: "a_i_s3_collection_amount")
+	int? aIS3CollectionAmount = 0;
+	@JSONField(name: "a_j_product_id")
+	int? AJProductId = 0;
 
 	CollectionOrderData();
 

@@ -158,7 +158,8 @@ class _AddNoteState extends State<AddNote> {
           children: [
             Container(
                 margin: EdgeInsets.only(left: 4, right: 4),
-                child: OrderItem(key: Key('order_item_'), index: 1, tabIndex: 1,inList: false,)),
+                // child: OrderItem(key: Key('order_item_'), index: 1, tabIndex: 1,inList: false,)
+            ),
             // Text("My Collection Log"),
             Gaps.vGap4,
             Expanded(

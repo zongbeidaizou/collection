@@ -8,6 +8,7 @@ import 'package:bounty_hunter/account/models/bank_entity.dart';
 import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
 
@@ -167,6 +168,14 @@ class JsonConvert {
       return data.map<AuthorizStorePassport>((Map<String, dynamic> e) =>
           AuthorizStorePassport.fromJson(e)).toList() as M;
     }
+    if (<CollectionOrderEntity>[] is M) {
+      return data.map<CollectionOrderEntity>((Map<String, dynamic> e) =>
+          CollectionOrderEntity.fromJson(e)).toList() as M;
+    }
+    if (<CollectionOrderData>[] is M) {
+      return data.map<CollectionOrderData>((Map<String, dynamic> e) =>
+          CollectionOrderData.fromJson(e)).toList() as M;
+    }
     if (<SearchEntity>[] is M) {
       return data.map<SearchEntity>((Map<String, dynamic> e) =>
           SearchEntity.fromJson(e)).toList() as M;
@@ -213,6 +222,8 @@ class JsonConvertClassCollection {
     (GoodsSortEntity).toString(): GoodsSortEntity.fromJson,
     (AuthorizStoreEntity).toString(): AuthorizStoreEntity.fromJson,
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
+    (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
+    (CollectionOrderData).toString(): CollectionOrderData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,
     (SearchItems).toString(): SearchItems.fromJson,
     (SearchItemsOwner).toString(): SearchItemsOwner.fromJson,

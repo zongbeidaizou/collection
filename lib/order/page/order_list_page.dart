@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/order/provider/order_page_provider.dart';
 import 'package:bounty_hunter/order/widgets/order_item.dart';
@@ -6,6 +7,10 @@ import 'package:bounty_hunter/util/change_notifier_manage.dart';
 import 'package:bounty_hunter/widgets/my_refresh_list.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/collection_order_entity.dart';
+import '../../mvp/base_page.dart';
+import '../iview/order_list_page_iview.dart';
 
 class OrderListPage extends StatefulWidget {
 
@@ -20,7 +25,8 @@ class OrderListPage extends StatefulWidget {
   _OrderListPageState createState() => _OrderListPageState();
 }
 
-class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveClientMixin<OrderListPage>, ChangeNotifierMixin<OrderListPage>{
+class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveClientMixin<OrderListPage>, ChangeNotifierMixin<OrderListPage>, BasePageMixin<OrderListPage, OrderListPagePresenter>
+    implements OrderListPageIMvpView {
 
   final ScrollController _controller = ScrollController();
   final StateType _stateType = StateType.loading;
@@ -29,18 +35,29 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   final int _maxPage = 3;
   int _page = 1;
   int _index = 0;
-  List<String> _list = <String>[];
+  List<CollectionOrderData> _list = <CollectionOrderData>[];
+  List<CollectionOrderData> _listNew = <CollectionOrderData>[];
+  late OrderListPagePresenter _orderListPagePresenter;
   
   @override
   void initState() {
     super.initState();
     _index = widget.index;
-    _onRefresh();
+    // _onRefresh();
   }
 
   @override
   Map<ChangeNotifier, List<VoidCallback>?>? changeNotifier() {
     return {_controller: null};
+  }
+  @override
+  bool get wantKeepAlive => true;
+
+
+  @override
+  OrderListPagePresenter createPresenter() {
+    _orderListPagePresenter = OrderListPagePresenter();
+    return _orderListPagePresenter;
   }
   
   @override
@@ -77,10 +94,13 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
             sliver: _list.isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                return index < _list.length ?
+                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index],) :
+                MoreWidget(_list.length, _hasMore(), 10);
                 return index < _list.length ? 
                 (index % 5 == 0 ? 
                     const OrderTagItem(date: '2021年2月5日', orderTotal: 4) :
-                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index,)
+                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index],)
                 ) : 
                 MoreWidget(_list.length, _hasMore(), 10);
               },
@@ -91,13 +111,14 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
       ),
     );
   }
-
+  @override
+  void onRefresh() {
+    _onRefresh();
+  }
   Future<void> _onRefresh() async {
-    await Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _page = 1;
-        _list = List.generate(10, (i) => 'newItem：$i');
-      });
+    _list = await _orderListPagePresenter.index(1, true);
+    setState(() {
+      _page = 1;
     });
   }
 
@@ -113,15 +134,19 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
       return;
     }
     _isLoading = true;
-    await Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _list.addAll(List.generate(10, (i) => 'newItem：$i'));
-        _page ++;
-        _isLoading = false;
-      });
+    setState(() {
+      _page ++;
+    });
+    _listNew = await _orderListPagePresenter.index(_page, true);
+    setState(() {
+      _list.addAll(_listNew);
+      _isLoading = false;
     });
   }
+
+
+
+
   
-  @override
-  bool get wantKeepAlive => true;
+
 }

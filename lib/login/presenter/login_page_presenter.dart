@@ -5,8 +5,10 @@ import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../models/authoriz_store_entity.dart';
+import '../../res/constant.dart';
 import '../iview/login_page_iview.dart';
 
 
@@ -40,7 +42,8 @@ class LoginPagePresenter extends BasePagePresenter<LoginPageIviewIMvpView> {
       // Map<String, dynamic> allDeviceInfo = {};
       // Map<String, dynamic> dynamicInfo = {};
       if (data != null) {
-
+        SpUtil.putString(Constant.accessToken, data.passport!.accessToken!);
+        SpUtil.putString(Constant.refreshToken, data.passport!.refreshToken!);
         view.loginSuccess();
       }
     }, onError: (_, __) async {

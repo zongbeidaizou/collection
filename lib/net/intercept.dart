@@ -17,7 +17,8 @@ class AuthInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final String accessToken = SpUtil.getString(Constant.accessToken).nullSafe;
     if (accessToken.isNotEmpty) {
-      options.headers['Authorization'] = 'token $accessToken';
+      //options.headers['Authorization'] = 'token $accessToken';
+      options.headers['Authorization'] = 'Bearer $accessToken';
     }
     if (!Device.isWeb) {
       // https://developer.github.com/v3/#user-agent-required
@@ -96,15 +97,17 @@ class LoggingInterceptor extends Interceptor{
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     _startTime = DateTime.now();
     Log.d('----------Start----------');
+    Log.d('⏰\x1B[36m${_startTime}\x1B[0m');
     if (options.queryParameters.isEmpty) {
-      Log.d('RequestUrl: ${options.baseUrl}${options.path}');
+      Log.d('👉RequestUrl:\x1B[37m ${options.baseUrl}${options.path}\x1B[0m');
     } else {
       Log.d('RequestUrl: ${options.baseUrl}${options.path}?${Transformer.urlEncodeMap(options.queryParameters)}');
     }
     Log.d('RequestMethod: ${options.method}');
     Log.d('RequestHeaders:${options.headers}');
     Log.d('RequestContentType: ${options.contentType}');
-    Log.d('RequestData: ${options.data}');
+    Log.d('RequestData: ${options.data.toString()}');
+    Log.d('👉RequestData:\x1B[37m ${options.data?.fields.toString()}\x1B[0m');
     super.onRequest(options, handler);
   }
   
@@ -112,14 +115,15 @@ class LoggingInterceptor extends Interceptor{
   void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {
     _endTime = DateTime.now();
     final int duration = _endTime.difference(_startTime).inMilliseconds;
-    if (response.statusCode == ExceptionHandle.success) {
-      Log.d('ResponseCode: ${response.statusCode}');
+    if (response.statusCode == ExceptionHandle.success || response.statusCode == ExceptionHandle.success_201) {
+      Log.d('👌🏻\x1B[32mResponseCode: ${response.statusCode}\x1B[0m');
     } else {
-      Log.e('ResponseCode: ${response.statusCode}');
+      Log.e('❌\x1B[31mResponseCode: ${response.statusCode}\x1B[0m');
     }
     // 输出结果
     Log.json(response.data.toString());
-    Log.d('----------End: $duration 毫秒----------');
+    Log.d('⏰\x1B[36m${duration}毫秒\x1B[0m');
+    Log.d('----------End ----------');
     super.onResponse(response, handler);
   }
   
@@ -135,6 +139,7 @@ class AdapterInterceptor extends Interceptor{
   static const String _kMsg = 'msg';
   static const String _kSlash = "'";
   static const String _kMessage = 'message';
+  static const String _kCode = 'code';
 
   static const String _kDefaultText = '无返回信息';
   static const String _kNotFound = '未找到查询信息';
@@ -160,7 +165,9 @@ class AdapterInterceptor extends Interceptor{
     String result;
     String content = response.data?.toString() ?? '';
     /// 成功时，直接格式化返回
-    if (response.statusCode == ExceptionHandle.success || response.statusCode == ExceptionHandle.success_not_content) {
+    if (response.statusCode == ExceptionHandle.success ||
+        response.statusCode == ExceptionHandle.success_201 ||
+        response.statusCode == ExceptionHandle.success_not_content) {
       if (content.isEmpty) {
         content = _kDefaultText;
       }
@@ -177,6 +184,7 @@ class AdapterInterceptor extends Interceptor{
           result = content;
         } else {
           String msg;
+          int code;
           try {
             content = content.replaceAll(r'\', '');
             if (_kSlash == content.substring(0, 1)) {
@@ -190,7 +198,17 @@ class AdapterInterceptor extends Interceptor{
             } else {
               msg = '未知异常';
             }
-            result = sprintf(_kFailureFormat, [response.statusCode, msg]);
+            if (map.containsKey(_kCode)) {
+              code = map[_kCode];
+              if (code == 0 && response.statusCode != ExceptionHandle.success) {
+                code = response.statusCode!;
+              }
+            } else {
+              code = response.statusCode!;
+            }
+
+            // result = sprintf(_kFailureFormat, [response.statusCode, msg]);
+            result = sprintf(_kFailureFormat, [code, msg]);
             // 401 token失效时，单独处理，其他一律为成功
             if (response.statusCode == ExceptionHandle.unauthorized) {
               response.statusCode = ExceptionHandle.unauthorized;

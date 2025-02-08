@@ -8,10 +8,12 @@ import 'package:bounty_hunter/util/log_utils.dart';
 import 'base_entity.dart';
 import 'error_handle.dart';
 
+import 'dart:io';
+
 /// 默认dio配置
-Duration _connectTimeout = const Duration(seconds: 15);
-Duration _receiveTimeout = const Duration(seconds: 15);
-Duration _sendTimeout = const Duration(seconds: 10);
+Duration _connectTimeout = const Duration(seconds: 45);
+Duration _receiveTimeout = const Duration(seconds: 45);
+Duration _sendTimeout = const Duration(seconds: 40);
 String _baseUrl = '';
 List<Interceptor> _interceptors = [];
 
@@ -34,7 +36,7 @@ typedef NetSuccessCallback<T> = void Function(T data);
 typedef NetSuccessListCallback<T> = void Function(List<T> data);
 typedef NetErrorCallback = void Function(int code, String msg);
 
-/// @dasewan https://github.com/simplezhli
+/// @dasewan https://github.com/dasewan
 class DioUtils {
 
   factory DioUtils() => _singleton;
@@ -102,11 +104,13 @@ class DioUtils {
       /// 主要目的减少不必要的性能开销
       final bool isCompute = !Constant.isDriverTest && data.length > 10 * 1024;
       debugPrint('isCompute:$isCompute');
+      debugPrint(data.length.toString());
+      debugPrint('10 * 1024');
       final Map<String, dynamic> map = isCompute ? await compute(parseData, data) : parseData(data);
       return BaseEntity<T>.fromJson(map);
     } catch(e) {
       debugPrint(e.toString());
-      return BaseEntity<T>(ExceptionHandle.parse_error, '数据解析错误！', null);
+      return BaseEntity<T>(ExceptionHandle.parse_error, 'Data parsing error.！', null);
     }
   }
 
@@ -124,7 +128,7 @@ class DioUtils {
     CancelToken? cancelToken,
     Options? options,
   }) {
-    return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19026",
+    return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19867",
       data: params,
       queryParameters: queryParameters,
       options: options,

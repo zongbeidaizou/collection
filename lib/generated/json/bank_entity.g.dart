@@ -4,26 +4,39 @@ import 'package:azlistview/azlistview.dart';
 
 
 BankEntity $BankEntityFromJson(Map<String, dynamic> json) {
-	final BankEntity bankEntity = BankEntity();
-	final int? id = jsonConvert.convert<int>(json['id']);
-	if (id != null) {
-		bankEntity.id = id;
-	}
-	final String? bankName = jsonConvert.convert<String>(json['bankName']);
-	if (bankName != null) {
-		bankEntity.bankName = bankName;
-	}
-	final String? firstLetter = jsonConvert.convert<String>(json['firstLetter']);
-	if (firstLetter != null) {
-		bankEntity.firstLetter = firstLetter;
-	}
-	return bankEntity;
+  final BankEntity bankEntity = BankEntity();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    bankEntity.id = id;
+  }
+  final String? bankName = jsonConvert.convert<String>(json['bankName']);
+  if (bankName != null) {
+    bankEntity.bankName = bankName;
+  }
+  final String? firstLetter = jsonConvert.convert<String>(json['firstLetter']);
+  if (firstLetter != null) {
+    bankEntity.firstLetter = firstLetter;
+  }
+  return bankEntity;
 }
 
 Map<String, dynamic> $BankEntityToJson(BankEntity entity) {
-	final Map<String, dynamic> data = <String, dynamic>{};
-	data['id'] = entity.id;
-	data['bankName'] = entity.bankName;
-	data['firstLetter'] = entity.firstLetter;
-	return data;
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['bankName'] = entity.bankName;
+  data['firstLetter'] = entity.firstLetter;
+  return data;
+}
+
+extension BankEntityExtension on BankEntity {
+  BankEntity copyWith({
+    int? id,
+    String? bankName,
+    String? firstLetter,
+  }) {
+    return BankEntity()
+      ..id = id ?? this.id
+      ..bankName = bankName ?? this.bankName
+      ..firstLetter = firstLetter ?? this.firstLetter;
+  }
 }

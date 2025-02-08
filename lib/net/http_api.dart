@@ -1,8 +1,9 @@
 
 class HttpApi{
-  static const String users = 'users/simplezhli';
+  static const String users = 'users/dasewan';
   static const String search = 'search/repositories';
-  static const String subscriptions = 'users/simplezhli/subscriptions';
-  static const String upload = 'uuc/upload-inco';
-  static const String authorizations = '/v1/authorizations';
+  static const String subscriptions = 'users/dasewan/subscriptions';
+
+  static const String authorizations = '/collection/authorizations';
+  static const String upload = 'authorizations';
 }

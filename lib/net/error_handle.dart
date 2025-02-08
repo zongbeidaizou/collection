@@ -22,15 +22,15 @@ class ExceptionHandle {
   static const int unknown_error = 9999;
 
   static final Map<int, NetError> _errorMap = <int, NetError>{
-    net_error: NetError(net_error, 'Network abnormality, please check your network!'),
-    parse_error: NetError(parse_error, 'Data parsing error!'),
-    socket_error: NetError(socket_error, 'Network abnormality, please check your network!'),
-    http_error: NetError(http_error, 'Server exception, please try again later!'),
-    connect_timeout_error: NetError(connect_timeout_error, 'Connection timed out!'),
-    send_timeout_error: NetError(send_timeout_error, 'Request timed out!'),
-    receive_timeout_error: NetError(receive_timeout_error, 'Response timeout!'),
-    cancel_error: NetError(cancel_error, 'Cancel request'),
-    unknown_error: NetError(unknown_error, 'unknown error'),
+    net_error             :   NetError(net_error, 'Network error, please check your connection!'),
+    parse_error           :   NetError(parse_error, 'Data parsing error!'),
+    socket_error          :   NetError(socket_error, 'Network error, please check your connection!'),
+    http_error            :   NetError(http_error, 'Server error, please try again later!'),
+    connect_timeout_error :   NetError(connect_timeout_error, 'Connection timeout!'),
+    send_timeout_error    :   NetError(send_timeout_error, 'Request timeout!'),
+    receive_timeout_error :   NetError(receive_timeout_error, 'Response timeout!'),
+    cancel_error          :   NetError(cancel_error, 'Request canceled'),
+    unknown_error         :   NetError(unknown_error, 'Unknown error'),
   };
 
   static NetError handleException(dynamic error) {

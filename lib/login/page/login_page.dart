@@ -11,8 +11,11 @@ import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 import 'package:flutter_gen/gen_l10n/deer_localizations.dart';
 import 'package:sp_util/sp_util.dart';
+import '../../mvp/base_page.dart';
 import '../../routers/routers.dart';
+import '../iview/login_page_iview.dart';
 import '../login_router.dart';
+import '../presenter/login_page_presenter.dart';
 
 /// design/1注册登录/index.html
 class LoginPage extends StatefulWidget {
@@ -23,13 +26,15 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPage> {
+class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPage>, BasePageMixin<LoginPage, LoginPagePresenter>, AutomaticKeepAliveClientMixin<LoginPage>
+    implements LoginPageIviewIMvpView {
   //定义一个controller
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _nodeText1 = FocusNode();
   final FocusNode _nodeText2 = FocusNode();
   bool _clickable = false;
+  late LoginPagePresenter _loginPagePresenter;
 
   @override
   Map<ChangeNotifier, List<VoidCallback>?>? changeNotifier() {
@@ -56,7 +61,7 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
     final String name = _nameController.text;
     final String password = _passwordController.text;
     bool clickable = true;
-    if (name.isEmpty || name.length < 11) {
+    if (name.isEmpty || name.length < 3) {
       clickable = false;
     }
     if (password.isEmpty || password.length < 6) {
@@ -70,10 +75,20 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
       });
     }
   }
+  @override
+  void loginSuccess() {
+    NavigatorUtils.push(context, Routes.home, clearStack: true);
+  }
+  @override
+  LoginPagePresenter createPresenter() {
+    _loginPagePresenter = LoginPagePresenter();
+    return _loginPagePresenter;
+  }
   
   void _login() {
     SpUtil.putString(Constant.phone, _nameController.text);
-    NavigatorUtils.push(context, Routes.home);
+    String phone = SpUtil.getString(Constant.phone)!;
+    _loginPagePresenter.login(phone, _passwordController.text, false);
   }
   
   @override
@@ -104,8 +119,8 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
       key: const Key('phone'),
       focusNode: _nodeText1,
       controller: _nameController,
-      maxLength: 11,
-      keyboardType: TextInputType.phone,
+      maxLength: 20,
+      keyboardType: TextInputType.text,
       hintText: DeerLocalizations.of(context)!.inputUsernameHint,
     ),
     Gaps.vGap8,
@@ -151,4 +166,7 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
       )
     )
   ];
+
+  @override
+  bool get wantKeepAlive => true;
 }

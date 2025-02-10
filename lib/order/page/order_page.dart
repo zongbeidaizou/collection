@@ -167,7 +167,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: MyCard(
                 child: Container(
                   height: 80.0,
@@ -183,11 +183,11 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
                     ),
                     indicatorColor: Colors.transparent,
                     tabs: const <Widget>[
-                      _TabView(0, 'Untracked'),
-                      _TabView(1, 'Tracked'),
-                      _TabView(2, 'Flagged'),
-                      _TabView(3, 'Completed'),
-                      _TabView(3, 'Completed'),
+                      _TabView(0, 'New', 10),
+                      _TabView(1, 'Negotiating', 10),
+                      _TabView(2, 'Promised', 10),
+                      _TabView(3, 'Broken Promise', 10),
+                      _TabView(4, 'Refused', 10),
                     ],
                     onTap: (index) {
                       if (!mounted) {
@@ -214,10 +214,10 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
 }
 
 List<List<String>> img = [
-  ['order/xdd_s', 'order/xdd_n'],
-  ['order/dps_s', 'order/dps_n'],
   ['order/dwc_s', 'order/dwc_n'],
+  ['order/xdd_s', 'order/xdd_n'],
   ['order/ywc_s', 'order/ywc_n'],
+  ['order/dps_s', 'order/dps_n'],
   ['order/yqx_s', 'order/yqx_n']
 ];
 
@@ -231,9 +231,10 @@ List<List<String>> darkImg = [
 
 class _TabView extends StatelessWidget {
 
-  const _TabView(this.index, this.text);
+  const _TabView(this.index, this.text, this.fontSize);
 
   final int index;
+  final double fontSize;
   final String text;
   
   @override
@@ -242,7 +243,7 @@ class _TabView extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          width: 70.0,
+          width: 72.0,
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             children: <Widget>[
@@ -251,7 +252,7 @@ class _TabView extends StatelessWidget {
               imgList[index][0] : 
               imgList[index][1], width: 24.0, height: 24.0,),
               Gaps.vGap4,
-              Text(text,style: TextStyle( fontSize: 12),),
+              Text(text,style: TextStyle( fontSize: fontSize),),
             ],
           ),
         ),

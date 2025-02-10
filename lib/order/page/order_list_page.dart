@@ -8,6 +8,7 @@ import 'package:bounty_hunter/widgets/my_refresh_list.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/admin_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
@@ -39,6 +40,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   List<CollectionOrderData> _list = <CollectionOrderData>[];
   List<CollectionOrderData> _listNew = <CollectionOrderData>[];
   List<ProductData> _product = <ProductData>[];
+  List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
   
   @override
@@ -97,12 +99,12 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return index < _list.length ?
-                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product,) :
+                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,) :
                 MoreWidget(_list.length, _hasMore(), 10);
                 return index < _list.length ? 
                 (index % 5 == 0 ? 
                     const OrderTagItem(date: '2021年2月5日', orderTotal: 4) :
-                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product,)
+                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,)
                 ) : 
                 MoreWidget(_list.length, _hasMore(), 10);
               },
@@ -119,6 +121,12 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
       _product = product;
     });
   }
+  @override
+  void setAdmin(List<AdminData> admin) {
+    setState(() {
+      _admins = admin;
+    });
+  }
 
   @override
   void onRefresh() {
@@ -126,7 +134,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   }
 
   Future<void> _onRefresh() async {
-    _list = await _orderListPagePresenter.index(1, true);
+    _list = await _orderListPagePresenter.index(1, widget.index, true);
     setState(() {
       _page = 1;
     });
@@ -147,7 +155,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
     setState(() {
       _page ++;
     });
-    _listNew = await _orderListPagePresenter.index(_page, true);
+    _listNew = await _orderListPagePresenter.index(_page, widget.index, true);
     setState(() {
       _list.addAll(_listNew);
       _isLoading = false;

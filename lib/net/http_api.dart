@@ -7,5 +7,7 @@ class HttpApi{
   static const String authorizations = '/collection/authorizations';
   static const String upload = 'authorizations';
   static const String collectionOrders = '/collection/b-l-collection-orders';
+  static const String collectionLogs = '/collection/q-c-collection-news';
   static const String product = '/collection/products-enum';
+  static const String admins = '/collection/g-m-collection-admins-enum';
 }

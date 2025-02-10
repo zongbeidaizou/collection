@@ -29,6 +29,8 @@ class CollectionOrderEntity {
 
 @JsonSerializable()
 class CollectionOrderData {
+	@JSONField(name: "id")
+	int? id = 0;
 	@JSONField(name: "a_borrow_id")
 	int? aBorrowId = 0;
 	@JSONField(name: "b_collection_stage_id")

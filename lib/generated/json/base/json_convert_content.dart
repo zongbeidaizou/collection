@@ -7,8 +7,10 @@ import 'package:flutter/material.dart' show debugPrint;
 import 'package:bounty_hunter/account/models/bank_entity.dart';
 import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
+import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
+import 'package:bounty_hunter/models/json/collection_log_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
@@ -161,6 +163,14 @@ class JsonConvert {
       return data.map<GoodsSortEntity>((Map<String, dynamic> e) =>
           GoodsSortEntity.fromJson(e)).toList() as M;
     }
+    if (<AdminEntity>[] is M) {
+      return data.map<AdminEntity>((Map<String, dynamic> e) =>
+          AdminEntity.fromJson(e)).toList() as M;
+    }
+    if (<AdminData>[] is M) {
+      return data.map<AdminData>((Map<String, dynamic> e) =>
+          AdminData.fromJson(e)).toList() as M;
+    }
     if (<AuthorizStoreEntity>[] is M) {
       return data.map<AuthorizStoreEntity>((Map<String, dynamic> e) =>
           AuthorizStoreEntity.fromJson(e)).toList() as M;
@@ -176,6 +186,14 @@ class JsonConvert {
     if (<CollectionOrderData>[] is M) {
       return data.map<CollectionOrderData>((Map<String, dynamic> e) =>
           CollectionOrderData.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogEntity>[] is M) {
+      return data.map<CollectionLogEntity>((Map<String, dynamic> e) =>
+          CollectionLogEntity.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogData>[] is M) {
+      return data.map<CollectionLogData>((Map<String, dynamic> e) =>
+          CollectionLogData.fromJson(e)).toList() as M;
     }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
@@ -229,10 +247,14 @@ class JsonConvertClassCollection {
     (BankEntity).toString(): BankEntity.fromJson,
     (CityEntity).toString(): CityEntity.fromJson,
     (GoodsSortEntity).toString(): GoodsSortEntity.fromJson,
+    (AdminEntity).toString(): AdminEntity.fromJson,
+    (AdminData).toString(): AdminData.fromJson,
     (AuthorizStoreEntity).toString(): AuthorizStoreEntity.fromJson,
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
     (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
     (CollectionOrderData).toString(): CollectionOrderData.fromJson,
+    (CollectionLogEntity).toString(): CollectionLogEntity.fromJson,
+    (CollectionLogData).toString(): CollectionLogData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,

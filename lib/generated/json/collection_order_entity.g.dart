@@ -91,6 +91,10 @@ extension CollectionOrderEntityExtension on CollectionOrderEntity {
 
 CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   final CollectionOrderData collectionOrderData = CollectionOrderData();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionOrderData.id = id;
+  }
   final int? aBorrowId = jsonConvert.convert<int>(json['a_borrow_id']);
   if (aBorrowId != null) {
     collectionOrderData.aBorrowId = aBorrowId;
@@ -262,6 +266,7 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['a_borrow_id'] = entity.aBorrowId;
   data['b_collection_stage_id'] = entity.bCollectionStageId;
   data['c_collection_agency_id'] = entity.cCollectionAgencyId;
@@ -304,6 +309,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
 
 extension CollectionOrderDataExtension on CollectionOrderData {
   CollectionOrderData copyWith({
+    int? id,
     int? aBorrowId,
     int? bCollectionStageId,
     int? cCollectionAgencyId,
@@ -342,6 +348,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? AJProductId,
   }) {
     return CollectionOrderData()
+      ..id = id ?? this.id
       ..aBorrowId = aBorrowId ?? this.aBorrowId
       ..bCollectionStageId = bCollectionStageId ?? this.bCollectionStageId
       ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId

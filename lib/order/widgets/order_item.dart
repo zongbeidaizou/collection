@@ -11,6 +11,7 @@ import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../models/admin_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../shop/widgets/price_input_dialog.dart';
@@ -34,6 +35,7 @@ class OrderItem extends StatelessWidget {
     required this.index,
     required this.item,
     required this.products,
+    required this.admins,
     this.inList = true,
   });
 
@@ -42,6 +44,7 @@ class OrderItem extends StatelessWidget {
   final bool inList;
   final CollectionOrderData item;
   final List<ProductData> products;
+  final List<AdminData> admins;
 
   
   @override
@@ -73,7 +76,7 @@ class OrderItem extends StatelessWidget {
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: AddNote(),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+              body: AddNote(orderId: item.id!, admins: admins),     //AddNote should be your Widget that will be displayed inside the bottomSheet
             ),
           );
           return ListView.builder(

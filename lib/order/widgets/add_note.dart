@@ -1,26 +1,43 @@
+import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
+import '../../models/admin_entity.dart';
+import '../../models/json/collection_log_entity.dart';
+import '../../mvp/base_page.dart';
 import '../../res/colors.dart';
 import '../../res/gaps.dart';
+import '../../util/change_notifier_manage.dart';
 import '../../widgets/my_card.dart';
+import '../iview/add_note_iview.dart';
+import '../presenter/add_note_presenter.dart';
 import 'MyCommentBox.dart';
 import 'order_item.dart';
 
 void main() {
-  runApp(AddNote());
 }
 
 class AddNote extends StatefulWidget {
+  const AddNote({
+    super.key,
+    required this.orderId,
+    required this.admins,
+  });
+  final int orderId;
+  final List<AdminData> admins;
   @override
   _AddNoteState createState() => _AddNoteState();
 }
 
-class _AddNoteState extends State<AddNote> {
+class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<AddNote>,  BasePageMixin<AddNote, AddNotePresenter>
+    implements AddNoteIMvpView   {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
+  List<CollectionLogData> _list = <CollectionLogData>[];
+  late AddNotePresenter _addNotePresenter;
   List<dynamic> filedata = [
     {
       'name': 'Chuks Okwuenu',
@@ -83,8 +100,36 @@ class _AddNoteState extends State<AddNote> {
       'date': '2021-01-01 12:00:00'
     },
   ];
+  Future<void> _onRefresh() async {
+    _list = await _addNotePresenter.index(1, widget.orderId, true);
+    setState(() {
+    });
+  }
 
-  Widget commentChild(List<dynamic> data) {
+
+  @override
+  AddNotePresenter createPresenter() {
+    _addNotePresenter = AddNotePresenter();
+    return _addNotePresenter;
+  }
+
+  @override
+  void onRefresh() {
+    _onRefresh();
+  }
+
+  @override
+  void setLogs(List<CollectionLogData> logs) {
+    setState(() {
+      _list = logs;
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Widget commentChild(List<CollectionLogData> data) {
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
       child: ListView.builder(
@@ -97,7 +142,9 @@ class _AddNoteState extends State<AddNote> {
                 Row(
                   children: [
                     Expanded(child: Gaps.line),
-                    Text(data[i]['date'].toString(), style: TextStyle(fontSize: 10)),
+                    Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
+                    Gaps.hGap8,
+                    Text(widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? '', style: TextStyle(fontSize: 10)),
                     Gaps.hGap8,
                     Icon(Icons.phone_disabled, color: Colors.purpleAccent, size: 12,),
                     Expanded(child: Gaps.line),
@@ -110,7 +157,7 @@ class _AddNoteState extends State<AddNote> {
                       color: Colors.grey.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
-                    child: Text(data[i]['message'].toString())),
+                    child: Text(data[i].jContent.toString())),
                 Gaps.vGap4,
                 // Gaps.line,
                 Gaps.vGap8
@@ -168,7 +215,7 @@ class _AddNoteState extends State<AddNote> {
                 child: MyCard(
                   shadowColor: Colors.grey.withOpacity(0.2),
                   child: MyCommentBox(
-                    child: commentChild(filedata),
+                    child: commentChild(_list),
                     labelText: 'Write a comment...',
                     errorText: 'Comment cannot be blank',
                     withBorder: false,
@@ -206,5 +253,7 @@ class _AddNoteState extends State<AddNote> {
       ),
     );
   }
+
+
 
 }

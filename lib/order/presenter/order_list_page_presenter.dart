@@ -6,6 +6,7 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
@@ -18,16 +19,17 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await product(false);
+      await admins(false);
       view.onRefresh();
     });
   }
 
-  Future<List<CollectionOrderData>> index(int page,  bool isShowDialog) async {
+  Future<List<CollectionOrderData>> index(int page, int status, bool isShowDialog) async {
 
 
     List<CollectionOrderData> _list = <CollectionOrderData>[];
-    FormData formData = FormData.fromMap({"page": page});
-    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page}, onSuccess: (data) async {
+    FormData formData = FormData.fromMap({"page": page, 'k_status': status});
+    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page, 'k_status': status}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
       }
@@ -44,6 +46,18 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
       if (data != null) {
         view.setProduct(data.data!);
+      }
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
+  }
+  Future<void> admins( bool isShowDialog) async {
+    await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
+      if (data != null) {
+        view.setAdmin(data.data!);
       }
     }, onError: (_, __) async {
       if (_ == 200006) {

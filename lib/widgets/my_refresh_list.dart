@@ -115,7 +115,7 @@ class MoreWidget extends StatelessWidget {
           if (hasMore) const CupertinoActivityIndicator(),
           if (hasMore) Gaps.hGap5,
           /// 只有一页的时候，就不显示FooterView了
-          Text(hasMore ? '正在加载中...' : (itemCount < pageSize ? '' : '没有了呦~'), style: style),
+          Text(hasMore ? 'Loading...' : (itemCount < pageSize ? '' : 'No data~'), style: style),
         ],
       ),
     );

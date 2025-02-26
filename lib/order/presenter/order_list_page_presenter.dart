@@ -5,11 +5,13 @@ import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/user_provider.dart';
 import '../iview/order_list_page_iview.dart';
 
 
@@ -33,6 +35,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       if (data != null) {
         _list =  data.data!;
       }
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {
@@ -66,5 +69,19 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       }
     });
   }
+
+  Future<void> profile( bool isShowDialog) async {
+    await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
+      if (data != null) {
+        view.setAdmin(data.data!);
+      }
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
+  }
+
  
 }

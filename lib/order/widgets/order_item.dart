@@ -98,7 +98,7 @@ class OrderItem extends StatelessWidget {
           children: <Widget>[
 
             Expanded(
-              child: Text(products.firstWhere((product) => product.id == item.AJProductId).bName ?? '',                 style: const TextStyle(
+              child: Text(products.firstWhere((product) => product.id == item.aJProductId).bName ?? '',                 style: const TextStyle(
                 fontSize: Dimens.font_sp14,
                 fontWeight: FontWeight.w500,
               ),),

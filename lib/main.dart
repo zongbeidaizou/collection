@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -136,7 +137,8 @@ class MyApp extends StatelessWidget {
     final Widget app = MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => LocaleProvider())
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider())
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (_, ThemeProvider provider, LocaleProvider localeProvider, __) {

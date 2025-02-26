@@ -41,6 +41,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   IconData? _value = Icons.sync;
   bool _focus = false;
   final FocusNode _focusNode = FocusNode();
+  DateTime? _savedDateTime;
 
   void _showDialog() {
     showDialog<void>(
@@ -88,6 +89,15 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   ),
                 ),
                 initialTime: const TimeOfDay(hour: 8, minute: 0),
+                onSaved: (value) {
+                  if (value != null) {
+                    // 自定义保存逻辑：保存到变量并增加日志
+                    setState(() {
+                      _savedDateTime = value.add(const Duration(hours: 8)); // 示例：自动+8小时
+                    });
+                    print('onSaved 触发: $value → $_savedDateTime');
+                  }
+                },
                 // locale: const Locale.fromSubtags(languageCode: 'fr'),
               ),
           ),

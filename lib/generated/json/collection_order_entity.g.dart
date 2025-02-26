@@ -25,8 +25,8 @@ CollectionOrderEntity $CollectionOrderEntityFromJson(
   if (data != null) {
     collectionOrderEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     collectionOrderEntity.other = other;
   }
@@ -56,7 +56,7 @@ Map<String, dynamic> $CollectionOrderEntityToJson(
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -70,7 +70,7 @@ extension CollectionOrderEntityExtension on CollectionOrderEntity {
     String? errorMessage,
     String? message,
     List<CollectionOrderData>? data,
-    List<dynamic>? other,
+    CollectionOrderOther? other,
     int? total,
     int? currentPage,
     int? perPage,
@@ -198,7 +198,7 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (vName != null) {
     collectionOrderData.vName = vName;
   }
-  final dynamic wViewTimes = json['w_view_times'];
+  final int? wViewTimes = jsonConvert.convert<int>(json['w_view_times']);
   if (wViewTimes != null) {
     collectionOrderData.wViewTimes = wViewTimes;
   }
@@ -217,19 +217,22 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (zCurrentCallCount != null) {
     collectionOrderData.zCurrentCallCount = zCurrentCallCount;
   }
-  final dynamic aACommission = json['a_a_commission'];
+  final int? aACommission = jsonConvert.convert<int>(json['a_a_commission']);
   if (aACommission != null) {
     collectionOrderData.aACommission = aACommission;
   }
-  final dynamic aBCurrentCommission = json['a_b_current_commission'];
+  final int? aBCurrentCommission = jsonConvert.convert<int>(
+      json['a_b_current_commission']);
   if (aBCurrentCommission != null) {
     collectionOrderData.aBCurrentCommission = aBCurrentCommission;
   }
-  final dynamic aCExpectCurrentCommission = json['a_c_expect_current_commission'];
+  final int? aCExpectCurrentCommission = jsonConvert.convert<int>(
+      json['a_c_expect_current_commission']);
   if (aCExpectCurrentCommission != null) {
     collectionOrderData.aCExpectCurrentCommission = aCExpectCurrentCommission;
   }
-  final dynamic aDLastLogTime = json['a_d_last_log_time'];
+  final String? aDLastLogTime = jsonConvert.convert<String>(
+      json['a_d_last_log_time']);
   if (aDLastLogTime != null) {
     collectionOrderData.aDLastLogTime = aDLastLogTime;
   }
@@ -252,14 +255,14 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aHS2CollectionAmount != null) {
     collectionOrderData.aHS2CollectionAmount = aHS2CollectionAmount;
   }
-  final int? aIS3CollectionAmount = jsonConvert.convert<int>(
-      json['a_i_s3_collection_amount']);
-  if (aIS3CollectionAmount != null) {
-    collectionOrderData.aIS3CollectionAmount = aIS3CollectionAmount;
+  final int? aFS3CollectionAmount = jsonConvert.convert<int>(
+      json['a_f_s3_collection_amount']);
+  if (aFS3CollectionAmount != null) {
+    collectionOrderData.aFS3CollectionAmount = aFS3CollectionAmount;
   }
-  final int? AJProductId = jsonConvert.convert<int>(json['a_j_product_id']);
-  if (AJProductId != null) {
-    collectionOrderData.AJProductId = AJProductId;
+  final int? aJProductId = jsonConvert.convert<int>(json['a_j_product_id']);
+  if (aJProductId != null) {
+    collectionOrderData.aJProductId = aJProductId;
   }
   return collectionOrderData;
 }
@@ -302,8 +305,8 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_f_s0_collection_amount'] = entity.aFS0CollectionAmount;
   data['a_g_s1_collection_amount'] = entity.aGS1CollectionAmount;
   data['a_h_s2_collection_amount'] = entity.aHS2CollectionAmount;
-  data['a_i_s3_collection_amount'] = entity.aIS3CollectionAmount;
-  data['a_j_product_id'] = entity.AJProductId;
+  data['a_f_s3_collection_amount'] = entity.aFS3CollectionAmount;
+  data['a_j_product_id'] = entity.aJProductId;
   return data;
 }
 
@@ -332,20 +335,20 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     String? tBorrowSn,
     String? uPhone,
     String? vName,
-    dynamic wViewTimes,
+    int? wViewTimes,
     int? xCurrentViewTimes,
     int? yCurrentLogCount,
     int? zCurrentCallCount,
-    dynamic aACommission,
-    dynamic aBCurrentCommission,
-    dynamic aCExpectCurrentCommission,
-    dynamic aDLastLogTime,
+    int? aACommission,
+    int? aBCurrentCommission,
+    int? aCExpectCurrentCommission,
+    String? aDLastLogTime,
     int? aEBorrowCount,
     int? aFS0CollectionAmount,
     int? aGS1CollectionAmount,
     int? aHS2CollectionAmount,
-    int? aIS3CollectionAmount,
-    int? AJProductId,
+    int? aFS3CollectionAmount,
+    int? aJProductId,
   }) {
     return CollectionOrderData()
       ..id = id ?? this.id
@@ -387,7 +390,396 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aFS0CollectionAmount = aFS0CollectionAmount ?? this.aFS0CollectionAmount
       ..aGS1CollectionAmount = aGS1CollectionAmount ?? this.aGS1CollectionAmount
       ..aHS2CollectionAmount = aHS2CollectionAmount ?? this.aHS2CollectionAmount
-      ..aIS3CollectionAmount = aIS3CollectionAmount ?? this.aIS3CollectionAmount
-      ..AJProductId = AJProductId ?? this.AJProductId;
+      ..aFS3CollectionAmount = aFS3CollectionAmount ?? this.aFS3CollectionAmount
+      ..aJProductId = aJProductId ?? this.aJProductId;
+  }
+}
+
+CollectionOrderOther $CollectionOrderOtherFromJson(Map<String, dynamic> json) {
+  final CollectionOrderOther collectionOrderOther = CollectionOrderOther();
+  final CollectionOrderOtherProgress? progress = jsonConvert.convert<
+      CollectionOrderOtherProgress>(json['progress']);
+  if (progress != null) {
+    collectionOrderOther.progress = progress;
+  }
+  final CollectionOrderOtherProfile? profile = jsonConvert.convert<
+      CollectionOrderOtherProfile>(json['profile']);
+  if (profile != null) {
+    collectionOrderOther.profile = profile;
+  }
+  return collectionOrderOther;
+}
+
+Map<String, dynamic> $CollectionOrderOtherToJson(CollectionOrderOther entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['progress'] = entity.progress?.toJson();
+  data['profile'] = entity.profile?.toJson();
+  return data;
+}
+
+extension CollectionOrderOtherExtension on CollectionOrderOther {
+  CollectionOrderOther copyWith({
+    CollectionOrderOtherProgress? progress,
+    CollectionOrderOtherProfile? profile,
+  }) {
+    return CollectionOrderOther()
+      ..progress = progress ?? this.progress
+      ..profile = profile ?? this.profile;
+  }
+}
+
+CollectionOrderOtherProgress $CollectionOrderOtherProgressFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherProgress collectionOrderOtherProgress = CollectionOrderOtherProgress();
+  final List<int>? points = (json['points'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (points != null) {
+    collectionOrderOtherProgress.points = points;
+  }
+  final List<
+      CollectionOrderOtherProgressLevelProgress>? levelProgress = (json['levelProgress'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionOrderOtherProgressLevelProgress>(
+          e) as CollectionOrderOtherProgressLevelProgress).toList();
+  if (levelProgress != null) {
+    collectionOrderOtherProgress.levelProgress = levelProgress;
+  }
+  final List<
+      CollectionOrderOtherProgressAmountProgress>? amountProgress = (json['amountProgress'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionOrderOtherProgressAmountProgress>(
+          e) as CollectionOrderOtherProgressAmountProgress).toList();
+  if (amountProgress != null) {
+    collectionOrderOtherProgress.amountProgress = amountProgress;
+  }
+  final List<int>? amountProgress2 = (json['amountProgress2'] as List<dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<int>(e) as int)
+      .toList();
+  if (amountProgress2 != null) {
+    collectionOrderOtherProgress.amountProgress2 = amountProgress2;
+  }
+  final int? currentLevel = jsonConvert.convert<int>(json['currentLevel']);
+  if (currentLevel != null) {
+    collectionOrderOtherProgress.currentLevel = currentLevel;
+  }
+  final int? nextAmount = jsonConvert.convert<int>(json['nextAmount']);
+  if (nextAmount != null) {
+    collectionOrderOtherProgress.nextAmount = nextAmount;
+  }
+  final int? nextLevel = jsonConvert.convert<int>(json['nextLevel']);
+  if (nextLevel != null) {
+    collectionOrderOtherProgress.nextLevel = nextLevel;
+  }
+  final int? currentKey = jsonConvert.convert<int>(json['currentKey']);
+  if (currentKey != null) {
+    collectionOrderOtherProgress.currentKey = currentKey;
+  }
+  return collectionOrderOtherProgress;
+}
+
+Map<String, dynamic> $CollectionOrderOtherProgressToJson(
+    CollectionOrderOtherProgress entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['points'] = entity.points;
+  data['levelProgress'] = entity.levelProgress?.map((v) => v.toJson()).toList();
+  data['amountProgress'] =
+      entity.amountProgress?.map((v) => v.toJson()).toList();
+  data['amountProgress2'] = entity.amountProgress2;
+  data['currentLevel'] = entity.currentLevel;
+  data['nextAmount'] = entity.nextAmount;
+  data['nextLevel'] = entity.nextLevel;
+  data['currentKey'] = entity.currentKey;
+  return data;
+}
+
+extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress {
+  CollectionOrderOtherProgress copyWith({
+    List<int>? points,
+    List<CollectionOrderOtherProgressLevelProgress>? levelProgress,
+    List<CollectionOrderOtherProgressAmountProgress>? amountProgress,
+    List<int>? amountProgress2,
+    int? currentLevel,
+    int? nextAmount,
+    int? nextLevel,
+    int? currentKey,
+  }) {
+    return CollectionOrderOtherProgress()
+      ..points = points ?? this.points
+      ..levelProgress = levelProgress ?? this.levelProgress
+      ..amountProgress = amountProgress ?? this.amountProgress
+      ..amountProgress2 = amountProgress2 ?? this.amountProgress2
+      ..currentLevel = currentLevel ?? this.currentLevel
+      ..nextAmount = nextAmount ?? this.nextAmount
+      ..nextLevel = nextLevel ?? this.nextLevel
+      ..currentKey = currentKey ?? this.currentKey;
+  }
+}
+
+CollectionOrderOtherProgressLevelProgress $CollectionOrderOtherProgressLevelProgressFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherProgressLevelProgress collectionOrderOtherProgressLevelProgress = CollectionOrderOtherProgressLevelProgress();
+  final String? level = jsonConvert.convert<String>(json['level']);
+  if (level != null) {
+    collectionOrderOtherProgressLevelProgress.level = level;
+  }
+  final int? type = jsonConvert.convert<int>(json['type']);
+  if (type != null) {
+    collectionOrderOtherProgressLevelProgress.type = type;
+  }
+  return collectionOrderOtherProgressLevelProgress;
+}
+
+Map<String, dynamic> $CollectionOrderOtherProgressLevelProgressToJson(
+    CollectionOrderOtherProgressLevelProgress entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['level'] = entity.level;
+  data['type'] = entity.type;
+  return data;
+}
+
+extension CollectionOrderOtherProgressLevelProgressExtension on CollectionOrderOtherProgressLevelProgress {
+  CollectionOrderOtherProgressLevelProgress copyWith({
+    String? level,
+    int? type,
+  }) {
+    return CollectionOrderOtherProgressLevelProgress()
+      ..level = level ?? this.level
+      ..type = type ?? this.type;
+  }
+}
+
+CollectionOrderOtherProgressAmountProgress $CollectionOrderOtherProgressAmountProgressFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherProgressAmountProgress collectionOrderOtherProgressAmountProgress = CollectionOrderOtherProgressAmountProgress();
+  final int? amount = jsonConvert.convert<int>(json['amount']);
+  if (amount != null) {
+    collectionOrderOtherProgressAmountProgress.amount = amount;
+  }
+  final int? type = jsonConvert.convert<int>(json['type']);
+  if (type != null) {
+    collectionOrderOtherProgressAmountProgress.type = type;
+  }
+  return collectionOrderOtherProgressAmountProgress;
+}
+
+Map<String, dynamic> $CollectionOrderOtherProgressAmountProgressToJson(
+    CollectionOrderOtherProgressAmountProgress entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['amount'] = entity.amount;
+  data['type'] = entity.type;
+  return data;
+}
+
+extension CollectionOrderOtherProgressAmountProgressExtension on CollectionOrderOtherProgressAmountProgress {
+  CollectionOrderOtherProgressAmountProgress copyWith({
+    int? amount,
+    int? type,
+  }) {
+    return CollectionOrderOtherProgressAmountProgress()
+      ..amount = amount ?? this.amount
+      ..type = type ?? this.type;
+  }
+}
+
+CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherProfile collectionOrderOtherProfile = CollectionOrderOtherProfile();
+  final String? aName = jsonConvert.convert<String>(json['a_name']);
+  if (aName != null) {
+    collectionOrderOtherProfile.aName = aName;
+  }
+  final int? bAdminId = jsonConvert.convert<int>(json['b_admin_id']);
+  if (bAdminId != null) {
+    collectionOrderOtherProfile.bAdminId = bAdminId;
+  }
+  final int? cCollectionAgencyId = jsonConvert.convert<int>(
+      json['c_collection_agency_id']);
+  if (cCollectionAgencyId != null) {
+    collectionOrderOtherProfile.cCollectionAgencyId = cCollectionAgencyId;
+  }
+  final int? dCollectionGroupId = jsonConvert.convert<int>(
+      json['d_collection_group_id']);
+  if (dCollectionGroupId != null) {
+    collectionOrderOtherProfile.dCollectionGroupId = dCollectionGroupId;
+  }
+  final String? eCollectionStages = jsonConvert.convert<String>(
+      json['e_collection_stages']);
+  if (eCollectionStages != null) {
+    collectionOrderOtherProfile.eCollectionStages = eCollectionStages;
+  }
+  final int? fStatus = jsonConvert.convert<int>(json['f_status']);
+  if (fStatus != null) {
+    collectionOrderOtherProfile.fStatus = fStatus;
+  }
+  final String? gComment = jsonConvert.convert<String>(json['g_comment']);
+  if (gComment != null) {
+    collectionOrderOtherProfile.gComment = gComment;
+  }
+  final int? hCollectionIngOrderCount = jsonConvert.convert<int>(
+      json['h_collection_ing_order_count']);
+  if (hCollectionIngOrderCount != null) {
+    collectionOrderOtherProfile.hCollectionIngOrderCount =
+        hCollectionIngOrderCount;
+  }
+  final int? iTodayCurrentKpiLevel = jsonConvert.convert<int>(
+      json['i_today_current_kpi_level']);
+  if (iTodayCurrentKpiLevel != null) {
+    collectionOrderOtherProfile.iTodayCurrentKpiLevel = iTodayCurrentKpiLevel;
+  }
+  final int? jTodayInitAmount = jsonConvert.convert<int>(
+      json['j_today_init_amount']);
+  if (jTodayInitAmount != null) {
+    collectionOrderOtherProfile.jTodayInitAmount = jTodayInitAmount;
+  }
+  final int? kCurrentNewCount = jsonConvert.convert<int>(
+      json['k_current_new_count']);
+  if (kCurrentNewCount != null) {
+    collectionOrderOtherProfile.kCurrentNewCount = kCurrentNewCount;
+  }
+  final int? lCurrentNegotiatingCount = jsonConvert.convert<int>(
+      json['l_current_negotiating_count']);
+  if (lCurrentNegotiatingCount != null) {
+    collectionOrderOtherProfile.lCurrentNegotiatingCount =
+        lCurrentNegotiatingCount;
+  }
+  final int? mCurrrentPromisedCount = jsonConvert.convert<int>(
+      json['m_currrent_promised_count']);
+  if (mCurrrentPromisedCount != null) {
+    collectionOrderOtherProfile.mCurrrentPromisedCount = mCurrrentPromisedCount;
+  }
+  final int? nCurrentBrokenCount = jsonConvert.convert<int>(
+      json['n_current_broken_count']);
+  if (nCurrentBrokenCount != null) {
+    collectionOrderOtherProfile.nCurrentBrokenCount = nCurrentBrokenCount;
+  }
+  final int? oCurrentRefusedCount = jsonConvert.convert<int>(
+      json['o_current_refused_count']);
+  if (oCurrentRefusedCount != null) {
+    collectionOrderOtherProfile.oCurrentRefusedCount = oCurrentRefusedCount;
+  }
+  final int? pTodayCurrentRepayCount = jsonConvert.convert<int>(
+      json['p_today_current_repay_count']);
+  if (pTodayCurrentRepayCount != null) {
+    collectionOrderOtherProfile.pTodayCurrentRepayCount =
+        pTodayCurrentRepayCount;
+  }
+  final int? rTodayCurrentRepayAmount = jsonConvert.convert<int>(
+      json['r_today_current_repay_amount']);
+  if (rTodayCurrentRepayAmount != null) {
+    collectionOrderOtherProfile.rTodayCurrentRepayAmount =
+        rTodayCurrentRepayAmount;
+  }
+  final int? tTodayLv1Commission = jsonConvert.convert<int>(
+      json['t_today_lv1_commission']);
+  if (tTodayLv1Commission != null) {
+    collectionOrderOtherProfile.tTodayLv1Commission = tTodayLv1Commission;
+  }
+  final int? uTodayLv2Commission = jsonConvert.convert<int>(
+      json['u_today_lv2_commission']);
+  if (uTodayLv2Commission != null) {
+    collectionOrderOtherProfile.uTodayLv2Commission = uTodayLv2Commission;
+  }
+  final int? vTodayLv3Commission = jsonConvert.convert<int>(
+      json['v_today_lv3_commission']);
+  if (vTodayLv3Commission != null) {
+    collectionOrderOtherProfile.vTodayLv3Commission = vTodayLv3Commission;
+  }
+  final int? wTodayLv4Commission = jsonConvert.convert<int>(
+      json['w_today_lv4_commission']);
+  if (wTodayLv4Commission != null) {
+    collectionOrderOtherProfile.wTodayLv4Commission = wTodayLv4Commission;
+  }
+  final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
+  if (updatedAt != null) {
+    collectionOrderOtherProfile.updatedAt = updatedAt;
+  }
+  return collectionOrderOtherProfile;
+}
+
+Map<String, dynamic> $CollectionOrderOtherProfileToJson(
+    CollectionOrderOtherProfile entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['a_name'] = entity.aName;
+  data['b_admin_id'] = entity.bAdminId;
+  data['c_collection_agency_id'] = entity.cCollectionAgencyId;
+  data['d_collection_group_id'] = entity.dCollectionGroupId;
+  data['e_collection_stages'] = entity.eCollectionStages;
+  data['f_status'] = entity.fStatus;
+  data['g_comment'] = entity.gComment;
+  data['h_collection_ing_order_count'] = entity.hCollectionIngOrderCount;
+  data['i_today_current_kpi_level'] = entity.iTodayCurrentKpiLevel;
+  data['j_today_init_amount'] = entity.jTodayInitAmount;
+  data['k_current_new_count'] = entity.kCurrentNewCount;
+  data['l_current_negotiating_count'] = entity.lCurrentNegotiatingCount;
+  data['m_currrent_promised_count'] = entity.mCurrrentPromisedCount;
+  data['n_current_broken_count'] = entity.nCurrentBrokenCount;
+  data['o_current_refused_count'] = entity.oCurrentRefusedCount;
+  data['p_today_current_repay_count'] = entity.pTodayCurrentRepayCount;
+  data['r_today_current_repay_amount'] = entity.rTodayCurrentRepayAmount;
+  data['t_today_lv1_commission'] = entity.tTodayLv1Commission;
+  data['u_today_lv2_commission'] = entity.uTodayLv2Commission;
+  data['v_today_lv3_commission'] = entity.vTodayLv3Commission;
+  data['w_today_lv4_commission'] = entity.wTodayLv4Commission;
+  data['updated_at'] = entity.updatedAt;
+  return data;
+}
+
+extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
+  CollectionOrderOtherProfile copyWith({
+    String? aName,
+    int? bAdminId,
+    int? cCollectionAgencyId,
+    int? dCollectionGroupId,
+    String? eCollectionStages,
+    int? fStatus,
+    String? gComment,
+    int? hCollectionIngOrderCount,
+    int? iTodayCurrentKpiLevel,
+    int? jTodayInitAmount,
+    int? kCurrentNewCount,
+    int? lCurrentNegotiatingCount,
+    int? mCurrrentPromisedCount,
+    int? nCurrentBrokenCount,
+    int? oCurrentRefusedCount,
+    int? pTodayCurrentRepayCount,
+    int? rTodayCurrentRepayAmount,
+    int? tTodayLv1Commission,
+    int? uTodayLv2Commission,
+    int? vTodayLv3Commission,
+    int? wTodayLv4Commission,
+    String? updatedAt,
+  }) {
+    return CollectionOrderOtherProfile()
+      ..aName = aName ?? this.aName
+      ..bAdminId = bAdminId ?? this.bAdminId
+      ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId
+      ..dCollectionGroupId = dCollectionGroupId ?? this.dCollectionGroupId
+      ..eCollectionStages = eCollectionStages ?? this.eCollectionStages
+      ..fStatus = fStatus ?? this.fStatus
+      ..gComment = gComment ?? this.gComment
+      ..hCollectionIngOrderCount = hCollectionIngOrderCount ??
+          this.hCollectionIngOrderCount
+      ..iTodayCurrentKpiLevel = iTodayCurrentKpiLevel ??
+          this.iTodayCurrentKpiLevel
+      ..jTodayInitAmount = jTodayInitAmount ?? this.jTodayInitAmount
+      ..kCurrentNewCount = kCurrentNewCount ?? this.kCurrentNewCount
+      ..lCurrentNegotiatingCount = lCurrentNegotiatingCount ??
+          this.lCurrentNegotiatingCount
+      ..mCurrrentPromisedCount = mCurrrentPromisedCount ??
+          this.mCurrrentPromisedCount
+      ..nCurrentBrokenCount = nCurrentBrokenCount ?? this.nCurrentBrokenCount
+      ..oCurrentRefusedCount = oCurrentRefusedCount ?? this.oCurrentRefusedCount
+      ..pTodayCurrentRepayCount = pTodayCurrentRepayCount ??
+          this.pTodayCurrentRepayCount
+      ..rTodayCurrentRepayAmount = rTodayCurrentRepayAmount ??
+          this.rTodayCurrentRepayAmount
+      ..tTodayLv1Commission = tTodayLv1Commission ?? this.tTodayLv1Commission
+      ..uTodayLv2Commission = uTodayLv2Commission ?? this.uTodayLv2Commission
+      ..vTodayLv3Commission = vTodayLv3Commission ?? this.vTodayLv3Commission
+      ..wTodayLv4Commission = wTodayLv4Commission ?? this.wTodayLv4Commission
+      ..updatedAt = updatedAt ?? this.updatedAt;
   }
 }

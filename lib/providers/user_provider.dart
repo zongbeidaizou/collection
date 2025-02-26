@@ -1,49 +1,10 @@
-{
-  "success": true,
-  "errorMessage": "messages.retrieved",
-  "message": "messages.retrieved",
-  "data": [
-    {
-      "id": 15,
-      "a_borrow_id": 15,
-      "b_collection_stage_id": 92,
-      "c_collection_agency_id": 94,
-      "d_collection_group_id": 23,
-      "e_collection_admin_id": 13,
-      "f_collection_news_id": 0,
-      "g_collection_order_flow_history_count": 0,
-      "h_collection_admin_log_count": 0,
-      "i_collection_admin_call_count": 0,
-      "j_system_sms_count": 0,
-      "k_status": 13,
-      "l_collection_amount": 0,
-      "m_period_id": 15,
-      "n_borrow_amount": 470,
-      "o_period_index": 917,
-      "p_expect_repay_time": "2025-02-06T16:00:00.000000Z",
-      "q_lock_end_stage_id": 0,
-      "r_flow_in_time": "2025-02-06T07:07:00.000000Z",
-      "s_flow_out_time": "2025-02-06T16:00:00.000000Z",
-      "t_borrow_sn": "TMmpmXYFh9",
-      "u_phone": "312-542-7999",
-      "v_name": "Song Lan",
-      "w_view_times": 0,
-      "x_current_view_times": 0,
-      "y_current_log_count": 0,
-      "z_current_call_count": 0,
-      "a_a_commission": 0,
-      "a_b_current_commission": 0,
-      "a_c_expect_current_commission": 0,
-      "a_d_last_log_time": "2025-02-06T16:00:00.000000Z",
-      "a_e_borrow_count": 499,
-      "a_f_s0_collection_amount": 0,
-      "a_g_s1_collection_amount": 0,
-      "a_h_s2_collection_amount": 0,
-      "a_f_s3_collection_amount": 0,
-      "a_j_product_id": 0
-    }
-  ],
-  "other": {
+import 'package:flutter/material.dart';
+
+import '../models/collection_order_entity.dart';
+
+
+class UserProvider extends ChangeNotifier {
+  CollectionOrderOther? _userEntity = CollectionOrderOther.fromJson({
     "progress": {
       "points": [0, 0.2, 0.4, 0.5, 1],
       "levelProgress": [{
@@ -108,9 +69,15 @@
       "w_today_lv4_commission": 0,
       "updated_at": "2025-02-06T16:00:00.000000Z"
     }
-  },
-  "total": 96,
-  "currentPage": 1,
-  "perPage": 40,
-  "hasMorePages": false
+  }) as CollectionOrderOther?;
+  CollectionOrderOther get userEntity => _userEntity!;
+
+  void setUserEntity(CollectionOrderOther userEntity) {
+    if (userEntity.profile?.updatedAt != _userEntity?.profile?.updatedAt ) {
+      _userEntity = userEntity;
+      notifyListeners();
+    }
+  }
+
+
 }

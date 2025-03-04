@@ -36,70 +36,13 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     implements AddNoteIMvpView   {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
   List<CollectionLogData> _list = <CollectionLogData>[];
+  final List<IconData> _iconList = [Icons.sync,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment];
+  final List<Color> _colorList = [Colors.grey,Colors.grey, Colors.green, Colors.purpleAccent, Colors.red, Colors.orange, Colors.blue];
   late AddNotePresenter _addNotePresenter;
-  List<dynamic> filedata = [
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Chuks Okwuenu',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'I love to codeI love to codeI love to codeI love to codeI love to codeI love to code',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'https://www.adeleyeayodeji.com/img/IMG_20200522_121756_834_2.jpg',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Tunde Martins',
-      'pic': 'assets/img/userpic.jpg',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-    {
-      'name': 'Biggi Man',
-      'pic': 'https://picsum.photos/300/30',
-      'message': 'Very cool',
-      'date': '2021-01-01 12:00:00'
-    },
-  ];
+
   Future<void> _onRefresh() async {
     _list = await _addNotePresenter.index(1, widget.orderId, true);
     setState(() {
@@ -139,25 +82,52 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(child: Gaps.line),
-                    Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
-                    Gaps.hGap8,
-                    Text(widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? '', style: TextStyle(fontSize: 10)),
-                    Gaps.hGap8,
-                    Icon(Icons.phone_disabled, color: Colors.purpleAccent, size: 12,),
-                    Expanded(child: Gaps.line),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(child: Gaps.line),
+                //     Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
+                //     Gaps.hGap8,
+                //     Text( widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? 'You' , style: const TextStyle(fontSize: 10)),
+                //     Gaps.hGap8,
+                //     Icon(_iconList[data[i].gType!], color: _colorList[data[i].gType!], size: 12,),
+                //     Expanded(child: Gaps.line),
+                //   ],
+                // ),
                 Gaps.vGap4,
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: _colorList[data[i].gType!].withOpacity(0.08),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
-                    child: Text(data[i].jContent.toString())),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(DateFormat("MMM dd, yyyy 'at' HH:mm").format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
+                            Gaps.hGap8,
+                            Text( 'Recorded by: ' , style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
+                            Text( widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? 'You' , style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
+                            Gaps.hGap8,
+                            Expanded(child: Gaps.empty),
+                            Icon(_iconList[data[i].gType!], color: _colorList[data[i].gType!], size: 12,),
+                          ],
+                        ),
+                        Gaps.vGap4,
+                        Text(data[i].jContent.toString()),
+                        Gaps.vGap4,
+                        if ((data[i].kPromiseTime?.isNotEmpty ?? false) && data[i].gType! == 2) Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('Promise to Pay by ${DateFormat("MMM dd, yyyy 'at' HH:mm").format(DateTime.parse(data[i].kPromiseTime!))}', style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
+                          ],
+                        ) else Gaps.empty,
+
+                      ],
+                    )),
                 Gaps.vGap4,
                 // Gaps.line,
                 Gaps.vGap8
@@ -219,20 +189,26 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                     labelText: 'Write a comment...',
                     errorText: 'Comment cannot be blank',
                     withBorder: false,
-                    sendButtonMethod: () {
+                    sendButtonMethod: () async {
                       if (formKey.currentState!.validate()) {
                         print(commentController.text);
+                        print(dateController.text);
+                        print(typeController.text);
+                        var value = {
+                          'g_type': typeController.text,
+                          'j_content': commentController.text,
+                          'created_at': DateTime.now(),
+                          'e_collection_admin_id': 0,
+                          'k_promise_time': dateController.text,
+                        };
                         setState(() {
-                          var value = {
-                            'name': 'New User',
-                            'pic':
-                            'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-                            'message': commentController.text,
-                            'date': '2021-01-01 12:00:00'
-                          };
-                          filedata.insert(0, value);
+                          _list.insert(0, CollectionLogData.fromJson(value));
                         });
+                        print(value);
+                        await _addNotePresenter.store(value,  true);
                         commentController.clear();
+                        dateController.clear();
+                        typeController.clear();
                         FocusScope.of(context).unfocus();
                       } else {
                         print("Not validated");
@@ -240,6 +216,8 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                     },
                     formKey: formKey,
                     commentController: commentController,
+                    dateController: dateController,
+                    typeController: typeController,
                     backgroundColor: Colors.white,
                     textColor: Colors.black,
                     sendWidget: Icon(Icons.send_sharp, size: 28, color: Colours.app_main),

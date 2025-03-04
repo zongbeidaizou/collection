@@ -129,6 +129,11 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   if (createdAt != null) {
     collectionLogData.createdAt = createdAt;
   }
+  final String? kPromiseTime = jsonConvert.convert<String>(
+      json['k_promise_time']);
+  if (kPromiseTime != null) {
+    collectionLogData.kPromiseTime = kPromiseTime;
+  }
   return collectionLogData;
 }
 
@@ -143,6 +148,7 @@ Map<String, dynamic> $CollectionLogDataToJson(CollectionLogData entity) {
   data['g_type'] = entity.gType;
   data['j_content'] = entity.jContent;
   data['created_at'] = entity.createdAt;
+  data['k_promise_time'] = entity.kPromiseTime;
   return data;
 }
 
@@ -157,6 +163,7 @@ extension CollectionLogDataExtension on CollectionLogData {
     int? gType,
     String? jContent,
     String? createdAt,
+    String? kPromiseTime,
   }) {
     return CollectionLogData()
       ..id = id ?? this.id
@@ -167,6 +174,7 @@ extension CollectionLogDataExtension on CollectionLogData {
       ..eCollectionAdminId = eCollectionAdminId ?? this.eCollectionAdminId
       ..gType = gType ?? this.gType
       ..jContent = jContent ?? this.jContent
-      ..createdAt = createdAt ?? this.createdAt;
+      ..createdAt = createdAt ?? this.createdAt
+      ..kPromiseTime = kPromiseTime ?? this.kPromiseTime;
   }
 }

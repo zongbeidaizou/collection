@@ -40,6 +40,16 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     });
     return _list;
   }
+  Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
+    FormData formData = FormData.fromMap(data);
+    await requestNetwork(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
+
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+      }
+    });
+  }
 
 
  

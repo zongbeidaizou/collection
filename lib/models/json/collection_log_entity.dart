@@ -46,6 +46,8 @@ class CollectionLogData {
 	String? jContent = '';
 	@JSONField(name: "created_at")
 	String? createdAt = '';
+	@JSONField(name: "k_promise_time")
+	String? kPromiseTime = '';
 
 	CollectionLogData();
 

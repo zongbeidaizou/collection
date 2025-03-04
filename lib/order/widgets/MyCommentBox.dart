@@ -11,6 +11,8 @@ class MyCommentBox extends StatefulWidget {
   Key? formKey;
   GestureTapCallback? sendButtonMethod;
   TextEditingController? commentController;
+  TextEditingController? dateController;
+  TextEditingController? typeController;
   String? labelText;
   String? errorText;
   Widget? sendWidget;
@@ -25,6 +27,8 @@ class MyCommentBox extends StatefulWidget {
         this.sendButtonMethod,
         this.formKey,
         this.commentController,
+        this.dateController,
+        this.typeController,
         this.sendWidget,
         this.labelText,
         this.focusNode,
@@ -89,14 +93,12 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   ),
                 ),
                 initialTime: const TimeOfDay(hour: 8, minute: 0),
-                onSaved: (value) {
-                  if (value != null) {
-                    // 自定义保存逻辑：保存到变量并增加日志
-                    setState(() {
-                      _savedDateTime = value.add(const Duration(hours: 8)); // 示例：自动+8小时
-                    });
-                    print('onSaved 触发: $value → $_savedDateTime');
-                  }
+                onChanged: (DateTime? value) {
+                  setState(() {
+                    _savedDateTime = value; // 实时更新选中时间
+                  });
+                  widget.dateController?.text = value.toString();
+                  print('选中的时间: $value');
                 },
                 // locale: const Locale.fromSubtags(languageCode: 'fr'),
               ),
@@ -108,7 +110,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
 
   @override
   Widget build(BuildContext context) {
-    final List<IconData> typeList = [Icons.phone_disabled,Icons.sync,Icons.more_time, Icons.do_not_touch];
+    final List<IconData> typeList = [Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled];
     final List<String> typeToastList = ["Unable to dial selected", "Under negotiation selected", "Promise to repay selected", "Refusal to repay selected"];
 
     return Column(
@@ -136,6 +138,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 ),
                 onChanged: (IconData? value) async {
                   Toast.show(typeToastList[typeList.indexOf(value!)]);
+                  widget.typeController?.text = typeList.indexOf(value).toString();
                   if(value == Icons.more_time){
                     _showDialog();
           /*                var results = await showCalendarDatePicker2Dialog(
@@ -173,37 +176,42 @@ class _MyCommentBoxState extends State<MyCommentBox> {
             ),
             title: Form(
               key: widget.formKey,
-              child: TextFormField(
-                maxLines: 4,
-                minLines: 1,
-                focusNode: _focusNode,
-                autofocus: _focus,
-                cursorColor: widget.textColor,
-                style: TextStyle(color: widget.textColor),
-                controller: widget.commentController,
-                decoration: InputDecoration(
-                  enabledBorder: !widget.withBorder
-                      ? InputBorder.none
-                      : UnderlineInputBorder(
-                    borderSide: BorderSide(color: widget.textColor!),
+              child: Column(
+                children: [
+                  TextFormField(
+                    maxLines: 4,
+                    minLines: 1,
+                    focusNode: _focusNode,
+                    autofocus: _focus,
+                    cursorColor: widget.textColor,
+                    style: TextStyle(color: widget.textColor),
+                    controller: widget.commentController,
+                    decoration: InputDecoration(
+                      enabledBorder: !widget.withBorder
+                          ? InputBorder.none
+                          : UnderlineInputBorder(
+                        borderSide: BorderSide(color: widget.textColor!),
+                      ),
+                      focusedBorder: !widget.withBorder
+                          ? InputBorder.none
+                          : UnderlineInputBorder(
+                        borderSide: BorderSide(color: widget.textColor!),
+                      ),
+                      border: !widget.withBorder
+                          ? InputBorder.none
+                          : UnderlineInputBorder(
+                        borderSide: BorderSide(color: widget.textColor!),
+                      ),
+                      labelText: widget.labelText,
+                      focusColor: Colors.red,
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelStyle: TextStyle(color: Colors.grey),
+                    ),
+                    validator: (value) => value!.isEmpty ? widget.errorText : null,
                   ),
-                  focusedBorder: !widget.withBorder
-                      ? InputBorder.none
-                      : UnderlineInputBorder(
-                    borderSide: BorderSide(color: widget.textColor!),
-                  ),
-                  border: !widget.withBorder
-                      ? InputBorder.none
-                      : UnderlineInputBorder(
-                    borderSide: BorderSide(color: widget.textColor!),
-                  ),
-                  labelText: widget.labelText,
-                  focusColor: Colors.red,
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelStyle: TextStyle(color: Colors.grey),
-                ),
-                validator: (value) => value!.isEmpty ? widget.errorText : null,
+
+                ],
               ),
             ),
             trailing: GestureDetector(

@@ -22,6 +22,7 @@ import 'package:clipboard/clipboard.dart';
 import 'dart:ui';
 
 import 'add_note.dart';
+import 'contact_dialog.dart';
 
 
 const List<String> orderLeftButtonText = ['拒单', '拒单', '订单跟踪', '订单跟踪', '订单跟踪'];
@@ -79,15 +80,24 @@ class OrderItem extends StatelessWidget {
               body: AddNote(orderId: item.id!, admins: admins, products: products, item: item),     //AddNote should be your Widget that will be displayed inside the bottomSheet
             ),
           );
-          return ListView.builder(
-            itemCount: 30,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text("$index"),
-                onTap: () => Navigator.of(context).pop(index),
-              );
-            },
+        },
+      );
+    }
+
+    Future<int?> _showModalBottomSheet2() {
+      return showModalBottomSheet<int>(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return Container(
+            height: 500,
+            color: Colors.grey,
+            child: Scaffold(
+              resizeToAvoidBottomInset: true,
+              body: ContactDialog()
+            ),
           );
+
         },
       );
     }
@@ -378,11 +388,6 @@ class OrderItem extends StatelessWidget {
         ) else Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-/*    IconButton(
-    // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
-    icon: FaIcon(FontAwesomeIcons.gamepad),
-    onPressed: () { print("Pressed"); }
-    ),*/
             OrderItemButton(
               key: Key('whatsapp'),
               text: "Whatsapp",
@@ -407,14 +412,14 @@ class OrderItem extends StatelessWidget {
                 var now = DateTime.now();
                 int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
                 int to = now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
-
+                _showModalBottomSheet2();
               },
             ),
             Gaps.hGap4,
             OrderItemButton(
               key: Key('order_button_2_send'),
               text: "Sms",
-              icon: Icon(Icons.message, size: 20, color: Colors.white),
+              icon: Icon(Icons.message, size: 18, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {

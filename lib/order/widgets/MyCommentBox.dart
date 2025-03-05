@@ -138,7 +138,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 ),
                 onChanged: (IconData? value) async {
                   Toast.show(typeToastList[typeList.indexOf(value!)]);
-                  widget.typeController?.text = typeList.indexOf(value).toString();
+                  widget.typeController?.text = (typeList.indexOf(value) + 1).toString();
                   if(value == Icons.more_time){
                     _showDialog();
           /*                var results = await showCalendarDatePicker2Dialog(

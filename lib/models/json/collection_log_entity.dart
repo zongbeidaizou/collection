@@ -48,6 +48,8 @@ class CollectionLogData {
 	String? createdAt = '';
 	@JSONField(name: "k_promise_time")
 	String? kPromiseTime = '';
+	@JSONField(name: "m_overdue_days")
+	int? mOverdueDays = 0;
 
 	CollectionLogData();
 

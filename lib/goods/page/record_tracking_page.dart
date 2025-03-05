@@ -3,6 +3,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:intl/intl.dart';
 
 import '../../order/order_router.dart';
 import '../../order/widgets/order_item.dart';
@@ -211,18 +212,37 @@ class _InnerTimeline extends StatelessWidget {
               return null;
             }
 
-            return Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: RichText(
-                text: TextSpan(
-                  style: textTextStyle,
-                  children: <TextSpan>[
-                    TextSpan(text: messages[index].createdAt),
-                    TextSpan(text: " "),
-                    TextSpan(text: messages[index].message,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp12)),
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+              margin: const EdgeInsets.only(bottom: 4),
+              decoration: BoxDecoration(
+                color: messages[index ].iconColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(DateFormat("hh:mm a").format(DateTime.now()), style: TextStyle(fontSize: 12)),
+                      Text( ' - joson' , style: TextStyle(fontSize: 12)),
+                      Expanded(child: Gaps.empty),
+                      // Icon(messages[index ].icon, color: messages[index ].iconColor, size: 12,),
+                    ],
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: textTextStyle,
+                      children: <TextSpan>[
+                        // TextSpan(text: messages[index].createdAt),
+                        // TextSpan(text: " "),
+                        TextSpan(text: messages[index].message,style: TextStyle(fontSize: 12)),
 
-                  ],
-                ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -230,15 +250,15 @@ class _InnerTimeline extends StatelessWidget {
             print(messages[index].toString());
             print(messages[index].toString().length);
             if(messages[index].toString().length < 45){
-              return 30;
-            }else if(messages[index].toString().length < 90){
               return 50;
-            }else if(messages[index].toString().length < 135){
+            }else if(messages[index].toString().length < 90){
               return 70;
+            }else if(messages[index].toString().length < 135){
+              return 100;
             }else if(messages[index].toString().length < 180){
-              return 95;
+              return 105;
             }else{
-              return 30;
+              return 50;
             }
           },
           nodeItemOverlapBuilder: (_, index) =>
@@ -394,7 +414,7 @@ _OrderInfo _data(int id) => _OrderInfo(
   ),
   deliveryProcesses: [
     const _DeliveryProcess(
-      '2024/02/20',
+      'Mar 04, 2025',
       Icons.abc,
       Colors.red,
 

@@ -134,6 +134,10 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   if (kPromiseTime != null) {
     collectionLogData.kPromiseTime = kPromiseTime;
   }
+  final int? mOverdueDays = jsonConvert.convert<int>(json['m_overdue_days']);
+  if (mOverdueDays != null) {
+    collectionLogData.mOverdueDays = mOverdueDays;
+  }
   return collectionLogData;
 }
 
@@ -149,6 +153,7 @@ Map<String, dynamic> $CollectionLogDataToJson(CollectionLogData entity) {
   data['j_content'] = entity.jContent;
   data['created_at'] = entity.createdAt;
   data['k_promise_time'] = entity.kPromiseTime;
+  data['m_overdue_days'] = entity.mOverdueDays;
   return data;
 }
 
@@ -164,6 +169,7 @@ extension CollectionLogDataExtension on CollectionLogData {
     String? jContent,
     String? createdAt,
     String? kPromiseTime,
+    int? mOverdueDays,
   }) {
     return CollectionLogData()
       ..id = id ?? this.id
@@ -175,6 +181,7 @@ extension CollectionLogDataExtension on CollectionLogData {
       ..gType = gType ?? this.gType
       ..jContent = jContent ?? this.jContent
       ..createdAt = createdAt ?? this.createdAt
-      ..kPromiseTime = kPromiseTime ?? this.kPromiseTime;
+      ..kPromiseTime = kPromiseTime ?? this.kPromiseTime
+      ..mOverdueDays = mOverdueDays ?? this.mOverdueDays;
   }
 }

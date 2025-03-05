@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:timelines/timelines.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/json/collection_log_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../res/colors.dart';
+import '../../res/dimens.dart';
 import '../../res/gaps.dart';
+import '../../routers/fluro_navigator.dart';
 import '../../util/change_notifier_manage.dart';
 import '../../widgets/my_card.dart';
 import '../iview/add_note_iview.dart';
+import '../order_router.dart';
 import '../presenter/add_note_presenter.dart';
 import 'MyCommentBox.dart';
 import 'order_item.dart';
@@ -39,14 +43,33 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   final TextEditingController dateController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   List<CollectionLogData> _list = <CollectionLogData>[];
-  final List<IconData> _iconList = [Icons.sync,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment];
-  final List<Color> _colorList = [Colors.grey,Colors.grey, Colors.green, Colors.purpleAccent, Colors.red, Colors.orange, Colors.blue];
+  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle];
+  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF004D40)];
   late AddNotePresenter _addNotePresenter;
+
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      10000,
+      duration: Duration(seconds: 6),
+      curve: Curves.easeOut,
+    );
+  }
+  @override
+  void initState() {
+    super.initState();
+    // 在初始化时自动滚动到底部
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      typeController.text = '1';
+    });
+  }
 
   Future<void> _onRefresh() async {
     _list = await _addNotePresenter.index(1, widget.orderId, true);
     setState(() {
     });
+    _scrollToBottom();
   }
 
 
@@ -66,104 +89,46 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     setState(() {
       _list = logs;
     });
+    _scrollToBottom();
   }
 
   @override
   bool get wantKeepAlive => true;
 
   Widget commentChild(List<CollectionLogData> data) {
-
+    final Map<String, List<CollectionLogData>> groupedData = {};
+    final Map<String, int> groupedOverdueDayData = {};
+    for (final item in data) {
+      final dateKey = DateFormat('MMM d, yyyy', 'en_US').format(DateTime.parse(item.createdAt!));
+      if (!groupedData.containsKey(dateKey)) {
+        groupedData[dateKey] = [];
+      }
+      if(groupedData[dateKey]!.isEmpty){
+        groupedOverdueDayData[dateKey] = item.mOverdueDays!;
+      }
+      groupedData[dateKey]!.add(item);
+    }
+    final List<_DeliveryProcess> deliveryProcesses = [];
+    groupedData.forEach((date, items) {
+      final messages = items.map((item) {
+        final time = DateFormat("hh:mm a").format(DateTime.parse(item.createdAt!));
+        return _DeliveryMessage(time, item.jContent!, item.gType!, _iconList[item.gType!], _colorList[item.gType!], _colorList[item.gType!], item.eCollectionAdminId!, item.kPromiseTime!);
+      }).toList();
+      deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!, Icons.import_contacts, Colors.black54, Colors.black87, messages: messages));
+    });
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-      child: ListView.builder(
-          // physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.length,
-          itemBuilder: (_, int i) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Row(
-                //   children: [
-                //     Expanded(child: Gaps.line),
-                //     Text(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
-                //     Gaps.hGap8,
-                //     Text( widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? 'You' , style: const TextStyle(fontSize: 10)),
-                //     Gaps.hGap8,
-                //     Icon(_iconList[data[i].gType!], color: _colorList[data[i].gType!], size: 12,),
-                //     Expanded(child: Gaps.line),
-                //   ],
-                // ),
-                Gaps.vGap4,
-                Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: _colorList[data[i].gType!].withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(DateFormat("MMM dd, yyyy 'at' HH:mm").format(DateTime.parse(data[i].createdAt!)), style: TextStyle(fontSize: 10)),
-                            Gaps.hGap8,
-                            Text( 'Recorded by: ' , style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
-                            Text( widget.admins.firstWhere((admin) => admin.id == data[i].eCollectionAdminId).aName ?? 'You' , style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
-                            Gaps.hGap8,
-                            Expanded(child: Gaps.empty),
-                            Icon(_iconList[data[i].gType!], color: _colorList[data[i].gType!], size: 12,),
-                          ],
-                        ),
-                        Gaps.vGap4,
-                        Text(data[i].jContent.toString()),
-                        Gaps.vGap4,
-                        if ((data[i].kPromiseTime?.isNotEmpty ?? false) && data[i].gType! == 2) Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text('Promise to Pay by ${DateFormat("MMM dd, yyyy 'at' HH:mm").format(DateTime.parse(data[i].kPromiseTime!))}', style: TextStyle(fontSize: 10, color: Colors.grey.withOpacity(0.8))),
-                          ],
-                        ) else Gaps.empty,
-
-                      ],
-                    )),
-                Gaps.vGap4,
-                // Gaps.line,
-                Gaps.vGap8
-              ],);
-          }
-      )
-
-/*      ListView(
-        children: [
-          for (var i = 0; i < data.length; i++)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Row(
-                children: [
-                  Expanded(flex: 10,child: Gaps.line),
-                  Text(data[i]['date'].toString(), style: TextStyle(fontSize: 10)),
-                  Expanded(child: Gaps.line),
-                  Icon(Icons.phone_disabled, color: Colors.purpleAccent, size: 12,),
-                  Expanded(flex: 10,child: Gaps.line),
-                ],
-              ),
-                Gaps.vGap4,
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(6.0),
-                  ),
-                  child: Text(data[i]['message'].toString())),
-                Gaps.vGap4,
-                // Gaps.line,
-                Gaps.vGap8
-            ],)
-        ],
-      ),*/
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _DeliveryProcesses(processes: deliveryProcesses, admins: widget.admins,),
+            Divider(height: 1.0),
+          ],
+        ),
+      ),
     );
   }
   @override
@@ -181,7 +146,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
             Gaps.vGap4,
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: 4, right: 4),
+                // margin: EdgeInsets.only(left: 4, right: 4),
                 child: MyCard(
                   shadowColor: Colors.grey.withOpacity(0.2),
                   child: MyCommentBox(
@@ -191,18 +156,15 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                     withBorder: false,
                     sendButtonMethod: () async {
                       if (formKey.currentState!.validate()) {
-                        print(commentController.text);
-                        print(dateController.text);
-                        print(typeController.text);
                         var value = {
                           'g_type': typeController.text,
-                          'j_content': commentController.text,
+                          'j_content': commentController.text.trim(),
                           'created_at': DateTime.now(),
                           'e_collection_admin_id': 0,
                           'k_promise_time': dateController.text,
                         };
                         setState(() {
-                          _list.insert(0, CollectionLogData.fromJson(value));
+                          _list.add(CollectionLogData.fromJson(value));
                         });
                         print(value);
                         await _addNotePresenter.store(value,  true);
@@ -234,4 +196,249 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
 
 
 
+}
+
+class _DeliveryProcesses extends StatelessWidget {
+  const _DeliveryProcesses({Key? key, required this.processes, required this.admins})
+      : super(key: key);
+
+  final List<_DeliveryProcess> processes;
+  final List<AdminData> admins;
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+      style: TextStyle(
+        color: Color(0xff9b9b9b),
+        fontSize: 12.5,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: FixedTimeline.tileBuilder(
+          theme: TimelineThemeData(
+            nodePosition: 0,
+            indicatorPosition: 0,
+            color: Colors.white,
+            indicatorTheme: const IndicatorThemeData(
+              position: 0,
+              size: 10.0,
+            ),
+            connectorTheme: const ConnectorThemeData(
+              thickness: 1.6,
+            ),
+          ),
+          builder: TimelineTileBuilder.connected(
+            connectionDirection: ConnectionDirection.before,
+            itemCount: processes.length,
+            contentsBuilder: (_, index) {
+              if (processes[index].isCompleted) return null;
+
+              return Padding(
+                padding: EdgeInsets.only(left: 1.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          processes[index].date,
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        Text(
+                          processes[index].overdueDays == 0 ? '' : ' (${processes[index].overdueDays} days)',
+                          style: DefaultTextStyle.of(context).style.copyWith(
+                            fontSize: 14.0,
+                            color: Colors.grey
+                          ),
+                        ),
+                      ],
+                    ),
+                    _InnerTimeline(messages: processes[index].messages, admins: admins,),
+                  ],
+                ),
+              );
+            },
+            indicatorBuilder: (_, index) {
+              if (processes[index].isCompleted) {
+                return DotIndicator(
+                  color: processes[index].color,
+                  child: Icon(
+                    processes[index].icon,
+                    color: processes[index].iconColor,
+                    size: 12.0,
+                  ),
+                );
+              } else {
+                return OutlinedDotIndicator(
+                  borderWidth: 2.5,
+                );
+              }
+            },
+            connectorBuilder: (_, index, ___) => SolidLineConnector(
+              color: processes[index].isCompleted ? Color(0xff66c97f) : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+class _DeliveryProcess {
+  const _DeliveryProcess(
+      this.date,this.overdueDays, this.icon, this.color, this.iconColor, {
+        this.messages = const [],
+      });
+
+  const _DeliveryProcess.complete()
+      : this.date = 'Done',
+        this.overdueDays = 0,
+        this.messages = const [],
+        this.icon = Icons.payment,
+        this.color = Colors.green,
+        this.iconColor = Colors.white;
+
+  final String date;
+  final int overdueDays;
+  final IconData icon;
+  final Color color;
+  final Color iconColor;
+  final List<_DeliveryMessage> messages;
+
+  bool get isCompleted => date == 'Done';
+}
+
+class _DeliveryMessage {
+  const _DeliveryMessage(this.createdAt, this.message, this.status, this.icon, this.color, this.iconColor, this.adminId, this.promiseTime);
+
+  final String createdAt; // final DateTime createdAt;
+  final String message;
+  final int status;
+  final IconData icon;
+  final Color color;
+  final Color iconColor;
+  final int adminId;
+  final String promiseTime;
+
+  @override
+  String toString() {
+    return '$createdAt $message';
+  }
+}
+
+class _InnerTimeline extends StatelessWidget {
+  const _InnerTimeline({
+    required this.messages,
+    required this.admins,
+  });
+
+  final List<_DeliveryMessage> messages;
+  final List<AdminData> admins;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isEdgeIndex(int index) {
+      // return index == 0 || index == messages.length + 1;
+      return false;
+    }
+    final TextStyle? textTextStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: Dimens.font_sp14);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: FixedTimeline.tileBuilder(
+        theme: TimelineTheme.of(context).copyWith(
+          nodePosition: 0,
+          // indicatorPosition:1,
+          connectorTheme: TimelineTheme.of(context).connectorTheme.copyWith(
+            thickness: 1.0,
+            space: 10,
+          ),
+          indicatorTheme: TimelineTheme.of(context).indicatorTheme.copyWith(
+            size: 10.0,
+            position: 0.5,
+          ),
+        ),
+        builder: TimelineTileBuilder(
+          indicatorBuilder: (_, index) =>
+          !isEdgeIndex(index) ? DotIndicator(
+            position: 0.5,
+            // border: Border(top:BorderSide(width: 1,color: Colors.black)),
+            color: Colors.white,
+            size: 16,
+            child: Icon(
+              messages[index ].icon,
+              color: messages[index ].iconColor,
+              size: 16.0,
+            ),
+          ) : null,
+          startConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
+          endConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
+          contentsBuilder: (_, index) {
+            if (isEdgeIndex(index)) {
+              return null;
+            }
+
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+              margin: const EdgeInsets.only(bottom: 4),
+              decoration: BoxDecoration(
+                color: messages[index ].iconColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(6.0),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(messages[index ].createdAt, style: TextStyle(fontSize: 12)),
+                      Text(' - ', style: TextStyle(fontSize: 12)),
+                      Text( admins.firstWhere((admin) => admin.id == messages[index ].adminId).aName ?? 'You' , style: TextStyle(fontSize: 12)),
+                      const Expanded(child: Gaps.empty),
+                      if(messages[index ].status == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index ].promiseTime))}', style: TextStyle(fontSize: 10, color: messages[index ].iconColor)) else Gaps.empty,
+                      // Icon(messages[index ].icon, color: messages[index ].iconColor, size: 12,),
+                    ],
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: textTextStyle,
+                      children: <TextSpan>[
+                        // TextSpan(text: messages[index].createdAt),
+                        // TextSpan(text: " "),
+                        TextSpan(text: messages[index].message,style: TextStyle(fontSize: 12)),
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+          itemExtentBuilder: (_, index) {
+            if(messages[index].toString().length < 45){
+              return 50;
+            }else if(messages[index].toString().length < 90){
+              return 70;
+            }else if(messages[index].toString().length < 135){
+              return 100;
+            }else if(messages[index].toString().length < 180){
+              return 105;
+            }else{
+              return 50;
+            }
+          },
+          nodeItemOverlapBuilder: (_, index) =>
+          isEdgeIndex(index) ? true : null,
+          itemCount: messages.length  ,
+          // itemExtent:60,
+        ),
+      ),
+    );
+  }
 }

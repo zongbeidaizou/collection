@@ -76,7 +76,7 @@ class OrderItem extends StatelessWidget {
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: AddNote(orderId: item.id!, admins: admins),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+              body: AddNote(orderId: item.id!, admins: admins, products: products, item: item),     //AddNote should be your Widget that will be displayed inside the bottomSheet
             ),
           );
           return ListView.builder(

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
 
 import '../../models/admin_entity.dart';
+import '../../models/collection_order_entity.dart';
 import '../../models/json/collection_log_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../res/colors.dart';
@@ -29,9 +30,14 @@ class AddNote extends StatefulWidget {
     super.key,
     required this.orderId,
     required this.admins,
+    required this.item,
+    required this.products,
+
   });
   final int orderId;
   final List<AdminData> admins;
+  final CollectionOrderData item;
+  final List<ProductData> products;
   @override
   _AddNoteState createState() => _AddNoteState();
 }
@@ -140,7 +146,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
           children: [
             Container(
                 margin: EdgeInsets.only(left: 4, right: 4),
-                // child: OrderItem(key: Key('order_item_'), index: 1, tabIndex: 1,inList: false,)
+                child: OrderItem(key: Key('order_item_'), index: 1, tabIndex: 1,inList: false,admins: widget.admins, products: widget.products, item: widget.item,)
             ),
             // Text("My Collection Log"),
             Gaps.vGap4,
@@ -220,7 +226,7 @@ class _DeliveryProcesses extends StatelessWidget {
             color: Colors.white,
             indicatorTheme: const IndicatorThemeData(
               position: 0,
-              size: 10.0,
+              size: 0.01,
             ),
             connectorTheme: const ConnectorThemeData(
               thickness: 1.6,
@@ -232,32 +238,29 @@ class _DeliveryProcesses extends StatelessWidget {
             contentsBuilder: (_, index) {
               if (processes[index].isCompleted) return null;
 
-              return Padding(
-                padding: EdgeInsets.only(left: 1.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          processes[index].date,
-                          style: DefaultTextStyle.of(context).style.copyWith(
-                            fontSize: 18.0,
-                          ),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        processes[index].date,
+                        style: DefaultTextStyle.of(context).style.copyWith(
+                          fontSize: 18.0,
                         ),
-                        Text(
-                          processes[index].overdueDays == 0 ? '' : ' (${processes[index].overdueDays} days)',
-                          style: DefaultTextStyle.of(context).style.copyWith(
-                            fontSize: 14.0,
-                            color: Colors.grey
-                          ),
+                      ),
+                      Text(
+                        processes[index].overdueDays == 0 ? '' : ' (${processes[index].overdueDays} days)',
+                        style: DefaultTextStyle.of(context).style.copyWith(
+                          fontSize: 14.0,
+                          color: Colors.grey
                         ),
-                      ],
-                    ),
-                    _InnerTimeline(messages: processes[index].messages, admins: admins,),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  _InnerTimeline(messages: processes[index].messages, admins: admins,),
+                ],
               );
             },
             indicatorBuilder: (_, index) {
@@ -369,12 +372,8 @@ class _InnerTimeline extends StatelessWidget {
             position: 0.5,
             // border: Border(top:BorderSide(width: 1,color: Colors.black)),
             color: Colors.white,
-            size: 16,
-            child: Icon(
-              messages[index ].icon,
-              color: messages[index ].iconColor,
-              size: 16.0,
-            ),
+            size: 26,
+            child: Text(messages[index].createdAt, style: TextStyle(fontSize: 10)),
           ) : null,
           startConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
           endConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
@@ -387,7 +386,7 @@ class _InnerTimeline extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
               margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
-                color: messages[index ].iconColor.withOpacity(0.2),
+                color: messages[index ].iconColor.withOpacity(0.14),
                 borderRadius: BorderRadius.circular(6.0),
               ),
               child: Column(
@@ -397,11 +396,17 @@ class _InnerTimeline extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(messages[index ].createdAt, style: TextStyle(fontSize: 12)),
-                      Text(' - ', style: TextStyle(fontSize: 12)),
+
                       Text( admins.firstWhere((admin) => admin.id == messages[index ].adminId).aName ?? 'You' , style: TextStyle(fontSize: 12)),
+                      Text(' :', style: TextStyle(fontSize: 12)),
+
                       const Expanded(child: Gaps.empty),
-                      if(messages[index ].status == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index ].promiseTime))}', style: TextStyle(fontSize: 10, color: messages[index ].iconColor)) else Gaps.empty,
+
+                      if(messages[index ].status == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index ].promiseTime))}', style: TextStyle(fontSize: 10, color: messages[index ].iconColor)) else Icon(
+            messages[index ].icon,
+            color: messages[index ].iconColor,
+            size: 16.0,
+            ),
                       // Icon(messages[index ].icon, color: messages[index ].iconColor, size: 12,),
                     ],
                   ),

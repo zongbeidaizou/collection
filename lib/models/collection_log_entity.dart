@@ -144,6 +144,7 @@ class CollectionLogOtherRepayInfo {
 
 @JsonSerializable()
 class CollectionLogOtherContactInfo {
+	int? id = 0;
 	String? name = '';
 	String? relationship = '';
 	String? phoneNumber = '';

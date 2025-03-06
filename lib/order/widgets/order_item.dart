@@ -52,7 +52,7 @@ class OrderItem extends StatelessWidget {
   final List<CollectionLogOtherContactInfo> contactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo ;
-  final void Function(int, String)? onSendSms;
+  final void Function(int, String, {String? phone, int? contactId})? onSendSms;
 
   
   @override
@@ -101,13 +101,64 @@ class OrderItem extends StatelessWidget {
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: ContactDialog(contactList: contactList,),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+              body: ContactDialog(contactList: contactList, repayInfo: repayInfo, onSendSms: (templateId, smsContent, {String? phone, int? contactId}) {
+                Toast.show('收款类型：$templateId');
+                onSendSms?.call(templateId, smsContent, contactId: contactId, phone: phone);
+                // Toast.show('收款类型：$type');
+              },),     //AddNote should be your Widget that will be displayed inside the bottomSheet
             ),
           );
 
         },
       );
     }
+    void _showSmsDialog(BuildContext context, CollectionLogOtherRepayInfo repayInfo) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SmsDialog(
+            repayInfo:repayInfo,
+            onPressed: (templateId, smsContent) {
+              Toast.show('收款类型：$templateId');
+              onSendSms?.call(templateId, smsContent);
+              // Toast.show('收款类型：$type');
+            },
+          );
+        },
+      );
+    }
+    void _showCallPhoneDialog(BuildContext context, String phone) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('提示'),
+            content: Text('是否拨打：$phone ?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => NavigatorUtils.goBack(context),
+                child: const Text('取消'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Utils.launchTelURL(phone);
+                  NavigatorUtils.goBack(context);
+                },
+                style: ButtonStyle(
+                  // 按下高亮颜色
+                  overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.error.withOpacity(0.2)),
+                ),
+                child: Text('拨打', style: TextStyle(color: Theme.of(context).colorScheme.error),),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -377,7 +428,7 @@ class OrderItem extends StatelessWidget {
               bgColor: isDark ? Colours.dark_material_bg : Colours.bg_gray,
               onTap: () {
                 if (tabIndex == 2) {
-                  _showPayTypeDialog(context, repayInfo!,);
+                  _showSmsDialog(context, repayInfo!,);
                 }
               },
             ),
@@ -402,10 +453,7 @@ class OrderItem extends StatelessWidget {
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               icon: FaIcon(FontAwesomeIcons.whatsapp, size: 20, color: Colors.white),
               onTap: () async {
-                var now = DateTime.now();
-                int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
-                int to = now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
-
+                Utils.launchWhatsAppURL(item.uPhone!);
               },
             ),
             Gaps.hGap4,
@@ -430,7 +478,7 @@ class OrderItem extends StatelessWidget {
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {
-                _showPayTypeDialog(context, repayInfo!);
+                _showSmsDialog(context, repayInfo!);
                 if (tabIndex >= 2) {
                   NavigatorUtils.push(context, OrderRouter.orderTrackPage);
                 }
@@ -443,56 +491,6 @@ class OrderItem extends StatelessWidget {
       ],
     );
   }
-
-  void _showCallPhoneDialog(BuildContext context, String phone) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('提示'),
-          content: Text('是否拨打：$phone ?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => NavigatorUtils.goBack(context),
-              child: const Text('取消'),
-            ),
-            TextButton(
-              onPressed: () {
-                Utils.launchTelURL(phone);
-                NavigatorUtils.goBack(context);
-              },
-              style: ButtonStyle(
-                // 按下高亮颜色
-                overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.error.withOpacity(0.2)),
-              ),
-              child: Text('拨打', style: TextStyle(color: Theme.of(context).colorScheme.error),),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showPayTypeDialog(BuildContext context, CollectionLogOtherRepayInfo repayInfo) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SmsDialog(
-            repayInfo:repayInfo,
-          onPressed: (templateId, smsContent) {
-            Toast.show('收款类型：$templateId');
-            onSendSms?.call(templateId, smsContent);
-            // Toast.show('收款类型：$type');
-          },
-        );
-      },
-    );
-  }
-
-
-
 }
 
 

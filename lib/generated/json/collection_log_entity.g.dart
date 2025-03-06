@@ -430,6 +430,10 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
 CollectionLogOtherContactInfo $CollectionLogOtherContactInfoFromJson(
     Map<String, dynamic> json) {
   final CollectionLogOtherContactInfo collectionLogOtherContactInfo = CollectionLogOtherContactInfo();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherContactInfo.id = id;
+  }
   final String? name = jsonConvert.convert<String>(json['name']);
   if (name != null) {
     collectionLogOtherContactInfo.name = name;
@@ -458,6 +462,7 @@ CollectionLogOtherContactInfo $CollectionLogOtherContactInfoFromJson(
 Map<String, dynamic> $CollectionLogOtherContactInfoToJson(
     CollectionLogOtherContactInfo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['name'] = entity.name;
   data['relationship'] = entity.relationship;
   data['phoneNumber'] = entity.phoneNumber;
@@ -467,12 +472,14 @@ Map<String, dynamic> $CollectionLogOtherContactInfoToJson(
 
 extension CollectionLogOtherContactInfoExtension on CollectionLogOtherContactInfo {
   CollectionLogOtherContactInfo copyWith({
+    int? id,
     String? name,
     String? relationship,
     String? phoneNumber,
     List<CollectionLogOtherContactInfoCallRecords>? callRecords,
   }) {
     return CollectionLogOtherContactInfo()
+      ..id = id ?? this.id
       ..name = name ?? this.name
       ..relationship = relationship ?? this.relationship
       ..phoneNumber = phoneNumber ?? this.phoneNumber

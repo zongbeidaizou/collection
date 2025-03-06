@@ -1,16 +1,40 @@
+import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/collection_log_entity.dart';
+import '../../util/toast_utils.dart';
 
 class ContactDialog extends StatelessWidget {
   const ContactDialog({
     super.key,
     required this.contactList,
+    this.onSendSms,
+    this.repayInfo,
   });
   final List<CollectionLogOtherContactInfo> contactList;
+  final void Function(int, String, {String? phone, int? contactId})? onSendSms;
+  final CollectionLogOtherRepayInfo? repayInfo;
+
+  void _showSmsDialog(BuildContext context, int contactId, String phone) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SmsDialog(
+          repayInfo:repayInfo,
+          onPressed: (templateId, smsContent) {
+            Toast.show('收款类型：$templateId');
+            onSendSms?.call(templateId, smsContent, contactId: contactId, phone: phone);
+            // Toast.show('收款类型：$type');
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +52,9 @@ class ContactDialog extends StatelessWidget {
         child: ListView.builder(
           itemCount: contactList.length,
           itemBuilder: (context, index) {
-            return ContactCard(contact: contactList[index]);
+            return ContactCard(contact: contactList[index], onSendSms: (int contactId, String phone){
+              _showSmsDialog(context, contactId, phone);
+            },);
           },
         ),
       ),
@@ -36,31 +62,13 @@ class ContactDialog extends StatelessWidget {
   }
 }
 
-class Contact {
-  final String name;
-  final String relationship;
-  final String phoneNumber;
-  final List<CallRecord> callRecords;
 
-  Contact({
-    required this.name,
-    required this.relationship,
-    required this.phoneNumber,
-    required this.callRecords,
-  });
-}
-
-class CallRecord {
-  final String time;
-  final int duration;
-
-  CallRecord({required this.time, required this.duration});
-}
 
 class ContactCard extends StatelessWidget {
   final CollectionLogOtherContactInfo contact;
 
-  ContactCard({required this.contact});
+  ContactCard({required this.contact,required this.onSendSms,});
+  final void Function(int, String) onSendSms;
 
   void _callContact() async {
     final url = 'tel:${contact.phoneNumber}';
@@ -71,14 +79,6 @@ class ContactCard extends StatelessWidget {
     }
   }
 
-  void _sendSms() async {
-    final url = 'sms:${contact.phoneNumber}';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw '无法发送短信';
-    }
-  }
   String formatDuration(int totalSeconds) {
     int minutes = totalSeconds ~/ 60; // Get the number of minutes
     int seconds = totalSeconds % 60; // Get the remaining seconds
@@ -110,21 +110,20 @@ class ContactCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 12),
                   children: <TextSpan>[
-                    TextSpan(text: contact.name, style: TextStyle(fontSize: 22)),
+                    TextSpan(text: contact.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                     const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
                     TextSpan(text: contact.relationship, style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
               Expanded(child: Gaps.hGap2),
-              Gaps.hGap10,
               IconButton(
                 icon: Icon(Icons.call, size: 20, color: Colors.blueAccent),
                 onPressed: _callContact,
               ),
               IconButton(
                 icon: Icon(Icons.message, size: 20, color: Colors.greenAccent),
-                onPressed: _sendSms,
+                onPressed: () => onSendSms.call(contact.id!, contact.phoneNumber!),
               ),
             ],
           ),

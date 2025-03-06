@@ -160,7 +160,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                   index: 1, tabIndex: 1,inList: false,admins: widget.admins,
                   products: widget.products, item: widget.item,
                   smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
-                  onSendSms: (smsTemplateId, smsContent) {
+                  onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
                     logData = {
                       'g_type': 8,
                       'j_content': smsContent.trim(),
@@ -168,6 +168,8 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                       'e_collection_admin_id': 0,
                       'k_promise_time': '',
                       'n_sms_template_id': smsTemplateId,
+                      'h_phone': phone ?? '',
+                      'o_contact_id': contactId ?? 0,
                     };
                     _addNotePresenter.store(logData,  true);
                   },

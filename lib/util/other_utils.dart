@@ -32,6 +32,16 @@ class Utils {
     }
   }
 
+  /// 调起whatapp
+  static Future<void> launchWhatsAppURL(String phone) async {
+    final Uri uri = Uri.parse('https://wa.me/$phone');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      Toast.show('拨号失败！');
+    }
+  }
+
   static String formatPrice(String price, {MoneyFormat format = MoneyFormat.END_INTEGER}){
     return MoneyUtil.changeYWithUnit(NumUtil.getDoubleByValueStr(price) ?? 0, MoneyUnit.YUAN, format: format);
   }

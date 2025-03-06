@@ -1,0 +1,109 @@
+{
+  "success": true,
+  "errorMessage": "messages.retrieved",
+  "message": "messages.retrieved",
+  "data": [{
+    "id": 9970,
+    "n_borrow_id": 47,
+    "o_period_id": 47,
+    "a_parent_id": 0,
+    "p_collection_order_id": 15378,
+    "b_collection_stage_id": 92,
+    "c_collection_agency_id": 92,
+    "d_collection_group_id": 21,
+    "e_collection_admin_id": 3,
+    "f_cat": 3,
+    "g_type": 1,
+    "h_phone": "",
+    "i_target": 0,
+    "j_content": "Number not reachable sms sent for reminder and payment ",
+    "k_promise_time": null,
+    "l_stage_day_index": 0,
+    "m_overdue_days": 1,
+    "created_at": "2025-02-06T07:06:28.000000Z"
+  }, {
+    "id": 9971,
+    "n_borrow_id": 31,
+    "o_period_id": 31,
+    "a_parent_id": 0,
+    "p_collection_order_id": 15379,
+    "b_collection_stage_id": 92,
+    "c_collection_agency_id": 92,
+    "d_collection_group_id": 21,
+    "e_collection_admin_id": 3,
+    "f_cat": 3,
+    "g_type": 2,
+    "h_phone": "",
+    "i_target": 0,
+    "j_content": "The customer promised to make payment before the end of tomorrow.",
+    "k_promise_time": "2025-03-27T17:36:23.000000Z",
+    "l_stage_day_index": 0,
+    "m_overdue_days": 1,
+    "created_at": "2025-02-06T07:06:28.000000Z"
+  }],
+  "other": {
+    "repay_info": {
+      "phone": "aaa",
+      "name": "aaa",
+      "loan_amount": 11111,
+      "repay_amount": 1111,
+      "expect_repay_time": "aaa",
+      "borrow_days": 6,
+      "up_amount": 10000,
+      "bankcard_bank": "aaa",
+      "overdue_days": 11,
+      "product_name": "aaa",
+      "recieve_bank": "aaa",
+      "recieve_bank_no": "aaa",
+      "account_number": "aaa",
+      "bank": "aaa",
+      "account_name": "aaa",
+      "email": "aaa",
+      "whatsapp": "aaa"
+    },
+    "contact_info": [{
+      "name": "aaa",
+      "relationship": "aaa",
+      "phoneNumber": "aaa",
+      "callRecords": [{
+        "time": "123",
+        "duration": 12,
+        "admin_id": 1
+      }, {
+        "time": "123",
+        "duration": 12,
+        "admin_id": 1
+      }]
+    }, {
+      "name": "aaa",
+      "relationship": "aaa",
+      "phoneNumber": "aaa",
+      "callRecords": [{
+        "time": "123",
+        "duration": 12,
+        "admin_id": 1
+      }, {
+        "time": "123",
+        "duration": 12,
+        "admin_id": 1
+      }]
+    }],
+    "sms_history": [{
+      "c_admin_id": 0,
+      "f_to": "15921181128",
+      "g_text": "your otp is 1208",
+      "k_send_status": 50,
+      "created_at": "2024-11-28T07:53:28.000000Z"
+    }, {
+      "c_admin_id": 0,
+      "f_to": "15921181129",
+      "g_text": "your otp is 5840",
+      "k_send_status": 50,
+      "created_at": "2024-11-29T07:07:40.000000Z"
+    }]
+  },
+  "total": 27,
+  "currentPage": 1,
+  "perPage": 40,
+  "hasMorePages": false
+}

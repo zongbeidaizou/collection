@@ -1,5 +1,5 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
-import 'package:bounty_hunter/models/json/collection_log_entity.dart';
+import 'package:bounty_hunter/models/collection_log_entity.dart';
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -23,8 +23,8 @@ CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     collectionLogEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionLogOther? other = jsonConvert.convert<CollectionLogOther>(
+      json['other']);
   if (other != null) {
     collectionLogEntity.other = other;
   }
@@ -53,7 +53,7 @@ Map<String, dynamic> $CollectionLogEntityToJson(CollectionLogEntity entity) {
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -67,7 +67,7 @@ extension CollectionLogEntityExtension on CollectionLogEntity {
     String? errorMessage,
     String? message,
     List<CollectionLogData>? data,
-    List<dynamic>? other,
+    CollectionLogOther? other,
     int? total,
     int? currentPage,
     int? perPage,
@@ -91,6 +91,18 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   final int? id = jsonConvert.convert<int>(json['id']);
   if (id != null) {
     collectionLogData.id = id;
+  }
+  final int? nBorrowId = jsonConvert.convert<int>(json['n_borrow_id']);
+  if (nBorrowId != null) {
+    collectionLogData.nBorrowId = nBorrowId;
+  }
+  final int? oPeriodId = jsonConvert.convert<int>(json['o_period_id']);
+  if (oPeriodId != null) {
+    collectionLogData.oPeriodId = oPeriodId;
+  }
+  final int? aParentId = jsonConvert.convert<int>(json['a_parent_id']);
+  if (aParentId != null) {
+    collectionLogData.aParentId = aParentId;
   }
   final int? pCollectionOrderId = jsonConvert.convert<int>(
       json['p_collection_order_id']);
@@ -117,26 +129,43 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   if (eCollectionAdminId != null) {
     collectionLogData.eCollectionAdminId = eCollectionAdminId;
   }
+  final int? fCat = jsonConvert.convert<int>(json['f_cat']);
+  if (fCat != null) {
+    collectionLogData.fCat = fCat;
+  }
   final int? gType = jsonConvert.convert<int>(json['g_type']);
   if (gType != null) {
     collectionLogData.gType = gType;
   }
+  final String? hPhone = jsonConvert.convert<String>(json['h_phone']);
+  if (hPhone != null) {
+    collectionLogData.hPhone = hPhone;
+  }
+  final int? iTarget = jsonConvert.convert<int>(json['i_target']);
+  if (iTarget != null) {
+    collectionLogData.iTarget = iTarget;
+  }
   final String? jContent = jsonConvert.convert<String>(json['j_content']);
   if (jContent != null) {
     collectionLogData.jContent = jContent;
-  }
-  final String? createdAt = jsonConvert.convert<String>(json['created_at']);
-  if (createdAt != null) {
-    collectionLogData.createdAt = createdAt;
   }
   final String? kPromiseTime = jsonConvert.convert<String>(
       json['k_promise_time']);
   if (kPromiseTime != null) {
     collectionLogData.kPromiseTime = kPromiseTime;
   }
+  final int? lStageDayIndex = jsonConvert.convert<int>(
+      json['l_stage_day_index']);
+  if (lStageDayIndex != null) {
+    collectionLogData.lStageDayIndex = lStageDayIndex;
+  }
   final int? mOverdueDays = jsonConvert.convert<int>(json['m_overdue_days']);
   if (mOverdueDays != null) {
     collectionLogData.mOverdueDays = mOverdueDays;
+  }
+  final String? createdAt = jsonConvert.convert<String>(json['created_at']);
+  if (createdAt != null) {
+    collectionLogData.createdAt = createdAt;
   }
   return collectionLogData;
 }
@@ -144,44 +173,403 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $CollectionLogDataToJson(CollectionLogData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['id'] = entity.id;
+  data['n_borrow_id'] = entity.nBorrowId;
+  data['o_period_id'] = entity.oPeriodId;
+  data['a_parent_id'] = entity.aParentId;
   data['p_collection_order_id'] = entity.pCollectionOrderId;
   data['b_collection_stage_id'] = entity.bCollectionStageId;
   data['c_collection_agency_id'] = entity.cCollectionAgencyId;
   data['d_collection_group_id'] = entity.dCollectionGroupId;
   data['e_collection_admin_id'] = entity.eCollectionAdminId;
+  data['f_cat'] = entity.fCat;
   data['g_type'] = entity.gType;
+  data['h_phone'] = entity.hPhone;
+  data['i_target'] = entity.iTarget;
   data['j_content'] = entity.jContent;
-  data['created_at'] = entity.createdAt;
   data['k_promise_time'] = entity.kPromiseTime;
+  data['l_stage_day_index'] = entity.lStageDayIndex;
   data['m_overdue_days'] = entity.mOverdueDays;
+  data['created_at'] = entity.createdAt;
   return data;
 }
 
 extension CollectionLogDataExtension on CollectionLogData {
   CollectionLogData copyWith({
     int? id,
+    int? nBorrowId,
+    int? oPeriodId,
+    int? aParentId,
     int? pCollectionOrderId,
     int? bCollectionStageId,
     int? cCollectionAgencyId,
     int? dCollectionGroupId,
     int? eCollectionAdminId,
+    int? fCat,
     int? gType,
+    String? hPhone,
+    int? iTarget,
     String? jContent,
-    String? createdAt,
     String? kPromiseTime,
+    int? lStageDayIndex,
     int? mOverdueDays,
+    String? createdAt,
   }) {
     return CollectionLogData()
       ..id = id ?? this.id
+      ..nBorrowId = nBorrowId ?? this.nBorrowId
+      ..oPeriodId = oPeriodId ?? this.oPeriodId
+      ..aParentId = aParentId ?? this.aParentId
       ..pCollectionOrderId = pCollectionOrderId ?? this.pCollectionOrderId
       ..bCollectionStageId = bCollectionStageId ?? this.bCollectionStageId
       ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId
       ..dCollectionGroupId = dCollectionGroupId ?? this.dCollectionGroupId
       ..eCollectionAdminId = eCollectionAdminId ?? this.eCollectionAdminId
+      ..fCat = fCat ?? this.fCat
       ..gType = gType ?? this.gType
+      ..hPhone = hPhone ?? this.hPhone
+      ..iTarget = iTarget ?? this.iTarget
       ..jContent = jContent ?? this.jContent
-      ..createdAt = createdAt ?? this.createdAt
       ..kPromiseTime = kPromiseTime ?? this.kPromiseTime
-      ..mOverdueDays = mOverdueDays ?? this.mOverdueDays;
+      ..lStageDayIndex = lStageDayIndex ?? this.lStageDayIndex
+      ..mOverdueDays = mOverdueDays ?? this.mOverdueDays
+      ..createdAt = createdAt ?? this.createdAt;
+  }
+}
+
+CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
+  final CollectionLogOther collectionLogOther = CollectionLogOther();
+  final CollectionLogOtherRepayInfo? repayInfo = jsonConvert.convert<
+      CollectionLogOtherRepayInfo>(json['repay_info']);
+  if (repayInfo != null) {
+    collectionLogOther.repayInfo = repayInfo;
+  }
+  final List<
+      CollectionLogOtherContactInfo>? contactInfo = (json['contact_info'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherContactInfo>(
+          e) as CollectionLogOtherContactInfo).toList();
+  if (contactInfo != null) {
+    collectionLogOther.contactInfo = contactInfo;
+  }
+  final List<
+      CollectionLogOtherSmsHistory>? smsHistory = (json['sms_history'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherSmsHistory>(
+          e) as CollectionLogOtherSmsHistory).toList();
+  if (smsHistory != null) {
+    collectionLogOther.smsHistory = smsHistory;
+  }
+  return collectionLogOther;
+}
+
+Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['repay_info'] = entity.repayInfo?.toJson();
+  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
+  data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
+  return data;
+}
+
+extension CollectionLogOtherExtension on CollectionLogOther {
+  CollectionLogOther copyWith({
+    CollectionLogOtherRepayInfo? repayInfo,
+    List<CollectionLogOtherContactInfo>? contactInfo,
+    List<CollectionLogOtherSmsHistory>? smsHistory,
+  }) {
+    return CollectionLogOther()
+      ..repayInfo = repayInfo ?? this.repayInfo
+      ..contactInfo = contactInfo ?? this.contactInfo
+      ..smsHistory = smsHistory ?? this.smsHistory;
+  }
+}
+
+CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherRepayInfo collectionLogOtherRepayInfo = CollectionLogOtherRepayInfo();
+  final String? phone = jsonConvert.convert<String>(json['phone']);
+  if (phone != null) {
+    collectionLogOtherRepayInfo.phone = phone;
+  }
+  final String? name = jsonConvert.convert<String>(json['name']);
+  if (name != null) {
+    collectionLogOtherRepayInfo.name = name;
+  }
+  final int? loanAmount = jsonConvert.convert<int>(json['loan_amount']);
+  if (loanAmount != null) {
+    collectionLogOtherRepayInfo.loanAmount = loanAmount;
+  }
+  final int? repayAmount = jsonConvert.convert<int>(json['repay_amount']);
+  if (repayAmount != null) {
+    collectionLogOtherRepayInfo.repayAmount = repayAmount;
+  }
+  final String? expectRepayTime = jsonConvert.convert<String>(
+      json['expect_repay_time']);
+  if (expectRepayTime != null) {
+    collectionLogOtherRepayInfo.expectRepayTime = expectRepayTime;
+  }
+  final int? borrowDays = jsonConvert.convert<int>(json['borrow_days']);
+  if (borrowDays != null) {
+    collectionLogOtherRepayInfo.borrowDays = borrowDays;
+  }
+  final int? upAmount = jsonConvert.convert<int>(json['up_amount']);
+  if (upAmount != null) {
+    collectionLogOtherRepayInfo.upAmount = upAmount;
+  }
+  final String? bankcardBank = jsonConvert.convert<String>(
+      json['bankcard_bank']);
+  if (bankcardBank != null) {
+    collectionLogOtherRepayInfo.bankcardBank = bankcardBank;
+  }
+  final int? overdueDays = jsonConvert.convert<int>(json['overdue_days']);
+  if (overdueDays != null) {
+    collectionLogOtherRepayInfo.overdueDays = overdueDays;
+  }
+  final String? productName = jsonConvert.convert<String>(json['product_name']);
+  if (productName != null) {
+    collectionLogOtherRepayInfo.productName = productName;
+  }
+  final String? recieveBank = jsonConvert.convert<String>(json['recieve_bank']);
+  if (recieveBank != null) {
+    collectionLogOtherRepayInfo.recieveBank = recieveBank;
+  }
+  final String? recieveBankNo = jsonConvert.convert<String>(
+      json['recieve_bank_no']);
+  if (recieveBankNo != null) {
+    collectionLogOtherRepayInfo.recieveBankNo = recieveBankNo;
+  }
+  final String? accountNumber = jsonConvert.convert<String>(
+      json['account_number']);
+  if (accountNumber != null) {
+    collectionLogOtherRepayInfo.accountNumber = accountNumber;
+  }
+  final String? bank = jsonConvert.convert<String>(json['bank']);
+  if (bank != null) {
+    collectionLogOtherRepayInfo.bank = bank;
+  }
+  final String? accountName = jsonConvert.convert<String>(json['account_name']);
+  if (accountName != null) {
+    collectionLogOtherRepayInfo.accountName = accountName;
+  }
+  final String? email = jsonConvert.convert<String>(json['email']);
+  if (email != null) {
+    collectionLogOtherRepayInfo.email = email;
+  }
+  final String? whatsapp = jsonConvert.convert<String>(json['whatsapp']);
+  if (whatsapp != null) {
+    collectionLogOtherRepayInfo.whatsapp = whatsapp;
+  }
+  return collectionLogOtherRepayInfo;
+}
+
+Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
+    CollectionLogOtherRepayInfo entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['phone'] = entity.phone;
+  data['name'] = entity.name;
+  data['loan_amount'] = entity.loanAmount;
+  data['repay_amount'] = entity.repayAmount;
+  data['expect_repay_time'] = entity.expectRepayTime;
+  data['borrow_days'] = entity.borrowDays;
+  data['up_amount'] = entity.upAmount;
+  data['bankcard_bank'] = entity.bankcardBank;
+  data['overdue_days'] = entity.overdueDays;
+  data['product_name'] = entity.productName;
+  data['recieve_bank'] = entity.recieveBank;
+  data['recieve_bank_no'] = entity.recieveBankNo;
+  data['account_number'] = entity.accountNumber;
+  data['bank'] = entity.bank;
+  data['account_name'] = entity.accountName;
+  data['email'] = entity.email;
+  data['whatsapp'] = entity.whatsapp;
+  return data;
+}
+
+extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
+  CollectionLogOtherRepayInfo copyWith({
+    String? phone,
+    String? name,
+    int? loanAmount,
+    int? repayAmount,
+    String? expectRepayTime,
+    int? borrowDays,
+    int? upAmount,
+    String? bankcardBank,
+    int? overdueDays,
+    String? productName,
+    String? recieveBank,
+    String? recieveBankNo,
+    String? accountNumber,
+    String? bank,
+    String? accountName,
+    String? email,
+    String? whatsapp,
+  }) {
+    return CollectionLogOtherRepayInfo()
+      ..phone = phone ?? this.phone
+      ..name = name ?? this.name
+      ..loanAmount = loanAmount ?? this.loanAmount
+      ..repayAmount = repayAmount ?? this.repayAmount
+      ..expectRepayTime = expectRepayTime ?? this.expectRepayTime
+      ..borrowDays = borrowDays ?? this.borrowDays
+      ..upAmount = upAmount ?? this.upAmount
+      ..bankcardBank = bankcardBank ?? this.bankcardBank
+      ..overdueDays = overdueDays ?? this.overdueDays
+      ..productName = productName ?? this.productName
+      ..recieveBank = recieveBank ?? this.recieveBank
+      ..recieveBankNo = recieveBankNo ?? this.recieveBankNo
+      ..accountNumber = accountNumber ?? this.accountNumber
+      ..bank = bank ?? this.bank
+      ..accountName = accountName ?? this.accountName
+      ..email = email ?? this.email
+      ..whatsapp = whatsapp ?? this.whatsapp;
+  }
+}
+
+CollectionLogOtherContactInfo $CollectionLogOtherContactInfoFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherContactInfo collectionLogOtherContactInfo = CollectionLogOtherContactInfo();
+  final String? name = jsonConvert.convert<String>(json['name']);
+  if (name != null) {
+    collectionLogOtherContactInfo.name = name;
+  }
+  final String? relationship = jsonConvert.convert<String>(
+      json['relationship']);
+  if (relationship != null) {
+    collectionLogOtherContactInfo.relationship = relationship;
+  }
+  final String? phoneNumber = jsonConvert.convert<String>(json['phoneNumber']);
+  if (phoneNumber != null) {
+    collectionLogOtherContactInfo.phoneNumber = phoneNumber;
+  }
+  final List<
+      CollectionLogOtherContactInfoCallRecords>? callRecords = (json['callRecords'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherContactInfoCallRecords>(
+          e) as CollectionLogOtherContactInfoCallRecords).toList();
+  if (callRecords != null) {
+    collectionLogOtherContactInfo.callRecords = callRecords;
+  }
+  return collectionLogOtherContactInfo;
+}
+
+Map<String, dynamic> $CollectionLogOtherContactInfoToJson(
+    CollectionLogOtherContactInfo entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['name'] = entity.name;
+  data['relationship'] = entity.relationship;
+  data['phoneNumber'] = entity.phoneNumber;
+  data['callRecords'] = entity.callRecords?.map((v) => v.toJson()).toList();
+  return data;
+}
+
+extension CollectionLogOtherContactInfoExtension on CollectionLogOtherContactInfo {
+  CollectionLogOtherContactInfo copyWith({
+    String? name,
+    String? relationship,
+    String? phoneNumber,
+    List<CollectionLogOtherContactInfoCallRecords>? callRecords,
+  }) {
+    return CollectionLogOtherContactInfo()
+      ..name = name ?? this.name
+      ..relationship = relationship ?? this.relationship
+      ..phoneNumber = phoneNumber ?? this.phoneNumber
+      ..callRecords = callRecords ?? this.callRecords;
+  }
+}
+
+CollectionLogOtherContactInfoCallRecords $CollectionLogOtherContactInfoCallRecordsFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherContactInfoCallRecords collectionLogOtherContactInfoCallRecords = CollectionLogOtherContactInfoCallRecords();
+  final String? time = jsonConvert.convert<String>(json['time']);
+  if (time != null) {
+    collectionLogOtherContactInfoCallRecords.time = time;
+  }
+  final int? duration = jsonConvert.convert<int>(json['duration']);
+  if (duration != null) {
+    collectionLogOtherContactInfoCallRecords.duration = duration;
+  }
+  final int? adminId = jsonConvert.convert<int>(json['admin_id']);
+  if (adminId != null) {
+    collectionLogOtherContactInfoCallRecords.adminId = adminId;
+  }
+  return collectionLogOtherContactInfoCallRecords;
+}
+
+Map<String, dynamic> $CollectionLogOtherContactInfoCallRecordsToJson(
+    CollectionLogOtherContactInfoCallRecords entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['time'] = entity.time;
+  data['duration'] = entity.duration;
+  data['admin_id'] = entity.adminId;
+  return data;
+}
+
+extension CollectionLogOtherContactInfoCallRecordsExtension on CollectionLogOtherContactInfoCallRecords {
+  CollectionLogOtherContactInfoCallRecords copyWith({
+    String? time,
+    int? duration,
+    int? adminId,
+  }) {
+    return CollectionLogOtherContactInfoCallRecords()
+      ..time = time ?? this.time
+      ..duration = duration ?? this.duration
+      ..adminId = adminId ?? this.adminId;
+  }
+}
+
+CollectionLogOtherSmsHistory $CollectionLogOtherSmsHistoryFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherSmsHistory collectionLogOtherSmsHistory = CollectionLogOtherSmsHistory();
+  final int? cAdminId = jsonConvert.convert<int>(json['c_admin_id']);
+  if (cAdminId != null) {
+    collectionLogOtherSmsHistory.cAdminId = cAdminId;
+  }
+  final String? fTo = jsonConvert.convert<String>(json['f_to']);
+  if (fTo != null) {
+    collectionLogOtherSmsHistory.fTo = fTo;
+  }
+  final String? gText = jsonConvert.convert<String>(json['g_text']);
+  if (gText != null) {
+    collectionLogOtherSmsHistory.gText = gText;
+  }
+  final int? kSendStatus = jsonConvert.convert<int>(json['k_send_status']);
+  if (kSendStatus != null) {
+    collectionLogOtherSmsHistory.kSendStatus = kSendStatus;
+  }
+  final String? createdAt = jsonConvert.convert<String>(json['created_at']);
+  if (createdAt != null) {
+    collectionLogOtherSmsHistory.createdAt = createdAt;
+  }
+  return collectionLogOtherSmsHistory;
+}
+
+Map<String, dynamic> $CollectionLogOtherSmsHistoryToJson(
+    CollectionLogOtherSmsHistory entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['c_admin_id'] = entity.cAdminId;
+  data['f_to'] = entity.fTo;
+  data['g_text'] = entity.gText;
+  data['k_send_status'] = entity.kSendStatus;
+  data['created_at'] = entity.createdAt;
+  return data;
+}
+
+extension CollectionLogOtherSmsHistoryExtension on CollectionLogOtherSmsHistory {
+  CollectionLogOtherSmsHistory copyWith({
+    int? cAdminId,
+    String? fTo,
+    String? gText,
+    int? kSendStatus,
+    String? createdAt,
+  }) {
+    return CollectionLogOtherSmsHistory()
+      ..cAdminId = cAdminId ?? this.cAdminId
+      ..fTo = fTo ?? this.fTo
+      ..gText = gText ?? this.gText
+      ..kSendStatus = kSendStatus ?? this.kSendStatus
+      ..createdAt = createdAt ?? this.createdAt;
   }
 }

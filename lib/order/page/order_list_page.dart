@@ -9,6 +9,7 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
+import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
@@ -99,12 +100,12 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return index < _list.length ?
-                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,) :
+                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,repayInfo: CollectionLogOtherRepayInfo(),contactList: [],smsHistory: [],) :
                 MoreWidget(_list.length, _hasMore(), 10);
                 return index < _list.length ? 
                 (index % 5 == 0 ? 
                     const OrderTagItem(date: '2021年2月5日', orderTotal: 4) :
-                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,)
+                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,repayInfo: CollectionLogOtherRepayInfo(),contactList: [],smsHistory: [],)
                 ) : 
                 MoreWidget(_list.length, _hasMore(), 10);
               },

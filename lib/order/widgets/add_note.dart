@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:timelines/timelines.dart';
 
 import '../../models/admin_entity.dart';
+import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
-import '../../models/json/collection_log_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../res/colors.dart';
 import '../../res/dimens.dart';
@@ -49,8 +49,12 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   final TextEditingController dateController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   List<CollectionLogData> _list = <CollectionLogData>[];
-  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle];
-  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF004D40)];
+  CollectionLogEntity? _data = null ;
+  List<CollectionLogOtherContactInfo> _contactList = <CollectionLogOtherContactInfo>[];
+  List<CollectionLogOtherSmsHistory> _smsHistory = <CollectionLogOtherSmsHistory>[];
+  CollectionLogOtherRepayInfo? _repayInfo ;
+  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
   late AddNotePresenter _addNotePresenter;
 
   final ScrollController _scrollController = ScrollController();
@@ -72,7 +76,11 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   }
 
   Future<void> _onRefresh() async {
-    _list = await _addNotePresenter.index(1, widget.orderId, true);
+    _data = await _addNotePresenter.index(1, widget.orderId, true);
+    _list = _data!.data!;
+    _contactList = _data!.other!.contactInfo!;
+    _smsHistory = _data!.other!.smsHistory!;
+    _repayInfo = _data!.other!.repayInfo!;
     setState(() {
     });
     _scrollToBottom();
@@ -139,6 +147,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   }
   @override
   Widget build(BuildContext context) {
+    Map<String, Object> logData;
     return SafeArea(
       child: Container(
         color: Colors.grey.withOpacity(0.2),
@@ -146,7 +155,23 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
           children: [
             Container(
                 margin: EdgeInsets.only(left: 4, right: 4),
-                child: OrderItem(key: Key('order_item_'), index: 1, tabIndex: 1,inList: false,admins: widget.admins, products: widget.products, item: widget.item,)
+                child: OrderItem(
+                  key: Key('order_item_'),
+                  index: 1, tabIndex: 1,inList: false,admins: widget.admins,
+                  products: widget.products, item: widget.item,
+                  smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
+                  onSendSms: (smsTemplateId, smsContent) {
+                    logData = {
+                      'g_type': 8,
+                      'j_content': smsContent.trim(),
+                      'created_at': DateTime.now(),
+                      'e_collection_admin_id': 0,
+                      'k_promise_time': '',
+                      'n_sms_template_id': smsTemplateId,
+                    };
+                    _addNotePresenter.store(logData,  true);
+                  },
+                )
             ),
             // Text("My Collection Log"),
             Gaps.vGap4,

@@ -39,7 +39,7 @@ class BaseDialog extends StatelessWidget {
     final Widget bottomButton = Row(
       children: <Widget>[
         _DialogButton(
-          text: '取消',
+          text: 'Cancel',
           textColor: Colours.text_gray,
           onPressed: () => NavigatorUtils.goBack(context),
         ),
@@ -49,7 +49,7 @@ class BaseDialog extends StatelessWidget {
           child: VerticalDivider(),
         ),
         _DialogButton(
-          text: '确定',
+          text: 'Send',
           textColor: Theme.of(context).primaryColor,
           onPressed: onPressed,
         ),

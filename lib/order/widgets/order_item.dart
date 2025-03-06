@@ -12,6 +12,7 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/admin_entity.dart';
+import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../shop/widgets/price_input_dialog.dart';
@@ -37,6 +38,10 @@ class OrderItem extends StatelessWidget {
     required this.item,
     required this.products,
     required this.admins,
+    required this.smsHistory,
+    required this.contactList,
+    required this.repayInfo,
+    this.onSendSms,
     this.inList = true,
   });
 
@@ -46,6 +51,10 @@ class OrderItem extends StatelessWidget {
   final CollectionOrderData item;
   final List<ProductData> products;
   final List<AdminData> admins;
+  final List<CollectionLogOtherContactInfo> contactList;
+  final List<CollectionLogOtherSmsHistory> smsHistory;
+  final CollectionLogOtherRepayInfo? repayInfo ;
+  final void Function(int, String)? onSendSms;
 
   
   @override
@@ -370,7 +379,7 @@ class OrderItem extends StatelessWidget {
               bgColor: isDark ? Colours.dark_material_bg : Colours.bg_gray,
               onTap: () {
                 if (tabIndex == 2) {
-                  _showPayTypeDialog(context);
+                  _showPayTypeDialog(context, repayInfo!,);
                 }
               },
             ),
@@ -423,7 +432,7 @@ class OrderItem extends StatelessWidget {
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {
-                _showPayTypeDialog(context);
+                _showPayTypeDialog(context, repayInfo!);
                 if (tabIndex >= 2) {
                   NavigatorUtils.push(context, OrderRouter.orderTrackPage);
                 }
@@ -467,18 +476,18 @@ class OrderItem extends StatelessWidget {
     );
   }
 
-  void _showPayTypeDialog(BuildContext context) {
+  void _showPayTypeDialog(BuildContext context, CollectionLogOtherRepayInfo repayInfo) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
-          child: SmsDialog(
-            onPressed: (index, type) {
-              Toast.show('收款类型：$type');
-            },
-          ),
+        return SmsDialog(
+            repayInfo:repayInfo,
+          onPressed: (templateId, smsContent) {
+            Toast.show('收款类型：$templateId');
+            onSendSms?.call(templateId, smsContent);
+            // Toast.show('收款类型：$type');
+          },
         );
       },
     );

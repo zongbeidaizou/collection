@@ -9,8 +9,8 @@ import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
+import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
-import 'package:bounty_hunter/models/json/collection_log_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
@@ -179,6 +179,35 @@ class JsonConvert {
       return data.map<AuthorizStorePassport>((Map<String, dynamic> e) =>
           AuthorizStorePassport.fromJson(e)).toList() as M;
     }
+    if (<CollectionLogEntity>[] is M) {
+      return data.map<CollectionLogEntity>((Map<String, dynamic> e) =>
+          CollectionLogEntity.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogData>[] is M) {
+      return data.map<CollectionLogData>((Map<String, dynamic> e) =>
+          CollectionLogData.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOther>[] is M) {
+      return data.map<CollectionLogOther>((Map<String, dynamic> e) =>
+          CollectionLogOther.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherRepayInfo>[] is M) {
+      return data.map<CollectionLogOtherRepayInfo>((Map<String, dynamic> e) =>
+          CollectionLogOtherRepayInfo.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherContactInfo>[] is M) {
+      return data.map<CollectionLogOtherContactInfo>((Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfo.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherContactInfoCallRecords>[] is M) {
+      return data.map<CollectionLogOtherContactInfoCallRecords>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfoCallRecords.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherSmsHistory>[] is M) {
+      return data.map<CollectionLogOtherSmsHistory>((Map<String, dynamic> e) =>
+          CollectionLogOtherSmsHistory.fromJson(e)).toList() as M;
+    }
     if (<CollectionOrderEntity>[] is M) {
       return data.map<CollectionOrderEntity>((Map<String, dynamic> e) =>
           CollectionOrderEntity.fromJson(e)).toList() as M;
@@ -208,14 +237,6 @@ class JsonConvert {
     if (<CollectionOrderOtherProfile>[] is M) {
       return data.map<CollectionOrderOtherProfile>((Map<String, dynamic> e) =>
           CollectionOrderOtherProfile.fromJson(e)).toList() as M;
-    }
-    if (<CollectionLogEntity>[] is M) {
-      return data.map<CollectionLogEntity>((Map<String, dynamic> e) =>
-          CollectionLogEntity.fromJson(e)).toList() as M;
-    }
-    if (<CollectionLogData>[] is M) {
-      return data.map<CollectionLogData>((Map<String, dynamic> e) =>
-          CollectionLogData.fromJson(e)).toList() as M;
     }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
@@ -273,6 +294,17 @@ class JsonConvertClassCollection {
     (AdminData).toString(): AdminData.fromJson,
     (AuthorizStoreEntity).toString(): AuthorizStoreEntity.fromJson,
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
+    (CollectionLogEntity).toString(): CollectionLogEntity.fromJson,
+    (CollectionLogData).toString(): CollectionLogData.fromJson,
+    (CollectionLogOther).toString(): CollectionLogOther.fromJson,
+    (CollectionLogOtherRepayInfo).toString(): CollectionLogOtherRepayInfo
+        .fromJson,
+    (CollectionLogOtherContactInfo).toString(): CollectionLogOtherContactInfo
+        .fromJson,
+    (CollectionLogOtherContactInfoCallRecords)
+        .toString(): CollectionLogOtherContactInfoCallRecords.fromJson,
+    (CollectionLogOtherSmsHistory).toString(): CollectionLogOtherSmsHistory
+        .fromJson,
     (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
     (CollectionOrderData).toString(): CollectionOrderData.fromJson,
     (CollectionOrderOther).toString(): CollectionOrderOther.fromJson,
@@ -284,8 +316,6 @@ class JsonConvertClassCollection {
         .toString(): CollectionOrderOtherProgressAmountProgress.fromJson,
     (CollectionOrderOtherProfile).toString(): CollectionOrderOtherProfile
         .fromJson,
-    (CollectionLogEntity).toString(): CollectionLogEntity.fromJson,
-    (CollectionLogData).toString(): CollectionLogData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,

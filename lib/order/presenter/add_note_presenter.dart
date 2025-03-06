@@ -7,8 +7,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../models/authoriz_store_entity.dart';
+import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
-import '../../models/json/collection_log_entity.dart';
 import '../../models/product_entity.dart';
 import '../iview/add_note_iview.dart';
 import '../iview/order_list_page_iview.dart';
@@ -23,14 +23,17 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     });
   }
 
-  Future<List<CollectionLogData>> index(int page, int orderId, bool isShowDialog) async {
+  Future<CollectionLogEntity> index(int page, int orderId, bool isShowDialog) async {
 
 
     List<CollectionLogData> _list = <CollectionLogData>[];
+    CollectionLogEntity _data = CollectionLogEntity() ;
     FormData formData = FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
     await requestNetwork<CollectionLogEntity>(Method.get, url: HttpApi.collectionLogs, queryParameters: {"page": page, 'p_collection_order_id': orderId}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
+        _data = data;
+
       }
     }, onError: (_, __) async {
       if (_ == 200006) {
@@ -38,7 +41,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         view.showToast(__);
       }
     });
-    return _list;
+    return _data;
   }
   Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
     FormData formData = FormData.fromMap(data);

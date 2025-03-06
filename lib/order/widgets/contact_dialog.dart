@@ -3,32 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ContactDialog extends StatelessWidget {
-  final List<Contact> contacts = [
-    Contact(
-      name: '张三',
-      relationship: '朋友',
-      phoneNumber: '1234567890',
-      callRecords: [
+import '../../models/collection_log_entity.dart';
 
-      ],
-    ),
-    Contact(
-      name: '李四',
-      relationship: '家人',
-      phoneNumber: '0987654321',
-      callRecords: [], // 没有通话记录
-    ),
-    Contact(
-      name: '王五',
-      relationship: '同事',
-      phoneNumber: '1122334455',
-      callRecords: [
-        CallRecord(time: '2025-03-05T09:14:21.000000Z', duration: 18),
-        CallRecord(time: '2025-03-05T09:14:21.000000Z', duration: 112),
-      ],
-    ),
-  ];
+class ContactDialog extends StatelessWidget {
+  const ContactDialog({
+    super.key,
+    required this.contactList,
+  });
+  final List<CollectionLogOtherContactInfo> contactList;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +26,9 @@ class ContactDialog extends StatelessWidget {
           ),
         ),
         child: ListView.builder(
-          itemCount: contacts.length,
+          itemCount: contactList.length,
           itemBuilder: (context, index) {
-            return ContactCard(contact: contacts[index]);
+            return ContactCard(contact: contactList[index]);
           },
         ),
       ),
@@ -76,7 +58,7 @@ class CallRecord {
 }
 
 class ContactCard extends StatelessWidget {
-  final Contact contact;
+  final CollectionLogOtherContactInfo contact;
 
   ContactCard({required this.contact});
 
@@ -128,9 +110,9 @@ class ContactCard extends StatelessWidget {
                 text: TextSpan(
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 12),
                   children: <TextSpan>[
-                    TextSpan(text: contact.name),
-                    TextSpan(text: '  '),
-                    TextSpan(text: contact.relationship),
+                    TextSpan(text: contact.name, style: TextStyle(fontSize: 22)),
+                    const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
+                    TextSpan(text: contact.relationship, style: TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
@@ -147,23 +129,23 @@ class ContactCard extends StatelessWidget {
             ],
           ),
           Divider(thickness: 1.2,),
-          if (contact.callRecords.isNotEmpty) // 检查是否有通话记录
+          if (contact.callRecords != null && contact.callRecords!.isNotEmpty) // 检查是否有通话记录
             Container(
               height: 100, // 固定高度
               padding: EdgeInsets.only(top: 6),
               child: ListView.builder(
-                itemCount: contact.callRecords.length,
+                itemCount: contact.callRecords!.length,
                 itemBuilder: (context, index) {
-                  final record = contact.callRecords[index];
+                  final record = contact.callRecords![index];
                   return Row(
                     children: [
                       Gaps.hGap12,
-                      Icon(Icons.access_time_filled_sharp, size: 20, color: Colors.blueGrey.withOpacity(0.6)),
+                      Icon(Icons.access_time_filled_sharp, size: 12, color: Colors.blueGrey.withOpacity(0.6)),
                       Gaps.hGap4,
-                      Expanded(child: Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(record.time))),flex: 2,),
-                      Icon(Icons.timelapse, size: 20, color: Colors.blueGrey.withOpacity(0.6)),
+                      Expanded(child: Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(record.time!)), style: TextStyle(fontSize: 12),),flex: 2,),
+                      Icon(Icons.timelapse, size: 18, color: Colors.blueGrey.withOpacity(0.6)),
                       Gaps.hGap4,
-                      Expanded(child: Text(formatDuration(record.duration))),
+                      Expanded(child: Text(formatDuration(record.duration!), style: TextStyle(fontSize: 12))),
                     ],
                   );
                 },

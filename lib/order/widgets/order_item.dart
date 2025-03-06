@@ -26,8 +26,6 @@ import 'add_note.dart';
 import 'contact_dialog.dart';
 
 
-const List<String> orderLeftButtonText = ['拒单', '拒单', '订单跟踪', '订单跟踪', '订单跟踪'];
-const List<String> orderRightButtonText = ['接单', '开始配送', '完成', '', ''];
 
 class OrderItem extends StatelessWidget {
 
@@ -93,7 +91,7 @@ class OrderItem extends StatelessWidget {
       );
     }
 
-    Future<int?> _showModalBottomSheet2() {
+    Future<int?> _showContactListModal() {
       return showModalBottomSheet<int>(
         context: context,
         isScrollControlled: true,
@@ -103,7 +101,7 @@ class OrderItem extends StatelessWidget {
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: ContactDialog()
+              body: ContactDialog(contactList: contactList,),     //AddNote should be your Widget that will be displayed inside the bottomSheet
             ),
           );
 
@@ -421,7 +419,7 @@ class OrderItem extends StatelessWidget {
                 var now = DateTime.now();
                 int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
                 int to = now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
-                _showModalBottomSheet2();
+                _showContactListModal();
               },
             ),
             Gaps.hGap4,

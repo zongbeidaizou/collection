@@ -9,6 +9,7 @@ import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
+import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -179,6 +180,19 @@ class JsonConvert {
       return data.map<AuthorizStorePassport>((Map<String, dynamic> e) =>
           AuthorizStorePassport.fromJson(e)).toList() as M;
     }
+    if (<CollectionLog2Entity>[] is M) {
+      return data.map<CollectionLog2Entity>((Map<String, dynamic> e) =>
+          CollectionLog2Entity.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLog2Data>[] is M) {
+      return data.map<CollectionLog2Data>((Map<String, dynamic> e) =>
+          CollectionLog2Data.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLog2DataAAAAAABLCollectionOrder>[] is M) {
+      return data.map<CollectionLog2DataAAAAAABLCollectionOrder>((
+          Map<String, dynamic> e) =>
+          CollectionLog2DataAAAAAABLCollectionOrder.fromJson(e)).toList() as M;
+    }
     if (<CollectionLogEntity>[] is M) {
       return data.map<CollectionLogEntity>((Map<String, dynamic> e) =>
           CollectionLogEntity.fromJson(e)).toList() as M;
@@ -294,6 +308,10 @@ class JsonConvertClassCollection {
     (AdminData).toString(): AdminData.fromJson,
     (AuthorizStoreEntity).toString(): AuthorizStoreEntity.fromJson,
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
+    (CollectionLog2Entity).toString(): CollectionLog2Entity.fromJson,
+    (CollectionLog2Data).toString(): CollectionLog2Data.fromJson,
+    (CollectionLog2DataAAAAAABLCollectionOrder)
+        .toString(): CollectionLog2DataAAAAAABLCollectionOrder.fromJson,
     (CollectionLogEntity).toString(): CollectionLogEntity.fromJson,
     (CollectionLogData).toString(): CollectionLogData.fromJson,
     (CollectionLogOther).toString(): CollectionLogOther.fromJson,

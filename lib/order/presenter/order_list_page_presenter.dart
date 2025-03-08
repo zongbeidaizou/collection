@@ -54,7 +54,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
         if (data != null) {
           view.setProduct(data.data!);
-          Cache().cacheData('products', data.toString(), 60);
+          Cache().cacheData('products', data.toString(), 3600);
         }
       }, onError: (_, __) async {
         if (_ == 200006) {
@@ -73,7 +73,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
         if (data != null) {
           view.setAdmin(data.data!);
-          Cache().cacheData('admins', data.toString(), 60);
+          Cache().cacheData('admins', data.toString(), 3600);
         }
       }, onError: (_, __) async {
         if (_ == 200006) {

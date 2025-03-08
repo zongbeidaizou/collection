@@ -217,6 +217,19 @@ CollectionLog2DataAAAAAABLCollectionOrder $CollectionLog2DataAAAAAABLCollectionO
   if (vName != null) {
     collectionLog2DataAAAAAABLCollectionOrder.vName = vName;
   }
+  final String? sFlowOutTime = jsonConvert.convert<String>(
+      json['s_flow_out_time']);
+  if (sFlowOutTime != null) {
+    collectionLog2DataAAAAAABLCollectionOrder.sFlowOutTime = sFlowOutTime;
+  }
+  final int? aEBorrowCount = jsonConvert.convert<int>(json['a_e_borrow_count']);
+  if (aEBorrowCount != null) {
+    collectionLog2DataAAAAAABLCollectionOrder.aEBorrowCount = aEBorrowCount;
+  }
+  final int? aJProductId = jsonConvert.convert<int>(json['a_j_product_id']);
+  if (aJProductId != null) {
+    collectionLog2DataAAAAAABLCollectionOrder.aJProductId = aJProductId;
+  }
   return collectionLog2DataAAAAAABLCollectionOrder;
 }
 
@@ -231,6 +244,9 @@ Map<String, dynamic> $CollectionLog2DataAAAAAABLCollectionOrderToJson(
   data['t_borrow_sn'] = entity.tBorrowSn;
   data['u_phone'] = entity.uPhone;
   data['v_name'] = entity.vName;
+  data['s_flow_out_time'] = entity.sFlowOutTime;
+  data['a_e_borrow_count'] = entity.aEBorrowCount;
+  data['a_j_product_id'] = entity.aJProductId;
   return data;
 }
 
@@ -244,6 +260,9 @@ extension CollectionLog2DataAAAAAABLCollectionOrderExtension on CollectionLog2Da
     String? tBorrowSn,
     String? uPhone,
     String? vName,
+    String? sFlowOutTime,
+    int? aEBorrowCount,
+    int? aJProductId,
   }) {
     return CollectionLog2DataAAAAAABLCollectionOrder()
       ..id = id ?? this.id
@@ -253,6 +272,9 @@ extension CollectionLog2DataAAAAAABLCollectionOrderExtension on CollectionLog2Da
       ..pExpectRepayTime = pExpectRepayTime ?? this.pExpectRepayTime
       ..tBorrowSn = tBorrowSn ?? this.tBorrowSn
       ..uPhone = uPhone ?? this.uPhone
-      ..vName = vName ?? this.vName;
+      ..vName = vName ?? this.vName
+      ..sFlowOutTime = sFlowOutTime ?? this.sFlowOutTime
+      ..aEBorrowCount = aEBorrowCount ?? this.aEBorrowCount
+      ..aJProductId = aJProductId ?? this.aJProductId;
   }
 }

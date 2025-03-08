@@ -18,22 +18,21 @@ class GoodsListPresenter extends BasePagePresenter<GoodsListMvpView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      index(1, 0, true);
-    });
+
   }
 
-  Future<void> index(int page, int orderId, bool isShowDialog) async {
+  Future<void> index(int currentPage, int type, bool isShowDialog) async {
 
 
     List<CollectionLog2Data> _list = <CollectionLog2Data>[];
     CollectionLog2Entity _data = CollectionLog2Entity() ;
-    FormData formData = FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
-    await requestNetwork<CollectionLog2Entity>(Method.get, url: HttpApi.collectionLogs2, queryParameters: {"page": page, 'p_collection_order_id': orderId}, onSuccess: (data) async {
+    await requestNetwork<CollectionLog2Entity>(Method.get, url: HttpApi.collectionLogs2, queryParameters:{"page": currentPage, 'g_type': type}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
         _data = data;
         view.setLogs(_list);
+        view.setPageSize(4);
+        view.setCurrentPage(data.currentPage!);
 
       }
     }, onError: (_, __) async {

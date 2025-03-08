@@ -9,5 +9,7 @@ import '../../models/product_entity.dart';
 abstract class GoodsListMvpView implements IMvpView {
   void onRefresh();
   void setLogs(List<CollectionLog2Data> logs);
+  void setPageSize(int pageSize);
+  void setCurrentPage(int currentPage);
 
 }

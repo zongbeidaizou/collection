@@ -1,6 +1,7 @@
 import 'package:bounty_hunter/goods/iview/goods_list_iview.dart';
 import 'package:bounty_hunter/goods/presenter/goods_list_presenter.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/goods/models/goods_item_entity.dart';
@@ -15,10 +16,16 @@ import 'package:provider/provider.dart';
 
 import '../../models/collection_log2_entity.dart';
 import '../../mvp/base_page.dart';
+import '../../res/colors.dart';
+import '../../res/dimens.dart';
+import '../../res/gaps.dart';
 import '../../util/theme_utils.dart';
 import '../goods_router.dart';
 import '../widgets/goods_delete_bottom_sheet.dart';
 import '../widgets/goods_item.dart';
+final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
+final List<int> _typeList = [0, 1, 2, 3, 4, 5, 8];
 
 class GoodsListPage extends StatefulWidget {
 
@@ -36,8 +43,8 @@ class GoodsListPage extends StatefulWidget {
 class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveClientMixin<GoodsListPage>, SingleTickerProviderStateMixin,BasePageMixin<GoodsListPage, GoodsListPresenter>
     implements GoodsListMvpView {
 
-  int _page = 1;
   late int _maxPage;
+  late int _currentPage = 1;
   StateType _stateType = StateType.loading;
   bool _isLoading = false;
   List<CollectionLog2Data> _logList = [];
@@ -46,9 +53,9 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   @override
   void initState() {
     super.initState();
-
-
-    _onRefresh();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _goodsListPresenter.index(1, _typeList[widget.index], true);
+    });
   }
 
   @override
@@ -83,12 +90,21 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
       _page = 1;
     });*/
   }
+  @override
+  void setPageSize(int pageSize) {
+    _maxPage = pageSize;
+  }
+  @override
+  void setCurrentPage(int currentPage) {
+    _currentPage = currentPage;
+  }
 
   bool _hasMore() {
-    return _page < _maxPage;
+    return _currentPage < _maxPage;
   }
 
   Future<void> _loadMore() async {
+    Toast.show(widget.index.toString());
     if (_isLoading) {
       return;
     }
@@ -97,9 +113,9 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
     }
     _isLoading = true;
     setState(() {
-      _page ++;
+      _currentPage ++;
     });
-    _goodsListPresenter.index(2, widget.index, true);
+    _goodsListPresenter.index(_currentPage, _typeList[widget.index], true);
   }
 
   @override
@@ -133,7 +149,7 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
       final DateTime createdAt = DateTime.parse(log.createdAt!);
 
       // 将日期格式化为年月日字符串
-      String date = DateFormat('yyyy-MM-dd').format(createdAt);
+      String date = DateFormat('MMM d', 'en_US').format(createdAt);
       if (!groupedLog.containsKey(date)) {
         groupedLog[date] = [];
       }
@@ -153,8 +169,8 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
                 color: ThemeUtils.getStickyHeaderColor(context),
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Text(date),
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text(date,style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
               ),
               34.0,
             ),
@@ -172,19 +188,74 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
     }).toList();
   }
 
-  Widget _buildItem(CollectionLog2Data transaction) {
+  Widget _buildItem(CollectionLog2Data log) {
+    final TextStyle? textTextStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: Dimens.font_sp12);
     return Container(
-      height: 72.0,
       width: double.infinity,
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.only(left: 18, top: 10, bottom: 10, right: 10),
       decoration: BoxDecoration(
         border: Border(
           bottom: Divider.createBorderSide(context, width: 0.8),
         ),
       ),
-      child: Text("123")
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Row(children: [
+                  RichText(
+                    text: TextSpan(
+                      style: textTextStyle,
+                      children: <TextSpan>[
+                        TextSpan(text: DateFormat('hh:mm a', 'en_US').format(DateTime.parse(log.createdAt!)), style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                ],),
+              ),
+              if(log.gType == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(log.kPromiseTime!))}', style: TextStyle(fontSize: 10, color: _colorList[log.gType!])) else Gaps.empty,
+              Gaps.hGap4,
+              InkWell(
+                child: Row(children: [
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500),
+                      children: <TextSpan>[
+                        TextSpan(text: log.aAAAAABLCollectionOrder!.tBorrowSn),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.content_copy, size: 12,color: Colours.app_main.withOpacity(0.6),),
+                ],),
+                onTap: () {
+                  FlutterClipboard.copy(log.aAAAAABLCollectionOrder!.tBorrowSn!);
+                },
+              ),
+              Gaps.hGap12,
+              Row(children: [
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500),
+                    children: <TextSpan>[
+                      TextSpan(text:(DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours >= 24) ? DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inDays.toString() + 'd' : DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours.toString() + 'h'),
+                    ],
+                  ),
+                ),
+                Icon(Icons.directions_run_rounded, size: 12,color: Colours.app_main.withOpacity(0.6),),
+              ],),
+            ],),
+          Gaps.vGap4,
+          Text(log.jContent!),
+        ],
+      )
     );
   }
+
+
 
 
 

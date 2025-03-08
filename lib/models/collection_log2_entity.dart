@@ -78,6 +78,13 @@ class CollectionLog2DataAAAAAABLCollectionOrder {
 	String? uPhone = '';
 	@JSONField(name: "v_name")
 	String? vName = '';
+	@JSONField(name: "s_flow_out_time")
+	String? sFlowOutTime = '';
+	@JSONField(name: "a_e_borrow_count")
+	int? aEBorrowCount = 0;
+	@JSONField(name: "a_j_product_id")
+	int? aJProductId = 0;
+
 
 	CollectionLog2DataAAAAAABLCollectionOrder();
 

@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:currency_formatter/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:keyboard_actions/keyboard_actions_item.dart';
 import 'package:sp_util/sp_util.dart';
@@ -44,6 +46,45 @@ class Utils {
 
   static String formatPrice(String price, {MoneyFormat format = MoneyFormat.END_INTEGER}){
     return MoneyUtil.changeYWithUnit(NumUtil.getDoubleByValueStr(price) ?? 0, MoneyUnit.YUAN, format: format);
+  }
+  static String formatPrice2(num price){
+    const CurrencyFormat euroSettings = CurrencyFormat(
+      // formatter settings for euro
+      code: 'ng',
+      symbol: '₦',
+      symbolSide: SymbolSide.left,
+      thousandSeparator: ',',
+      decimalSeparator: '.',
+      symbolSeparator: '',
+    );
+    return CurrencyFormatter.format(price, euroSettings);
+  }
+
+  static String formatDateTime(String? time) {
+
+    if(time == null || time.isEmpty){
+      return '';
+    }
+    final DateTime now = DateTime.now();
+    final DateTime dateTime = DateTime.parse(time);
+    final Duration difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      // 今天
+      return DateFormat('Today hh:mm a', 'en_US').format(dateTime);
+    } else if (difference.inDays == 1) {
+      // 昨天
+      return 'Yesterday ${DateFormat('hh:mm a', 'en_US').format(dateTime)}';
+    } else if (difference.inDays == 2) {
+      // 前天
+      return '2 days ago';
+    } else if (difference.inDays == 3) {
+      // 3天前
+      return '3 days ago';
+    } else {
+      // 超过3天
+      return DateFormat('MMM d hh:mm a', 'en_US').format(dateTime);
+    }
   }
 
   static KeyboardActionsConfig getKeyboardActionsConfig(BuildContext context, List<FocusNode> list) {
@@ -116,6 +157,7 @@ Widget _buildDialogTransitions(BuildContext context, Animation<double> animation
       child: child,
     ),
   );
+
 }
 
 /// String 空安全处理

@@ -11,6 +11,7 @@ import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
@@ -178,7 +179,7 @@ class OrderItem extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
               child: Text(
-                'Promise to repay',
+                '',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.error,
@@ -216,10 +217,10 @@ class OrderItem extends StatelessWidget {
                     ),
                   ),
                   Gaps.hGap2,
-                  Icon(Icons.content_copy, size: 12,color: Colours.app_main.withOpacity(0.6),),
+                  Icon(Icons.content_copy, size: 14,color: Colours.app_main.withOpacity(0.6),),
                 ],),
                 onTap: () {
-                  FlutterClipboard.copy('hello flutter friends').then(( value ) => Toast.show('BV24022939902E copied'));
+                  FlutterClipboard.copy(item.tBorrowSn!);
                 },
               ),
             ),
@@ -242,7 +243,7 @@ class OrderItem extends StatelessWidget {
                     style: textTextStyle,
                     children: <TextSpan>[
                       // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                      const TextSpan(text: 'SAMUEL TAMALE'),
+                      TextSpan(text: item.vName),
                     ],
                   ),
                 ),
@@ -266,7 +267,7 @@ class OrderItem extends StatelessWidget {
                     style: textTextStyle,
                     children: <TextSpan>[
                       // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                      const TextSpan(text: '159***312'),
+                      TextSpan(text: item.uPhone),
                     ],
                   ),
                 ),
@@ -295,14 +296,13 @@ class OrderItem extends StatelessWidget {
                     style: textTextStyle,
                     children: <TextSpan>[
                       // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                      const TextSpan(text: '\$3000'),
+                      TextSpan(text: Utils.formatPrice2(item.nBorrowAmount!)),
                     ],
                   ),
                 ),
               Gaps.hGap2,
               ],),
               onTap: () {
-                FlutterClipboard.copy('hello flutter friends').then(( value ) => Toast.show('BV24022939902E copied'));
               },
             ),
           ),
@@ -325,7 +325,7 @@ class OrderItem extends StatelessWidget {
                   style: textTextStyle,
                   children: <TextSpan>[
                     // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                    const TextSpan(text: '2024/03/01'),
+                    TextSpan(text: DateFormat('MMM d', 'en_US').format(DateTime.parse(item.pExpectRepayTime!))),
                   ],
                 ),
               ),
@@ -349,7 +349,7 @@ class OrderItem extends StatelessWidget {
                   style: textTextStyle,
                   children: <TextSpan>[
                     // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                    const TextSpan(text: 'overdue 12 days'),
+                    TextSpan(text: 'overdue ${DateTime.parse(item.pExpectRepayTime!).difference(DateTime.now()).inDays} days'),
                   ],
                 ),
               ),
@@ -375,8 +375,8 @@ class OrderItem extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("3 days remaining"),
-                      Text("last note at yestorday 09:36", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8)),
+                      Text((DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours >= 24) ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left' : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
+                      Text(Utils.formatDateTime(item.aDLastLogTime), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8)),
                     ],
                   ),
                 ],

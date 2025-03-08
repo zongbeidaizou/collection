@@ -95,6 +95,8 @@ dependencies:
   form_builder_validators: ^11.0.0
   pager: ^0.0.6
   flutter_animate: ^4.5.0
+  currency_formatter: ^2.2.2
+
 
 # https://github.com/simplezhli/bounty_hunter/issues/187
 dependency_overrides:

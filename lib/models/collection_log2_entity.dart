@@ -1,6 +1,8 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_log2_entity.g.dart';
 import 'dart:convert';
+
+import 'collection_order_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log2_entity.g.dart';
 
 @JsonSerializable()
@@ -47,7 +49,7 @@ class CollectionLog2Data {
 	@JSONField(name: "created_at")
 	String? createdAt = '';
 	@JSONField(name: "a_a_a_a_a_a_b_l_collection_order")
-	CollectionLog2DataAAAAAABLCollectionOrder? aAAAAABLCollectionOrder;
+	CollectionOrderData? aAAAAABLCollectionOrder;
 
 	CollectionLog2Data();
 

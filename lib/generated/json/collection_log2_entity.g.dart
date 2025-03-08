@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 CollectionLog2Entity $CollectionLog2EntityFromJson(Map<String, dynamic> json) {
   final CollectionLog2Entity collectionLog2Entity = CollectionLog2Entity();
@@ -127,9 +129,8 @@ CollectionLog2Data $CollectionLog2DataFromJson(Map<String, dynamic> json) {
   if (createdAt != null) {
     collectionLog2Data.createdAt = createdAt;
   }
-  final CollectionLog2DataAAAAAABLCollectionOrder? aAAAAABLCollectionOrder = jsonConvert
-      .convert<CollectionLog2DataAAAAAABLCollectionOrder>(
-      json['a_a_a_a_a_a_b_l_collection_order']);
+  final CollectionOrderData? aAAAAABLCollectionOrder = jsonConvert.convert<
+      CollectionOrderData>(json['a_a_a_a_a_a_b_l_collection_order']);
   if (aAAAAABLCollectionOrder != null) {
     collectionLog2Data.aAAAAABLCollectionOrder = aAAAAABLCollectionOrder;
   }
@@ -163,7 +164,7 @@ extension CollectionLog2DataExtension on CollectionLog2Data {
     String? kPromiseTime,
     int? mOverdueDays,
     String? createdAt,
-    CollectionLog2DataAAAAAABLCollectionOrder? aAAAAABLCollectionOrder,
+    CollectionOrderData? aAAAAABLCollectionOrder,
   }) {
     return CollectionLog2Data()
       ..id = id ?? this.id

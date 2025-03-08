@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/order/iview/order_search_iview.dart';
@@ -12,6 +14,7 @@ import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../providers/user_provider.dart';
+import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
 
 
@@ -46,28 +49,41 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
   }
 
   Future<void> product( bool isShowDialog) async {
-    await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
-      if (data != null) {
-        view.setProduct(data.data!);
-      }
-    }, onError: (_, __) async {
-      if (_ == 200006) {
-      } else {
-        view.showToast(__);
-      }
-    });
+    String? productString = await Cache().checkCache('products');
+    if (productString == null) {
+      await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
+        if (data != null) {
+          view.setProduct(data.data!);
+          Cache().cacheData('products', data.toString(), 60);
+        }
+      }, onError: (_, __) async {
+        if (_ == 200006) {
+        } else {
+          view.showToast(__);
+        }
+      });
+    }else{
+      view.setProduct(ProductEntity.fromJson(jsonDecode(productString) as Map<String, dynamic >).data!);
+    }
   }
+
   Future<void> admins( bool isShowDialog) async {
-    await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
-      if (data != null) {
-        view.setAdmin(data.data!);
-      }
-    }, onError: (_, __) async {
-      if (_ == 200006) {
-      } else {
-        view.showToast(__);
-      }
-    });
+    String? productString = await Cache().checkCache('admins');
+    if (productString == null) {
+      await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
+        if (data != null) {
+          view.setAdmin(data.data!);
+          Cache().cacheData('admins', data.toString(), 60);
+        }
+      }, onError: (_, __) async {
+        if (_ == 200006) {
+        } else {
+          view.showToast(__);
+        }
+      });
+    }else{
+      view.setAdmin(AdminEntity.fromJson(jsonDecode(productString) as Map<String, dynamic >).data!);
+    }
   }
 
   Future<void> profile( bool isShowDialog) async {

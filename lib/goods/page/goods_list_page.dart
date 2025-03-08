@@ -14,8 +14,12 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/admin_entity.dart';
 import '../../models/collection_log2_entity.dart';
+import '../../models/collection_order_entity.dart';
+import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
+import '../../order/widgets/add_note.dart';
 import '../../res/colors.dart';
 import '../../res/dimens.dart';
 import '../../res/gaps.dart';
@@ -49,6 +53,8 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   bool _isLoading = false;
   List<CollectionLog2Data> _logList = [];
   late GoodsListPresenter _goodsListPresenter;
+  List<ProductData> _products = <ProductData>[];
+  List<AdminData> _admins = <AdminData>[];
 
   @override
   void initState() {
@@ -98,6 +104,14 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   void setCurrentPage(int currentPage) {
     _currentPage = currentPage;
   }
+  @override
+  void setProduct(List<ProductData> products) {
+    _products = products;
+  }
+  @override
+  void setAdmin(List<AdminData> admin) {
+    _admins = admin;
+  }
 
   bool _hasMore() {
     return _currentPage < _maxPage;
@@ -120,6 +134,23 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
 
   @override
   bool get wantKeepAlive => true;
+
+  Future<int?> _showModalBottomSheet(CollectionOrderData item) {
+    return showModalBottomSheet<int>(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: 700,
+          color: Colors.grey,
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: AddNote(orderId: item.id!, admins: _admins, products: _products, item: item),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+          ),
+        );
+      },
+    );
+  }
 
 
   @override
@@ -217,7 +248,7 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
                   ),
                 ],),
               ),
-              if(log.gType == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(log.kPromiseTime!))}', style: TextStyle(fontSize: 10, color: _colorList[log.gType!])) else Gaps.empty,
+              if(log.gType == 2 )  Text('Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(log.kPromiseTime!))}', style: TextStyle(fontSize: 10, color: _colorList[log.gType!])) else Gaps.empty,
               Gaps.hGap4,
               InkWell(
                 child: Row(children: [
@@ -229,24 +260,33 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
                       ],
                     ),
                   ),
-                  Icon(Icons.content_copy, size: 12,color: Colours.app_main.withOpacity(0.6),),
+                  Gaps.hGap2,
+                  Icon(Icons.content_copy, size: 14,color: Colours.app_main.withOpacity(0.6),),
+                  Gaps.hGap4,
                 ],),
                 onTap: () {
                   FlutterClipboard.copy(log.aAAAAABLCollectionOrder!.tBorrowSn!);
                 },
               ),
-              Gaps.hGap12,
-              Row(children: [
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500),
-                    children: <TextSpan>[
-                      TextSpan(text:(DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours >= 24) ? DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inDays.toString() + 'd' : DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours.toString() + 'h'),
-                    ],
+
+              InkWell(
+                onTap: () {
+                  _showModalBottomSheet(log.aAAAAABLCollectionOrder!);
+                },
+                child: Row(children: [
+                  Gaps.hGap4,
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500),
+                      children: <TextSpan>[
+                        TextSpan(text:(DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours >= 24) ? DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inDays.toString() + 'd left' : DateTime.parse(log.aAAAAABLCollectionOrder!.sFlowOutTime!).difference(DateTime.now()).inHours.toString() + 'h left'),
+                      ],
+                    ),
                   ),
-                ),
-                Icon(Icons.directions_run_rounded, size: 12,color: Colours.app_main.withOpacity(0.6),),
-              ],),
+                  Gaps.hGap2,
+                  Icon(Icons.edit, size: 14,color: Colours.app_main.withOpacity(0.6),),
+                ],),
+              ),
             ],),
           Gaps.vGap4,
           Text(log.jContent!),

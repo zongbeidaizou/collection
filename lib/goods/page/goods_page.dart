@@ -32,6 +32,8 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   final GlobalKey _addKey = GlobalKey();
   final GlobalKey _bodyKey = GlobalKey();
   final GlobalKey _buttonKey = GlobalKey();
+  String _searchKeyword = ''; // 管理搜索关键词的状态
+  final TextEditingController _controller = TextEditingController();
 
   GoodsPageProvider provider = GoodsPageProvider();
 

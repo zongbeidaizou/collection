@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "errorMessage": "messages.retrieved",
+  "message": "messages.retrieved",
+  "data": [{
+    "a_borrow_id": 37,
+    "b_collection_stage_id": 0,
+    "c_collection_agency_id": 0,
+    "d_collection_group_id": 0,
+    "e_collection_admin_id": 0,
+    "f_period_id": 0,
+    "g_amount": 0,
+    "h_commission_amount": 0,
+    "i_collection_kpi_id": 0,
+    "j_rate": 0,
+    "k_level": 0,
+    "l_repay_log_id": 0,
+    "created_at":""
+
+  }],
+  "other": [],
+  "total": 1,
+  "currentPage": 1,
+  "perPage": 40,
+  "hasMorePages": false
+}

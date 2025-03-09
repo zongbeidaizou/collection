@@ -12,6 +12,7 @@ import 'package:bounty_hunter/models/authoriz_store_entity.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
+import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
@@ -252,6 +253,14 @@ class JsonConvert {
       return data.map<CollectionOrderOtherProfile>((Map<String, dynamic> e) =>
           CollectionOrderOtherProfile.fromJson(e)).toList() as M;
     }
+    if (<CommissionEntity>[] is M) {
+      return data.map<CommissionEntity>((Map<String, dynamic> e) =>
+          CommissionEntity.fromJson(e)).toList() as M;
+    }
+    if (<CommissionData>[] is M) {
+      return data.map<CommissionData>((Map<String, dynamic> e) =>
+          CommissionData.fromJson(e)).toList() as M;
+    }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
           ProductEntity.fromJson(e)).toList() as M;
@@ -334,6 +343,8 @@ class JsonConvertClassCollection {
         .toString(): CollectionOrderOtherProgressAmountProgress.fromJson,
     (CollectionOrderOtherProfile).toString(): CollectionOrderOtherProfile
         .fromJson,
+    (CommissionEntity).toString(): CommissionEntity.fromJson,
+    (CommissionData).toString(): CommissionData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,

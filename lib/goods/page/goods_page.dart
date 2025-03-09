@@ -52,6 +52,11 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   // ignore: must_call_super
   void didChangeDependencies() {
   }
+  void _updateSearchKeyword(String keyword) {
+    setState(() {
+      _searchKeyword = keyword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +66,11 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
       create: (_) => provider,
       child: Scaffold(
         //todo 搜索
-/*        appBar: MySearchBar(
-          hintText: 'Search by Phone, Order, Code, Log',
-          onPressed: (text) => Toast.show('搜索内容：$text'),
-        ),*/
+        // appBar: MySearchBar(
+        //   hintText: 'Search by Phone, Order, Code, Log',
+        //   onPressed: (text) =>  _updateSearchKeyword(text),
+        //   controller: _controller,
+        // ),
         appBar: AppBar(
           actions: <Widget>[
 
@@ -114,7 +120,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                   itemCount: 7,
                   onPageChanged: _onPageChange,
                   controller: _pageController,
-                  itemBuilder: (_, int index) => GoodsListPage(index: index)
+                  itemBuilder: (_, int index) => GoodsListPage(index: index, searchKeyword: _searchKeyword,)
               ),
             )
           ],
@@ -124,6 +130,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   }
 
   void _onPageChange(int index) {
+    _controller.text='';
     _tabController?.animateTo(index);
     provider.setIndex(index);
   }

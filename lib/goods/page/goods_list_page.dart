@@ -35,10 +35,12 @@ class GoodsListPage extends StatefulWidget {
 
   const GoodsListPage({
     super.key,
-    required this.index
+    required this.index,
+    required this.searchKeyword
   });
 
   final int index;
+  final String searchKeyword;
 
   @override
   _GoodsListPageState createState() => _GoodsListPageState();
@@ -60,7 +62,7 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _goodsListPresenter.index(1, _typeList[widget.index], true);
+      _goodsListPresenter.index(1, _typeList[widget.index], true, keyword: widget.searchKeyword);
     });
   }
 
@@ -78,6 +80,17 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   @override
   void onRefresh() {
     // TODO: implement onRefresh
+  }
+  @override
+  void didUpdateWidget(GoodsListPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 当搜索关键词变化时，重新请求数据
+    if (oldWidget.searchKeyword != widget.searchKeyword) {
+      setState(() {
+        _logList.clear();
+      });
+      _goodsListPresenter.index(1, _typeList[widget.index], false, keyword: widget.searchKeyword);
+    }
   }
 
 

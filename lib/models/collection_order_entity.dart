@@ -102,6 +102,10 @@ class CollectionOrderData {
 	int? aFS3CollectionAmount = 0;
 	@JSONField(name: "a_j_product_id")
 	int? aJProductId = 0;
+	@JSONField(name: "a_k_no")
+	String? aKNo = '';
+	@JSONField(name: "a_l_last_log")
+	String? aLLastLog = '';
 
 	CollectionOrderData();
 

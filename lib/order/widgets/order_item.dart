@@ -175,14 +175,14 @@ class OrderItem extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
               child: Text(
-                '',
+                item.aKNo!,
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
-                  color: Theme.of(context).colorScheme.error,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
             ),
@@ -416,22 +416,14 @@ class OrderItem extends StatelessWidget {
         Gaps.vGap8,
         if (inList) Row(
           children: <Widget>[
-            const Expanded(
-              child: Gaps.empty,
+            Expanded(
+              child: Text(
+                item.aLLastLog!,
+                style: TextStyle(color: Colors.grey, fontSize: 11),
+                maxLines: 2, // 设置最大行数为2
+                overflow: TextOverflow.ellipsis,),
             ),
-            Gaps.hGap4,
 
-            OrderItemButton(
-              key: Key('order_button_3_Add'),
-              text: "Action",
-              textColor: isDark ? Colours.dark_text : Colours.text,
-              bgColor: isDark ? Colours.dark_material_bg : Colours.bg_gray,
-              onTap: () {
-                if (tabIndex == 2) {
-                  _showSmsDialog(context, repayInfo!,);
-                }
-              },
-            ),
             Gaps.hGap4,
             OrderItemButton(
               key: Key('order_button_3_$index'),

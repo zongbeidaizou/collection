@@ -113,7 +113,7 @@ class _MySearchBarState extends State<MySearchBar> {
         ),
         child: TextField(
           key: const Key('search_text_field'),
-//          autofocus: true,
+          autofocus: false,
           controller: _controller,
           focusNode: _focus,
           textInputAction: TextInputAction.search,
@@ -132,7 +132,7 @@ class _MySearchBarState extends State<MySearchBar> {
             hintText: widget.hintText,
             suffixIcon: GestureDetector(
               child: Semantics(
-                label: '清空',
+                label: 'Clear',
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 8.0, bottom: 8.0),
                   child: LoadAssetImage('order/order_delete', color: iconColor),
@@ -156,7 +156,8 @@ class _MySearchBarState extends State<MySearchBar> {
       fontSize: Dimens.font_sp14,
       radius: 4.0,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      text: '搜索',
+      text: 'Search',
+      backgroundColor: Colours.app_main.withOpacity(0.8),
       onPressed:() {
         _focus.unfocus();
         widget.onPressed?.call(_controller.text);
@@ -170,7 +171,7 @@ class _MySearchBarState extends State<MySearchBar> {
         child: SafeArea(
           child: Row(
             children: <Widget>[
-              back,
+              Gaps.hGap16,
               textField,
               Gaps.hGap8,
               search,

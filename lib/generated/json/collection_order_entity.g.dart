@@ -264,6 +264,14 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aJProductId != null) {
     collectionOrderData.aJProductId = aJProductId;
   }
+  final String? aKNo = jsonConvert.convert<String>(json['a_k_no']);
+  if (aKNo != null) {
+    collectionOrderData.aKNo = aKNo;
+  }
+  final String? aLLastLog = jsonConvert.convert<String>(json['a_l_last_log']);
+  if (aLLastLog != null) {
+    collectionOrderData.aLLastLog = aLLastLog;
+  }
   return collectionOrderData;
 }
 
@@ -307,6 +315,8 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_h_s2_collection_amount'] = entity.aHS2CollectionAmount;
   data['a_f_s3_collection_amount'] = entity.aFS3CollectionAmount;
   data['a_j_product_id'] = entity.aJProductId;
+  data['a_k_no'] = entity.aKNo;
+  data['a_l_last_log'] = entity.aLLastLog;
   return data;
 }
 
@@ -349,6 +359,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? aHS2CollectionAmount,
     int? aFS3CollectionAmount,
     int? aJProductId,
+    String? aKNo,
+    String? aLLastLog,
   }) {
     return CollectionOrderData()
       ..id = id ?? this.id
@@ -391,7 +403,9 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aGS1CollectionAmount = aGS1CollectionAmount ?? this.aGS1CollectionAmount
       ..aHS2CollectionAmount = aHS2CollectionAmount ?? this.aHS2CollectionAmount
       ..aFS3CollectionAmount = aFS3CollectionAmount ?? this.aFS3CollectionAmount
-      ..aJProductId = aJProductId ?? this.aJProductId;
+      ..aJProductId = aJProductId ?? this.aJProductId
+      ..aKNo = aKNo ?? this.aKNo
+      ..aLLastLog = aLLastLog ?? this.aLLastLog;
   }
 }
 

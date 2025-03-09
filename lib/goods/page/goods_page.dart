@@ -12,6 +12,8 @@ import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/popup_window.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/my_search_bar.dart';
+
 final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
 /// design/4商品/index.html
 class GoodsPage extends StatefulWidget {
@@ -58,19 +60,14 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
     return ChangeNotifierProvider<GoodsPageProvider>(
       create: (_) => provider,
       child: Scaffold(
+        //todo 搜索
+/*        appBar: MySearchBar(
+          hintText: 'Search by Phone, Order, Code, Log',
+          onPressed: (text) => Toast.show('搜索内容：$text'),
+        ),*/
         appBar: AppBar(
           actions: <Widget>[
-            IconButton(
-              tooltip: '搜索商品',
-              onPressed: () => NavigatorUtils.push(context, GoodsRouter.goodsSearchPage),
-              icon: LoadAssetImage(
-                'goods/search',
-                key: const Key('search'),
-                width: 24.0,
-                height: 24.0,
-                color: iconColor,
-              ),
-            )
+
           ],
         ),
         body: Column(

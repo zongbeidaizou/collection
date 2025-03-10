@@ -476,6 +476,10 @@ class OrderItem extends StatelessWidget {
                 }
               },
             ),
+            Gaps.hGap4,
+            Icon(Icons.more_vert, color: Colours.app_main,),
+
+
 
 
           ],
@@ -515,7 +519,7 @@ class OrderItemButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(4.0),
         ),
         constraints: BoxConstraints(
-          minWidth: icon != null ? 120 : 64,
+          minWidth: icon != null ? 100 : 64,
           maxHeight: 30.0,
           minHeight: 30.0,
         ),

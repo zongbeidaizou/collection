@@ -206,6 +206,14 @@ class JsonConvert {
       return data.map<CollectionLogOther>((Map<String, dynamic> e) =>
           CollectionLogOther.fromJson(e)).toList() as M;
     }
+    if (<CollectionLogOtherTrack>[] is M) {
+      return data.map<CollectionLogOtherTrack>((Map<String, dynamic> e) =>
+          CollectionLogOtherTrack.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherPeriod>[] is M) {
+      return data.map<CollectionLogOtherPeriod>((Map<String, dynamic> e) =>
+          CollectionLogOtherPeriod.fromJson(e)).toList() as M;
+    }
     if (<CollectionLogOtherRepayInfo>[] is M) {
       return data.map<CollectionLogOtherRepayInfo>((Map<String, dynamic> e) =>
           CollectionLogOtherRepayInfo.fromJson(e)).toList() as M;
@@ -324,6 +332,8 @@ class JsonConvertClassCollection {
     (CollectionLogEntity).toString(): CollectionLogEntity.fromJson,
     (CollectionLogData).toString(): CollectionLogData.fromJson,
     (CollectionLogOther).toString(): CollectionLogOther.fromJson,
+    (CollectionLogOtherTrack).toString(): CollectionLogOtherTrack.fromJson,
+    (CollectionLogOtherPeriod).toString(): CollectionLogOtherPeriod.fromJson,
     (CollectionLogOtherRepayInfo).toString(): CollectionLogOtherRepayInfo
         .fromJson,
     (CollectionLogOtherContactInfo).toString(): CollectionLogOtherContactInfo

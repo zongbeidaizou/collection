@@ -149,8 +149,7 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   if (jContent != null) {
     collectionLogData.jContent = jContent;
   }
-  final String? kPromiseTime = jsonConvert.convert<String>(
-      json['k_promise_time']);
+  final dynamic kPromiseTime = json['k_promise_time'];
   if (kPromiseTime != null) {
     collectionLogData.kPromiseTime = kPromiseTime;
   }
@@ -162,6 +161,15 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   final int? mOverdueDays = jsonConvert.convert<int>(json['m_overdue_days']);
   if (mOverdueDays != null) {
     collectionLogData.mOverdueDays = mOverdueDays;
+  }
+  final int? nSmsTemplateId = jsonConvert.convert<int>(
+      json['n_sms_template_id']);
+  if (nSmsTemplateId != null) {
+    collectionLogData.nSmsTemplateId = nSmsTemplateId;
+  }
+  final int? oContactId = jsonConvert.convert<int>(json['o_contact_id']);
+  if (oContactId != null) {
+    collectionLogData.oContactId = oContactId;
   }
   final String? createdAt = jsonConvert.convert<String>(json['created_at']);
   if (createdAt != null) {
@@ -189,6 +197,8 @@ Map<String, dynamic> $CollectionLogDataToJson(CollectionLogData entity) {
   data['k_promise_time'] = entity.kPromiseTime;
   data['l_stage_day_index'] = entity.lStageDayIndex;
   data['m_overdue_days'] = entity.mOverdueDays;
+  data['n_sms_template_id'] = entity.nSmsTemplateId;
+  data['o_contact_id'] = entity.oContactId;
   data['created_at'] = entity.createdAt;
   return data;
 }
@@ -209,9 +219,11 @@ extension CollectionLogDataExtension on CollectionLogData {
     String? hPhone,
     int? iTarget,
     String? jContent,
-    String? kPromiseTime,
+    dynamic kPromiseTime,
     int? lStageDayIndex,
     int? mOverdueDays,
+    int? nSmsTemplateId,
+    int? oContactId,
     String? createdAt,
   }) {
     return CollectionLogData()
@@ -232,12 +244,24 @@ extension CollectionLogDataExtension on CollectionLogData {
       ..kPromiseTime = kPromiseTime ?? this.kPromiseTime
       ..lStageDayIndex = lStageDayIndex ?? this.lStageDayIndex
       ..mOverdueDays = mOverdueDays ?? this.mOverdueDays
+      ..nSmsTemplateId = nSmsTemplateId ?? this.nSmsTemplateId
+      ..oContactId = oContactId ?? this.oContactId
       ..createdAt = createdAt ?? this.createdAt;
   }
 }
 
 CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   final CollectionLogOther collectionLogOther = CollectionLogOther();
+  final CollectionLogOtherTrack? track = jsonConvert.convert<
+      CollectionLogOtherTrack>(json['track']);
+  if (track != null) {
+    collectionLogOther.track = track;
+  }
+  final CollectionLogOtherPeriod? period = jsonConvert.convert<
+      CollectionLogOtherPeriod>(json['period']);
+  if (period != null) {
+    collectionLogOther.period = period;
+  }
   final CollectionLogOtherRepayInfo? repayInfo = jsonConvert.convert<
       CollectionLogOtherRepayInfo>(json['repay_info']);
   if (repayInfo != null) {
@@ -266,6 +290,8 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['track'] = entity.track?.toJson();
+  data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
   data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
@@ -274,14 +300,234 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
 
 extension CollectionLogOtherExtension on CollectionLogOther {
   CollectionLogOther copyWith({
+    CollectionLogOtherTrack? track,
+    CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
     List<CollectionLogOtherContactInfo>? contactInfo,
     List<CollectionLogOtherSmsHistory>? smsHistory,
   }) {
     return CollectionLogOther()
+      ..track = track ?? this.track
+      ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo
       ..contactInfo = contactInfo ?? this.contactInfo
       ..smsHistory = smsHistory ?? this.smsHistory;
+  }
+}
+
+CollectionLogOtherTrack $CollectionLogOtherTrackFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherTrack collectionLogOtherTrack = CollectionLogOtherTrack();
+  final String? applyTime = jsonConvert.convert<String>(json['apply_time']);
+  if (applyTime != null) {
+    collectionLogOtherTrack.applyTime = applyTime;
+  }
+  final String? borrowAmount = jsonConvert.convert<String>(
+      json['borrow_amount']);
+  if (borrowAmount != null) {
+    collectionLogOtherTrack.borrowAmount = borrowAmount;
+  }
+  final String? loanTime = jsonConvert.convert<String>(json['loan_time']);
+  if (loanTime != null) {
+    collectionLogOtherTrack.loanTime = loanTime;
+  }
+  final String? loanBank = jsonConvert.convert<String>(json['loan_bank']);
+  if (loanBank != null) {
+    collectionLogOtherTrack.loanBank = loanBank;
+  }
+  final String? loanAmount = jsonConvert.convert<String>(json['loan_amount']);
+  if (loanAmount != null) {
+    collectionLogOtherTrack.loanAmount = loanAmount;
+  }
+  final String? loanActiveTime = jsonConvert.convert<String>(
+      json['loan_active_time']);
+  if (loanActiveTime != null) {
+    collectionLogOtherTrack.loanActiveTime = loanActiveTime;
+  }
+  return collectionLogOtherTrack;
+}
+
+Map<String, dynamic> $CollectionLogOtherTrackToJson(
+    CollectionLogOtherTrack entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['apply_time'] = entity.applyTime;
+  data['borrow_amount'] = entity.borrowAmount;
+  data['loan_time'] = entity.loanTime;
+  data['loan_bank'] = entity.loanBank;
+  data['loan_amount'] = entity.loanAmount;
+  data['loan_active_time'] = entity.loanActiveTime;
+  return data;
+}
+
+extension CollectionLogOtherTrackExtension on CollectionLogOtherTrack {
+  CollectionLogOtherTrack copyWith({
+    String? applyTime,
+    String? borrowAmount,
+    String? loanTime,
+    String? loanBank,
+    String? loanAmount,
+    String? loanActiveTime,
+  }) {
+    return CollectionLogOtherTrack()
+      ..applyTime = applyTime ?? this.applyTime
+      ..borrowAmount = borrowAmount ?? this.borrowAmount
+      ..loanTime = loanTime ?? this.loanTime
+      ..loanBank = loanBank ?? this.loanBank
+      ..loanAmount = loanAmount ?? this.loanAmount
+      ..loanActiveTime = loanActiveTime ?? this.loanActiveTime;
+  }
+}
+
+CollectionLogOtherPeriod $CollectionLogOtherPeriodFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherPeriod collectionLogOtherPeriod = CollectionLogOtherPeriod();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherPeriod.id = id;
+  }
+  final int? aBorrowId = jsonConvert.convert<int>(json['a_borrow_id']);
+  if (aBorrowId != null) {
+    collectionLogOtherPeriod.aBorrowId = aBorrowId;
+  }
+  final int? fExpectRepayTotalAmount = jsonConvert.convert<int>(
+      json['f_expect_repay_total_amount']);
+  if (fExpectRepayTotalAmount != null) {
+    collectionLogOtherPeriod.fExpectRepayTotalAmount = fExpectRepayTotalAmount;
+  }
+  final int? pPaidInterest = jsonConvert.convert<int>(json['p_paid_interest']);
+  if (pPaidInterest != null) {
+    collectionLogOtherPeriod.pPaidInterest = pPaidInterest;
+  }
+  final int? qPaidServiceFee = jsonConvert.convert<int>(
+      json['q_paid_service_fee']);
+  if (qPaidServiceFee != null) {
+    collectionLogOtherPeriod.qPaidServiceFee = qPaidServiceFee;
+  }
+  final int? sPaidOverdueAmount = jsonConvert.convert<int>(
+      json['s_paid_overdue_amount']);
+  if (sPaidOverdueAmount != null) {
+    collectionLogOtherPeriod.sPaidOverdueAmount = sPaidOverdueAmount;
+  }
+  final int? oPaidBorrowAmount = jsonConvert.convert<int>(
+      json['o_paid_borrow_amount']);
+  if (oPaidBorrowAmount != null) {
+    collectionLogOtherPeriod.oPaidBorrowAmount = oPaidBorrowAmount;
+  }
+  final int? gExpectBorrowAmount = jsonConvert.convert<int>(
+      json['g_expect_borrow_amount']);
+  if (gExpectBorrowAmount != null) {
+    collectionLogOtherPeriod.gExpectBorrowAmount = gExpectBorrowAmount;
+  }
+  final int? hExpectInterest = jsonConvert.convert<int>(
+      json['h_expect_interest']);
+  if (hExpectInterest != null) {
+    collectionLogOtherPeriod.hExpectInterest = hExpectInterest;
+  }
+  final int? iExpectServiceFee = jsonConvert.convert<int>(
+      json['i_expect_service_fee']);
+  if (iExpectServiceFee != null) {
+    collectionLogOtherPeriod.iExpectServiceFee = iExpectServiceFee;
+  }
+  final int? jExpectViolateFee = jsonConvert.convert<int>(
+      json['j_expect_violate_fee']);
+  if (jExpectViolateFee != null) {
+    collectionLogOtherPeriod.jExpectViolateFee = jExpectViolateFee;
+  }
+  final int? kExpectOverdueAmount = jsonConvert.convert<int>(
+      json['k_expect_overdue_amount']);
+  if (kExpectOverdueAmount != null) {
+    collectionLogOtherPeriod.kExpectOverdueAmount = kExpectOverdueAmount;
+  }
+  final int? lOverdueDays = jsonConvert.convert<int>(json['l_overdue_days']);
+  if (lOverdueDays != null) {
+    collectionLogOtherPeriod.lOverdueDays = lOverdueDays;
+  }
+  final int? tDeductionTimes = jsonConvert.convert<int>(
+      json['t_deduction_times']);
+  if (tDeductionTimes != null) {
+    collectionLogOtherPeriod.tDeductionTimes = tDeductionTimes;
+  }
+  final int? uDeductionTotalAmount = jsonConvert.convert<int>(
+      json['u_deduction_total_amount']);
+  if (uDeductionTotalAmount != null) {
+    collectionLogOtherPeriod.uDeductionTotalAmount = uDeductionTotalAmount;
+  }
+  final int? aHPartTimes = jsonConvert.convert<int>(json['a_h_part_times']);
+  if (aHPartTimes != null) {
+    collectionLogOtherPeriod.aHPartTimes = aHPartTimes;
+  }
+  final int? aUCurrentDeductionFee = jsonConvert.convert<int>(
+      json['a_u_current_deduction_fee']);
+  if (aUCurrentDeductionFee != null) {
+    collectionLogOtherPeriod.aUCurrentDeductionFee = aUCurrentDeductionFee;
+  }
+  return collectionLogOtherPeriod;
+}
+
+Map<String, dynamic> $CollectionLogOtherPeriodToJson(
+    CollectionLogOtherPeriod entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['a_borrow_id'] = entity.aBorrowId;
+  data['f_expect_repay_total_amount'] = entity.fExpectRepayTotalAmount;
+  data['p_paid_interest'] = entity.pPaidInterest;
+  data['q_paid_service_fee'] = entity.qPaidServiceFee;
+  data['s_paid_overdue_amount'] = entity.sPaidOverdueAmount;
+  data['o_paid_borrow_amount'] = entity.oPaidBorrowAmount;
+  data['g_expect_borrow_amount'] = entity.gExpectBorrowAmount;
+  data['h_expect_interest'] = entity.hExpectInterest;
+  data['i_expect_service_fee'] = entity.iExpectServiceFee;
+  data['j_expect_violate_fee'] = entity.jExpectViolateFee;
+  data['k_expect_overdue_amount'] = entity.kExpectOverdueAmount;
+  data['l_overdue_days'] = entity.lOverdueDays;
+  data['t_deduction_times'] = entity.tDeductionTimes;
+  data['u_deduction_total_amount'] = entity.uDeductionTotalAmount;
+  data['a_h_part_times'] = entity.aHPartTimes;
+  data['a_u_current_deduction_fee'] = entity.aUCurrentDeductionFee;
+  return data;
+}
+
+extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
+  CollectionLogOtherPeriod copyWith({
+    int? id,
+    int? aBorrowId,
+    int? fExpectRepayTotalAmount,
+    int? pPaidInterest,
+    int? qPaidServiceFee,
+    int? sPaidOverdueAmount,
+    int? oPaidBorrowAmount,
+    int? gExpectBorrowAmount,
+    int? hExpectInterest,
+    int? iExpectServiceFee,
+    int? jExpectViolateFee,
+    int? kExpectOverdueAmount,
+    int? lOverdueDays,
+    int? tDeductionTimes,
+    int? uDeductionTotalAmount,
+    int? aHPartTimes,
+    int? aUCurrentDeductionFee,
+  }) {
+    return CollectionLogOtherPeriod()
+      ..id = id ?? this.id
+      ..aBorrowId = aBorrowId ?? this.aBorrowId
+      ..fExpectRepayTotalAmount = fExpectRepayTotalAmount ??
+          this.fExpectRepayTotalAmount
+      ..pPaidInterest = pPaidInterest ?? this.pPaidInterest
+      ..qPaidServiceFee = qPaidServiceFee ?? this.qPaidServiceFee
+      ..sPaidOverdueAmount = sPaidOverdueAmount ?? this.sPaidOverdueAmount
+      ..oPaidBorrowAmount = oPaidBorrowAmount ?? this.oPaidBorrowAmount
+      ..gExpectBorrowAmount = gExpectBorrowAmount ?? this.gExpectBorrowAmount
+      ..hExpectInterest = hExpectInterest ?? this.hExpectInterest
+      ..iExpectServiceFee = iExpectServiceFee ?? this.iExpectServiceFee
+      ..jExpectViolateFee = jExpectViolateFee ?? this.jExpectViolateFee
+      ..kExpectOverdueAmount = kExpectOverdueAmount ?? this.kExpectOverdueAmount
+      ..lOverdueDays = lOverdueDays ?? this.lOverdueDays
+      ..tDeductionTimes = tDeductionTimes ?? this.tDeductionTimes
+      ..uDeductionTotalAmount = uDeductionTotalAmount ??
+          this.uDeductionTotalAmount
+      ..aHPartTimes = aHPartTimes ?? this.aHPartTimes
+      ..aUCurrentDeductionFee = aUCurrentDeductionFee ??
+          this.aUCurrentDeductionFee;
   }
 }
 
@@ -502,6 +748,10 @@ CollectionLogOtherContactInfoCallRecords $CollectionLogOtherContactInfoCallRecor
   if (adminId != null) {
     collectionLogOtherContactInfoCallRecords.adminId = adminId;
   }
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherContactInfoCallRecords.id = id;
+  }
   return collectionLogOtherContactInfoCallRecords;
 }
 
@@ -511,6 +761,7 @@ Map<String, dynamic> $CollectionLogOtherContactInfoCallRecordsToJson(
   data['time'] = entity.time;
   data['duration'] = entity.duration;
   data['admin_id'] = entity.adminId;
+  data['id'] = entity.id;
   return data;
 }
 
@@ -519,11 +770,13 @@ extension CollectionLogOtherContactInfoCallRecordsExtension on CollectionLogOthe
     String? time,
     int? duration,
     int? adminId,
+    int? id,
   }) {
     return CollectionLogOtherContactInfoCallRecords()
       ..time = time ?? this.time
       ..duration = duration ?? this.duration
-      ..adminId = adminId ?? this.adminId;
+      ..adminId = adminId ?? this.adminId
+      ..id = id ?? this.id;
   }
 }
 
@@ -550,6 +803,10 @@ CollectionLogOtherSmsHistory $CollectionLogOtherSmsHistoryFromJson(
   if (createdAt != null) {
     collectionLogOtherSmsHistory.createdAt = createdAt;
   }
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherSmsHistory.id = id;
+  }
   return collectionLogOtherSmsHistory;
 }
 
@@ -561,6 +818,7 @@ Map<String, dynamic> $CollectionLogOtherSmsHistoryToJson(
   data['g_text'] = entity.gText;
   data['k_send_status'] = entity.kSendStatus;
   data['created_at'] = entity.createdAt;
+  data['id'] = entity.id;
   return data;
 }
 
@@ -571,12 +829,14 @@ extension CollectionLogOtherSmsHistoryExtension on CollectionLogOtherSmsHistory 
     String? gText,
     int? kSendStatus,
     String? createdAt,
+    int? id,
   }) {
     return CollectionLogOtherSmsHistory()
       ..cAdminId = cAdminId ?? this.cAdminId
       ..fTo = fTo ?? this.fTo
       ..gText = gText ?? this.gText
       ..kSendStatus = kSendStatus ?? this.kSendStatus
-      ..createdAt = createdAt ?? this.createdAt;
+      ..createdAt = createdAt ?? this.createdAt
+      ..id = id ?? this.id;
   }
 }

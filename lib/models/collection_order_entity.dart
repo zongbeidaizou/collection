@@ -1,7 +1,9 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_order_entity.g.dart';
 import 'dart:convert';
-export 'package:bounty_hunter/generated/json/collection_order_entity.g.dart';
+
+import 'collection_log_entity.dart';
+export 'package:bounty_hunter/models/collection_log_entity.dart';
 
 @JsonSerializable()
 class CollectionOrderEntity {
@@ -106,6 +108,8 @@ class CollectionOrderData {
 	String? aKNo = '';
 	@JSONField(name: "a_l_last_log")
 	String? aLLastLog = '';
+	@JSONField(name: "a_a_a_a_a_q_b_periods")
+	CollectionLogOtherPeriod? aAAAAQBPeriods;
 
 	CollectionOrderData();
 

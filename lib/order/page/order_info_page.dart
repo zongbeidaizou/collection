@@ -42,8 +42,8 @@ class OrderInfoPage extends StatefulWidget {
   _OrderInfoPageState createState() => _OrderInfoPageState();
 }
 
-class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<OrderInfoPage>,BasePageMixin<OrderInfoPage, OrderListPagePresenter>
-    implements OrderInfoPageIMvpView {
+class _OrderInfoPageState extends State<OrderInfoPage> with AutomaticKeepAliveClientMixin<OrderInfoPage>, ChangeNotifierMixin<OrderInfoPage>, BasePageMixin<OrderInfoPage, OrderInfoPagePresenter>
+implements OrderInfoPageIMvpView {
   late CollectionLogOtherTrack _track ;
   late CollectionLogOtherPeriod _period ;
   bool _immediatelyPay = false;
@@ -59,6 +59,13 @@ class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<
 
   }
   @override
+  Map<ChangeNotifier, List<VoidCallback>?>? changeNotifier() {
+    return {_controller: null};
+  }
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   OrderInfoPagePresenter createPresenter() {
     _orderInfoPagePresenter = OrderInfoPagePresenter();
     return _orderInfoPagePresenter;
@@ -70,7 +77,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<
     _controller2.dispose();
     super.dispose();
   }
-  void _verify() {
+  Future<void> _verify() async {
     final price = _controller.text;
     if (price.isEmpty || double.parse(price) < 1000) {
       Toast.show('The minimum amount is 1000.');
@@ -87,11 +94,13 @@ class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<
 
     final comment = _controller2.text;
     final immediatelyPay = _immediatelyPay ? 1 : 0;
-    _orderListPagePresenter.deduction({
+    await _orderInfoPagePresenter.deduction({
       'c_period_id': widget.orderId,
       'j_apply_remark': comment,
       'q_deduction_total_amount': price,
     }, true);
+    Toast.show("Your application for reduction has been successfully submitted.", duration: 2500);
+    NavigatorUtils.goBack(context);
 
   }
   int calculateAndRoundToThousand(int amount) {
@@ -327,4 +336,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<
       ),
     );
   }
+
+
 }

@@ -29,7 +29,20 @@ class OrderRouter implements IRouterProvider{
       );
     }));
 
-    router.define(orderInfoPage, handler: Handler(handlerFunc: (_, __) => const OrderInfoPage()));
+    // router.define(orderInfoPage, handler: Handler(handlerFunc: (_, __) => const OrderInfoPage()));
+    router.define(orderInfoPage, handler: Handler(handlerFunc: (_, params) {
+      print(params['id']);
+      print(params['track']);
+      print(params['period']);
+      final String id = params['id']!.first;
+      final String track = params['track']!.first;
+      final String period = params['period']!.first;
+      return OrderInfoPage(
+        orderId: int.parse(id),
+        track: track,
+        period: period,
+      );
+    }));
     router.define(orderSearchPage, handler: Handler(handlerFunc: (_, __) => const OrderSearchPage()));
     router.define(orderTrackPage, handler: Handler(handlerFunc: (_, __) => const OrderTrackPage()));
   }

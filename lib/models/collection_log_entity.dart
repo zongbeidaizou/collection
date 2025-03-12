@@ -57,7 +57,7 @@ class CollectionLogData {
 	@JSONField(name: "j_content")
 	String? jContent = '';
 	@JSONField(name: "k_promise_time")
-	String? kPromiseTime;
+	String? kPromiseTime = '';
 	@JSONField(name: "l_stage_day_index")
 	int? lStageDayIndex = 0;
 	@JSONField(name: "m_overdue_days")
@@ -109,13 +109,13 @@ class CollectionLogOtherTrack {
 	@JSONField(name: "apply_time")
 	String? applyTime = '';
 	@JSONField(name: "borrow_amount")
-	String? borrowAmount = '';
+	int? borrowAmount = 0;
 	@JSONField(name: "loan_time")
 	String? loanTime = '';
 	@JSONField(name: "loan_bank")
 	String? loanBank = '';
 	@JSONField(name: "loan_amount")
-	String? loanAmount = '';
+	int? loanAmount = 0;
 	@JSONField(name: "loan_active_time")
 	String? loanActiveTime = '';
 
@@ -150,6 +150,8 @@ class CollectionLogOtherPeriod {
 	int? gExpectBorrowAmount = 0;
 	@JSONField(name: "h_expect_interest")
 	int? hExpectInterest = 0;
+	@JSONField(name: "n_paid_amount")
+	int? nPaidAmount = 0;
 	@JSONField(name: "i_expect_service_fee")
 	int? iExpectServiceFee = 0;
 	@JSONField(name: "j_expect_violate_fee")
@@ -166,6 +168,10 @@ class CollectionLogOtherPeriod {
 	int? aHPartTimes = 0;
 	@JSONField(name: "a_u_current_deduction_fee")
 	int? aUCurrentDeductionFee = 0;
+	@JSONField(name: "a_z_left_amount")
+	int? aZLeftAmount = 0;
+	@JSONField(name: "a_p_expect_repay_time")
+	String? aPExpectRepayTime = '';
 
 	CollectionLogOtherPeriod();
 

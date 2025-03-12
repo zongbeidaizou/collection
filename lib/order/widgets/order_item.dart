@@ -40,6 +40,8 @@ class OrderItem extends StatelessWidget {
     required this.smsHistory,
     required this.contactList,
     required this.repayInfo,
+    required this.track,
+    required this.period,
     this.onSendSms,
     this.inList = true,
   });
@@ -53,6 +55,8 @@ class OrderItem extends StatelessWidget {
   final List<CollectionLogOtherContactInfo> contactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo ;
+  final CollectionLogOtherTrack? track ;
+  final CollectionLogOtherPeriod? period ;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
 
   
@@ -61,9 +65,10 @@ class OrderItem extends StatelessWidget {
     final bool isDark = context.isDark;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: inList ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
       child: MyCard(
         shadowColor:inList ? (isDark ? Colors.white: Colors.blueGrey.withOpacity(0.6)) : Colors.transparent,
+        onlyBottom: !inList,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: _buildContent(context),
@@ -472,13 +477,22 @@ class OrderItem extends StatelessWidget {
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {
                 _showSmsDialog(context, repayInfo!);
-                if (tabIndex >= 2) {
-                  NavigatorUtils.push(context, OrderRouter.orderTrackPage);
-                }
+
               },
             ),
             Gaps.hGap4,
-            Icon(Icons.more_vert, color: Colours.app_main,),
+            // Icon(Icons.recycling),
+            OrderItemButton(
+              key: Key('order_reducation'),
+              text: "Reduce",
+              icon: Icon(Icons.next_plan_outlined, size: 18, color: Colors.white),
+              textColor: isDark ? Colours.dark_button_text : Colors.white,
+              bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+              onTap: () {
+                NavigatorUtils.push(context, '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
+
+              },
+            ),
 
 
 
@@ -514,20 +528,20 @@ class OrderItemButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4.0),
         ),
         constraints: BoxConstraints(
-          minWidth: icon != null ? 100 : 64,
+          minWidth: icon != null ? 58 : 44,
           maxHeight: 30.0,
           minHeight: 30.0,
         ),
         child: icon != null ? Row(
           children: [
           Text(text, style: TextStyle(fontSize: Dimens.font_sp14, color: textColor)),
-            Gaps.hGap8,
+            Gaps.hGap4,
             icon!,
           ],
         ) : Text(text, style: TextStyle(fontSize: Dimens.font_sp14, color: textColor),),

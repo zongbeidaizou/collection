@@ -100,14 +100,21 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return index < _list.length ?
-                OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,repayInfo: CollectionLogOtherRepayInfo(),contactList: [],smsHistory: [],) :
+                OrderItem(
+                  key: Key('order_item_$index'),
+                  index: index,
+                  tabIndex: _index,
+                  item: _list[index],
+                  products: _product,
+                  admins: _admins,
+                  repayInfo: CollectionLogOtherRepayInfo(),
+                  track: CollectionLogOtherTrack(),
+                  period: CollectionLogOtherPeriod(),
+                  contactList: [],
+                  smsHistory: [],
+                ) :
                 MoreWidget(_list.length, _hasMore(), 10);
-                return index < _list.length ? 
-                (index % 5 == 0 ? 
-                    const OrderTagItem(date: '2021年2月5日', orderTotal: 4) :
-                    OrderItem(key: Key('order_item_$index'), index: index, tabIndex: _index, item: _list[index], products: _product, admins: _admins,repayInfo: CollectionLogOtherRepayInfo(),contactList: [],smsHistory: [],)
-                ) : 
-                MoreWidget(_list.length, _hasMore(), 10);
+
               },
               childCount: _list.length + 1),
             ),

@@ -149,7 +149,8 @@ CollectionLogData $CollectionLogDataFromJson(Map<String, dynamic> json) {
   if (jContent != null) {
     collectionLogData.jContent = jContent;
   }
-  final dynamic kPromiseTime = json['k_promise_time'];
+  final String? kPromiseTime = jsonConvert.convert<String>(
+      json['k_promise_time']);
   if (kPromiseTime != null) {
     collectionLogData.kPromiseTime = kPromiseTime;
   }
@@ -219,7 +220,7 @@ extension CollectionLogDataExtension on CollectionLogData {
     String? hPhone,
     int? iTarget,
     String? jContent,
-    dynamic kPromiseTime,
+    String? kPromiseTime,
     int? lStageDayIndex,
     int? mOverdueDays,
     int? nSmsTemplateId,
@@ -322,8 +323,7 @@ CollectionLogOtherTrack $CollectionLogOtherTrackFromJson(
   if (applyTime != null) {
     collectionLogOtherTrack.applyTime = applyTime;
   }
-  final String? borrowAmount = jsonConvert.convert<String>(
-      json['borrow_amount']);
+  final int? borrowAmount = jsonConvert.convert<int>(json['borrow_amount']);
   if (borrowAmount != null) {
     collectionLogOtherTrack.borrowAmount = borrowAmount;
   }
@@ -335,7 +335,7 @@ CollectionLogOtherTrack $CollectionLogOtherTrackFromJson(
   if (loanBank != null) {
     collectionLogOtherTrack.loanBank = loanBank;
   }
-  final String? loanAmount = jsonConvert.convert<String>(json['loan_amount']);
+  final int? loanAmount = jsonConvert.convert<int>(json['loan_amount']);
   if (loanAmount != null) {
     collectionLogOtherTrack.loanAmount = loanAmount;
   }
@@ -362,10 +362,10 @@ Map<String, dynamic> $CollectionLogOtherTrackToJson(
 extension CollectionLogOtherTrackExtension on CollectionLogOtherTrack {
   CollectionLogOtherTrack copyWith({
     String? applyTime,
-    String? borrowAmount,
+    int? borrowAmount,
     String? loanTime,
     String? loanBank,
-    String? loanAmount,
+    int? loanAmount,
     String? loanActiveTime,
   }) {
     return CollectionLogOtherTrack()
@@ -423,6 +423,10 @@ CollectionLogOtherPeriod $CollectionLogOtherPeriodFromJson(
   if (hExpectInterest != null) {
     collectionLogOtherPeriod.hExpectInterest = hExpectInterest;
   }
+  final int? nPaidAmount = jsonConvert.convert<int>(json['n_paid_amount']);
+  if (nPaidAmount != null) {
+    collectionLogOtherPeriod.nPaidAmount = nPaidAmount;
+  }
   final int? iExpectServiceFee = jsonConvert.convert<int>(
       json['i_expect_service_fee']);
   if (iExpectServiceFee != null) {
@@ -461,6 +465,15 @@ CollectionLogOtherPeriod $CollectionLogOtherPeriodFromJson(
   if (aUCurrentDeductionFee != null) {
     collectionLogOtherPeriod.aUCurrentDeductionFee = aUCurrentDeductionFee;
   }
+  final int? aZLeftAmount = jsonConvert.convert<int>(json['a_z_left_amount']);
+  if (aZLeftAmount != null) {
+    collectionLogOtherPeriod.aZLeftAmount = aZLeftAmount;
+  }
+  final String? aPExpectRepayTime = jsonConvert.convert<String>(
+      json['a_p_expect_repay_time']);
+  if (aPExpectRepayTime != null) {
+    collectionLogOtherPeriod.aPExpectRepayTime = aPExpectRepayTime;
+  }
   return collectionLogOtherPeriod;
 }
 
@@ -476,6 +489,7 @@ Map<String, dynamic> $CollectionLogOtherPeriodToJson(
   data['o_paid_borrow_amount'] = entity.oPaidBorrowAmount;
   data['g_expect_borrow_amount'] = entity.gExpectBorrowAmount;
   data['h_expect_interest'] = entity.hExpectInterest;
+  data['n_paid_amount'] = entity.nPaidAmount;
   data['i_expect_service_fee'] = entity.iExpectServiceFee;
   data['j_expect_violate_fee'] = entity.jExpectViolateFee;
   data['k_expect_overdue_amount'] = entity.kExpectOverdueAmount;
@@ -484,6 +498,8 @@ Map<String, dynamic> $CollectionLogOtherPeriodToJson(
   data['u_deduction_total_amount'] = entity.uDeductionTotalAmount;
   data['a_h_part_times'] = entity.aHPartTimes;
   data['a_u_current_deduction_fee'] = entity.aUCurrentDeductionFee;
+  data['a_z_left_amount'] = entity.aZLeftAmount;
+  data['a_p_expect_repay_time'] = entity.aPExpectRepayTime;
   return data;
 }
 
@@ -498,6 +514,7 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
     int? oPaidBorrowAmount,
     int? gExpectBorrowAmount,
     int? hExpectInterest,
+    int? nPaidAmount,
     int? iExpectServiceFee,
     int? jExpectViolateFee,
     int? kExpectOverdueAmount,
@@ -506,6 +523,8 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
     int? uDeductionTotalAmount,
     int? aHPartTimes,
     int? aUCurrentDeductionFee,
+    int? aZLeftAmount,
+    String? aPExpectRepayTime,
   }) {
     return CollectionLogOtherPeriod()
       ..id = id ?? this.id
@@ -518,6 +537,7 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
       ..oPaidBorrowAmount = oPaidBorrowAmount ?? this.oPaidBorrowAmount
       ..gExpectBorrowAmount = gExpectBorrowAmount ?? this.gExpectBorrowAmount
       ..hExpectInterest = hExpectInterest ?? this.hExpectInterest
+      ..nPaidAmount = nPaidAmount ?? this.nPaidAmount
       ..iExpectServiceFee = iExpectServiceFee ?? this.iExpectServiceFee
       ..jExpectViolateFee = jExpectViolateFee ?? this.jExpectViolateFee
       ..kExpectOverdueAmount = kExpectOverdueAmount ?? this.kExpectOverdueAmount
@@ -527,7 +547,9 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
           this.uDeductionTotalAmount
       ..aHPartTimes = aHPartTimes ?? this.aHPartTimes
       ..aUCurrentDeductionFee = aUCurrentDeductionFee ??
-          this.aUCurrentDeductionFee;
+          this.aUCurrentDeductionFee
+      ..aZLeftAmount = aZLeftAmount ?? this.aZLeftAmount
+      ..aPExpectRepayTime = aPExpectRepayTime ?? this.aPExpectRepayTime;
   }
 }
 

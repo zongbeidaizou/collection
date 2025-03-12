@@ -8,12 +8,14 @@ class MyCard extends StatelessWidget {
     super.key,
     required this.child,
     this.color,
-    this.shadowColor
+    this.shadowColor,
+    this.onlyBottom = false,
   });
   
   final Widget child;
   final Color? color;
   final Color? shadowColor;
+  final bool onlyBottom;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class MyCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: onlyBottom ? BorderRadius.only(bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0),) : BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
           BoxShadow(color: sColor, offset: const Offset(0.0, 2.0), blurRadius: 8.0),
         ],

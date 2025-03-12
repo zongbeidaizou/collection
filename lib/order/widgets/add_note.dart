@@ -56,6 +56,8 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   List<CollectionLogOtherContactInfo> _contactList = <CollectionLogOtherContactInfo>[];
   List<CollectionLogOtherSmsHistory> _smsHistory = <CollectionLogOtherSmsHistory>[];
   CollectionLogOtherRepayInfo? _repayInfo ;
+  CollectionLogOtherTrack? _track ;
+  CollectionLogOtherPeriod? _period ;
   final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
   final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
   late AddNotePresenter _addNotePresenter;
@@ -100,6 +102,8 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     _contactList = _data!.other!.contactInfo!;
     _smsHistory = _data!.other!.smsHistory!;
     _repayInfo = _data!.other!.repayInfo!;
+    _track = _data!.other!.track!;
+    _period = _data!.other!.period!;
     setState(() {
     });
     _scrollToBottom();
@@ -187,6 +191,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
               index: 1, tabIndex: 1,inList: false,admins: _admins,
               products: _product, item: item,
               smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
+              track: _track, period: _period,
               onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
                 logData = {
                   'g_type': 8,
@@ -200,6 +205,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                 };
                 _addNotePresenter.store(logData,  true);
               },
+              // track: ,
             ),
             // Text("My Collection Log"),
             Gaps.vGap4,

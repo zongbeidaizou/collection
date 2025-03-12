@@ -48,6 +48,23 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     return _list;
   }
 
+  Future<bool> deduction(Map<String, dynamic> loginInfo, bool isShowDialog) async {
+
+    FormData formData = FormData.fromMap(loginInfo);
+    requestNetwork<AuthorizStoreEntity>(Method.post, url: HttpApi.deduction, params: formData, onSuccess: (data) async {
+      // Map<String, dynamic> allDeviceInfo = {};
+      // Map<String, dynamic> dynamicInfo = {};
+      if (data != null) {
+      }
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
+    return true;
+  }
+
   Future<void> product( bool isShowDialog) async {
     String? productString = await Cache().checkCache('products');
     if (productString == null) {

@@ -12,4 +12,5 @@ class HttpApi{
   static const String commission = '/collection/q-g-collection-commission-logs';
   static const String product = '/collection/products-enum';
   static const String admins = '/collection/g-m-collection-admins-enum';
+  static const String deduction = '/collection/o-a-deductions';
 }

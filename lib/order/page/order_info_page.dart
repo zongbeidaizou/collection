@@ -15,8 +15,14 @@ import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/collection_log_entity.dart';
+import '../../mvp/base_page.dart';
+import '../../util/change_notifier_manage.dart';
 import '../../util/input_formatter/number_text_input_formatter.dart';
+import '../../util/toast_utils.dart';
+import '../iview/order_info_page_iview.dart';
 import '../order_router.dart';
+import '../presenter/order_info_page_presenter.dart';
+import '../presenter/order_list_page_presenter.dart';
 
 
 /// design/3订单/index.html#artboard10
@@ -36,20 +42,26 @@ class OrderInfoPage extends StatefulWidget {
   _OrderInfoPageState createState() => _OrderInfoPageState();
 }
 
-class _OrderInfoPageState extends State<OrderInfoPage> {
+class _OrderInfoPageState extends State<OrderInfoPage> with ChangeNotifierMixin<OrderInfoPage>,BasePageMixin<OrderInfoPage, OrderListPagePresenter>
+    implements OrderInfoPageIMvpView {
   late CollectionLogOtherTrack _track ;
   late CollectionLogOtherPeriod _period ;
   bool _immediatelyPay = false;
   bool _clickable = false;
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
+  late OrderInfoPagePresenter _orderInfoPagePresenter;
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_verify);
     _track = CollectionLogOtherTrack.fromJson(jsonDecode(widget.track) as Map<String, dynamic >);
     _period = CollectionLogOtherPeriod.fromJson(jsonDecode(widget.period) as Map<String, dynamic >);
 
+  }
+  @override
+  OrderInfoPagePresenter createPresenter() {
+    _orderInfoPagePresenter = OrderInfoPagePresenter();
+    return _orderInfoPagePresenter;
   }
   @override
   void dispose() {
@@ -60,15 +72,36 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   }
   void _verify() {
     final price = _controller.text;
-    if (price.isEmpty || double.parse(price) < 1) {
-      setState(() {
-        _clickable = false;
-      });
+    if (price.isEmpty || double.parse(price) < 1000) {
+      Toast.show('The minimum amount is 1000.');
       return;
     }
-    setState(() {
-      _clickable = true;
-    });
+    if(_period.kExpectOverdueAmount! <= 0){
+      Toast.show('This order is not overdue and therefore cannot be subject to any reduction.');
+      return;
+    }
+    if (price.isEmpty || double.parse(price) > calculateAndRoundToThousand(_period.kExpectOverdueAmount!)) {
+      Toast.show('The maximum amount is ${calculateAndRoundToThousand(_period.kExpectOverdueAmount!)}.');
+      return;
+    }
+
+    final comment = _controller2.text;
+    final immediatelyPay = _immediatelyPay ? 1 : 0;
+    _orderListPagePresenter.deduction({
+      'c_period_id': widget.orderId,
+      'j_apply_remark': comment,
+      'q_deduction_total_amount': price,
+    }, true);
+
+  }
+  int calculateAndRoundToThousand(int amount) {
+    // 计算60%的金额
+    double sixtyPercent = amount * 0.6;
+
+    // 取整到千位数
+    int roundedAmount = (sixtyPercent / 1000).floor() * 1000;
+
+    return roundedAmount;
   }
   @override
   Widget build(BuildContext context) {
@@ -89,19 +122,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
           children: <Widget>[
             Expanded(
               child: MyButton(
-                backgroundColor: isDark ? Colours.dark_material_bg : const Color(0xFFE1EAFA),
-                textColor: isDark ? Colours.dark_text : Colours.app_main,
-                text: '拒单',
+                text: 'Application for Reduction.',
                 minHeight: 45,
-                onPressed: () {},
-              ),
-            ),
-            Gaps.hGap16,
-            Expanded(
-              child: MyButton(
-                text: '接单',
-                minHeight: 45,
-                onPressed: () {},
+                onPressed: () {_verify();},
               ),
             )
           ],
@@ -211,7 +234,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('The maximum penalty reduction allowed is ${Utils.formatPrice2(_period.kExpectOverdueAmount!)}.', style: Theme.of(context).textTheme.titleSmall),
+                  Text('The maximum penalty reduction is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.kExpectOverdueAmount!))}.', style: Theme.of(context).textTheme.titleSmall),
                   GestureDetector(
                       onTap: () {
                         _controller.text = '70';

@@ -272,6 +272,11 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aLLastLog != null) {
     collectionOrderData.aLLastLog = aLLastLog;
   }
+  final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
+      CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
+  if (aAAAAQBPeriods != null) {
+    collectionOrderData.aAAAAQBPeriods = aAAAAQBPeriods;
+  }
   return collectionOrderData;
 }
 
@@ -317,6 +322,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_j_product_id'] = entity.aJProductId;
   data['a_k_no'] = entity.aKNo;
   data['a_l_last_log'] = entity.aLLastLog;
+  data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
 }
 
@@ -361,6 +367,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? aJProductId,
     String? aKNo,
     String? aLLastLog,
+    CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
       ..id = id ?? this.id
@@ -405,7 +412,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aFS3CollectionAmount = aFS3CollectionAmount ?? this.aFS3CollectionAmount
       ..aJProductId = aJProductId ?? this.aJProductId
       ..aKNo = aKNo ?? this.aKNo
-      ..aLLastLog = aLLastLog ?? this.aLLastLog;
+      ..aLLastLog = aLLastLog ?? this.aLLastLog
+      ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
   }
 }
 

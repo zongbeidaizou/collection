@@ -19,6 +19,7 @@ import '../../models/collection_log2_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
+import '../../order/order_router.dart';
 import '../../order/widgets/add_note.dart';
 import '../../res/colors.dart';
 import '../../res/dimens.dart';
@@ -148,21 +149,22 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
-  Future<int?> _showModalBottomSheet(CollectionOrderData item) {
-    return showModalBottomSheet<int>(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          height: 700,
-          color: Colors.grey,
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: AddNote(orderId: item.id!, admins: _admins, products: _products, item: item),     //AddNote should be your Widget that will be displayed inside the bottomSheet
-          ),
-        );
-      },
-    );
+  void _showModalBottomSheet(CollectionOrderData item) {
+    NavigatorUtils.push(context, '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
+    // return showModalBottomSheet<int>(
+    //   context: context,
+    //   isScrollControlled: true,
+    //   builder: (BuildContext context) {
+    //     return Container(
+    //       height: 700,
+    //       color: Colors.grey,
+    //       child: Scaffold(
+    //         resizeToAvoidBottomInset: true,
+    //         body: AddNote(orderId: item.id!,  item: item.toString()),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
 

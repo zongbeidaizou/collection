@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import '../../res/dimens.dart';
 import '../../res/gaps.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../util/change_notifier_manage.dart';
+import '../../widgets/my_app_bar.dart';
 import '../../widgets/my_card.dart';
 import '../iview/add_note_iview.dart';
 import '../order_router.dart';
@@ -29,15 +32,15 @@ class AddNote extends StatefulWidget {
   const AddNote({
     super.key,
     required this.orderId,
-    required this.admins,
+    // required this.admins,
     required this.item,
-    required this.products,
+    // required this.products,
 
   });
   final int orderId;
-  final List<AdminData> admins;
-  final CollectionOrderData item;
-  final List<ProductData> products;
+  // final List<AdminData> admins;
+  final String item;
+  // final List<ProductData> products;
   @override
   _AddNoteState createState() => _AddNoteState();
 }
@@ -56,6 +59,9 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
   final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
   late AddNotePresenter _addNotePresenter;
+  late CollectionOrderData item;
+  List<ProductData> _product = <ProductData>[];
+  List<AdminData> _admins = <AdminData>[];
 
   final ScrollController _scrollController = ScrollController();
 
@@ -69,9 +75,22 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   @override
   void initState() {
     super.initState();
+    item = CollectionOrderData.fromJson(jsonDecode(widget.item) as Map<String, dynamic >);
     // 在初始化时自动滚动到底部
     WidgetsBinding.instance.addPostFrameCallback((_) {
       typeController.text = '1';
+    });
+  }
+  @override
+  void setProduct(List<ProductData> product) {
+    setState(() {
+      _product = product;
+    });
+  }
+  @override
+  void setAdmin(List<AdminData> admin) {
+    setState(() {
+      _admins = admin;
     });
   }
 
@@ -126,7 +145,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     groupedData.forEach((date, items) {
       final messages = items.map((item) {
         final time = DateFormat("hh:mm a").format(DateTime.parse(item.createdAt!));
-        return _DeliveryMessage(time, item.jContent!, item.gType!, _iconList[item.gType!], _colorList[item.gType!], _colorList[item.gType!], item.eCollectionAdminId!, item.kPromiseTime!);
+        return _DeliveryMessage(time, item.jContent!, item.gType!, _iconList[item.gType!], _colorList[item.gType!], _colorList[item.gType!], item.eCollectionAdminId!, item.kPromiseTime ?? '');
       }).toList();
       deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!, Icons.import_contacts, Colors.black54, Colors.black87, messages: messages));
     });
@@ -138,7 +157,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _DeliveryProcesses(processes: deliveryProcesses, admins: widget.admins,),
+            _DeliveryProcesses(processes: deliveryProcesses, admins: _admins,),
             Divider(height: 1.0),
           ],
         ),
@@ -148,32 +167,39 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   @override
   Widget build(BuildContext context) {
     Map<String, Object> logData;
-    return SafeArea(
+    return Scaffold(
+      //todo 搜索
+      // appBar: MySearchBar(
+      //   hintText: 'Search by Phone, Order, Code, Log',
+      //   onPressed: (text) =>  _updateSearchKeyword(text),
+      //   controller: _controller,
+      // ),
+        appBar: MyAppBar(
+          centerTitle: 'Details',
+        ),
+        body:SafeArea(
       child: Container(
         color: Colors.grey.withOpacity(0.2),
         child: Column(
           children: [
-            Container(
-                margin: EdgeInsets.only(left: 4, right: 4),
-                child: OrderItem(
-                  key: Key('order_item_'),
-                  index: 1, tabIndex: 1,inList: false,admins: widget.admins,
-                  products: widget.products, item: widget.item,
-                  smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
-                  onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
-                    logData = {
-                      'g_type': 8,
-                      'j_content': smsContent.trim(),
-                      'created_at': DateTime.now(),
-                      'e_collection_admin_id': 0,
-                      'k_promise_time': '',
-                      'n_sms_template_id': smsTemplateId,
-                      'h_phone': phone ?? '',
-                      'o_contact_id': contactId ?? 0,
-                    };
-                    _addNotePresenter.store(logData,  true);
-                  },
-                )
+            OrderItem(
+              key: Key('order_item_'),
+              index: 1, tabIndex: 1,inList: false,admins: _admins,
+              products: _product, item: item,
+              smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
+              onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
+                logData = {
+                  'g_type': 8,
+                  'j_content': smsContent.trim(),
+                  'created_at': DateTime.now(),
+                  'e_collection_admin_id': 0,
+                  'k_promise_time': '',
+                  'n_sms_template_id': smsTemplateId,
+                  'h_phone': phone ?? '',
+                  'o_contact_id': contactId ?? 0,
+                };
+                _addNotePresenter.store(logData,  true);
+              },
             ),
             // Text("My Collection Log"),
             Gaps.vGap4,
@@ -224,7 +250,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
           ],
         ),
       ),
-    );
+    ));
   }
 
 

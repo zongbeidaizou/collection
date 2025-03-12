@@ -75,21 +75,22 @@ class OrderItem extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     final TextStyle? textTextStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: Dimens.font_sp12);
     final bool isDark = context.isDark;
-    Future<int?> _showModalBottomSheet() {
-      return showModalBottomSheet<int>(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return Container(
-            height: 700,
-            color: Colors.grey,
-            child: Scaffold(
-              resizeToAvoidBottomInset: true,
-              body: AddNote(orderId: item.id!, admins: admins, products: products, item: item),     //AddNote should be your Widget that will be displayed inside the bottomSheet
-            ),
-          );
-        },
-      );
+    void _showModalBottomSheet() {
+      NavigatorUtils.push(context, '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
+      // return showModalBottomSheet<int>(
+      //   context: context,
+      //   isScrollControlled: true,
+      //   builder: (BuildContext context) {
+      //     return Container(
+      //       height: 700,
+      //       color: Colors.grey,
+      //       child: Scaffold(
+      //         resizeToAvoidBottomInset: true,
+      //         body: AddNote(orderId: item.id!,  item: item.toString()),     //AddNote should be your Widget that will be displayed inside the bottomSheet
+      //       ),
+      //     );
+      //   },
+      // );
     }
 
     Future<int?> _showContactListModal() {

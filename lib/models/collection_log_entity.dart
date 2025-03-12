@@ -57,7 +57,7 @@ class CollectionLogData {
 	@JSONField(name: "j_content")
 	String? jContent = '';
 	@JSONField(name: "k_promise_time")
-	dynamic kPromiseTime;
+	String? kPromiseTime;
 	@JSONField(name: "l_stage_day_index")
 	int? lStageDayIndex = 0;
 	@JSONField(name: "m_overdue_days")

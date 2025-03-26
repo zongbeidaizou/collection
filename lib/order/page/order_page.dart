@@ -296,9 +296,8 @@ class _TabViewState extends State<_TabView> {
           ),
         ),
         Positioned(
-          right: 0.0,
-          child: widget.index < 3
-              ? DecoratedBox(
+          right: 6.0,
+          child: DecoratedBox(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.error,
                     borderRadius: BorderRadius.circular(11.0),
@@ -354,7 +353,7 @@ class _TabViewState extends State<_TabView> {
                         }),
                   ),
                 )
-              : Gaps.empty,
+              ,
         )
       ],
     );

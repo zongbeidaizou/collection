@@ -1,6 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../../routers/fluro_navigator.dart';
 import '../../util/toast_utils.dart';
@@ -63,6 +64,12 @@ class _MyCommentBoxState extends State<MyCommentBox> {
             ),
             TextButton(
               onPressed: () {
+                if(_savedDateTime == null){
+                  showToast("Please select a time");
+                  return;
+                }
+                print(123123123);
+                print(_savedDateTime);
                 NavigatorUtils.goBack(context);
                 setState(() {
                   _focus = true;
@@ -111,7 +118,8 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   @override
   Widget build(BuildContext context) {
     final List<IconData> typeList = [Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled];
-    final List<String> typeToastList = ["Unable to dial selected", "Under negotiation selected", "Promise to repay selected", "Refusal to repay selected"];
+    final List<int> typeList2 = [1, 2, 4, 5];
+    final List<String> typeToastList = ["Under negotiation selected", "Promise to repay selected", "Refusal to repay selected","Unable to dial selected", ];
 
     return Column(
       children: [
@@ -138,7 +146,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 ),
                 onChanged: (IconData? value) async {
                   Toast.show(typeToastList[typeList.indexOf(value!)]);
-                  widget.typeController?.text = (typeList.indexOf(value) + 1).toString();
+                  widget.typeController?.text = typeList2[typeList.indexOf(value!)].toString();
                   if(value == Icons.more_time){
                     _showDialog();
           /*                var results = await showCalendarDatePicker2Dialog(

@@ -67,6 +67,11 @@ class UserProvider extends ChangeNotifier {
       "u_today_lv2_commission": 0,
       "v_today_lv3_commission": 0,
       "w_today_lv4_commission": 0,
+      "a_a_month_lv1_commission": 0,
+      "a_b_month_lv2_commission": 0,
+      "a_c_month_lv3_commission": 0,
+      "a_d_month_lv4_commission": 0,
+      "a_e_today_commission_rate": 0.8,
       "updated_at": "2025-02-06T16:00:00.000000Z"
     }
   }) as CollectionOrderOther?;

@@ -58,8 +58,8 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   CollectionLogOtherRepayInfo? _repayInfo ;
   CollectionLogOtherTrack? _track ;
   CollectionLogOtherPeriod? _period ;
-  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
-  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
+  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.do_not_touch, Icons.phone_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue,Colors.orange,  Colors.purpleAccent, Colors.red, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
   late AddNotePresenter _addNotePresenter;
   late CollectionOrderData item;
   List<ProductData> _product = <ProductData>[];
@@ -228,14 +228,15 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                           'e_collection_admin_id': 0,
                           'k_promise_time': dateController.text,
                         };
+                        showToast(typeController.text);
                         setState(() {
                           _list.add(CollectionLogData.fromJson(value));
                         });
                         print(value);
-                        await _addNotePresenter.store(value,  true);
+                        await _addNotePresenter.store({'p_collection_order_id': widget.orderId ,...value},  true);
                         commentController.clear();
-                        dateController.clear();
-                        typeController.clear();
+                        // dateController.clear();
+                        // typeController.clear();
                         FocusScope.of(context).unfocus();
                       } else {
                         print("Not validated");

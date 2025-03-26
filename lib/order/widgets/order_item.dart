@@ -12,10 +12,12 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/user_provider.dart';
 import '../../shop/widgets/price_input_dialog.dart';
 import '../order_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -377,7 +379,7 @@ class OrderItem extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  SvgPicture.asset(width: 52, height: 52, "assets/images/clock-svgrepo-com.svg",),
+                  SvgPicture.asset(width: 48, height: 48, "assets/images/clock-svgrepo-com.svg",),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -401,14 +403,16 @@ class OrderItem extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  SvgPicture.asset(width: 52, height: 52, "assets/images/money-earn-svgrepo-com.svg",),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("300 reward"),
-                      Text("current lv. 1 with 4% of amount", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8)),
-                    ],
-                  ),
+                  SvgPicture.asset(width: 48, height: 48, "assets/images/money-earn-svgrepo-com.svg",),
+                  Consumer<UserProvider>(builder: (_, provider, __) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${(provider.userEntity.profile!.aETodayCommissionRate! * item.lCollectionAmount!/100).toInt()} reward"),
+                        Text("current lv. ${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}% of amount", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8))
+                      ],
+                    );
+                  }),
                   // Text(" (level 1 with 4% amount)", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 6)),
 
                 ],

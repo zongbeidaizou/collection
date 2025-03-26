@@ -714,6 +714,31 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (wTodayLv4Commission != null) {
     collectionOrderOtherProfile.wTodayLv4Commission = wTodayLv4Commission;
   }
+  final int? aAMonthLv1Commission = jsonConvert.convert<int>(
+      json['a_a_month_lv1_commission']);
+  if (aAMonthLv1Commission != null) {
+    collectionOrderOtherProfile.aAMonthLv1Commission = aAMonthLv1Commission;
+  }
+  final int? aBMonthLv2Commission = jsonConvert.convert<int>(
+      json['a_b_month_lv2_commission']);
+  if (aBMonthLv2Commission != null) {
+    collectionOrderOtherProfile.aBMonthLv2Commission = aBMonthLv2Commission;
+  }
+  final int? aCMonthLv3Commission = jsonConvert.convert<int>(
+      json['a_c_month_lv3_commission']);
+  if (aCMonthLv3Commission != null) {
+    collectionOrderOtherProfile.aCMonthLv3Commission = aCMonthLv3Commission;
+  }
+  final int? aDMonthLv4Commission = jsonConvert.convert<int>(
+      json['a_d_month_lv4_commission']);
+  if (aDMonthLv4Commission != null) {
+    collectionOrderOtherProfile.aDMonthLv4Commission = aDMonthLv4Commission;
+  }
+  final double? aETodayCommissionRate = jsonConvert.convert<double>(
+      json['a_e_today_commission_rate']);
+  if (aETodayCommissionRate != null) {
+    collectionOrderOtherProfile.aETodayCommissionRate = aETodayCommissionRate;
+  }
   final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
   if (updatedAt != null) {
     collectionOrderOtherProfile.updatedAt = updatedAt;
@@ -745,6 +770,11 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['u_today_lv2_commission'] = entity.uTodayLv2Commission;
   data['v_today_lv3_commission'] = entity.vTodayLv3Commission;
   data['w_today_lv4_commission'] = entity.wTodayLv4Commission;
+  data['a_a_month_lv1_commission'] = entity.aAMonthLv1Commission;
+  data['a_b_month_lv2_commission'] = entity.aBMonthLv2Commission;
+  data['a_c_month_lv3_commission'] = entity.aCMonthLv3Commission;
+  data['a_d_month_lv4_commission'] = entity.aDMonthLv4Commission;
+  data['a_e_today_commission_rate'] = entity.aETodayCommissionRate;
   data['updated_at'] = entity.updatedAt;
   return data;
 }
@@ -772,6 +802,11 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? uTodayLv2Commission,
     int? vTodayLv3Commission,
     int? wTodayLv4Commission,
+    int? aAMonthLv1Commission,
+    int? aBMonthLv2Commission,
+    int? aCMonthLv3Commission,
+    int? aDMonthLv4Commission,
+    double? aETodayCommissionRate,
     String? updatedAt,
   }) {
     return CollectionOrderOtherProfile()
@@ -802,6 +837,12 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..uTodayLv2Commission = uTodayLv2Commission ?? this.uTodayLv2Commission
       ..vTodayLv3Commission = vTodayLv3Commission ?? this.vTodayLv3Commission
       ..wTodayLv4Commission = wTodayLv4Commission ?? this.wTodayLv4Commission
+      ..aAMonthLv1Commission = aAMonthLv1Commission ?? this.aAMonthLv1Commission
+      ..aBMonthLv2Commission = aBMonthLv2Commission ?? this.aBMonthLv2Commission
+      ..aCMonthLv3Commission = aCMonthLv3Commission ?? this.aCMonthLv3Commission
+      ..aDMonthLv4Commission = aDMonthLv4Commission ?? this.aDMonthLv4Commission
+      ..aETodayCommissionRate = aETodayCommissionRate ??
+          this.aETodayCommissionRate
       ..updatedAt = updatedAt ?? this.updatedAt;
   }
 }

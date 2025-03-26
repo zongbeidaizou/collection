@@ -241,6 +241,16 @@ class CollectionOrderOtherProfile {
 	int? vTodayLv3Commission = 0;
 	@JSONField(name: "w_today_lv4_commission")
 	int? wTodayLv4Commission = 0;
+	@JSONField(name: "a_a_month_lv1_commission")
+	int? aAMonthLv1Commission = 0;
+	@JSONField(name: "a_b_month_lv2_commission")
+	int? aBMonthLv2Commission = 0;
+	@JSONField(name: "a_c_month_lv3_commission")
+	int? aCMonthLv3Commission = 0;
+	@JSONField(name: "a_d_month_lv4_commission")
+	int? aDMonthLv4Commission = 0;
+	@JSONField(name: "a_e_today_commission_rate")
+	double? aETodayCommissionRate = 0;
 	@JSONField(name: "updated_at")
 	String? updatedAt = '';
 

@@ -53,7 +53,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   }
   Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
     FormData formData = FormData.fromMap(data);
-    await requestNetwork(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
+    await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {
       if (_ == 200006) {

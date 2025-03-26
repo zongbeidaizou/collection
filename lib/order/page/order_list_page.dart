@@ -13,6 +13,7 @@ import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
+import '../../providers/order_list_provider.dart';
 import '../iview/order_list_page_iview.dart';
 
 class OrderListPage extends StatefulWidget {
@@ -43,6 +44,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
+  OrderListProvider provider2 = OrderListProvider();
   
   @override
   void initState() {
@@ -94,17 +96,19 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
               ],
             );
           },
-          child: SliverPadding(
+          child: Consumer<OrderListProvider>(
+              builder: (_, provider2, child) {
+              return SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: _list.isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
+            sliver: provider2.list.where((element) => element.kStatus == widget.index).toList().isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                return index < _list.length ?
+                return index < provider2.list.where((element) => element.kStatus == widget.index).toList().length ?
                 OrderItem(
                   key: Key('order_item_$index'),
                   index: index,
                   tabIndex: _index,
-                  item: _list[index],
+                  item: provider2.list.where((element) => element.kStatus == widget.index).toList()[index],
                   products: _product,
                   admins: _admins,
                   repayInfo: CollectionLogOtherRepayInfo(),
@@ -113,12 +117,12 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
                   contactList: [],
                   smsHistory: [],
                 ) :
-                MoreWidget(_list.length, _hasMore(), 10);
+                MoreWidget(provider2.list.where((element) => element.kStatus == widget.index).toList().length, _hasMore(), 10);
 
               },
-              childCount: _list.length + 1),
-            ),
-          ),
+              childCount: provider2.list.where((element) => element.kStatus == widget.index).toList().length + 1),
+            ));
+          }),
         ),
       ),
     );

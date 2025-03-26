@@ -13,13 +13,13 @@ import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
-import '../../providers/order_list_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
+import '../iview/order_page_iview.dart';
 
 
-class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
+class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
 
   @override
   void initState() {
@@ -35,10 +35,9 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
 
     List<CollectionOrderData> _list = <CollectionOrderData>[];
     FormData formData = FormData.fromMap({"page": page, 'k_status': status});
-    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page}, onSuccess: (data) async {
+    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page, 'k_status': status}, onSuccess: (data) async {
       if (data != null) {
-        // _list =  data.data!;
-        view.getContext().read<OrderListProvider>().setList(data.data!);
+        _list =  data.data!;
       }
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {

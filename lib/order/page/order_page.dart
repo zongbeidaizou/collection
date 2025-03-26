@@ -12,6 +12,7 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
 
 /// design/3订单/index.html
@@ -32,6 +33,7 @@ class _OrderPageState extends State<OrderPage>
   TabController? _tabController;
   OrderPageProvider provider = OrderPageProvider();
   UserProvider provider2 = UserProvider();
+  OrderListProvider provider3 = OrderListProvider();
 
   int _lastReportedPage = 0;
 
@@ -70,8 +72,16 @@ class _OrderPageState extends State<OrderPage>
   Widget build(BuildContext context) {
     super.build(context);
     isDark = context.isDark;
-    return ChangeNotifierProvider<OrderPageProvider>(
-      create: (_) => provider,
+    return
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider<OrderPageProvider>(
+                create: (_) => provider,
+            ),
+            ChangeNotifierProvider<OrderListProvider>(
+              create: (_) => provider3,
+            ),
+          ],
       child: Scaffold(
         body: Stack(
           children: <Widget>[

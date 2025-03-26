@@ -14,6 +14,7 @@ import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/order_list_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/add_note_iview.dart';
@@ -55,6 +56,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     FormData formData = FormData.fromMap(data);
     await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      var a = data.data!.first;
+      view.getContext().read<OrderListProvider>().changeList(data.data!.first);
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {

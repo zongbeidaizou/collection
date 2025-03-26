@@ -7,12 +7,14 @@ import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/add_note_iview.dart';
 import '../iview/order_list_page_iview.dart';
@@ -52,7 +54,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
     FormData formData = FormData.fromMap(data);
     await requestNetwork(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
-
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {

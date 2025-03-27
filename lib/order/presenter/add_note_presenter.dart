@@ -57,6 +57,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       var a = data.data!.first;
+      var c = view.getContext().read<UserProvider>();
+      var b = view.getContext().read<OrderListProvider>();
       view.getContext().read<OrderListProvider>().changeList(data.data!.first);
     }, onError: (_, __) async {
       if (_ == 200006) {

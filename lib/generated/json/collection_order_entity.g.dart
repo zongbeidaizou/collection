@@ -272,6 +272,16 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aLLastLog != null) {
     collectionOrderData.aLLastLog = aLLastLog;
   }
+  final int? aNCurrentDayLogCount = jsonConvert.convert<int>(
+      json['a_n_current_day_log_count']);
+  if (aNCurrentDayLogCount != null) {
+    collectionOrderData.aNCurrentDayLogCount = aNCurrentDayLogCount;
+  }
+  final int? aOCurrentDayCallCount = jsonConvert.convert<int>(
+      json['a_o_current_day_call_count']);
+  if (aOCurrentDayCallCount != null) {
+    collectionOrderData.aOCurrentDayCallCount = aOCurrentDayCallCount;
+  }
   final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
       CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
   if (aAAAAQBPeriods != null) {
@@ -322,6 +332,8 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_j_product_id'] = entity.aJProductId;
   data['a_k_no'] = entity.aKNo;
   data['a_l_last_log'] = entity.aLLastLog;
+  data['a_n_current_day_log_count'] = entity.aNCurrentDayLogCount;
+  data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
   data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
 }
@@ -367,6 +379,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? aJProductId,
     String? aKNo,
     String? aLLastLog,
+    int? aNCurrentDayLogCount,
+    int? aOCurrentDayCallCount,
     CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
@@ -413,6 +427,9 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aJProductId = aJProductId ?? this.aJProductId
       ..aKNo = aKNo ?? this.aKNo
       ..aLLastLog = aLLastLog ?? this.aLLastLog
+      ..aNCurrentDayLogCount = aNCurrentDayLogCount ?? this.aNCurrentDayLogCount
+      ..aOCurrentDayCallCount = aOCurrentDayCallCount ??
+          this.aOCurrentDayCallCount
       ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
   }
 }

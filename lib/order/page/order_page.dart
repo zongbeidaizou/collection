@@ -77,10 +77,7 @@ class _OrderPageState extends State<OrderPage>
           providers: [
             ChangeNotifierProvider<OrderPageProvider>(
                 create: (_) => provider,
-            ),
-            ChangeNotifierProvider<OrderListProvider>(
-              create: (_) => provider3,
-            ),
+            )
           ],
       child: Scaffold(
         body: Stack(

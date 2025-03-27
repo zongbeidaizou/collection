@@ -108,6 +108,10 @@ class CollectionOrderData {
 	String? aKNo = '';
 	@JSONField(name: "a_l_last_log")
 	String? aLLastLog = '';
+	@JSONField(name: "a_n_current_day_log_count")
+	int? aNCurrentDayLogCount = 0;
+	@JSONField(name: "a_o_current_day_call_count")
+	int? aOCurrentDayCallCount = 0;
 	@JSONField(name: "a_a_a_a_a_q_b_periods")
 	CollectionLogOtherPeriod? aAAAAQBPeriods;
 

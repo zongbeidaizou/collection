@@ -66,7 +66,6 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   late CollectionOrderData item;
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
-  OrderListProvider provider3 = OrderListProvider();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -174,100 +173,93 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   @override
   Widget build(BuildContext context) {
     Map<String, Object> logData;
-    return       MultiProvider(
-      providers: [
-        ChangeNotifierProvider<OrderListProvider>(
-          create: (_) => provider3,
+    return       Scaffold(
+      //todo 搜索
+      // appBar: MySearchBar(
+      //   hintText: 'Search by Phone, Order, Code, Log',
+      //   onPressed: (text) =>  _updateSearchKeyword(text),
+      //   controller: _controller,
+      // ),
+        appBar: MyAppBar(
+          centerTitle: 'Details',
         ),
-      ],
-      child: Scaffold(
-        //todo 搜索
-        // appBar: MySearchBar(
-        //   hintText: 'Search by Phone, Order, Code, Log',
-        //   onPressed: (text) =>  _updateSearchKeyword(text),
-        //   controller: _controller,
-        // ),
-          appBar: MyAppBar(
-            centerTitle: 'Details',
-          ),
-          body:SafeArea(
-        child: Container(
-          color: Colors.grey.withOpacity(0.2),
-          child: Column(
-            children: [
-              OrderItem(
-                key: Key('order_item_'),
-                index: 1, tabIndex: 1,inList: false,admins: _admins,
-                products: _product, item: item,
-                smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
-                track: _track, period: _period,
-                onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
-                  logData = {
-                    'g_type': 8,
-                    'j_content': smsContent.trim(),
-                    'created_at': DateTime.now(),
-                    'e_collection_admin_id': 0,
-                    'k_promise_time': '',
-                    'n_sms_template_id': smsTemplateId,
-                    'h_phone': phone ?? '',
-                    'o_contact_id': contactId ?? 0,
-                  };
-                  _addNotePresenter.store(logData,  true);
-                },
-                // track: ,
-              ),
-              // Text("My Collection Log"),
-              Gaps.vGap4,
-              Expanded(
-                child: Container(
-                  // margin: EdgeInsets.only(left: 4, right: 4),
-                  child: MyCard(
-                    shadowColor: Colors.grey.withOpacity(0.2),
-                    child: MyCommentBox(
-                      child: commentChild(_list),
-                      labelText: 'Write a comment...',
-                      errorText: 'Comment cannot be blank',
-                      withBorder: false,
-                      sendButtonMethod: () async {
-                        if (formKey.currentState!.validate()) {
-                          var value = {
-                            'g_type': typeController.text,
-                            'j_content': commentController.text.trim(),
-                            'created_at': DateTime.now(),
-                            'e_collection_admin_id': 0,
-                            'k_promise_time': dateController.text,
-                          };
-                          showToast(typeController.text);
-                          setState(() {
-                            _list.add(CollectionLogData.fromJson(value));
-                          });
-                          print(value);
-                          await _addNotePresenter.store({'p_collection_order_id': widget.orderId ,...value},  true);
-                          commentController.clear();
-                          // dateController.clear();
-                          // typeController.clear();
-                          FocusScope.of(context).unfocus();
-                        } else {
-                          print("Not validated");
-                        }
-                      },
-                      formKey: formKey,
-                      commentController: commentController,
-                      dateController: dateController,
-                      typeController: typeController,
-                      backgroundColor: Colors.white,
-                      textColor: Colors.black,
-                      sendWidget: Icon(Icons.send_sharp, size: 28, color: Colours.app_main),
-                    ),
+        body:SafeArea(
+      child: Container(
+        color: Colors.grey.withOpacity(0.2),
+        child: Column(
+          children: [
+            OrderItem(
+              key: Key('order_item_'),
+              index: 1, tabIndex: 1,inList: false,admins: _admins,
+              products: _product, item: item,
+              smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
+              track: _track, period: _period,
+              onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
+                logData = {
+                  'g_type': 8,
+                  'j_content': smsContent.trim(),
+                  'created_at': DateTime.now(),
+                  'e_collection_admin_id': 0,
+                  'k_promise_time': '',
+                  'n_sms_template_id': smsTemplateId,
+                  'h_phone': phone ?? '',
+                  'o_contact_id': contactId ?? 0,
+                };
+                _addNotePresenter.store(logData,  true);
+              },
+              // track: ,
+            ),
+            // Text("My Collection Log"),
+            Gaps.vGap4,
+            Expanded(
+              child: Container(
+                // margin: EdgeInsets.only(left: 4, right: 4),
+                child: MyCard(
+                  shadowColor: Colors.grey.withOpacity(0.2),
+                  child: MyCommentBox(
+                    child: commentChild(_list),
+                    labelText: 'Write a comment...',
+                    errorText: 'Comment cannot be blank',
+                    withBorder: false,
+                    sendButtonMethod: () async {
+                      if (formKey.currentState!.validate()) {
+                        var value = {
+                          'g_type': typeController.text,
+                          'j_content': commentController.text.trim(),
+                          'created_at': DateTime.now(),
+                          'e_collection_admin_id': 0,
+                          'k_promise_time': dateController.text,
+                        };
+                        showToast(typeController.text);
+                        setState(() {
+                          _list.add(CollectionLogData.fromJson(value));
+                        });
+                        print(value);
+                        await _addNotePresenter.store({'p_collection_order_id': widget.orderId ,...value},  true);
+                        commentController.clear();
+                        // dateController.clear();
+                        // typeController.clear();
+                        FocusScope.of(context).unfocus();
+                      } else {
+                        print("Not validated");
+                      }
+                    },
+                    formKey: formKey,
+                    commentController: commentController,
+                    dateController: dateController,
+                    typeController: typeController,
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                    sendWidget: Icon(Icons.send_sharp, size: 28, color: Colours.app_main),
                   ),
                 ),
               ),
-              Gaps.line,
-            ],
-          ),
+            ),
+            Gaps.line,
+          ],
         ),
-      )),
-    );
+      ),
+    ));
   }
 
 
@@ -467,7 +459,7 @@ class _InnerTimeline extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-                      Text( admins.firstWhere((admin) => admin.id == messages[index ].adminId).aName ?? 'You' , style: TextStyle(fontSize: 12)),
+                      Text( admins.where((admin) => admin.id == messages[index ].adminId).firstOrNull?.aName  ?? 'You' , style: TextStyle(fontSize: 12)),
                       Text(' :', style: TextStyle(fontSize: 12)),
 
                       const Expanded(child: Gaps.empty),

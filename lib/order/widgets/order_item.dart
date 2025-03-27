@@ -65,24 +65,38 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
-
+    Color shadowColor = Colors.transparent;
+    Color buttonColor = isDark ? Colours.dark_app_main : Colours.app_main;
+    if(inList){
+      if(item.aNCurrentDayLogCount! == 0){
+        shadowColor = isDark ? Colors.white: Colors.redAccent.withOpacity(0.2);
+        buttonColor = Colors.redAccent;
+      }else if(item.aOCurrentDayCallCount! == 0){
+        shadowColor = isDark ? Colors.white: Color(0xFF3BA28D).withOpacity(0.2);
+        buttonColor = Color(0xFF3BA28D);
+      }
+    }
+    if(item.tBorrowSn == 'QRSOSEDpZn'){
+      print('');
+    }
     return Padding(
       padding: inList ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
       child: MyCard(
-        shadowColor:inList ? (isDark ? Colors.white: Colors.blueGrey.withOpacity(0.6)) : Colors.transparent,
+        shadowColor:shadowColor,
         onlyBottom: !inList,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _buildContent(context),
+          child: _buildContent(context, buttonColor),
         ),
       )
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, Color buttonColor) {
     final TextStyle? textTextStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: Dimens.font_sp12);
     final bool isDark = context.isDark;
     void _showModalBottomSheet() {
+      item.aLLastLog = '';
       NavigatorUtils.push(context, '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
       // return showModalBottomSheet<int>(
       //   context: context,
@@ -175,7 +189,7 @@ class OrderItem extends StatelessWidget {
           children: <Widget>[
 
             Expanded(
-              child: Text(products.firstWhere((product) => product.id == item.aJProductId).bName ?? '',                 style: const TextStyle(
+              child: Text(products.where((p) => p.id == item.aJProductId).firstOrNull?.bName ?? '',                 style: const TextStyle(
                 fontSize: Dimens.font_sp14,
                 fontWeight: FontWeight.w500,
               ),),
@@ -384,7 +398,7 @@ class OrderItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text((DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours >= 24) ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left' : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
-                      Text(Utils.formatDateTime(item.aDLastLogTime), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8)),
+                      Text(item.aDLastLogTime != null && item.aDLastLogTime!.isNotEmpty ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(item.aDLastLogTime!))}' : '', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8)),
                     ],
                   ),
                 ],
@@ -439,7 +453,7 @@ class OrderItem extends StatelessWidget {
               key: Key('order_button_3_$index'),
               text: "Detail",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
-              bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+              bgColor: buttonColor,
               onTap: () {
                 _showModalBottomSheet();
               },

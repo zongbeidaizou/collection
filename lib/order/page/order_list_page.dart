@@ -15,6 +15,7 @@ import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
 import '../iview/order_list_page_iview.dart';
+const List<List<int>> indexMap = [[0], [1], [2], [3], [4,5]];
 
 class OrderListPage extends StatefulWidget {
 
@@ -73,7 +74,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
     return NotificationListener(
       onNotification: (ScrollNotification note) {
         if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-          _loadMore();
+          // _loadMore();
         }
         return true;
       },
@@ -100,15 +101,15 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
               builder: (_, provider2, child) {
               return SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: provider2.list.where((element) => element.kStatus == widget.index).toList().isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
+            sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                return index < provider2.list.where((element) => element.kStatus == widget.index).toList().length ?
+                return index < provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length ?
                 OrderItem(
                   key: Key('order_item_$index'),
                   index: index,
                   tabIndex: _index,
-                  item: provider2.list.where((element) => element.kStatus == widget.index).toList()[index],
+                  item: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList()[index],
                   products: _product,
                   admins: _admins,
                   repayInfo: CollectionLogOtherRepayInfo(),
@@ -117,10 +118,10 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
                   contactList: [],
                   smsHistory: [],
                 ) :
-                MoreWidget(provider2.list.where((element) => element.kStatus == widget.index).toList().length, _hasMore(), 10);
+                MoreWidget(provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length, _hasMore(), 10);
 
               },
-              childCount: provider2.list.where((element) => element.kStatus == widget.index).toList().length + 1),
+              childCount: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length + 1),
             ));
           }),
         ),
@@ -153,7 +154,8 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   }
 
   bool _hasMore() {
-    return _page < _maxPage;
+    // return _page < _maxPage;
+    return false;
   }
 
   Future<void> _loadMore() async {

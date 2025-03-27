@@ -132,13 +132,17 @@ CommissionData $CommissionDataFromJson(Map<String, dynamic> json) {
   if (iCollectionKpiId != null) {
     commissionData.iCollectionKpiId = iCollectionKpiId;
   }
-  final int? jRate = jsonConvert.convert<int>(json['j_rate']);
+  final double? jRate = jsonConvert.convert<double>(json['j_rate']);
   if (jRate != null) {
     commissionData.jRate = jRate;
   }
   final int? kLevel = jsonConvert.convert<int>(json['k_level']);
   if (kLevel != null) {
     commissionData.kLevel = kLevel;
+  }
+  final int? oType = jsonConvert.convert<int>(json['o_type']);
+  if (oType != null) {
+    commissionData.oType = oType;
   }
   final int? lRepayLogId = jsonConvert.convert<int>(json['l_repay_log_id']);
   if (lRepayLogId != null) {
@@ -169,6 +173,7 @@ Map<String, dynamic> $CommissionDataToJson(CommissionData entity) {
   data['i_collection_kpi_id'] = entity.iCollectionKpiId;
   data['j_rate'] = entity.jRate;
   data['k_level'] = entity.kLevel;
+  data['o_type'] = entity.oType;
   data['l_repay_log_id'] = entity.lRepayLogId;
   data['created_at'] = entity.createdAt;
   data['a_a_a_a_a_a_b_l_collection_order'] =
@@ -187,8 +192,9 @@ extension CommissionDataExtension on CommissionData {
     int? gAmount,
     int? hCommissionAmount,
     int? iCollectionKpiId,
-    int? jRate,
+    double? jRate,
     int? kLevel,
+    int? oType,
     int? lRepayLogId,
     String? createdAt,
     CollectionOrderData? aAAAAABLCollectionOrder,
@@ -205,6 +211,7 @@ extension CommissionDataExtension on CommissionData {
       ..iCollectionKpiId = iCollectionKpiId ?? this.iCollectionKpiId
       ..jRate = jRate ?? this.jRate
       ..kLevel = kLevel ?? this.kLevel
+      ..oType = oType ?? this.oType
       ..lRepayLogId = lRepayLogId ?? this.lRepayLogId
       ..createdAt = createdAt ?? this.createdAt
       ..aAAAAABLCollectionOrder = aAAAAABLCollectionOrder ??

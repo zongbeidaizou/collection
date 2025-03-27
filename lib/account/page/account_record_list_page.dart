@@ -15,6 +15,13 @@ import '../../mvp/base_page.dart';
 import '../../order/page/order_page.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../widgets/load_image.dart';
+const List<Color> bgColors = [
+  Colors.white,
+  Colors.white,
+  Color(0xFFD4E2FA),
+  Colors.greenAccent
+
+];
 
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
@@ -69,7 +76,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   }
   @override
   Future<void> _onRefresh() async {
-
+    setState(() {
+      _list.clear();
+      _currentPage = 1;
+    });
+    _accountRecordListPresenter.index(1, true);
 
   }
 
@@ -207,11 +218,19 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   }
 
   Widget _buildItem(CommissionData log, int i) {
+    String txt = '${log.jRate}% of total amount ${log.gAmount} (lv.${log.kLevel})';
+    if(log.oType == 2){
+      txt = "Tiered Achievement Bonus (lv.${log.kLevel})";
+    }else if(log.oType == 3){
+      txt = "Manually Calculated Bonus";
+    }
+
     return Container(
       height: 72.0,
       width: double.infinity,
       padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
+        color: bgColors[log.oType!],
         border: Border(
           bottom: Divider.createBorderSide(context, width: 0.8),
         ),
@@ -225,10 +244,10 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
               top: 0.0,
               right: 0.0,
               child: Text("+${log.hCommissionAmount}",
-                style: i.isEven ? TextStyle(
+                style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
-                ) : TextStyles.textBold14,
+                ) ,
               ),
             ),
             Positioned(
@@ -239,7 +258,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
             Positioned(
               bottom: 0.0,
               right: 0.0,
-              child: Text('lv.${log.kLevel} ${log.jRate}% of total amount ${log.gAmount}', style: Theme.of(context).textTheme.titleSmall),
+              child: Text(txt, style: Theme.of(context).textTheme.titleSmall),
             ),
           ],
         ),

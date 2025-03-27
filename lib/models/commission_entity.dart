@@ -50,9 +50,11 @@ class CommissionData {
 	@JSONField(name: 'i_collection_kpi_id')
 	int? iCollectionKpiId = 0;
 	@JSONField(name: 'j_rate')
-	int? jRate = 0;
+	double? jRate = 0;
 	@JSONField(name: 'k_level')
 	int? kLevel = 0;
+	@JSONField(name: 'o_type')
+	int? oType = 0;
 	@JSONField(name: 'l_repay_log_id')
 	int? lRepayLogId = 0;
 	@JSONField(name: "created_at")

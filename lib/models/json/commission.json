@@ -12,9 +12,10 @@
     "g_amount": 0,
     "h_commission_amount": 0,
     "i_collection_kpi_id": 0,
-    "j_rate": 0,
+    "j_rate": 0.1,
     "k_level": 0,
     "l_repay_log_id": 0,
+    "o_type": 0,
     "created_at":""
 
   }],

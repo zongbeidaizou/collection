@@ -104,11 +104,11 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
   }
   @override
   Future<void> _onRefresh() async {
-/*    CollectionLog2Entity response = await _goodsListPresenter.index(1, widget.index, true);
-    _logList = response.data!;
     setState(() {
-      _page = 1;
-    });*/
+      _logList.clear();
+      _currentPage = 1;
+    });
+    await _goodsListPresenter.index(1, _typeList[widget.index], false, keyword: widget.searchKeyword);
   }
   @override
   void setPageSize(int pageSize) {

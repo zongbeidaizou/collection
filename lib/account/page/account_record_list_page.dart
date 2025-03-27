@@ -239,7 +239,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
             Positioned(
               bottom: 0.0,
               right: 0.0,
-              child: Text('lv.1 4% of total amount 2000', style: Theme.of(context).textTheme.titleSmall),
+              child: Text('lv.${log.kLevel} ${log.jRate}% of total amount ${log.gAmount}', style: Theme.of(context).textTheme.titleSmall),
             ),
           ],
         ),

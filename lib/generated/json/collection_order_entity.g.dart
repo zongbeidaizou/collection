@@ -760,6 +760,11 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (updatedAt != null) {
     collectionOrderOtherProfile.updatedAt = updatedAt;
   }
+  final String? aFLastCallAt = jsonConvert.convert<String>(
+      json['a_f_last_call_at']);
+  if (aFLastCallAt != null) {
+    collectionOrderOtherProfile.aFLastCallAt = aFLastCallAt;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -793,6 +798,7 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['a_d_month_lv4_commission'] = entity.aDMonthLv4Commission;
   data['a_e_today_commission_rate'] = entity.aETodayCommissionRate;
   data['updated_at'] = entity.updatedAt;
+  data['a_f_last_call_at'] = entity.aFLastCallAt;
   return data;
 }
 
@@ -825,6 +831,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? aDMonthLv4Commission,
     double? aETodayCommissionRate,
     String? updatedAt,
+    String? aFLastCallAt,
   }) {
     return CollectionOrderOtherProfile()
       ..aName = aName ?? this.aName
@@ -860,6 +867,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..aDMonthLv4Commission = aDMonthLv4Commission ?? this.aDMonthLv4Commission
       ..aETodayCommissionRate = aETodayCommissionRate ??
           this.aETodayCommissionRate
-      ..updatedAt = updatedAt ?? this.updatedAt;
+      ..updatedAt = updatedAt ?? this.updatedAt
+      ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt;
   }
 }

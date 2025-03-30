@@ -257,6 +257,8 @@ class CollectionOrderOtherProfile {
 	double? aETodayCommissionRate = 0;
 	@JSONField(name: "updated_at")
 	String? updatedAt = '';
+	@JSONField(name: "a_f_last_call_at")
+	String? aFLastCallAt = '';
 
 	CollectionOrderOtherProfile();
 

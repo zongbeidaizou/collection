@@ -63,7 +63,9 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     }
 
     final filteredFiles = <File>[];
-    final targetTime = DateTime(2025, 3, 10); // 替换为你的目标时间
+    // final targetTime = DateTime(2025, 3, 10); // 替换为你的目标时间
+    //todo 时区
+    final DateTime targetTime = DateTime.parse(view.getContext().read<UserProvider>().userEntity.profile!.aFLastCallAt!);
 
     await for (var entity in targetDir.list()) {
       if (entity is File) {

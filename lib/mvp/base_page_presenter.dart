@@ -106,6 +106,9 @@ class BasePagePresenter<V extends IMvpView> extends BasePresenter<V> {
     return imgPath;
   }
 
+
+
+
   void _onError(int code, String msg, NetErrorCallback? onError) {
     /// 异常时直接关闭加载圈，不受isClose影响
     view.closeProgress();

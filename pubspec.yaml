@@ -96,6 +96,8 @@ dependencies:
   pager: ^0.0.6
   flutter_animate: ^4.5.0
   currency_formatter: ^2.2.2
+  path_provider: ^2.1.5
+  permission_handler: ^11.4.0
 
 
 # https://github.com/simplezhli/bounty_hunter/issues/187

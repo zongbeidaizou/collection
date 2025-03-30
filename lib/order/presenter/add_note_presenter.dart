@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
@@ -53,7 +54,46 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     return _data;
   }
   Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
-    FormData formData = FormData.fromMap(data);
+    final targetPath = '/storage/emulated/0/Documents/CubeCallRecorder/All/';
+    final targetDir = Directory(targetPath);
+
+    if (!await targetDir.exists()) {
+      print('目录不存在');
+      return;
+    }
+
+    final filteredFiles = <File>[];
+    final targetTime = DateTime(2025, 3, 10); // 替换为你的目标时间
+
+    await for (var entity in targetDir.list()) {
+      if (entity is File) {
+        try {
+          final modified = await entity.lastModified();
+          if (modified.isAfter(targetTime)) {
+            filteredFiles.add(entity);
+          }
+        } catch (e) {
+          print('无法获取文件时间: ${entity.path}');
+        }
+      }
+    }
+    print('符合条件的文件数量: ${filteredFiles.length}');
+    final formData = FormData.fromMap({
+      // 包含原始 data 中的所有字段
+      ...data,
+      // 添加 files 字段
+      'files': await Future.wait(
+        filteredFiles.map((file) async {
+          final filename = file.path.split('/').last;
+          final createdTimestamp = await file.lastModified();
+          return {
+            'file': await MultipartFile.fromFile(file.path, filename: filename),
+            'created_time': createdTimestamp,
+          };
+        }),
+      ),
+    });
+
     await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       var a = data.data!.first;

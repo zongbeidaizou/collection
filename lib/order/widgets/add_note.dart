@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 
@@ -81,8 +82,11 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     super.initState();
     item = CollectionOrderData.fromJson(jsonDecode(widget.item) as Map<String, dynamic >);
     // 在初始化时自动滚动到底部
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       typeController.text = '1';
+      await Permission.manageExternalStorage.request();
+      await Permission.audio.request();
+      await Permission.storage.request();
     });
   }
   @override

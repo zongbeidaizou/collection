@@ -134,7 +134,7 @@ class _HomeState extends State<Home> with RestorationMixin{
               children: <Widget>[
                 Center(child: const Icon(Icons.campaign_sharp, size: _imageSize, color: Colours.unselected_item_color,),),
                 if (aHCollectionNotificationCount == 0) const SizedBox() else Positioned(
-                  right: 0.2,
+                  right: 4.2,
                   top: 0.2,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class _HomeState extends State<Home> with RestorationMixin{
               children: <Widget>[
                 Center(child: const Icon(Icons.campaign_sharp, size: _imageSize, color: Colours.app_main,),),
                 if (aHCollectionNotificationCount == 0) const SizedBox() else Positioned(
-                  right: 0.2,
+                  right: 4.2,
                   top: 0.2,
                   child: DecoratedBox(
                     decoration: BoxDecoration(

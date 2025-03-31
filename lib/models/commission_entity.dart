@@ -11,7 +11,7 @@ class CommissionEntity {
 	String? errorMessage = '';
 	String? message = '';
 	List<CommissionData>? data = [];
-	List<dynamic>? other = [];
+	CollectionOrderOther? other;
 	int? total = 0;
 	int? currentPage = 0;
 	int? perPage = 0;
@@ -57,6 +57,14 @@ class CommissionData {
 	int? oType = 0;
 	@JSONField(name: 'l_repay_log_id')
 	int? lRepayLogId = 0;
+	@JSONField(name: 's_assist_rate')
+	int? sAssistRate = 0;
+	@JSONField(name: 't_commission_amount_without_assist')
+	int? tCommissionAmountWithoutAssist = 0;
+	@JSONField(name: 'w_readed')
+	int? wReaded = 0;
+	@JSONField(name: 'x_read_at')
+	String? xReadAt = '';
 	@JSONField(name: "created_at")
 	String? createdAt = '';
 	@JSONField(name: "a_a_a_a_a_a_b_l_collection_order")

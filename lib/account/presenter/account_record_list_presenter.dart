@@ -9,6 +9,7 @@ import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
@@ -16,6 +17,7 @@ import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/commission_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 
 
@@ -33,6 +35,7 @@ class AccountRecordListPresenter extends BasePagePresenter<AccountRecordListMvpV
     CommissionEntity _data = CommissionEntity() ;
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
     await requestNetwork<CommissionEntity>(Method.get, url: HttpApi.commission, queryParameters:{"page": currentPage,  'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       if (data != null) {
         _list =  data.data!;
         _data = data;

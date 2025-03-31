@@ -25,8 +25,8 @@ CommissionEntity $CommissionEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     commissionEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     commissionEntity.other = other;
   }
@@ -55,7 +55,7 @@ Map<String, dynamic> $CommissionEntityToJson(CommissionEntity entity) {
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -69,7 +69,7 @@ extension CommissionEntityExtension on CommissionEntity {
     String? errorMessage,
     String? message,
     List<CommissionData>? data,
-    List<dynamic>? other,
+    CollectionOrderOther? other,
     int? total,
     int? currentPage,
     int? perPage,
@@ -148,6 +148,24 @@ CommissionData $CommissionDataFromJson(Map<String, dynamic> json) {
   if (lRepayLogId != null) {
     commissionData.lRepayLogId = lRepayLogId;
   }
+  final int? sAssistRate = jsonConvert.convert<int>(json['s_assist_rate']);
+  if (sAssistRate != null) {
+    commissionData.sAssistRate = sAssistRate;
+  }
+  final int? tCommissionAmountWithoutAssist = jsonConvert.convert<int>(
+      json['t_commission_amount_without_assist']);
+  if (tCommissionAmountWithoutAssist != null) {
+    commissionData.tCommissionAmountWithoutAssist =
+        tCommissionAmountWithoutAssist;
+  }
+  final int? wReaded = jsonConvert.convert<int>(json['w_readed']);
+  if (wReaded != null) {
+    commissionData.wReaded = wReaded;
+  }
+  final String? xReadAt = jsonConvert.convert<String>(json['x_read_at']);
+  if (xReadAt != null) {
+    commissionData.xReadAt = xReadAt;
+  }
   final String? createdAt = jsonConvert.convert<String>(json['created_at']);
   if (createdAt != null) {
     commissionData.createdAt = createdAt;
@@ -175,6 +193,11 @@ Map<String, dynamic> $CommissionDataToJson(CommissionData entity) {
   data['k_level'] = entity.kLevel;
   data['o_type'] = entity.oType;
   data['l_repay_log_id'] = entity.lRepayLogId;
+  data['s_assist_rate'] = entity.sAssistRate;
+  data['t_commission_amount_without_assist'] =
+      entity.tCommissionAmountWithoutAssist;
+  data['w_readed'] = entity.wReaded;
+  data['x_read_at'] = entity.xReadAt;
   data['created_at'] = entity.createdAt;
   data['a_a_a_a_a_a_b_l_collection_order'] =
       entity.aAAAAABLCollectionOrder?.toJson();
@@ -196,6 +219,10 @@ extension CommissionDataExtension on CommissionData {
     int? kLevel,
     int? oType,
     int? lRepayLogId,
+    int? sAssistRate,
+    int? tCommissionAmountWithoutAssist,
+    int? wReaded,
+    String? xReadAt,
     String? createdAt,
     CollectionOrderData? aAAAAABLCollectionOrder,
   }) {
@@ -213,6 +240,11 @@ extension CommissionDataExtension on CommissionData {
       ..kLevel = kLevel ?? this.kLevel
       ..oType = oType ?? this.oType
       ..lRepayLogId = lRepayLogId ?? this.lRepayLogId
+      ..sAssistRate = sAssistRate ?? this.sAssistRate
+      ..tCommissionAmountWithoutAssist = tCommissionAmountWithoutAssist ??
+          this.tCommissionAmountWithoutAssist
+      ..wReaded = wReaded ?? this.wReaded
+      ..xReadAt = xReadAt ?? this.xReadAt
       ..createdAt = createdAt ?? this.createdAt
       ..aAAAAABLCollectionOrder = aAAAAABLCollectionOrder ??
           this.aAAAAABLCollectionOrder;

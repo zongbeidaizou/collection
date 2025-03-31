@@ -18,6 +18,9 @@ import '../../widgets/load_image.dart';
 const List<Color> bgColors = [
   Colors.white,
   Colors.white,
+  Colors.white,
+  Colors.white,
+  Colors.white,
   Color(0xFFD4E2FA),
   Colors.greenAccent
 
@@ -217,6 +220,23 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     }).toList();
   }
 
+  Widget _buildGoodsTag(Color color, String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      margin: const EdgeInsets.only(right: 4.0),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(2.0),
+      ),
+      height: 16.0,
+      alignment: Alignment.center,
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white, fontSize: Dimens.font_sp10, height:  1.1 ,),
+      ),
+    );
+  }
+
   Widget _buildItem(CommissionData log, int i) {
     String txt = '${log.jRate}% of total amount ${log.gAmount} (lv.${log.kLevel})';
     if(log.oType == 2){
@@ -239,7 +259,28 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
         index: i,
         child: Stack(
           children: <Widget>[
-            Text( log.aAAAAABLCollectionOrder!.tBorrowSn!),
+            Row(
+              children: [
+                Text( log.aAAAAABLCollectionOrder!.tBorrowSn!),
+                Gaps.hGap4,
+                Row(
+                  children: <Widget>[
+                    Offstage(
+                      offstage: !(log.oType == 2) ,
+                      child: _buildGoodsTag(Theme.of(context).colorScheme.error, 'Achievement Bonus'),
+                    ),
+                    Offstage(
+                      offstage: !(log.oType == 3) ,
+                      child: _buildGoodsTag(Theme.of(context).primaryColor, 'Manually Bonus'),
+                    ),
+                    Offstage(
+                      offstage: !(log.wReaded == 0) ,
+                      child: _buildGoodsTag(Colors.green, 'New'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             Positioned(
               top: 0.0,
               right: 0.0,

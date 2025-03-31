@@ -101,7 +101,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
               builder: (_, provider2, child) {
               return SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: StateLayout(type: _stateType)) :
+            sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: Center(child: Text("no data"))) :
             SliverList(
               delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                 return index < provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length ?

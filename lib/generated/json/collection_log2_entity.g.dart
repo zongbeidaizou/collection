@@ -26,8 +26,8 @@ CollectionLog2Entity $CollectionLog2EntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     collectionLog2Entity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     collectionLog2Entity.other = other;
   }
@@ -56,7 +56,7 @@ Map<String, dynamic> $CollectionLog2EntityToJson(CollectionLog2Entity entity) {
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -70,7 +70,7 @@ extension CollectionLog2EntityExtension on CollectionLog2Entity {
     String? errorMessage,
     String? message,
     List<CollectionLog2Data>? data,
-    List<dynamic>? other,
+    CollectionOrderOther? other,
     int? total,
     int? currentPage,
     int? perPage,

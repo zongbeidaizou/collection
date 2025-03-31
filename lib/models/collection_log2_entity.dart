@@ -11,7 +11,7 @@ class CollectionLog2Entity {
 	String? errorMessage = '';
 	String? message = '';
 	List<CollectionLog2Data>? data = [];
-	List<dynamic>? other = [];
+	CollectionOrderOther? other;
 	int? total = 0;
 	int? currentPage = 0;
 	int? perPage = 0;

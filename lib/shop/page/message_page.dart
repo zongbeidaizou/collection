@@ -35,10 +35,7 @@ class MessagePage extends StatefulWidget {
 
   const MessagePage({
     super.key,
-    required this.item,
-
-  })
-   CollectionNotificationData item;
+  });
   @override
   _AccountRecordListPageState createState() => _AccountRecordListPageState();
 }
@@ -182,7 +179,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
               controller: _scrollController,
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
-              itemBuilder: (_, index) => _MessageItem(_list[index]),
+              itemBuilder: (_, index) => _MessageItem(item: _list[index]),
             ),
           ),
         ),
@@ -193,12 +190,17 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
 }
 
 class _MessageItem extends StatelessWidget {
+  _MessageItem({
+    super.key,
+    required this.item,
+  });
+  CollectionNotificationData item;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Gaps.vGap15,
-        Text('2021-5-31 17:19:36', style: Theme.of(context).textTheme.titleSmall),
+
         Gaps.vGap8,
         MyCard(
           child: Padding(
@@ -208,7 +210,6 @@ class _MessageItem extends StatelessWidget {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    const Expanded(child: Text('系统通知')),
                     Container(
                       margin: const EdgeInsets.only(right: 4.0),
                       height: 8.0,
@@ -218,13 +219,14 @@ class _MessageItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                     ),
-                    Images.arrowRight,
+                    const Expanded(child: Text('系统通知')),
+                    Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(item.createdAt!)), style: TextStyle(fontSize: 12),),
                   ],
                 ),
                 Gaps.vGap8,
                 Gaps.line,
                 Gaps.vGap8,
-                const Text('供货商由于[商品缺货]原因，取消了采购订单。', style: TextStyles.textSize12),
+                Text(item.hContent!, style: TextStyles.textSize12),
               ],
             ),
           ),

@@ -26,7 +26,7 @@ class _HomeState extends State<Home> with RestorationMixin{
   static const double _imageSize = 25.0;
 
   late List<Widget> _pageList;
-  final List<String> _appBarTitles = ['Cases', 'Logs', 'Commission','Commission2', 'Account'];
+  final List<String> _appBarTitles = ['Cases', 'Logs', 'Bonus','News', 'Account'];
   final PageController _pageController = PageController();
 
   HomeProvider provider = HomeProvider();

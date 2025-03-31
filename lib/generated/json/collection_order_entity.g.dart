@@ -756,6 +756,27 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aETodayCommissionRate != null) {
     collectionOrderOtherProfile.aETodayCommissionRate = aETodayCommissionRate;
   }
+  final int? aGCollectionCommissionNewCount = jsonConvert.convert<int>(
+      json['a_g_collection_commission_new_count']);
+  if (aGCollectionCommissionNewCount != null) {
+    collectionOrderOtherProfile.aGCollectionCommissionNewCount =
+        aGCollectionCommissionNewCount;
+  }
+  final int? aHCollectionNotificationCount = jsonConvert.convert<int>(
+      json['a_h_collection_notification_count']);
+  if (aHCollectionNotificationCount != null) {
+    collectionOrderOtherProfile.aHCollectionNotificationCount =
+        aHCollectionNotificationCount;
+  }
+  final int? aIWeekRepayCount = jsonConvert.convert<int>(
+      json['a_i_week_repay_count']);
+  if (aIWeekRepayCount != null) {
+    collectionOrderOtherProfile.aIWeekRepayCount = aIWeekRepayCount;
+  }
+  final int? aJWeekRank = jsonConvert.convert<int>(json['a_j_week_rank']);
+  if (aJWeekRank != null) {
+    collectionOrderOtherProfile.aJWeekRank = aJWeekRank;
+  }
   final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
   if (updatedAt != null) {
     collectionOrderOtherProfile.updatedAt = updatedAt;
@@ -797,6 +818,12 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['a_c_month_lv3_commission'] = entity.aCMonthLv3Commission;
   data['a_d_month_lv4_commission'] = entity.aDMonthLv4Commission;
   data['a_e_today_commission_rate'] = entity.aETodayCommissionRate;
+  data['a_g_collection_commission_new_count'] =
+      entity.aGCollectionCommissionNewCount;
+  data['a_h_collection_notification_count'] =
+      entity.aHCollectionNotificationCount;
+  data['a_i_week_repay_count'] = entity.aIWeekRepayCount;
+  data['a_j_week_rank'] = entity.aJWeekRank;
   data['updated_at'] = entity.updatedAt;
   data['a_f_last_call_at'] = entity.aFLastCallAt;
   return data;
@@ -830,6 +857,10 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? aCMonthLv3Commission,
     int? aDMonthLv4Commission,
     double? aETodayCommissionRate,
+    int? aGCollectionCommissionNewCount,
+    int? aHCollectionNotificationCount,
+    int? aIWeekRepayCount,
+    int? aJWeekRank,
     String? updatedAt,
     String? aFLastCallAt,
   }) {
@@ -867,6 +898,12 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..aDMonthLv4Commission = aDMonthLv4Commission ?? this.aDMonthLv4Commission
       ..aETodayCommissionRate = aETodayCommissionRate ??
           this.aETodayCommissionRate
+      ..aGCollectionCommissionNewCount = aGCollectionCommissionNewCount ??
+          this.aGCollectionCommissionNewCount
+      ..aHCollectionNotificationCount = aHCollectionNotificationCount ??
+          this.aHCollectionNotificationCount
+      ..aIWeekRepayCount = aIWeekRepayCount ?? this.aIWeekRepayCount
+      ..aJWeekRank = aJWeekRank ?? this.aJWeekRank
       ..updatedAt = updatedAt ?? this.updatedAt
       ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt;
   }

@@ -255,6 +255,14 @@ class CollectionOrderOtherProfile {
 	int? aDMonthLv4Commission = 0;
 	@JSONField(name: "a_e_today_commission_rate")
 	double? aETodayCommissionRate = 0;
+	@JSONField(name: "a_g_collection_commission_new_count")
+	int? aGCollectionCommissionNewCount = 0;
+	@JSONField(name: "a_h_collection_notification_count")
+	int? aHCollectionNotificationCount = 0;
+	@JSONField(name: "a_i_week_repay_count")
+	int? aIWeekRepayCount = 0;
+	@JSONField(name: "a_j_week_rank")
+	int? aJWeekRank = 0;
 	@JSONField(name: "updated_at")
 	String? updatedAt = '';
 	@JSONField(name: "a_f_last_call_at")

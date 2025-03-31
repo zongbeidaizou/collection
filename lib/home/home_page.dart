@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../account/page/account_record_list_page.dart';
 import '../providers/user_provider.dart';
+import '../shop/page/message_page.dart';
 
 class Home extends StatefulWidget {
 
@@ -51,7 +52,7 @@ class _HomeState extends State<Home> with RestorationMixin{
       const OrderPage(),
       const GoodsPage(),
       const AccountRecordListPage(),
-      const AccountRecordListPage(),
+      const MessagePage(),
       const ShopPage(),
     ];
   }

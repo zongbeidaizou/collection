@@ -11,6 +11,7 @@ import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -231,6 +232,40 @@ class JsonConvert {
       return data.map<CollectionLogOtherSmsHistory>((Map<String, dynamic> e) =>
           CollectionLogOtherSmsHistory.fromJson(e)).toList() as M;
     }
+    if (<CollectionNotificationEntity>[] is M) {
+      return data.map<CollectionNotificationEntity>((Map<String, dynamic> e) =>
+          CollectionNotificationEntity.fromJson(e)).toList() as M;
+    }
+    if (<CollectionNotificationData>[] is M) {
+      return data.map<CollectionNotificationData>((Map<String, dynamic> e) =>
+          CollectionNotificationData.fromJson(e)).toList() as M;
+    }
+    if (<CollectionNotificationOther>[] is M) {
+      return data.map<CollectionNotificationOther>((Map<String, dynamic> e) =>
+          CollectionNotificationOther.fromJson(e)).toList() as M;
+    }
+    if (<CollectionNotificationOtherProgress>[] is M) {
+      return data.map<CollectionNotificationOtherProgress>((
+          Map<String, dynamic> e) =>
+          CollectionNotificationOtherProgress.fromJson(e)).toList() as M;
+    }
+    if (<CollectionNotificationOtherProgressLevelProgress>[] is M) {
+      return data.map<CollectionNotificationOtherProgressLevelProgress>((
+          Map<String, dynamic> e) =>
+          CollectionNotificationOtherProgressLevelProgress.fromJson(e))
+          .toList() as M;
+    }
+    if (<CollectionNotificationOtherProgressAmountProgress>[] is M) {
+      return data.map<CollectionNotificationOtherProgressAmountProgress>((
+          Map<String, dynamic> e) =>
+          CollectionNotificationOtherProgressAmountProgress.fromJson(e))
+          .toList() as M;
+    }
+    if (<CollectionNotificationOtherProfile>[] is M) {
+      return data.map<CollectionNotificationOtherProfile>((
+          Map<String, dynamic> e) =>
+          CollectionNotificationOtherProfile.fromJson(e)).toList() as M;
+    }
     if (<CollectionOrderEntity>[] is M) {
       return data.map<CollectionOrderEntity>((Map<String, dynamic> e) =>
           CollectionOrderEntity.fromJson(e)).toList() as M;
@@ -342,6 +377,20 @@ class JsonConvertClassCollection {
         .toString(): CollectionLogOtherContactInfoCallRecords.fromJson,
     (CollectionLogOtherSmsHistory).toString(): CollectionLogOtherSmsHistory
         .fromJson,
+    (CollectionNotificationEntity).toString(): CollectionNotificationEntity
+        .fromJson,
+    (CollectionNotificationData).toString(): CollectionNotificationData
+        .fromJson,
+    (CollectionNotificationOther).toString(): CollectionNotificationOther
+        .fromJson,
+    (CollectionNotificationOtherProgress)
+        .toString(): CollectionNotificationOtherProgress.fromJson,
+    (CollectionNotificationOtherProgressLevelProgress)
+        .toString(): CollectionNotificationOtherProgressLevelProgress.fromJson,
+    (CollectionNotificationOtherProgressAmountProgress)
+        .toString(): CollectionNotificationOtherProgressAmountProgress.fromJson,
+    (CollectionNotificationOtherProfile)
+        .toString(): CollectionNotificationOtherProfile.fromJson,
     (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
     (CollectionOrderData).toString(): CollectionOrderData.fromJson,
     (CollectionOrderOther).toString(): CollectionOrderOther.fromJson,

@@ -1,0 +1,105 @@
+{
+  "success": true,
+  "errorMessage": "messages.retrieved",
+  "message": "messages.retrieved",
+  "data": [{
+    "id": 37608,
+    "a_collection_stage_id": 1,
+    "b_collection_agency_id": 1,
+    "c_collection_group_id": 1,
+    "d_collection_admin_id": 3,
+    "e_readed": 1,
+    "f_read_at": "2025-03-31T09:25:34.000000Z",
+    "g_cat": 1,
+    "h_content": "123123",
+    "i_collection_stage_id": 0,
+    "g_collection_agency_id": 0,
+    "k_collection_group_id": 0,
+    "l_collection_admin_id": 0,
+    "created_at": "2025-03-31T09:25:44.000000Z"
+  }],
+  "other": {
+    "progress": {
+      "points": [0, 0.3, 0.45, 0.53, 1],
+      "levelProgress": [{
+        "level": "",
+        "type": 0
+      }, {
+        "level": 1,
+        "type": 1
+      }, {
+        "level": 2,
+        "type": 1
+      }, {
+        "level": 3,
+        "type": 1
+      }, {
+        "level": 4,
+        "type": 1
+      }],
+      "amountProgress": [{
+        "amount": 0,
+        "type": 0
+      }, {
+        "amount": 0,
+        "type": 0
+      }, {
+        "amount": 0,
+        "type": 0
+      }, {
+        "amount": 0,
+        "type": 0
+      }, {
+        "amount": 0,
+        "type": 0
+      }],
+      "amountProgress2": [0, 0, 0, 0, 0],
+      "currentLevel": 1,
+      "nextAmount": -45000,
+      "nextLevel": 1,
+      "currentKey": 0
+    },
+    "profile": {
+      "id": 3,
+      "a_name": "u65e0u5c3du8ffdu503au961f(u5185-s0)-1",
+      "b_admin_id": 1,
+      "c_collection_agency_id": 92,
+      "d_collection_group_id": 21,
+      "e_collection_stages": "92",
+      "f_status": 1,
+      "g_comment": "123",
+      "h_collection_ing_order_count": 0,
+      "i_today_current_kpi_level": 2,
+      "j_today_init_amount": 0,
+      "k_current_new_count": 0,
+      "l_current_negotiating_count": 6,
+      "m_currrent_promised_count": 0,
+      "n_current_broken_count": 0,
+      "o_current_refused_count": 0,
+      "p_today_current_repay_count": 3,
+      "r_today_current_repay_amount": 45000,
+      "t_today_lv1_commission": 30,
+      "u_today_lv2_commission": 15,
+      "v_today_lv3_commission": 0,
+      "w_today_lv4_commission": 0,
+      "x_today_init_count": 9,
+      "y_first_log_at": "2025-03-30T08:33:53.000000Z",
+      "z_last_log_at": "2025-03-30T14:27:48.000000Z",
+      "a_a_month_lv1_commission": 2476,
+      "a_b_month_lv2_commission": 750,
+      "a_c_month_lv3_commission": 240,
+      "a_d_month_lv4_commission": 960,
+      "a_e_today_commission_rate": 0.1,
+      "a_f_last_call_at": "2025-03-30T07:25:54.000000Z",
+      "a_g_collection_commission_new_count": 0,
+      "a_h_collection_notification_count": 0,
+      "a_i_week_repay_count": null,
+      "a_j_week_rank": null,
+      "updated_at": "2025-03-31T09:30:30.000000Z"
+    }
+  },
+  "total": 1,
+  "currentPage": 1,
+  "perPage": 40,
+  "hasMorePages": false
+}

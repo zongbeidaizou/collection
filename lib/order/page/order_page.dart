@@ -144,7 +144,7 @@ class _OrderPageState extends State<OrderPage>
               onPressed: () {
                 NavigatorUtils.push(context, OrderRouter.orderSearchPage);
               },
-              tooltip: '搜索',
+              tooltip: 'Search',
               icon: LoadAssetImage(
                 'order/icon_search',
                 width: 22.0,
@@ -175,7 +175,7 @@ class _OrderPageState extends State<OrderPage>
                 const EdgeInsetsDirectional.only(start: 16.0, bottom: 14.0),
             collapseMode: CollapseMode.pin,
             title: Text(
-              '订单',
+              'Cases',
               style: TextStyle(color: ThemeUtils.getIconColor(context)),
             ),
           ),

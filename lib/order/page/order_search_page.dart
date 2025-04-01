@@ -14,6 +14,9 @@ import 'package:bounty_hunter/widgets/my_search_bar.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
+import 'order_list_page.dart';
+import 'order_search_result_page.dart';
+
 /// design/3订单/index.html#artboard8
 class OrderSearchPage extends StatefulWidget {
 
@@ -58,22 +61,7 @@ class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<Or
         ),
         body: Consumer<BaseListProvider<SearchItems>>(
           builder: (_, provider, __) {
-            return DeerListView(
-              key: const Key('order_search_list'),
-              itemCount: provider.list.length,
-              stateType: provider.stateType,
-              onRefresh: _onRefresh,
-              loadMore: _loadMore,
-              itemExtent: 50.0,
-              hasMore: provider.hasMore,
-              itemBuilder: (_, index) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  alignment: Alignment.centerLeft,
-                  child: Text(provider.list[index].name.nullSafe),
-                );
-              },
-            );
+            return OrderSearchResultPage(index: 1);
           }
         ),
       ),

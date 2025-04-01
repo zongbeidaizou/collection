@@ -1,6 +1,6 @@
 
 class HttpApi{
-  static const String users = 'users/dasewan';
+  static const String users = '/users/dasewan';
   static const String search = 'search/repositories';
   static const String subscriptions = 'users/dasewan/subscriptions';
 

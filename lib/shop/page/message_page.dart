@@ -156,17 +156,14 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
         // toolbarHeight: 30,
         title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
         actions: <Widget>[
-          IconButton(
-            tooltip: 'Search',
-            onPressed: () {},
-            icon: LoadAssetImage(
-              'goods/search',
-              key: const Key('search'),
-              width: 24.0,
-              // height: 24.0,
-              color: iconColor,
-            ),
-          ),
+          InkWell(
+            onTap: () {
+              print('带水波纹的点击');
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 16, right: 16),
+                child: Center(child: Text('Mark All as Read'))),
+          )
         ],
       ),
       body: NotificationListener(

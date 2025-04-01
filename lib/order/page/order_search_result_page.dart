@@ -82,29 +82,25 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
       child: RefreshIndicator(
         onRefresh: _onRefresh,
         displacement: 120.0, /// 默认40， 多添加的80为Header高度
-        child: Consumer<OrderListProvider>(
-            builder: (_, provider2, child) {
-              return ListView.builder(
-                itemCount: provider2.list.length ,
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
-                itemBuilder: (_, index) => OrderItem(
-                  key: Key('order_item_$index'),
-                  index: index,
-                  tabIndex: _index,
-                  item: provider2.list[index],
-                  products: _product,
-                  admins: _admins,
-                  repayInfo: CollectionLogOtherRepayInfo(),
-                  track: CollectionLogOtherTrack(),
-                  period: CollectionLogOtherPeriod(),
-                  contactList: [],
-                  smsHistory: [],
-                ),
-              );
-
-        }),
+        child: ListView.builder(
+          itemCount: _list.length ,
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
+          itemBuilder: (_, index) => OrderItem(
+            key: Key('order_item_$index'),
+            index: index,
+            tabIndex: _index,
+            item: _list[index],
+            products: _product,
+            admins: _admins,
+            repayInfo: CollectionLogOtherRepayInfo(),
+            track: CollectionLogOtherTrack(),
+            period: CollectionLogOtherPeriod(),
+            contactList: [],
+            smsHistory: [],
+          ),
+        ),
       ),
     );
   }
@@ -123,35 +119,26 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
 
   @override
   void onRefresh() {
-    // _onRefresh();
+    _onRefresh();
   }
 
   Future<void> _onRefresh() async {
-
-  }
-
-  bool _hasMore() {
-    // return _page < _maxPage;
-    return false;
-  }
-
-  Future<void> _loadMore() async {
-    if (_isLoading) {
-      return;
-    }
-    if (!_hasMore()) {
-      return;
-    }
-    _isLoading = true;
+    _list = await _orderListPagePresenter.index(1, widget.index, true);
     setState(() {
-      _page ++;
-    });
-    _listNew = await _orderListPagePresenter.index(_page, widget.index, true);
-    setState(() {
-      _list.addAll(_listNew);
-      _isLoading = false;
+      _page = 1;
     });
   }
+
+  @override
+  void setList(List<CollectionOrderData> list) {
+    setState(() {
+      _list = list;
+    });
+  }
+
+
+
+
 
 
 

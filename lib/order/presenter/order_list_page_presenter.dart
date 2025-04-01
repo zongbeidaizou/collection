@@ -37,8 +37,9 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     FormData formData = FormData.fromMap({"page": page, 'k_status': status});
     await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page}, onSuccess: (data) async {
       if (data != null) {
-        // _list =  data.data!;
+        _list =  data.data!;
         view.getContext().read<OrderListProvider>().setList(data.data!);
+        // view.setList(data.data!);
       }
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {

@@ -176,6 +176,11 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
     });
   }
 
+  @override
+  void setList(List<CollectionOrderData> list) {
+    // TODO: implement setList
+  }
+
 
 
 

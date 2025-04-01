@@ -21,7 +21,7 @@ import '../iview/message_page_iview.dart';
 import '../presenter/message_presenter.dart';
 const List<Color> bgColors = [
   Colours.app_main,
-  Color(0xFFFFA113),
+  Colors.orangeAccent,
   Color(0xFF3BA28D),
   Colours.dark_button_disabled,
   Colours.dark_red,
@@ -158,7 +158,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
         actions: <Widget>[
           InkWell(
             onTap: () {
-              print('带水波纹的点击');
+              _accountRecordListPresenter.markAsRead(true);
             },
             child: Container(
               padding: EdgeInsets.only(left: 16, right: 16),
@@ -204,9 +204,9 @@ class _MessageItem extends StatelessWidget {
     return Column(
       children: <Widget>[
         Gaps.vGap15,
-
         Gaps.vGap8,
         MyCard(
+          shadowColor: bgColors[item.gCat!].withOpacity(0.46),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

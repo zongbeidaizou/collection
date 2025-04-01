@@ -44,9 +44,26 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
         view.setLogs(_list);
         view.setPageSize((data.total!/data.perPage!).ceil());
         view.setCurrentPage(data.currentPage!);
+        view.getContext().read<UserProvider>().setUserEntity(data.other!);
 
       }
     }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
+  }
+
+  Future<void> markAsRead(bool isShowDialog, {String keyword = ''}) async {
+    Map<String, dynamic> loginInfo = {
+      'grant_type': 'password',
+    };
+    FormData formData = FormData.fromMap(loginInfo);
+    await requestNetwork<CollectionNotificationEntity>(Method.put, url: '${HttpApi.notification}/1', params: formData, isShow: isShowDialog, onSuccess: (data) async {
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+
+        }, onError: (_, __) async {
       if (_ == 200006) {
       } else {
         view.showToast(__);

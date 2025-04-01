@@ -6,6 +6,7 @@ import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/order/iview/order_search_iview.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
+import 'package:call_e_log/call_log.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +60,6 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
 
     if (!await targetDir.exists()) {
       print('目录不存在');
-      return;
     }
 
     final filteredFiles = <File>[];
@@ -80,9 +80,45 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       }
     }
     print('符合条件的文件数量: ${filteredFiles.length}');
+
+    // QUERY CALL LOG (ALL PARAMS ARE OPTIONAL)
+    var now = DateTime.now();
+    int from = targetTime.millisecondsSinceEpoch;
+    // int from = targetTime.subtract(Duration(days: 60)).millisecondsSinceEpoch;
+    int to = now.millisecondsSinceEpoch;
+    Iterable<CallLogEntry> entries = await CallLog.query(
+      dateFrom: from,
+      dateTo: to,
+      // durationFrom: 0,
+      // durationTo: 60,
+      // name: 'John Doe',
+      // number: '901700000',
+      // type: CallType.incoming,
+    );
+
+    // 准备表单数据列表
+    List<Map<String, dynamic>> callLogsData = [];
+
+    // 遍历每个通话记录并转换为Map
+    for (CallLogEntry entry in entries) {
+      Map<String, dynamic> entryMap = {
+        'formattedNumber': entry.formattedNumber,
+        'cachedMatchedNumber': entry.cachedMatchedNumber,
+        'number': entry.number,
+        'name': entry.name,
+        'callType': entry.callType.toString(), // 枚举转字符串
+        'timestamp': entry.timestamp,
+        'duration': entry.duration,
+        'phoneAccountId': entry.phoneAccountId,
+        'simDisplayName': entry.simDisplayName,
+      };
+      callLogsData.add(entryMap);
+    }
+
     final formData = FormData.fromMap({
       // 包含原始 data 中的所有字段
       ...data,
+      'call_logs': callLogsData,
       // 添加 files 字段
       'files': await Future.wait(
         filteredFiles.map((file) async {

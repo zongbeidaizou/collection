@@ -98,6 +98,8 @@ dependencies:
   currency_formatter: ^2.2.2
   path_provider: ^2.1.5
   permission_handler: ^11.4.0
+  call_e_log: ^0.0.4
+
 
 
 # https://github.com/simplezhli/bounty_hunter/issues/187

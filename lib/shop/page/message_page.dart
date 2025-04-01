@@ -20,13 +20,20 @@ import '../../widgets/my_card.dart';
 import '../iview/message_page_iview.dart';
 import '../presenter/message_presenter.dart';
 const List<Color> bgColors = [
-  Colors.white,
-  Colors.white,
-  Colors.white,
-  Colors.white,
-  Colors.white,
-  Color(0xFFD4E2FA),
-  Colors.greenAccent
+  Colours.app_main,
+  Color(0xFFFFA113),
+  Color(0xFF3BA28D),
+  Colours.dark_button_disabled,
+  Colours.dark_red,
+  Colours.unselected_item_color,
+];
+const List<String> catText = [
+  'Personal ',
+  'Bonus Awards',
+  'Rankings ',
+  'System Alerts ',
+  'Promise-to-Pay Reminders ',
+  'Others ',
 
 ];
 
@@ -215,11 +222,11 @@ class _MessageItem extends StatelessWidget {
                       height: 8.0,
                       width: 8.0,
                       decoration: BoxDecoration(
-                        color: Colours.app_main,
+                        color: bgColors[item.gCat!],
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                     ),
-                    const Expanded(child: Text('系统通知')),
+                    Expanded(child: Text(catText[item.gCat!])),
                     Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(item.createdAt!)), style: TextStyle(fontSize: 12),),
                   ],
                 ),

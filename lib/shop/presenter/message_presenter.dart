@@ -42,7 +42,7 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
         _list =  data.data!;
         _data = data;
         view.setLogs(_list);
-        view.setPageSize(4);
+        view.setPageSize((data.total!/data.perPage!).ceil());
         view.setCurrentPage(data.currentPage!);
 
       }

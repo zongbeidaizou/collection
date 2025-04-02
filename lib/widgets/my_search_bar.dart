@@ -157,7 +157,7 @@ class _MySearchBarState extends State<MySearchBar> {
       radius: 4.0,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       text: 'Search',
-      backgroundColor: Colours.app_main.withOpacity(0.8),
+      // backgroundColor: Colours.app_main.withOpacity(0.8),
       onPressed:() {
         _focus.unfocus();
         widget.onPressed?.call(_controller.text);

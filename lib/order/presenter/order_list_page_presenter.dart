@@ -39,7 +39,10 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {'page': page, 'keyword': keyword}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
-        view.getContext().read<OrderListProvider>().setList(data.data!);
+        if(keyword == ''){
+          view.getContext().read<OrderListProvider>().setList(data.data!);
+        }
+
         // view.setList(data.data!);
       }
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);

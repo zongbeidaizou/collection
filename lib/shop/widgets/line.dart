@@ -3,6 +3,8 @@ import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import 'bar_chart_sample7.dart';
+
 class _LineChart extends StatelessWidget {
   const _LineChart({required this.isShowingMainData});
 
@@ -10,10 +12,10 @@ class _LineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      isShowingMainData ? sampleData1 : sampleData2,
+    return isShowingMainData ? LineChart(
+       sampleData1 ,
       duration: const Duration(milliseconds: 250),
-    );
+    ) : BarChartSample7();
   }
 
   LineChartData get sampleData1 => LineChartData(
@@ -268,9 +270,9 @@ class LineChartSample1State extends State<LineChartSample1> {
               const SizedBox(
                 height: 17,
               ),
-              const Text(
-                'Monthly Bounty',
-                style: TextStyle(
+              Text(
+                isShowingMainData ? 'Monthly Bounty' : 'Week Rank',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 10,
                   // fontWeight: FontWeight.bold,
@@ -294,7 +296,7 @@ class LineChartSample1State extends State<LineChartSample1> {
           ),
           IconButton(
             icon: Icon(
-              Icons.refresh,
+              isShowingMainData ? Icons.stacked_bar_chart : Icons.stacked_line_chart,
               color: Colors.white.withOpacity(isShowingMainData ? 1.0 : 0.5),
             ),
             onPressed: () {

@@ -182,7 +182,7 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
         onRefresh: _onRefresh,
         displacement: 120.0,
         child: CustomScrollView(
-          slivers: _buildGroups(),
+          slivers: _logList.isNotEmpty ? _buildGroups() : [const SliverFillRemaining(child: Center(child: Text('no data, search by phone or log')))],
         ),
       ),
     );

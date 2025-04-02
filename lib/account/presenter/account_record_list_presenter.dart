@@ -31,6 +31,9 @@ class AccountRecordListPresenter extends BasePagePresenter<AccountRecordListMvpV
   }
 
   Future<void> index(int currentPage, bool isShowDialog, {String keyword = ''}) async {
+    if (keyword == 'JJJJJJJJJJJ') {
+      return ;
+    }
     List<CommissionData> _list = <CommissionData>[];
     CommissionEntity _data = CommissionEntity() ;
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po

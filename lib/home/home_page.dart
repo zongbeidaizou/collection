@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with RestorationMixin{
     _pageList = [
       const OrderPage(),
       const GoodsPage(),
-      const AccountRecordListPage(),
+      const AccountRecordListPage(searchKeyword:''),
       const MessagePage(),
       const ShopPage(),
     ];

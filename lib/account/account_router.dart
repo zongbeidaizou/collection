@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/account/page/account_search_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:bounty_hunter/routers/i_router.dart';
 
@@ -27,11 +28,12 @@ class AccountRouter implements IRouterProvider{
   static String withdrawalPasswordPage = '/account/withdrawalPassword';
   static String withdrawalRecordListPage = '/account/withdrawalRecordList';
   static String withdrawalResultPage = '/account/withdrawalResult';
+  static String search = '/account/search';
   
   @override
   void initRouter(FluroRouter router) {
     router.define(accountPage, handler: Handler(handlerFunc: (_, __) => const AccountPage()));
-    router.define(accountRecordListPage, handler: Handler(handlerFunc: (_, __) => const AccountRecordListPage()));
+    router.define(accountRecordListPage, handler: Handler(handlerFunc: (_, __) => const AccountRecordListPage(searchKeyword: '')));
     router.define(addWithdrawalAccountPage, handler: Handler(handlerFunc: (_, __) => const AddWithdrawalAccountPage()));
     router.define(bankSelectPage, handler: Handler(handlerFunc: (_, Map<String, List<String>> params) {
       final int type = int.parse(params['type']?.first ?? '0');
@@ -44,6 +46,7 @@ class AccountRouter implements IRouterProvider{
     router.define(withdrawalPasswordPage, handler: Handler(handlerFunc: (_, __) => const WithdrawalPasswordPage()));
     router.define(withdrawalRecordListPage, handler: Handler(handlerFunc: (_, __) => const WithdrawalRecordListPage()));
     router.define(withdrawalResultPage, handler: Handler(handlerFunc: (_, __) => const WithdrawalResultPage()));
+    router.define(search, handler: Handler(handlerFunc: (_, __) => const AccountSearchPage()));
   }
   
 }

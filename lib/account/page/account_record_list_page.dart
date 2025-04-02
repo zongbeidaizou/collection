@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/account/account_router.dart';
 import 'package:bounty_hunter/account/iview/account_record_list_iview.dart';
 import 'package:bounty_hunter/account/presenter/account_record_list_presenter.dart';
 import 'package:bounty_hunter/models/admin_entity.dart';
@@ -29,7 +30,8 @@ const List<Color> bgColors = [
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
 
-  const AccountRecordListPage({super.key});
+  const AccountRecordListPage({super.key, required this.searchKeyword});
+  final String searchKeyword;
 
   @override
   _AccountRecordListPageState createState() => _AccountRecordListPageState();
@@ -52,15 +54,19 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _accountRecordListPresenter.index(1, true);
+      _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });
   }
   @override
   void didUpdateWidget(AccountRecordListPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 当搜索关键词变化时，重新请求数据
-
-    _accountRecordListPresenter.index(1, false);
+    if (oldWidget.searchKeyword != widget.searchKeyword) {
+      setState(() {
+        _list.clear();
+      });
+      _accountRecordListPresenter.index(1,  false, keyword: widget.searchKeyword);
+    }
   }
 
   @override
@@ -83,7 +89,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
       _list.clear();
       _currentPage = 1;
     });
-    _accountRecordListPresenter.index(1, true);
+    _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
 
   }
 
@@ -120,7 +126,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     setState(() {
       _currentPage ++;
     });
-    _accountRecordListPresenter.index(_currentPage,  true);
+    _accountRecordListPresenter.index(_currentPage,  true, keyword: widget.searchKeyword);
   }
 
   @override
@@ -131,7 +137,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: widget.searchKeyword == '' ? AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colours.app_main,
@@ -145,7 +151,9 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
         actions: <Widget>[
           IconButton(
             tooltip: 'Search',
-            onPressed: () {},
+            onPressed: () {
+              NavigatorUtils.push(context, AccountRouter.search);
+            },
             icon: LoadAssetImage(
               'goods/search',
               key: const Key('search'),
@@ -155,7 +163,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
             ),
           ),
         ],
-      ),
+      ): null,
       body: NotificationListener(
         onNotification: (ScrollNotification note) {
           if (note.metrics.pixels == note.metrics.maxScrollExtent) {
@@ -167,7 +175,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
           onRefresh: _onRefresh,
           displacement: 120.0,
           child: CustomScrollView(
-            slivers: _buildGroups(),
+            slivers: _list.isNotEmpty ? _buildGroups() : [const SliverFillRemaining(child: Center(child: Text('no data, search by phone or sn')))],
           ),
         ),
       ),

@@ -30,12 +30,13 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     });
   }
 
-  Future<List<CollectionOrderData>> index(int page, int status, bool isShowDialog) async {
-
+  Future<List<CollectionOrderData>> index(int page, int status, bool isShowDialog, {String keyword = ''}) async {
+    if (keyword == 'JJJJJJJJJJJ') {
+      return [];
+    }
 
     List<CollectionOrderData> _list = <CollectionOrderData>[];
-    FormData formData = FormData.fromMap({"page": page, 'k_status': status});
-    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page}, onSuccess: (data) async {
+    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {'page': page, 'keyword': keyword}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
         view.getContext().read<OrderListProvider>().setList(data.data!);

@@ -22,10 +22,12 @@ class OrderSearchResultPage extends StatefulWidget {
   const OrderSearchResultPage({
     super.key,
     required this.index,
+    required this.keyword,
   });
 
   final int index;
-  
+  final String keyword;
+
   @override
   _OrderSearchResultPageState createState() => _OrderSearchResultPageState();
 }
@@ -123,7 +125,8 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
   }
 
   Future<void> _onRefresh() async {
-    _list = await _orderListPagePresenter.index(1, widget.index, true);
+    String keyword = widget.keyword.isNotEmpty ? widget.keyword : 'JJJJJJJJJJJ';
+    _list = await _orderListPagePresenter.index(1, widget.index, true, keyword: keyword);
     setState(() {
       _page = 1;
     });

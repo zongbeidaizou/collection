@@ -31,7 +31,7 @@ class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<Or
   @override
   BaseListProvider<SearchItems> provider = BaseListProvider<SearchItems>();
   
-  late String _keyword;
+  String _keyword = '';
   int _page = 1;
   
   @override
@@ -43,28 +43,23 @@ class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<Or
   
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<BaseListProvider<SearchItems>>(
-      create: (_) => provider,
-      child: Scaffold(
-        appBar: MySearchBar(
-          hintText: '请输入手机号或姓名查询',
-          onPressed: (text) {
-            if (text.isEmpty) {
-              showToast('搜索关键字不能为空！');
-              return;
-            }
-            _keyword = text;
-            provider.setStateType(StateType.loading);
-            _page = 1;
-            _orderSearchPresenter.search(_keyword, _page, true);
-          },
-        ),
-        body: Consumer<BaseListProvider<SearchItems>>(
-          builder: (_, provider, __) {
-            return OrderSearchResultPage(index: 1);
+    return Scaffold(
+      appBar: MySearchBar(
+        hintText: 'Search by phone, sn, name.',
+        onPressed: (text) {
+          if (text.isEmpty) {
+            showToast('Search keyword cannot be empty！');
+            return;
           }
-        ),
+          setState(() {
+            _keyword = text;
+          });
+          // provider.setStateType(StateType.loading);
+          _page = 1;
+          // _orderSearchPresenter.search(_keyword, _page, true);
+        },
       ),
+      body: OrderSearchResultPage(key: ValueKey(_keyword),index: 1, keyword: _keyword,),
     );
   }
 

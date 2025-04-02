@@ -55,6 +55,28 @@ class _MySearchBarState extends State<MySearchBar> {
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     final Color iconColor = isDark ? Colours.dark_text_gray : Colours.text_gray_c;
+    final Widget back = Semantics(
+      label: 'back',
+      child: SizedBox(
+        width: 48.0,
+        height: 48.0,
+        child: InkWell(
+          onTap: () {
+            _focus.unfocus();
+            Navigator.maybePop(context);
+          },
+          borderRadius: BorderRadius.circular(24.0),
+          child: Padding(
+            key: const Key('search_back'),
+            padding: const EdgeInsets.all(12.0),
+            child: Image.asset(
+              widget.backImg,
+              color: isDark ? Colours.dark_text : Colours.text,
+            ),
+          ),
+        ),
+      ),
+    );
     /// 使用2.0.0新增CupertinoSearchTextField 实现， 需添加依赖 cupertino_icons: ^1.0.2
     // final Widget textField1 = Expanded(child: Container(
     //     height: 32.0,
@@ -91,7 +113,7 @@ class _MySearchBarState extends State<MySearchBar> {
         ),
         child: TextField(
           key: const Key('search_text_field'),
-          autofocus: false,
+          autofocus: true,
           controller: _controller,
           focusNode: _focus,
           textInputAction: TextInputAction.search,
@@ -149,7 +171,7 @@ class _MySearchBarState extends State<MySearchBar> {
         child: SafeArea(
           child: Row(
             children: <Widget>[
-              Gaps.hGap16,
+              back,
               textField,
               Gaps.hGap8,
               search,

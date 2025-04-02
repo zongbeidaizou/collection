@@ -1,4 +1,5 @@
 
+import 'package:bounty_hunter/goods/page/goods_list_page.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fluro/fluro.dart';
 import 'package:bounty_hunter/goods/page/qr_code_scanner_page.dart';
@@ -29,6 +30,10 @@ class GoodsRouter implements IRouterProvider{
       final String heroTag = params['heroTag']?.first ?? 'heroTag';
       return GoodsEditPage(isAdd: isAdd, isScan: isScan, goodsImageUrl: url, heroTag: heroTag,);
     }));
+    // router.define(goodsSearchPage, handler: Handler(handlerFunc: (_, Map<String, List<String>> params) {
+    //   final String keyword = params['keyword']?.first ?? 'JJJJJJJJJJJ';
+    //   return GoodsListPage(index: 0, searchKeyword: keyword);
+    // }));
     router.define(goodsSearchPage, handler: Handler(handlerFunc: (_, __) => const GoodsSearchPage()));
     router.define(goodsSizePage, handler: Handler(handlerFunc: (_, __) => const GoodsSizePage()));
     router.define(goodsSizeEditPage, handler: Handler(handlerFunc: (_, __) => const GoodsSizeEditPage()));

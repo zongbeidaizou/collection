@@ -16,10 +16,12 @@ class MySearchBar extends StatefulWidget implements PreferredSizeWidget {
     this.backImg = 'assets/images/ic_back_black.png',
     this.onPressed,
     this.controller,
+    this.showBack = true,
   });
 
   final String backImg;
   final String hintText;
+  final bool showBack;
   final TextEditingController? controller;
   final void Function(String)? onPressed;
 
@@ -55,7 +57,7 @@ class _MySearchBarState extends State<MySearchBar> {
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     final Color iconColor = isDark ? Colours.dark_text_gray : Colours.text_gray_c;
-    final Widget back = Semantics(
+    final Widget back = widget.showBack ? Semantics(
       label: 'back',
       child: SizedBox(
         width: 48.0,
@@ -76,7 +78,7 @@ class _MySearchBarState extends State<MySearchBar> {
           ),
         ),
       ),
-    );
+    ):  Gaps.hGap16;
     /// 使用2.0.0新增CupertinoSearchTextField 实现， 需添加依赖 cupertino_icons: ^1.0.2
     // final Widget textField1 = Expanded(child: Container(
     //     height: 32.0,

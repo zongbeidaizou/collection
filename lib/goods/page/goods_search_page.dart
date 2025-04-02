@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/my_search_bar.dart';
 
+import 'goods_list_page.dart';
+
 class GoodsSearchPage extends StatefulWidget {
 
   const GoodsSearchPage({super.key});
@@ -12,14 +14,17 @@ class GoodsSearchPage extends StatefulWidget {
 }
 
 class _GoodsSearchPageState extends State<GoodsSearchPage> {
+  String _keyword = 'JJJJJJJJJJJ';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: '请输入商品名称查询',
-        onPressed: (text) => Toast.show('搜索内容：$text'),
+        hintText: 'Search by phone or log',
+        onPressed: (text) =>           setState(() {
+          _keyword = text;
+        }),
       ),
-      body: Container(),
+      body: GoodsListPage(key: ValueKey(_keyword),index: 1, searchKeyword: _keyword,)
     );
   }
 }

@@ -45,7 +45,7 @@ class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<Or
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: 'Search by phone or sn.',
+        hintText: 'Search by phone or sn',
         onPressed: (text) {
           if (text.isEmpty) {
             showToast('Search keyword cannot be empty！');

@@ -68,16 +68,37 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
       create: (_) => provider,
       child: Scaffold(
         //todo 搜索
-        // appBar: MySearchBar(
-        //   hintText: 'Search by Phone, Order, Code, Log',
-        //   onPressed: (text) =>  _updateSearchKeyword(text),
-        //   controller: _controller,
-        // ),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colours.app_main,
+          flexibleSpace:  LoadAssetImage('statistic/statistic_bg',
+            height: 115.0,
+            fit: BoxFit.fill,
+          ),
+          // toolbarHeight: 30,
+          title: Text("Logs",style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
-
+            IconButton(
+              tooltip: 'Search',
+              onPressed: () {
+                NavigatorUtils.push(context, GoodsRouter.goodsSearchPage);
+              },
+              icon: LoadAssetImage(
+                'goods/search',
+                key: const Key('search'),
+                width: 24.0,
+                // height: 24.0,
+                color: iconColor,
+              ),
+            ),
           ],
         ),
+        // appBar: AppBar(
+        //   actions: <Widget>[
+        //
+        //   ],
+        // ),
         body: Column(
           key: _bodyKey,
           crossAxisAlignment: CrossAxisAlignment.start,

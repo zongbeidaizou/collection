@@ -4,37 +4,44 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'bar_chart_sample7.dart';
-const dateString = [
-  '01/03',
-  '02/03',
-  '03/03',
-  '04/03',
-  '05/03',
-  '06/03',
-  '07/03',
-  '08/03',
-  '09/03',
-  '10/03',
-  '11/03',
-  '12/03',
-  '13/03',
-  '14/03',
-  '15/03',
-  '16/03',
-  '17/03',
-  '18/03',
-  '19/03',
-  '20/03',
-  '21/03',
-  '22/03',
-  '23/03',
-  '24/03',
-  '25/03',
-  '26/03',
-  '27/03',
-  '28/03',
-  '29/03',
-  '30/03',
+
+const List<Map<String, dynamic>> lineData = [
+  {'date':'01/03','value':12},
+  {'date':'02/03','value':16},
+  {'date':'03/03','value':17},
+  {'date':'04/03','value':16},
+  {'date':'05/03','value':19},
+  {'date':'06/03','value':22},
+  {'date':'07/03','value':22},
+  {'date':'08/03','value':21},
+  {'date':'09/03','value':23},
+  {'date':'10/03','value':21},
+  {'date':'11/03','value':25},
+  {'date':'12/03','value':20},
+  {'date':'13/03','value':22},
+  {'date':'14/03','value':21},
+  {'date':'15/03','value':12},
+  {'date':'16/03','value':22},
+  {'date':'17/03','value':12},
+  {'date':'18/03','value':22},
+  {'date':'19/03','value':24},
+  {'date':'20/03','value':21},
+  {'date':'21/03','value':19},
+  {'date':'22/03','value':22},
+  {'date':'23/03','value':16},
+  {'date':'24/03','value':24},
+  {'date':'25/03','value':19},
+  {'date':'26/03','value':22},
+  {'date':'27/03','value':23},
+  {'date':'28/03','value':24},
+  {'date':'29/03','value':23},
+  {'date':'30/03','value':22},
+];
+const List<Map<String, dynamic>> barData = [
+  {'name': 'Tom', 'value': 160},
+  {'name': 'Jerry', 'value': 142},
+  {'name': 'Spike', 'value': 120},
+  {'name': 'Tyke', 'value': 110}
 ];
 class _LineChart extends StatelessWidget {
   const _LineChart({required this.isShowingMainData});
@@ -46,7 +53,7 @@ class _LineChart extends StatelessWidget {
     return isShowingMainData ? LineChart(
        sampleData1 ,
       duration: const Duration(milliseconds: 250),
-    ) : BarChartSample7();
+    ) : BarChartSample7(data: barData);
   }
 
   LineChartData get sampleData1 => LineChartData(
@@ -61,7 +68,9 @@ class _LineChart extends StatelessWidget {
     minY: 0,
   );
 
-  LineTouchData get lineTouchData1 => LineTouchData(
+  LineTouchData get lineTouchData1{
+    List<String> dates = lineData.map((item) => item['date'] as String).toList();
+    return  LineTouchData(
     handleBuiltInTouches: true,
     touchTooltipData: LineTouchTooltipData(
       tooltipBgColor: Colors.blueGrey.withOpacity(0.6),
@@ -75,12 +84,12 @@ class _LineChart extends StatelessWidget {
                 Colors.blueGrey,
             fontSize: 14,
           );
-          return LineTooltipItem('${dateString[touchedSpot.x.toInt()]}\n', textStyle,children: [TextSpan(text: touchedSpot.y.toInt().toString(), style: const TextStyle(fontSize: 16.0,))]);
+          return LineTooltipItem('${dates[touchedSpot.x.toInt()]}\n', textStyle,children: [TextSpan(text: touchedSpot.y.toInt().toString(), style: const TextStyle(fontSize: 16.0,))]);
         }).toList();
       },
 
     ),
-  );
+  );}
 
   FlTitlesData get titlesData1 => FlTitlesData(
     bottomTitles: AxisTitles(
@@ -115,18 +124,20 @@ class _LineChart extends StatelessWidget {
 
   FlGridData get gridData => const FlGridData(show: false);
 
-  FlBorderData get borderData => FlBorderData(
-    show: true,
-    border: Border(
-      bottom:
-      BorderSide(color: AppColors.primary.withOpacity(0.2), width: 4),
-      left: const BorderSide(color: Colors.transparent),
-      right: const BorderSide(color: Colors.transparent),
-      top: const BorderSide(color: Colors.transparent),
-    ),
-  );
+  FlBorderData get borderData{
+    return FlBorderData(
+      show: true,
+      border: Border(
+        bottom:
+        BorderSide(color: AppColors.primary.withOpacity(0.2), width: 4),
+        left: const BorderSide(color: Colors.transparent),
+        right: const BorderSide(color: Colors.transparent),
+        top: const BorderSide(color: Colors.transparent),
+      ),
+    );
+  }
 
-  LineChartBarData get lineChartBarData1_1 => LineChartBarData(
+  LineChartBarData get lineChartBarData1_1{return  LineChartBarData(
     isCurved: true,
     color: Colors.blueAccent,
     barWidth: 2,
@@ -143,37 +154,16 @@ class _LineChart extends StatelessWidget {
     shadow: const Shadow(
       blurRadius: 0,
     ),
-    spots: const [
-      FlSpot(1, 11),
-      FlSpot(2, 15),
-      FlSpot(3, 16),
-      FlSpot(4, 17),
-      FlSpot(5, 15),
-      FlSpot(6, 21),
-      FlSpot(7, 22),
-      FlSpot(8, 23),
-      FlSpot(9, 25),
-      FlSpot(10, 24),
-      FlSpot(11, 21),
-      FlSpot(12, 19),
-      FlSpot(13, 17),
-      FlSpot(14, 20),
-      FlSpot(15, 21),
-      FlSpot(16, 23),
-      FlSpot(17, 26),
-      FlSpot(18, 22),
-      FlSpot(19, 25),
-      FlSpot(20, 25),
-      FlSpot(21, 21),
-      FlSpot(22, 21),
-      FlSpot(23, 22),
-      FlSpot(24, 24),
-      FlSpot(25, 21),
-      FlSpot(26, 27),
-      FlSpot(27, 21),
-      FlSpot(28, 11),
-    ],
-  );
+    spots: lineData.asMap().map((index, item) => MapEntry(
+      index,
+      FlSpot(
+        index.toDouble(), // x值从0开始递增
+        (item['value'] as int).toDouble(), // y值取value
+      ),
+    ))
+        .values
+        .toList(),
+  );}
 
 }
 

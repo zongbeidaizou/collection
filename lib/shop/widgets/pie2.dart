@@ -48,28 +48,28 @@ class _GaugeTemperatureMonitorExampleState extends State {
 
               GaugeRange(
                   startValue: 0,
-                  endValue: 40,
+                  endValue: 50,
                   startWidth: 0.165,
                   sizeUnit: GaugeSizeUnit.factor,
                   endWidth: 0.165,
                   color: Colors.blueAccent.withOpacity(0.2)),
               GaugeRange(
-                  startValue: 40,
-                  endValue: 90,
+                  startValue: 50,
+                  endValue: 100,
                   startWidth: 0.165,
                   sizeUnit: GaugeSizeUnit.factor,
                   endWidth: 0.165,
                   color:  Colors.blueAccent.withOpacity(0.6)),
               GaugeRange(
-                  startValue: 90,
-                  endValue: 130,
+                  startValue: 100,
+                  endValue: 150,
                   startWidth: 0.165,
                   sizeUnit: GaugeSizeUnit.factor,
                   endWidth: 0.165,
                   color: Colors.blueAccent.withOpacity(0.9)),
               GaugeRange(
-                  startValue: 130,
-                  endValue: 150,
+                  startValue: 150,
+                  endValue: 200,
                   startWidth: 0.165,
                   sizeUnit: GaugeSizeUnit.factor,
                   endWidth: 0.165,
@@ -79,9 +79,9 @@ class _GaugeTemperatureMonitorExampleState extends State {
               GaugeAnnotation(
                   angle: 90,
                   positionFactor: 0.35,
-                  widget: Text('°C',
+                  widget: Text('Cases',
                       style:
-                      TextStyle(color: Color(0xFFF8B195), fontSize: 16))),
+                      TextStyle(color: Color(0xFFF8B195), fontSize: 12))),
               GaugeAnnotation(
                 angle: 90,
                 positionFactor: 0.8,

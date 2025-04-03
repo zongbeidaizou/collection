@@ -3,31 +3,41 @@ import 'dart:math' as math;
 import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
+const List<Color> colorss = [
+  Colors.purple,
+  Colors.lightGreen,
+  Colors.cyan,
+  Colors.teal,
+  Colors.red,
+  Colors.grey,
+];
 class BarChartSample7 extends StatefulWidget {
-  BarChartSample7({super.key});
+  BarChartSample7({super.key, required this.data});
 
   final shadowColor = const Color(0xFFCCCCCC);
-  final dataList = [
-    const _BarData(Colors.purple, 138, 18, "Tom1"),
-    const _BarData(Colors.lightGreen, 127, 8, "Tom2"),
-    const _BarData(Colors.cyan, 111, 15, "Tom3"),
-    const _BarData(Colors.teal, 98, 5, "Tom4"),
-    const _BarData(Colors.red, 71, 2.5, "Tom5"),
-    const _BarData(Colors.grey, 60, 2, "Tom6"),
-  ];
+  List<Map<String, dynamic>> data;
 
   @override
   State<BarChartSample7> createState() => _BarChartSample7State();
 }
 
 class _BarChartSample7State extends State<BarChartSample7> {
-  BarChartGroupData generateBarGroup(
-      int x,
-      Color color,
-      double value,
-      double shadowValue,
-      ) {
+  late List<_BarData> _dataList = [];
+  @override
+  void initState() {
+    super.initState();
+    _dataList = widget.data.asMap().map((index, item) => MapEntry(
+      index,
+      _BarData(
+        colorss[index % colorss.length],
+        (item['value']! as int).toDouble(),
+        10.0,                         
+        item['name']! as String,        
+      ),
+    )).values.toList();
+  }
+
+  BarChartGroupData generateBarGroup(int x, Color color, double value, double shadowValue,) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -73,7 +83,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
               reservedSize: 36,
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
-                return Text(widget.dataList[index].name, style: TextStyle(color: widget.dataList[index].color, fontSize: 10),);
+                return Text(_dataList[index].name, style: TextStyle(color: _dataList[index].color, fontSize: 10),);
               },
             ),
           ),
@@ -88,7 +98,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
             strokeWidth: 1,
           ),
         ),
-        barGroups: widget.dataList.asMap().entries.map((e) {
+        barGroups: _dataList.asMap().entries.map((e) {
           final index = e.key;
           final data = e.value;
           return generateBarGroup(

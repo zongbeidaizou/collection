@@ -21,10 +21,22 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/bar.dart';
+import '../widgets/bar2.dart';
 import '../widgets/level_bar.dart';
 import '../widgets/line.dart';
 import '../widgets/pie.dart';
 
+const List<Map<String, dynamic>> hallData = [
+  {'name': 'Tom', 'value': 160, 'avatar': 'https://api.dasewan.cn/assets/avater1.png'},
+  {'name': 'Jerry', 'value': 142, 'avatar': 'https://api.dasewan.cn/assets/avater2.png'},
+  {'name': 'Spike', 'value': 120, 'avatar': 'https://api.dasewan.cn/assets/avater3.png'},
+  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater4.png'},
+  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater5.png'},
+  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater6.png'},
+  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater7.png'},
+  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater8.png'},
+
+];
 /// design/6店铺-账户/index.html#artboard0
 class ShopPage extends StatefulWidget {
   const ShopPage({
@@ -192,7 +204,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                   height: 110,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 10,
+                    itemCount: hallData.length,
                     itemBuilder: (BuildContext context, int index) {
                       Color iconColor = Colors.transparent;
                       if (index == 0) {
@@ -231,7 +243,9 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                                       child: CircleAvatar(
                                         radius: 28.0,
                                         backgroundColor: Colors.transparent,
-                                        backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                        // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                        backgroundImage: ImageUtils.getImageProvider(hallData[index]['avatar'] as String, holderImg: 'store/icon_zj'),
+                                        // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
                                       ),
                                     ).animate(onPlay: (controller) => controller.repeat())
                                         .shimmer(duration: 2200.ms, color: Colors.white.withOpacity(0.5))
@@ -251,7 +265,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                                 ],
                               ),
                               SizedBox(height: 8.0),
-                              Text('${(15 - index) / 10}K'),
+                              Text('${hallData[index]['value']}K'),
                             ],
                           ),
                         );
@@ -273,7 +287,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                                   child: CircleAvatar(
                                     radius: 28.0,
                                     backgroundColor: Colors.transparent,
-                                    backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                    backgroundImage: ImageUtils.getImageProvider(hallData[index]['avatar'] as String, holderImg: 'store/icon_zj'),
                                   ),
                                 ),
                                 Positioned(
@@ -288,7 +302,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                               ],
                             ),
                             SizedBox(height: 8.0),
-                            Text('${(15 - index) / 10}K'),
+                            Text('${hallData[index]['value']}K'),
                           ],
                         ),
                       );
@@ -298,201 +312,202 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                 ),
                 // 统计
                 LineChartSample1(),
+                Bar2(),
                 // BarChartSample3(),
-                Container(
-                  height: 208,
-                  padding: EdgeInsets.all(10),
-                  child: ListView.separated(
-                    separatorBuilder: (BuildContext context, int index) {
-                      // 定义分隔器
-                      return Container(
-                        width: 6.4, //
-                        // color: Colors.blue.withOpacity(0.1),// 分隔器高度，即每个元素之间的留白大小
-                      );
-                    },
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                /*                          gradient: LinearGradient(
-                            // colors:  [Color(0xFF8C9EFF),Colors.limeAccent],
-                            colors:  [Colors.white,Colors.white],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),*/
-                          color: Colors.white.withOpacity(0.42),
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(54.0),
-                              bottomLeft: Radius.circular(8.0),
-                              bottomRight: Radius.circular(8.0),
-                              topRight: Radius.circular(11.0)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(color: Colors.transparent, offset: const Offset(0.1, 0.1), blurRadius: 100.0),
-                          ],
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.71,
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                GaugeTemperatureMonitorExample(),
-                                Expanded(
-                                    child: Container(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text("2023 W30 Bonus"),
-                                        ],
-                                      ),
-                                      Gaps.vGap12,
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.only(right: 4.0),
-                                                width: 3.4,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blueAccent.withOpacity(0.2),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 26,
-                                                child: Text(
-                                                  "lv.1:",
-                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                                ),
-                                              ),
-                                              Text("400", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                            ],
-                                          ),
-                                          Gaps.hGap4,
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.only(right: 4.0),
-                                                width: 3.4,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blueAccent.withOpacity(0.6),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 29,
-                                                child: Text(
-                                                  "lv.2:",
-                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                                ),
-                                              ),
-                                              Text("600", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Gaps.vGap10,
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.only(right: 4.0),
-                                                width: 3.4,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blueAccent.withOpacity(0.9),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 26,
-                                                child: Text(
-                                                  "lv.3:",
-                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                                ),
-                                              ),
-                                              Text("700", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                            ],
-                                          ),
-                                          Gaps.hGap4,
-                                          Row(
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.only(right: 4.0),
-                                                width: 3.4,
-                                                height: 20,
-                                                decoration: BoxDecoration(
-                                                  color: Color.fromRGBO(238, 79, 34, 0.65),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 29,
-                                                child: Text(
-                                                  "loss:",
-                                                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                                                ),
-                                              ),
-                                              Text("1444", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                              ],
-                            ),
-                            Gaps.line,
-                            Gaps.line,
-                            Gaps.vGap10,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                              // 排名
-                              Row(
-                                children: [
-                                  SvgPicture.asset(width: 22, height: 22, "assets/images/customer-rate-svgrepo-com.svg",),
-                                  Gaps.hGap5,
-                                  Text("2/4", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                ],
-                              ),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(width: 22, height: 22, "assets/images/favourite-star-svgrepo-com.svg",),
-                                    Gaps.hGap5,
-                                    Text("lv.2", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(width: 22, height: 22, "assets/images/money-card-credit-card-svgrepo-com.svg",),
-                                    Gaps.hGap5,
-                                    Text("3641", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(width: 22, height: 22, "assets/images/off-button-power-button-svgrepo-com.svg",),
-                                    Gaps.hGap5,
-                                    Text("2000", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                                  ],
-                                ),
-            
-            
-                            ],)
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                // Container(
+                //   height: 208,
+                //   padding: EdgeInsets.all(10),
+                //   child: ListView.separated(
+                //     separatorBuilder: (BuildContext context, int index) {
+                //       // 定义分隔器
+                //       return Container(
+                //         width: 6.4, //
+                //         // color: Colors.blue.withOpacity(0.1),// 分隔器高度，即每个元素之间的留白大小
+                //       );
+                //     },
+                //     scrollDirection: Axis.horizontal,
+                //     itemCount: 10,
+                //     itemBuilder: (BuildContext context, int index) {
+                //       return Container(
+                //         padding: EdgeInsets.all(2.0),
+                //         decoration: BoxDecoration(
+                // /*                          gradient: LinearGradient(
+                //             // colors:  [Color(0xFF8C9EFF),Colors.limeAccent],
+                //             colors:  [Colors.white,Colors.white],
+                //             begin: Alignment.topLeft,
+                //             end: Alignment.bottomRight,
+                //           ),*/
+                //           color: Colors.white.withOpacity(0.42),
+                //           borderRadius: const BorderRadius.only(
+                //               topLeft: Radius.circular(54.0),
+                //               bottomLeft: Radius.circular(8.0),
+                //               bottomRight: Radius.circular(8.0),
+                //               topRight: Radius.circular(11.0)),
+                //           boxShadow: <BoxShadow>[
+                //             BoxShadow(color: Colors.transparent, offset: const Offset(0.1, 0.1), blurRadius: 100.0),
+                //           ],
+                //         ),
+                //         width: MediaQuery.of(context).size.width * 0.71,
+                //         child: Column(
+                //           children: <Widget>[
+                //             Row(
+                //               children: [
+                //                 GaugeTemperatureMonitorExample(),
+                //                 Expanded(
+                //                     child: Container(
+                //                   child: Column(
+                //                     children: [
+                //                       Row(
+                //                         mainAxisAlignment: MainAxisAlignment.start,
+                //                         children: [
+                //                           Text("2023 W30 Bonus"),
+                //                         ],
+                //                       ),
+                //                       Gaps.vGap12,
+                //                       Row(
+                //                         children: [
+                //                           Row(
+                //                             children: [
+                //                               Container(
+                //                                 margin: const EdgeInsets.only(right: 4.0),
+                //                                 width: 3.4,
+                //                                 height: 20,
+                //                                 decoration: BoxDecoration(
+                //                                   color: Colors.blueAccent.withOpacity(0.2),
+                //                                   borderRadius: BorderRadius.circular(4.0),
+                //                                 ),
+                //                               ),
+                //                               Container(
+                //                                 width: 26,
+                //                                 child: Text(
+                //                                   "lv.1:",
+                //                                   style: TextStyle(fontSize: 14, color: Colors.grey),
+                //                                 ),
+                //                               ),
+                //                               Text("400", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                             ],
+                //                           ),
+                //                           Gaps.hGap4,
+                //                           Row(
+                //                             children: [
+                //                               Container(
+                //                                 margin: const EdgeInsets.only(right: 4.0),
+                //                                 width: 3.4,
+                //                                 height: 20,
+                //                                 decoration: BoxDecoration(
+                //                                   color: Colors.blueAccent.withOpacity(0.6),
+                //                                   borderRadius: BorderRadius.circular(4.0),
+                //                                 ),
+                //                               ),
+                //                               Container(
+                //                                 width: 29,
+                //                                 child: Text(
+                //                                   "lv.2:",
+                //                                   style: TextStyle(fontSize: 14, color: Colors.grey),
+                //                                 ),
+                //                               ),
+                //                               Text("600", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                             ],
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       Gaps.vGap10,
+                //                       Row(
+                //                         children: [
+                //                           Row(
+                //                             children: [
+                //                               Container(
+                //                                 margin: const EdgeInsets.only(right: 4.0),
+                //                                 width: 3.4,
+                //                                 height: 20,
+                //                                 decoration: BoxDecoration(
+                //                                   color: Colors.blueAccent.withOpacity(0.9),
+                //                                   borderRadius: BorderRadius.circular(4.0),
+                //                                 ),
+                //                               ),
+                //                               Container(
+                //                                 width: 26,
+                //                                 child: Text(
+                //                                   "lv.3:",
+                //                                   style: TextStyle(fontSize: 14, color: Colors.grey),
+                //                                 ),
+                //                               ),
+                //                               Text("700", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                             ],
+                //                           ),
+                //                           Gaps.hGap4,
+                //                           Row(
+                //                             children: [
+                //                               Container(
+                //                                 margin: const EdgeInsets.only(right: 4.0),
+                //                                 width: 3.4,
+                //                                 height: 20,
+                //                                 decoration: BoxDecoration(
+                //                                   color: Color.fromRGBO(238, 79, 34, 0.65),
+                //                                   borderRadius: BorderRadius.circular(4.0),
+                //                                 ),
+                //                               ),
+                //                               Container(
+                //                                 width: 29,
+                //                                 child: Text(
+                //                                   "loss:",
+                //                                   style: TextStyle(fontSize: 14, color: Colors.grey),
+                //                                 ),
+                //                               ),
+                //                               Text("1444", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                             ],
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ],
+                //                   ),
+                //                 )),
+                //               ],
+                //             ),
+                //             Gaps.line,
+                //             Gaps.line,
+                //             Gaps.vGap10,
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //               children: [
+                //               // 排名
+                //               Row(
+                //                 children: [
+                //                   SvgPicture.asset(width: 22, height: 22, "assets/images/customer-rate-svgrepo-com.svg",),
+                //                   Gaps.hGap5,
+                //                   Text("2/4", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                 ],
+                //               ),
+                //                 Row(
+                //                   children: [
+                //                     SvgPicture.asset(width: 22, height: 22, "assets/images/favourite-star-svgrepo-com.svg",),
+                //                     Gaps.hGap5,
+                //                     Text("lv.2", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                   ],
+                //                 ),
+                //                 Row(
+                //                   children: [
+                //                     SvgPicture.asset(width: 22, height: 22, "assets/images/money-card-credit-card-svgrepo-com.svg",),
+                //                     Gaps.hGap5,
+                //                     Text("3641", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                   ],
+                //                 ),
+                //                 Row(
+                //                   children: [
+                //                     SvgPicture.asset(width: 22, height: 22, "assets/images/off-button-power-button-svgrepo-com.svg",),
+                //                     Gaps.hGap5,
+                //                     Text("2000", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                //                   ],
+                //                 ),
+                //
+                //
+                //             ],)
+                //           ],
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
                 // Expanded(child: Gaps.empty),
               ],
             ),

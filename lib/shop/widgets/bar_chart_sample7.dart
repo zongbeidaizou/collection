@@ -9,12 +9,12 @@ class BarChartSample7 extends StatefulWidget {
 
   final shadowColor = const Color(0xFFCCCCCC);
   final dataList = [
-    const _BarData(AppColors.contentColorYellow, 18, 18),
-    const _BarData(AppColors.contentColorGreen, 17, 8),
-    const _BarData(AppColors.contentColorOrange, 10, 15),
-    const _BarData(AppColors.contentColorPink, 2.5, 5),
-    const _BarData(AppColors.contentColorBlue, 2, 2.5),
-    const _BarData(AppColors.contentColorRed, 2, 2),
+    const _BarData(Colors.purple, 138, 18, "Tom1"),
+    const _BarData(Colors.lightGreen, 127, 8, "Tom2"),
+    const _BarData(Colors.cyan, 111, 15, "Tom3"),
+    const _BarData(Colors.teal, 98, 5, "Tom4"),
+    const _BarData(Colors.red, 71, 2.5, "Tom5"),
+    const _BarData(Colors.grey, 60, 2, "Tom6"),
   ];
 
   @override
@@ -34,12 +34,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
         BarChartRodData(
           toY: value,
           color: color,
-          width: 6,
-        ),
-        BarChartRodData(
-          toY: shadowValue,
-          color: widget.shadowColor,
-          width: 6,
+          width: 12,
         ),
       ],
       showingTooltipIndicators: touchedGroupIndex == x ? [0] : [],
@@ -69,7 +64,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
             drawBelowEverything: true,
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
+              reservedSize: 40,
             ),
           ),
           bottomTitles: AxisTitles(
@@ -78,7 +73,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
               reservedSize: 36,
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
-                return Text("Jocab", style: TextStyle(color: widget.dataList[index].color),);
+                return Text(widget.dataList[index].name, style: TextStyle(color: widget.dataList[index].color, fontSize: 10),);
               },
             ),
           ),
@@ -103,7 +98,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
             data.shadowValue,
           );
         }).toList(),
-        maxY: 20,
+        maxY: 200,
         barTouchData: BarTouchData(
           enabled: true,
           handleBuiltInTouches: false,
@@ -151,11 +146,12 @@ class _BarChartSample7State extends State<BarChartSample7> {
 }
 
 class _BarData {
-  const _BarData(this.color, this.value, this.shadowValue);
+  const _BarData(this.color, this.value, this.shadowValue, this.name);
 
   final Color color;
   final double value;
   final double shadowValue;
+  final String name;
 }
 
 

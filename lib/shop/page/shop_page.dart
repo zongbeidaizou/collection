@@ -116,22 +116,20 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                   height: 115.0,
                   color: Colors.indigoAccent,
                 ),
-          actions: <Widget>[
-            IconButton(
-              tooltip: '消息',
-              onPressed: () {
-                NavigatorUtils.push(context, ShopRouter.messagePage);
-              },
-              icon: LoadAssetImage(
-                'shop/message',
-                key: const Key('message'),
-                width: 24.0,
-                height: 24.0,
-                color: iconColor,
+          leading: Container(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Align(
+              alignment: Alignment.centerLeft, // 水平居左，垂直居中
+              child: Text(
+                "Hi Jacob",
+                style: TextStyle(fontSize: 24),
               ),
             ),
+          ),
+          leadingWidth: 300,
+          actions: <Widget>[
             IconButton(
-              tooltip: '设置',
+              tooltip: 'Setting',
               onPressed: () {
                 NavigatorUtils.push(context, SettingRouter.settingPage);
               },

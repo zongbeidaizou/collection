@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
-final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+final List<IconData> _iconList = [Icons.play_for_work_sharp,Icons.sync, Icons.more_time,Icons.hourglass_disabled, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
 /// design/3订单/index.html
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -285,7 +285,10 @@ class _TabViewState extends State<_TabView> {
           child: Column(
             children: <Widget>[
               /// 使用context.select替代Consumer
-              Icon(_iconList[widget.index], size: 28.0,weight: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 800 : 400, color: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? Colors.blue : Colors.grey),
+              SizedBox(
+                width:28,height: 28,
+                  child: Center(child: Icon(_iconList[widget.index], size: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 30 : 20,weight: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 800 : 400, color: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? Colors.blue : Colors.grey))),
+
               // LoadAssetImage(
               //   context.select<OrderPageProvider, int>(
               //               (value) => value.index) ==
@@ -298,7 +301,7 @@ class _TabViewState extends State<_TabView> {
               Gaps.vGap4,
               Text(
                 widget.text,
-                style: TextStyle(fontSize: widget.fontSize),
+                style: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? TextStyle(fontSize: 10, color: Colors.blue) : TextStyle(fontSize: 10),
               ),
             ],
           ),

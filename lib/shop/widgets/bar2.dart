@@ -197,8 +197,8 @@ class Bar2State extends State<Bar2> {
                 isShowingMainData ? 'Week Bounty Rank ' : 'Week Rank',
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10,
-                  // fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                   letterSpacing: 1,
                 ),
                 textAlign: TextAlign.center,
@@ -219,8 +219,8 @@ class Bar2State extends State<Bar2> {
           ),
           IconButton(
             icon: Icon(
-              isShowingMainData ? Icons.stacked_bar_chart : Icons.stacked_line_chart,
-              color: Colors.white.withOpacity(isShowingMainData ? 1.0 : 0.5),
+              isShowingMainData ? Icons.theater_comedy_outlined : Icons.text_rotation_angleup,
+              color: Colors.white.withOpacity(0.6),
             ),
             onPressed: () {
               setState(() {

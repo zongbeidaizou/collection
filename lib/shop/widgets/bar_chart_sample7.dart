@@ -4,11 +4,11 @@ import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 const List<Color> colorss = [
-  Colors.purple,
-  Colors.lightGreen,
+  Colors.orange,
+  Colors.redAccent,
   Colors.cyan,
   Colors.teal,
-  Colors.red,
+  Colors.brown,
   Colors.grey,
 ];
 class BarChartSample7 extends StatefulWidget {

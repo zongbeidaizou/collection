@@ -53,116 +53,6 @@ class _LineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return isShowingMainData ? BarChartSample7(data: barData) : BarChartSample3() ;
   }
-
-  LineChartData get sampleData1 => LineChartData(
-    lineTouchData: lineTouchData1,
-    gridData: gridData,
-    titlesData: titlesData1,
-    borderData: borderData,
-    lineBarsData: lineBarsData1,
-    minX: 0,
-    maxX: 27,
-    maxY: 30,
-    minY: 0,
-  );
-
-  LineTouchData get lineTouchData1{
-    List<String> dates = lineData.map((item) => item['date'] as String).toList();
-    return  LineTouchData(
-      handleBuiltInTouches: true,
-      touchTooltipData: LineTouchTooltipData(
-        tooltipBgColor: Colors.blueGrey.withOpacity(0.6),
-        tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-        tooltipMargin: -10,
-        getTooltipItems: (touchedSpots) {
-          return touchedSpots.map((LineBarSpot touchedSpot) {
-            final textStyle = TextStyle(
-              color: Colors.white ??
-                  touchedSpot.bar.color ??
-                  Colors.blueGrey,
-              fontSize: 14,
-            );
-            return LineTooltipItem('${dates[touchedSpot.x.toInt()]}\n', textStyle,children: [TextSpan(text: touchedSpot.y.toInt().toString(), style: const TextStyle(fontSize: 16.0,))]);
-          }).toList();
-        },
-
-      ),
-    );}
-
-  FlTitlesData get titlesData1 => FlTitlesData(
-    bottomTitles: AxisTitles(
-      sideTitles: bottomTitles,
-    ),
-    rightTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    topTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    leftTitles: const AxisTitles(
-      drawBelowEverything: true,
-      sideTitles: SideTitles(
-        showTitles: true,
-        reservedSize: 40,
-      ),
-    ),
-  );
-
-  List<LineChartBarData> get lineBarsData1 => [
-    lineChartBarData1_1,
-
-  ];
-
-
-  SideTitles get bottomTitles => SideTitles(
-    showTitles: false,
-    reservedSize: 32,
-    interval: 1,
-  );
-
-  FlGridData get gridData => const FlGridData(show: false);
-
-  FlBorderData get borderData{
-    return FlBorderData(
-      show: true,
-      border: Border(
-        bottom:
-        BorderSide(color: AppColors.primary.withOpacity(0.2), width: 4),
-        left: const BorderSide(color: Colors.transparent),
-        right: const BorderSide(color: Colors.transparent),
-        top: const BorderSide(color: Colors.transparent),
-      ),
-    );
-  }
-
-  LineChartBarData get lineChartBarData1_1{return  LineChartBarData(
-    isCurved: true,
-    color: Colors.blueAccent,
-    barWidth: 2,
-    isStrokeCapRound: true,
-    dotData: const FlDotData(show: true),
-    belowBarData: BarAreaData(show: true,          gradient: LinearGradient(
-      colors: [
-        Colors.blueAccent.withOpacity(0.1),
-        Colors.blueAccent.withOpacity(0.2),
-        Colors.blueAccent.withOpacity(0.4),
-        Colors.blueAccent.withOpacity(0.6),
-      ],
-    ),),
-    shadow: const Shadow(
-      blurRadius: 0,
-    ),
-    spots: lineData.asMap().map((index, item) => MapEntry(
-      index,
-      FlSpot(
-        index.toDouble(), // x值从0开始递增
-        (item['value'] as int).toDouble(), // y值取value
-      ),
-    ))
-        .values
-        .toList(),
-  );}
-
 }
 
 class Bar2 extends StatefulWidget {
@@ -194,11 +84,11 @@ class Bar2State extends State<Bar2> {
                 height: 17,
               ),
               Text(
-                isShowingMainData ? 'Week Bounty Rank ' : 'Week Rank',
+                isShowingMainData ? 'Live Bonus Rankings' : 'Live Case Rankings',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w400,
                   letterSpacing: 1,
                 ),
                 textAlign: TextAlign.center,

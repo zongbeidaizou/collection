@@ -311,11 +311,11 @@ class LineChartSample1State extends State<LineChartSample1> {
                 height: 17,
               ),
               Text(
-                isShowingMainData ? 'My Daily Bounty' : 'My Daily Recoveries',
+                isShowingMainData ? 'My Daily Bonus Earnings Trend' : 'My Daily Case Recovery Trend',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w400,
                   letterSpacing: 1,
                 ),
                 textAlign: TextAlign.center,

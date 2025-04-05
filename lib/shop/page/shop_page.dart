@@ -178,6 +178,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                       points: [],
                       tips: 'your current hunt level is lv.1 with 4% of amount, collection more 5000 can touch lv2 with 6% of amount',
                     )),
+                Gaps.vGap8,
                 // 名人堂
                 MergeSemantics(
                   child: Padding(
@@ -186,15 +187,8 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Hall of Fame',
-                          style: TextStyles.textBold18,
-                        ),
-                        InkWell(
-                          // onTap: () => NavigatorUtils.push(context, ShopRouter.allHallPage),
-                          child: Text(
-                            'May',
-                            style: TextStyle(color: Colors.black54, fontSize: 10, fontWeight: FontWeight.w500),
-                          ),
+                          'This Month\'s Collector Hall of Fame',
+                          style: TextStyles.textBold16,
                         ),
                       ],
                     ),
@@ -310,9 +304,9 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                     },
                   ),
                 ),
+                Bar2(),
                 // 统计
                 LineChartSample1(),
-                Bar2(),
                 // BarChartSample3(),
                 // Container(
                 //   height: 208,

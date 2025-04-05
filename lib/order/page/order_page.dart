@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
-
+final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
 /// design/3订单/index.html
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -285,15 +285,16 @@ class _TabViewState extends State<_TabView> {
           child: Column(
             children: <Widget>[
               /// 使用context.select替代Consumer
-              LoadAssetImage(
-                context.select<OrderPageProvider, int>(
-                            (value) => value.index) ==
-                        widget.index
-                    ? imgList[widget.index][0]
-                    : imgList[widget.index][1],
-                width: 24.0,
-                height: 24.0,
-              ),
+              Icon(_iconList[widget.index], size: 28.0,weight: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 800 : 400, color: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? Colors.blue : Colors.grey),
+              // LoadAssetImage(
+              //   context.select<OrderPageProvider, int>(
+              //               (value) => value.index) ==
+              //           widget.index
+              //       ? imgList[widget.index][0]
+              //       : imgList[widget.index][1],
+              //   width: 24.0,
+              //   height: 24.0,
+              // ),
               Gaps.vGap4,
               Text(
                 widget.text,

@@ -190,9 +190,9 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                           style: TextStyles.textBold18,
                         ),
                         InkWell(
-                          onTap: () => NavigatorUtils.push(context, ShopRouter.allHallPage),
+                          // onTap: () => NavigatorUtils.push(context, ShopRouter.allHallPage),
                           child: Text(
-                            'See all2 >>',
+                            'May',
                             style: TextStyle(color: Colors.black54, fontSize: 10, fontWeight: FontWeight.w500),
                           ),
                         ),

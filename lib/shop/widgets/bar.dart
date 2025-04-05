@@ -1,7 +1,12 @@
 import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
+const List<Map<String, dynamic>> barData = [
+  {'name': 'Tom', 'value': 180},
+  {'name': 'Jerry', 'value': 140},
+  {'name': 'Spike', 'value': 120},
+  {'name': 'Tyke', 'value': 110}
+];
 class _BarChart extends StatelessWidget {
   const _BarChart();
 
@@ -15,7 +20,7 @@ class _BarChart extends StatelessWidget {
         barGroups: barGroups,
         gridData: const FlGridData(show: false),
         alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
+        maxY: 200,
       ),
     );
   }
@@ -35,7 +40,8 @@ class _BarChart extends StatelessWidget {
         return BarTooltipItem(
           rod.toY.round().toString(),
           const TextStyle(
-            color: AppColors.contentColorCyan,
+            color: AppColors.contentColorBlue,
+            // color: Colors.red,
             fontWeight: FontWeight.bold,
           ),
         );
@@ -52,13 +58,13 @@ class _BarChart extends StatelessWidget {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'Mn';
+        text = 'Tom';
         break;
       case 1:
-        text = 'Te';
+        text = 'Caven';
         break;
       case 2:
-        text = 'Wd';
+        text = 'Gcob';
         break;
       case 3:
         text = 'Tu';
@@ -109,14 +115,34 @@ class _BarChart extends StatelessWidget {
 
   LinearGradient get _barsGradient => LinearGradient(
     colors: [
-      AppColors.contentColorBlue,
       AppColors.contentColorCyan,
+      AppColors.contentColorBlue,
+
     ],
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
   );
+  List<BarChartGroupData> get barGroups {
+    return barData.asMap().entries.map((entry) {
+      final index = entry.key;
+      final data = entry.value;
 
-  List<BarChartGroupData> get barGroups => [
+      return BarChartGroupData(
+        x: index, // Use the index as x value for positioning
+        barRods: [
+          BarChartRodData(
+            toY: (data['value'] as int).toDouble(), // Convert value to double for toY
+            gradient: _barsGradient,
+          )
+        ],
+        showingTooltipIndicators: [0],
+      );
+    }).toList();
+  }
+  List<BarChartGroupData> get barGroups2 {
+
+
+    return [
     BarChartGroupData(
       x: 0,
       barRods: [
@@ -187,7 +213,7 @@ class _BarChart extends StatelessWidget {
       ],
       showingTooltipIndicators: [0],
     ),
-  ];
+  ];}
 }
 
 class BarChartSample3 extends StatefulWidget {

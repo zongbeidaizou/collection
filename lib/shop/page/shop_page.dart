@@ -52,12 +52,9 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPagePresenter>, AutomaticKeepAliveClientMixin<ShopPage>, SingleTickerProviderStateMixin implements ShopIMvpView {
-  final List<String> _menuTitle = ['账户流水', '资金管理', '提现账号'];
-  final List<String> _menuImage = ['zhls', 'zjgl', 'txzh'];
-  final List<String> _menuDarkImage = ['dark_zhls', 'dark_zjgl', 'dark_txzh'];
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
-  ShopData _data = ShopData.fromJson({"web_url":"","other":{"progress":{"points":[0,0.02,0.05,0.1,1],"levelProgress":[{"level":"","type":0},{"level":1,"type":1},{"level":2,"type":1},{"level":3,"type":1},{"level":4,"type":1}],"amountProgress":[{"amount":0,"type":0},{"amount":0,"type":0},{"amount":0,"type":0},{"amount":0,"type":0},{"amount":0,"type":0}],"amountProgress2":[0,0,0,0,0],"currentLevel":1,"nextAmount":0,"nextLevel":1,"currentKey":0},"profile":{"id":2,"a_name":"u503au52a1u6536u5272u8005u56e2u961f(u5185uff09-2","b_admin_id":3,"c_collection_agency_id":92,"d_collection_group_id":25,"e_collection_stages":"94","f_status":1,"g_comment":"123","h_collection_ing_order_count":0,"i_today_current_kpi_level":1,"j_today_init_amount":0,"k_current_new_count":0,"l_current_negotiating_count":0,"m_currrent_promised_count":0,"n_current_broken_count":0,"o_current_refused_count":0,"p_today_current_repay_count":0,"r_today_current_repay_amount":0,"t_today_lv1_commission":0,"u_today_lv2_commission":0,"v_today_lv3_commission":0,"w_today_lv4_commission":0,"x_today_init_count":0,"y_first_log_at":null,"z_last_log_at":null,"a_a_month_lv1_commission":null,"a_b_month_lv2_commission":0,"a_c_month_lv3_commission":null,"a_d_month_lv4_commission":null,"a_e_today_commission_rate":0,"a_f_last_call_at":null,"a_g_collection_commission_new_count":0,"a_h_collection_notification_count":null,"a_i_week_repay_count":null,"a_j_week_rank":null,"updated_at":"2025-03-25T09:06:27.000000Z"}},"show_month_data":true,"month_data":[{"avatar":"https://api.dasewan.cn/assets/avater4.png","name":"Tommi","value":160200}],"show_week_case_data":true,"week_case_data":[{"name":"Tommi","value":160200}],"show_week_bonus_data":true,"week_bonus_data":[{"name":"Tommi","value":19800}],"show_month_case_data":true,"month_case_data":[{"date":"01/03","value":12}],"show_month_bonus_data":true,"month_bonus_data":[{"date":"01/03","value":1200}]});
+  ShopData _data = ShopData.fromJson({"web_url":"","other":{"progress":{"points":[0,1],"levelProgress":[],"amountProgress":[],"amountProgress2":[0,0,0,0,0],"currentLevel":1,"nextAmount":0,"nextLevel":1,"currentKey":0},"profile":{}},"show_month_data":false,"month_data":[],"show_week_case_data":false,"week_case_data":[],"show_week_bonus_data":false,"week_bonus_data":[],"show_month_case_data":false,"month_case_data":[],"show_month_bonus_data":false,"month_bonus_data":[]});
 
   @override
   void initState() {
@@ -93,6 +90,19 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
     setState(() {
 
     });
+  }
+  String formatNumberToK(int number) {
+    if (number < 1000) {
+      return number.toString(); // 小于1000直接返回原数字
+    }
+
+    double result = number / 1000;
+    // 处理小数部分（避免四舍五入后显示.0时仍保留一位小数）
+    if (result == result.truncate()) {
+      return '${result.truncate()}K'; // 无小数的情况
+    } else {
+      return '${result.toStringAsFixed(1)}K'; // 保留一位小数
+    }
   }
 
   @override
@@ -267,7 +277,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                                 ],
                               ),
                               SizedBox(height: 8.0),
-                              Text('${_data.monthData![index].value}K'),
+                              Text(formatNumberToK(_data.monthData![index].value!)),
                             ],
                           ),
                         );

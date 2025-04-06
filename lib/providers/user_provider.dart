@@ -15,6 +15,7 @@ class UserProvider extends ChangeNotifier {
       "nextGrade": "",
       "nextRate": "",
       "currentPoint": 0.2,
+      "nextAdditionBonus": 0,
       "more": 0
     },
     "profile": {

@@ -512,6 +512,11 @@ CollectionOrderOtherProgress $CollectionOrderOtherProgressFromJson(
   if (more != null) {
     collectionOrderOtherProgress.more = more;
   }
+  final int? nextAdditionBonus = jsonConvert.convert<int>(
+      json['nextAdditionBonus']);
+  if (nextAdditionBonus != null) {
+    collectionOrderOtherProgress.nextAdditionBonus = nextAdditionBonus;
+  }
   final double? currentPoint = jsonConvert.convert<double>(
       json['currentPoint']);
   if (currentPoint != null) {
@@ -532,6 +537,7 @@ Map<String, dynamic> $CollectionOrderOtherProgressToJson(
   data['nextGrade'] = entity.nextGrade;
   data['nextRate'] = entity.nextRate;
   data['more'] = entity.more;
+  data['nextAdditionBonus'] = entity.nextAdditionBonus;
   data['currentPoint'] = entity.currentPoint;
   return data;
 }
@@ -547,6 +553,7 @@ extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress 
     String? nextGrade,
     String? nextRate,
     int? more,
+    int? nextAdditionBonus,
     double? currentPoint,
   }) {
     return CollectionOrderOtherProgress()
@@ -559,6 +566,7 @@ extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress 
       ..nextGrade = nextGrade ?? this.nextGrade
       ..nextRate = nextRate ?? this.nextRate
       ..more = more ?? this.more
+      ..nextAdditionBonus = nextAdditionBonus ?? this.nextAdditionBonus
       ..currentPoint = currentPoint ?? this.currentPoint;
   }
 }

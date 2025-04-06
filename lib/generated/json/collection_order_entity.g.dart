@@ -470,51 +470,47 @@ extension CollectionOrderOtherExtension on CollectionOrderOther {
 CollectionOrderOtherProgress $CollectionOrderOtherProgressFromJson(
     Map<String, dynamic> json) {
   final CollectionOrderOtherProgress collectionOrderOtherProgress = CollectionOrderOtherProgress();
-  final List<int>? points = (json['points'] as List<dynamic>?)?.map(
-          (e) => jsonConvert.convert<int>(e) as int).toList();
+  final List<double>? points = (json['points'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<double>(e) as double).toList();
   if (points != null) {
     collectionOrderOtherProgress.points = points;
   }
-  final List<
-      CollectionOrderOtherProgressLevelProgress>? levelProgress = (json['levelProgress'] as List<
+  final List<int>? counts = (json['counts'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (counts != null) {
+    collectionOrderOtherProgress.counts = counts;
+  }
+  final List<String>? grades = (json['grades'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<String>(e) as String).toList();
+  if (grades != null) {
+    collectionOrderOtherProgress.grades = grades;
+  }
+  final List<String>? commissionRates = (json['commissionRates'] as List<
       dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<CollectionOrderOtherProgressLevelProgress>(
-          e) as CollectionOrderOtherProgressLevelProgress).toList();
-  if (levelProgress != null) {
-    collectionOrderOtherProgress.levelProgress = levelProgress;
+          (e) => jsonConvert.convert<String>(e) as String).toList();
+  if (commissionRates != null) {
+    collectionOrderOtherProgress.commissionRates = commissionRates;
   }
-  final List<
-      CollectionOrderOtherProgressAmountProgress>? amountProgress = (json['amountProgress'] as List<
-      dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<CollectionOrderOtherProgressAmountProgress>(
-          e) as CollectionOrderOtherProgressAmountProgress).toList();
-  if (amountProgress != null) {
-    collectionOrderOtherProgress.amountProgress = amountProgress;
+  final String? currentGrade = jsonConvert.convert<String>(
+      json['currentGrade']);
+  if (currentGrade != null) {
+    collectionOrderOtherProgress.currentGrade = currentGrade;
   }
-  final List<int>? amountProgress2 = (json['amountProgress2'] as List<dynamic>?)
-      ?.map(
-          (e) => jsonConvert.convert<int>(e) as int)
-      .toList();
-  if (amountProgress2 != null) {
-    collectionOrderOtherProgress.amountProgress2 = amountProgress2;
+  final String? currentRate = jsonConvert.convert<String>(json['currentRate']);
+  if (currentRate != null) {
+    collectionOrderOtherProgress.currentRate = currentRate;
   }
-  final int? currentLevel = jsonConvert.convert<int>(json['currentLevel']);
-  if (currentLevel != null) {
-    collectionOrderOtherProgress.currentLevel = currentLevel;
+  final String? nextGrade = jsonConvert.convert<String>(json['nextGrade']);
+  if (nextGrade != null) {
+    collectionOrderOtherProgress.nextGrade = nextGrade;
   }
-  final int? nextAmount = jsonConvert.convert<int>(json['nextAmount']);
-  if (nextAmount != null) {
-    collectionOrderOtherProgress.nextAmount = nextAmount;
+  final String? nextRate = jsonConvert.convert<String>(json['nextRate']);
+  if (nextRate != null) {
+    collectionOrderOtherProgress.nextRate = nextRate;
   }
-  final int? nextLevel = jsonConvert.convert<int>(json['nextLevel']);
-  if (nextLevel != null) {
-    collectionOrderOtherProgress.nextLevel = nextLevel;
-  }
-  final int? currentKey = jsonConvert.convert<int>(json['currentKey']);
-  if (currentKey != null) {
-    collectionOrderOtherProgress.currentKey = currentKey;
+  final int? more = jsonConvert.convert<int>(json['more']);
+  if (more != null) {
+    collectionOrderOtherProgress.more = more;
   }
   return collectionOrderOtherProgress;
 }
@@ -523,37 +519,39 @@ Map<String, dynamic> $CollectionOrderOtherProgressToJson(
     CollectionOrderOtherProgress entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['points'] = entity.points;
-  data['levelProgress'] = entity.levelProgress?.map((v) => v.toJson()).toList();
-  data['amountProgress'] =
-      entity.amountProgress?.map((v) => v.toJson()).toList();
-  data['amountProgress2'] = entity.amountProgress2;
-  data['currentLevel'] = entity.currentLevel;
-  data['nextAmount'] = entity.nextAmount;
-  data['nextLevel'] = entity.nextLevel;
-  data['currentKey'] = entity.currentKey;
+  data['counts'] = entity.counts;
+  data['grades'] = entity.grades;
+  data['commissionRates'] = entity.commissionRates;
+  data['currentGrade'] = entity.currentGrade;
+  data['currentRate'] = entity.currentRate;
+  data['nextGrade'] = entity.nextGrade;
+  data['nextRate'] = entity.nextRate;
+  data['more'] = entity.more;
   return data;
 }
 
 extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress {
   CollectionOrderOtherProgress copyWith({
-    List<int>? points,
-    List<CollectionOrderOtherProgressLevelProgress>? levelProgress,
-    List<CollectionOrderOtherProgressAmountProgress>? amountProgress,
-    List<int>? amountProgress2,
-    int? currentLevel,
-    int? nextAmount,
-    int? nextLevel,
-    int? currentKey,
+    List<double>? points,
+    List<int>? counts,
+    List<String>? grades,
+    List<String>? commissionRates,
+    String? currentGrade,
+    String? currentRate,
+    String? nextGrade,
+    String? nextRate,
+    int? more,
   }) {
     return CollectionOrderOtherProgress()
       ..points = points ?? this.points
-      ..levelProgress = levelProgress ?? this.levelProgress
-      ..amountProgress = amountProgress ?? this.amountProgress
-      ..amountProgress2 = amountProgress2 ?? this.amountProgress2
-      ..currentLevel = currentLevel ?? this.currentLevel
-      ..nextAmount = nextAmount ?? this.nextAmount
-      ..nextLevel = nextLevel ?? this.nextLevel
-      ..currentKey = currentKey ?? this.currentKey;
+      ..counts = counts ?? this.counts
+      ..grades = grades ?? this.grades
+      ..commissionRates = commissionRates ?? this.commissionRates
+      ..currentGrade = currentGrade ?? this.currentGrade
+      ..currentRate = currentRate ?? this.currentRate
+      ..nextGrade = nextGrade ?? this.nextGrade
+      ..nextRate = nextRate ?? this.nextRate
+      ..more = more ?? this.more;
   }
 }
 

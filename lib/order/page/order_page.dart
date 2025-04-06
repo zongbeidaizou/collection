@@ -32,7 +32,6 @@ class _OrderPageState extends State<OrderPage>
 
   TabController? _tabController;
   OrderPageProvider provider = OrderPageProvider();
-  UserProvider provider2 = UserProvider();
   OrderListProvider provider3 = OrderListProvider();
 
   int _lastReportedPage = 0;

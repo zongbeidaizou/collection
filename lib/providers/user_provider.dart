@@ -7,43 +7,14 @@ class UserProvider extends ChangeNotifier {
   CollectionOrderOther? _userEntity = CollectionOrderOther.fromJson({
     "progress": {
       "points": [0, 0.2, 0.4, 0.5, 1],
-      "levelProgress": [{
-        "level": "",
-        "type": 0
-      }, {
-        "level": 1,
-        "type": 1
-      }, {
-        "level": 2,
-        "type": 1
-      }, {
-        "level": 3,
-        "type": 1
-      }, {
-        "level": 4,
-        "type": 1
-      }],
-      "amountProgress": [{
-        "amount": 0,
-        "type": 0
-      }, {
-        "amount": 1200,
-        "type": 1
-      }, {
-        "amount": 3600,
-        "type": 1
-      }, {
-        "amount": 6000,
-        "type": 1
-      }, {
-        "amount": 24000,
-        "type": 1
-      }],
-      "amountProgress2": [0, 60000, 60000, 30000, 150000],
-      "currentLevel": 1,
-      "nextAmount": 60000,
-      "nextLevel": 1,
-      "currentKey": 0
+      "counts": [0, 3, 4, 5, 30],
+      "grades": ["B", "A", "A+", "A++", ""],
+      "commissionRates": ["(0.4%)", "(1%)", "(1.4%)","(2%)", ""],
+      "currentGrade": "",
+      "currentRate": "",
+      "nextGrade": "",
+      "nextRate": "",
+      "more": 0
     },
     "profile": {
       "a_name": "4\u98de\u817e\u50ac\u6536\u7ec4(\u5185)",

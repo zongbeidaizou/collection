@@ -392,7 +392,7 @@ class _TextPainter extends CustomPainter {
       if (point <= progress) {
         TextPainter tp = TextPainter(
           text: TextSpan(
-            text: below[i], // 替换为普通字符串
+            text: below[i].length <2 ? '  ${below[i]}' : below[i], // 替换为普通字符串
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -433,7 +433,7 @@ class _TextPainter extends CustomPainter {
       } else {
         TextPainter tp = TextPainter(
           text: TextSpan(
-            text: below[i], // 替换为普通字符串
+            text: below[i].length <2 ? '  ${below[i]}' : below[i], // 替换为普通字符串
             style: TextStyle(
               color: _paintPoint2.color,
               fontSize: 14,

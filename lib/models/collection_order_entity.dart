@@ -146,14 +146,15 @@ class CollectionOrderOther {
 
 @JsonSerializable()
 class CollectionOrderOtherProgress {
-	List<int>? points = [];
-	List<CollectionOrderOtherProgressLevelProgress>? levelProgress = [];
-	List<CollectionOrderOtherProgressAmountProgress>? amountProgress = [];
-	List<int>? amountProgress2 = [];
-	int? currentLevel = 0;
-	int? nextAmount = 0;
-	int? nextLevel = 0;
-	int? currentKey = 0;
+	List<double>? points = [];
+	List<int>? counts = [];
+	List<String>? grades = [];
+	List<String>? commissionRates = [];
+	String? currentGrade = '';
+	String? currentRate = '';
+	String? nextGrade = '';
+	String? nextRate = '';
+	int? more = 0;
 
 	CollectionOrderOtherProgress();
 

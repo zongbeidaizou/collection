@@ -2,15 +2,13 @@ import 'package:bounty_hunter/shop/widgets/progerssoo.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/collection_order_entity.dart';
 import '../../res/gaps.dart';
 
 class LevelBar extends StatelessWidget {
-  const LevelBar({super.key, required this.amountProgress, required this.levelProgress, required this.points, required this.tips});
+  const LevelBar({super.key, required this.data});
 
-  final List amountProgress;
-  final List levelProgress;
-  final List<double> points;
-  final String tips;
+  final CollectionOrderOtherProgress data;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +36,10 @@ class LevelBar extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 2),
                 child: Progressoo(
                     progress: 0.6,
-                    above: ["0", "120","180", "270"],
-                    points: [0,0.44,0.67, 1],
-                    below: ["lv.1", "lv.2", "lv.3", "c"],
-                    belowFix: ["(4%)", "(6%)", "(9%)", "(c)"],
+                    above: data.counts!.map((i) => i.toString()).toList(),
+                    points: data.points!,
+                    below: data.grades!,
+                    belowFix: data.commissionRates!,
                     pointRadius: 7,
                     progressStrokeWidth: 6,
                     backgroundStrokeWidth: 6,
@@ -64,7 +62,7 @@ class LevelBar extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(tips, style: TextStyle(color: Colors.white, fontSize: 6)),
+                        Text("", style: TextStyle(color: Colors.white, fontSize: 6)),
                         Container(
                           padding: EdgeInsets.only(left: 10, right: 10, bottom: 2),
                           height: 18,

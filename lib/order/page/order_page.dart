@@ -174,7 +174,7 @@ class _OrderPageState extends State<OrderPage>
                 const EdgeInsetsDirectional.only(start: 16.0, bottom: 14.0),
             collapseMode: CollapseMode.pin,
             title: Text(
-              'Cases',
+              'Every call is a chance to collect—did you move closer to your goal today?',
               style: TextStyle(color: ThemeUtils.getIconColor(context)),
             ),
           ),

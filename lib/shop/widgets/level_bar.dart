@@ -6,9 +6,10 @@ import '../../models/collection_order_entity.dart';
 import '../../res/gaps.dart';
 
 class LevelBar extends StatelessWidget {
-  const LevelBar({super.key, required this.data});
+  const LevelBar({super.key, required this.data, required this.profile});
 
   final CollectionOrderOtherProgress data;
+  final CollectionOrderOtherProfile profile;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class LevelBar extends StatelessWidget {
                 padding: EdgeInsets.only(left: _widgetSize.width / 11 / 2, right: _widgetSize.width / 11 / 2),
                 margin: EdgeInsets.only(bottom: 2),
                 child: Progressoo(
-                    progress: 0.6,
+                    progress: data.currentPoint!,
                     above: data.counts!.map((i) => i.toString()).toList(),
                     points: data.points!,
                     below: data.grades!,
@@ -62,7 +63,8 @@ class LevelBar extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("", style: TextStyle(color: Colors.white, fontSize: 6)),
+                        Text('Your current recovery count is ${profile.pTodayCurrentRepayCount} cases, placing you at Level ${data.currentGrade} with a ${data.currentRate}% commission. To reach the next level (Level ${data.nextGrade}) and earn a ${data.nextRate}% commission, you need ${data.more} more successful recoveries.', style: TextStyle(color: Colors.white, fontSize: 6)),
+                        Text('Your current recovery count is ${profile.pTodayCurrentRepayCount} cases, placing you at Level ${data.currentGrade} with a ${data.currentRate}% commission. To reach the next level (Level ${data.nextGrade}) and earn a ${data.nextRate}% commission plus an additional bonus of ¥10,000, you need ${data.more} more successful recoveries.', style: TextStyle(color: Colors.white, fontSize: 6)),
                         Container(
                           padding: EdgeInsets.only(left: 10, right: 10, bottom: 2),
                           height: 18,

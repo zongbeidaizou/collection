@@ -395,14 +395,15 @@ class _TextPainter extends CustomPainter {
             text: below[i].length <2 ? '  ${below[i]}' : below[i], // 替换为普通字符串
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
             ),
             children: <TextSpan>[
               belowFix.length > 0 ? TextSpan(
                 text: belowFix[i],
                 style: TextStyle(
                   color: Colors.white60,
-                  fontSize: 10,
+                  fontSize: 9,
                 ),
               ) : TextSpan(
                 text: '',
@@ -436,14 +437,14 @@ class _TextPainter extends CustomPainter {
             text: below[i].length <2 ? '  ${below[i]}' : below[i], // 替换为普通字符串
             style: TextStyle(
               color: _paintPoint2.color,
-              fontSize: 14,
+              fontSize: 12,
             ),
             children: <TextSpan>[
               belowFix.length > 0 ? TextSpan(
                 text: belowFix[i],
                 style: TextStyle(
                   color: Colors.white60,
-                  fontSize: 10,
+                  fontSize: 8,
                 ),
               ) : TextSpan(
                 text: '',

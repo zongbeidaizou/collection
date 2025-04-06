@@ -155,6 +155,7 @@ class CollectionOrderOtherProgress {
 	String? nextGrade = '';
 	String? nextRate = '';
 	int? more = 0;
+	double? currentPoint = 0.2;
 
 	CollectionOrderOtherProgress();
 

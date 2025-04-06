@@ -188,7 +188,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               Container(
                   padding: const EdgeInsets.all(8.0),
                   child:Consumer<UserProvider>(builder: (_, provider, __) {
-                    return LevelBar(data: provider.userEntity.progress!);
+                    return LevelBar(data: provider.userEntity.progress!, profile: provider.userEntity.profile!,);
                   }),
                   ),
               Gaps.vGap8,

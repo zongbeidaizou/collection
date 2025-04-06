@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/mvp/power_presenter.dart';
@@ -12,6 +13,7 @@ import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/widgets/my_refresh_list.dart';
 import 'package:bounty_hunter/widgets/my_search_bar.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'order_list_page.dart';
@@ -26,7 +28,7 @@ class OrderSearchPage extends StatefulWidget {
   _OrderSearchPageState createState() => _OrderSearchPageState();
 }
 
-class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<OrderSearchPage, PowerPresenter<dynamic>> implements OrderSearchIMvpView, ShopIMvpView {
+class _OrderSearchPageState extends State<OrderSearchPage>  {
 
   @override
   BaseListProvider<SearchItems> provider = BaseListProvider<SearchItems>();
@@ -76,21 +78,7 @@ class _OrderSearchPageState extends State<OrderSearchPage> with BasePageMixin<Or
   late OrderSearchPresenter _orderSearchPresenter;
   late ShopPagePresenter _shopPagePresenter;
 
-  @override
-  PowerPresenter<dynamic> createPresenter() {
-    final PowerPresenter<dynamic> powerPresenter = PowerPresenter<dynamic>(this);
-    _orderSearchPresenter = OrderSearchPresenter();
-    _shopPagePresenter = ShopPagePresenter();
-    powerPresenter.requestPresenter([_orderSearchPresenter, _shopPagePresenter]);
-    return powerPresenter;
-  }
 
-  @override
-  bool get isAccessibilityTest => false;
 
-  @override
-  void setUser(UserEntity? user) {
-    showToast(user?.name ?? '');
-  }
 
 }

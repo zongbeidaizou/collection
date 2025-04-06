@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
+import '../../models/shop_entity.dart';
 const List<Color> colorss = [
   Colors.orange,
   Colors.redAccent,
@@ -15,7 +17,7 @@ class BarChartSample7 extends StatefulWidget {
   BarChartSample7({super.key, required this.data});
 
   final shadowColor = const Color(0xFFCCCCCC);
-  List<Map<String, dynamic>> data;
+  List<ShopDataWeekBonusData> data;
 
   @override
   State<BarChartSample7> createState() => _BarChartSample7State();
@@ -30,9 +32,9 @@ class _BarChartSample7State extends State<BarChartSample7> {
       index,
       _BarData(
         colorss[index % colorss.length],
-        (item['value']! as int).toDouble(),
+        (item.value! as int).toDouble(),
         10.0,                         
-        item['name']! as String,        
+        item.name! as String,
       ),
     )).values.toList();
   }

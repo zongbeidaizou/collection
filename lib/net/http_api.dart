@@ -14,4 +14,5 @@ class HttpApi{
   static const String product = '/collection/products-enum';
   static const String admins = '/collection/g-m-collection-admins-enum';
   static const String deduction = '/collection/o-a-deductions';
+  static const String shop = '/collection/g-m-collection-admins';
 }

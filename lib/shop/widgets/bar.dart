@@ -1,14 +1,12 @@
 import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-const List<Map<String, dynamic>> barData = [
-  {'name': 'Tom', 'value': 180},
-  {'name': 'Jerry', 'value': 140},
-  {'name': 'Spike', 'value': 120},
-  {'name': 'Tyke', 'value': 110}
-];
+
+import '../../models/shop_entity.dart';
+
 class _BarChart extends StatelessWidget {
-  const _BarChart();
+  const _BarChart({super.key, required this.data});
+  final List<ShopDataWeekCaseData> data;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +25,7 @@ class _BarChart extends StatelessWidget {
 
   BarTouchData get barTouchData => BarTouchData(
     enabled: false,
+    handleBuiltInTouches: false,
     touchTooltipData: BarTouchTooltipData(
       tooltipBgColor: Colors.transparent,
       tooltipPadding: EdgeInsets.zero,
@@ -55,33 +54,8 @@ class _BarChart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Tom';
-        break;
-      case 1:
-        text = 'Caven';
-        break;
-      case 2:
-        text = 'Gcob';
-        break;
-      case 3:
-        text = 'Tu';
-        break;
-      case 4:
-        text = 'Fr';
-        break;
-      case 5:
-        text = 'St';
-        break;
-      case 6:
-        text = 'Sn';
-        break;
-      default:
-        text = '';
-        break;
-    }
+    String text = data[value.toInt()].name!;
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
@@ -123,7 +97,7 @@ class _BarChart extends StatelessWidget {
     end: Alignment.topCenter,
   );
   List<BarChartGroupData> get barGroups {
-    return barData.asMap().entries.map((entry) {
+    return data.asMap().entries.map((entry) {
       final index = entry.key;
       final data = entry.value;
 
@@ -131,7 +105,7 @@ class _BarChart extends StatelessWidget {
         x: index, // Use the index as x value for positioning
         barRods: [
           BarChartRodData(
-            toY: (data['value'] as int).toDouble(), // Convert value to double for toY
+            toY: (data.value as int).toDouble(), // Convert value to double for toY
             gradient: _barsGradient,
           )
         ],
@@ -217,7 +191,8 @@ class _BarChart extends StatelessWidget {
 }
 
 class BarChartSample3 extends StatefulWidget {
-  const BarChartSample3({super.key});
+  const BarChartSample3({super.key, required this.data});
+  final List<ShopDataWeekCaseData> data;
 
   @override
   State<StatefulWidget> createState() => BarChartSample3State();
@@ -226,9 +201,9 @@ class BarChartSample3 extends StatefulWidget {
 class BarChartSample3State extends State<BarChartSample3> {
   @override
   Widget build(BuildContext context) {
-    return const AspectRatio(
+    return AspectRatio(
       aspectRatio: 2.83,
-      child: _BarChart(),
+      child: _BarChart(data: widget.data),
     );
   }
 }

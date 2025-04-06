@@ -15,6 +15,7 @@ import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
 
@@ -312,6 +313,56 @@ class JsonConvert {
       return data.map<ProductData>((Map<String, dynamic> e) =>
           ProductData.fromJson(e)).toList() as M;
     }
+    if (<ShopEntity>[] is M) {
+      return data.map<ShopEntity>((Map<String, dynamic> e) =>
+          ShopEntity.fromJson(e)).toList() as M;
+    }
+    if (<ShopData>[] is M) {
+      return data.map<ShopData>((Map<String, dynamic> e) =>
+          ShopData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataOther>[] is M) {
+      return data.map<ShopDataOther>((Map<String, dynamic> e) =>
+          ShopDataOther.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataOtherProgress>[] is M) {
+      return data.map<ShopDataOtherProgress>((Map<String, dynamic> e) =>
+          ShopDataOtherProgress.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataOtherProgressLevelProgress>[] is M) {
+      return data.map<ShopDataOtherProgressLevelProgress>((
+          Map<String, dynamic> e) =>
+          ShopDataOtherProgressLevelProgress.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataOtherProgressAmountProgress>[] is M) {
+      return data.map<ShopDataOtherProgressAmountProgress>((
+          Map<String, dynamic> e) =>
+          ShopDataOtherProgressAmountProgress.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataOtherProfile>[] is M) {
+      return data.map<ShopDataOtherProfile>((Map<String, dynamic> e) =>
+          ShopDataOtherProfile.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthData>[] is M) {
+      return data.map<ShopDataMonthData>((Map<String, dynamic> e) =>
+          ShopDataMonthData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataWeekCaseData>[] is M) {
+      return data.map<ShopDataWeekCaseData>((Map<String, dynamic> e) =>
+          ShopDataWeekCaseData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataWeekBonusData>[] is M) {
+      return data.map<ShopDataWeekBonusData>((Map<String, dynamic> e) =>
+          ShopDataWeekBonusData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthCaseData>[] is M) {
+      return data.map<ShopDataMonthCaseData>((Map<String, dynamic> e) =>
+          ShopDataMonthCaseData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthBonusData>[] is M) {
+      return data.map<ShopDataMonthBonusData>((Map<String, dynamic> e) =>
+          ShopDataMonthBonusData.fromJson(e)).toList() as M;
+    }
     if (<SearchEntity>[] is M) {
       return data.map<SearchEntity>((Map<String, dynamic> e) =>
           SearchEntity.fromJson(e)).toList() as M;
@@ -406,6 +457,20 @@ class JsonConvertClassCollection {
     (CommissionData).toString(): CommissionData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
+    (ShopEntity).toString(): ShopEntity.fromJson,
+    (ShopData).toString(): ShopData.fromJson,
+    (ShopDataOther).toString(): ShopDataOther.fromJson,
+    (ShopDataOtherProgress).toString(): ShopDataOtherProgress.fromJson,
+    (ShopDataOtherProgressLevelProgress)
+        .toString(): ShopDataOtherProgressLevelProgress.fromJson,
+    (ShopDataOtherProgressAmountProgress)
+        .toString(): ShopDataOtherProgressAmountProgress.fromJson,
+    (ShopDataOtherProfile).toString(): ShopDataOtherProfile.fromJson,
+    (ShopDataMonthData).toString(): ShopDataMonthData.fromJson,
+    (ShopDataWeekCaseData).toString(): ShopDataWeekCaseData.fromJson,
+    (ShopDataWeekBonusData).toString(): ShopDataWeekBonusData.fromJson,
+    (ShopDataMonthCaseData).toString(): ShopDataMonthCaseData.fromJson,
+    (ShopDataMonthBonusData).toString(): ShopDataMonthBonusData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,
     (SearchItems).toString(): SearchItems.fromJson,
     (SearchItemsOwner).toString(): SearchItemsOwner.fromJson,

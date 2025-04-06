@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 ShopEntity $ShopEntityFromJson(Map<String, dynamic> json) {
   final ShopEntity shopEntity = ShopEntity();
@@ -11,8 +13,8 @@ ShopEntity $ShopEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     shopEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     shopEntity.other = other;
   }
@@ -27,7 +29,7 @@ Map<String, dynamic> $ShopEntityToJson(ShopEntity entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['success'] = entity.success;
   data['data'] = entity.data?.toJson();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['message'] = entity.message;
   return data;
 }
@@ -36,7 +38,7 @@ extension ShopEntityExtension on ShopEntity {
   ShopEntity copyWith({
     bool? success,
     ShopData? data,
-    List<dynamic>? other,
+    CollectionOrderOther? other,
     String? message,
   }) {
     return ShopEntity()

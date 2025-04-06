@@ -2,14 +2,15 @@ import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/shop_entity.g.dart';
 import 'dart:convert';
 
-import 'collection_order_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 export 'package:bounty_hunter/generated/json/shop_entity.g.dart';
 
 @JsonSerializable()
 class ShopEntity {
 	bool? success = false;
 	ShopData? data;
-	CollectionLogOther? other;
+	CollectionOrderOther? other;
 	String? message = '';
 
 	ShopEntity();

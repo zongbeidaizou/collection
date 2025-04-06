@@ -3,6 +3,7 @@ import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/shop_entity.dart';
 import 'bar_chart_sample7.dart';
 
 const List<Map<String, dynamic>> lineData = [
@@ -72,9 +73,11 @@ const List<Map<String, dynamic>> lineData2 = [
 ];
 
 class _LineChart extends StatelessWidget {
-  const _LineChart({required this.isShowingMainData});
+  const _LineChart({required this.isShowingMainData, required this.monthCaseData, required this.monthBonusData});
 
   final bool isShowingMainData;
+  final List<ShopDataMonthCaseData> monthCaseData;
+  final List<ShopDataMonthBonusData> monthBonusData;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +110,7 @@ class _LineChart extends StatelessWidget {
     minY: 0,
   );
   LineTouchData get lineTouchData2{
-    List<String> dates = lineData2.map((item) => item['date'] as String).toList();
+    List<String> dates = monthBonusData.map((item) => item.date!).toList();
     return  LineTouchData(
       handleBuiltInTouches: true,
       touchTooltipData: LineTouchTooltipData(
@@ -171,11 +174,11 @@ class _LineChart extends StatelessWidget {
     shadow: const Shadow(
       blurRadius: 0,
     ),
-    spots: lineData2.asMap().map((index, item) => MapEntry(
+    spots: monthBonusData.asMap().map((index, item) => MapEntry(
       index,
       FlSpot(
         index.toDouble(), // x值从0开始递增
-        (item['value'] as int).toDouble(), // y值取value
+        item.value!.toDouble(), // y值取value
       ),
     ))
         .values
@@ -184,7 +187,7 @@ class _LineChart extends StatelessWidget {
 
 
   LineTouchData get lineTouchData1{
-    List<String> dates = lineData.map((item) => item['date'] as String).toList();
+    List<String> dates = monthCaseData.map((item) => item.date!).toList();
     return  LineTouchData(
     handleBuiltInTouches: true,
     touchTooltipData: LineTouchTooltipData(
@@ -269,11 +272,11 @@ class _LineChart extends StatelessWidget {
     shadow: const Shadow(
       blurRadius: 0,
     ),
-    spots: lineData.asMap().map((index, item) => MapEntry(
+    spots: monthCaseData.asMap().map((index, item) => MapEntry(
       index,
       FlSpot(
         index.toDouble(), // x值从0开始递增
-        (item['value'] as int).toDouble(), // y值取value
+        item.value!.toDouble(), // y值取value
       ),
     ))
         .values
@@ -283,7 +286,9 @@ class _LineChart extends StatelessWidget {
 }
 
 class LineChartSample1 extends StatefulWidget {
-  const LineChartSample1({super.key});
+  const LineChartSample1({super.key, required this.monthCaseData, required this.monthBonusData});
+  final List<ShopDataMonthCaseData> monthCaseData;
+  final List<ShopDataMonthBonusData> monthBonusData;
 
   @override
   State<StatefulWidget> createState() => LineChartSample1State();
@@ -326,7 +331,7 @@ class LineChartSample1State extends State<LineChartSample1> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: _LineChart(isShowingMainData: isShowingMainData),
+                  child: _LineChart(isShowingMainData: isShowingMainData, monthBonusData: widget.monthBonusData, monthCaseData: widget.monthCaseData,),
                 ),
               ),
               const SizedBox(

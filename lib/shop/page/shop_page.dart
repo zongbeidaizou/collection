@@ -147,10 +147,13 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
           padding: const EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft, // 水平居左，垂直居中
-            child: Text(
-              "Hi Jacob",
-              style: TextStyle(fontSize: 24),
-            ),
+            child:
+            Consumer<UserProvider>(builder: (_, provider, __) {
+              return Text(
+                'Hi ${provider.userEntity.profile!.aName!}',
+                style: const TextStyle(fontSize: 24),
+              );
+            }),
           ),
         ),
         leadingWidth: 300,

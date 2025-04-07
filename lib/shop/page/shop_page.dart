@@ -1,4 +1,5 @@
 import 'package:bounty_hunter/shop/widgets/pie2.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -326,6 +327,52 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               if (_data.showWeekCaseData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: false) else Gaps.empty,
               if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
               if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white70), // 外层边框
+                  ),
+                  child: Column(
+                    children: [
+                      // 表头 - 带背景色
+                      Container(
+                        color: Color(0xFF50E4FF), // 表头背景色
+                        child: Row(
+                          children: [
+                            _buildHeaderCell('Performance Target', flex: 3),
+                            _buildHeaderCell('Bonus'),
+                            _buildHeaderCell('Progress Status', flex: 3),
+                          ],
+                        ),
+                      ),
+                      // 表格内容
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(), // 禁止单独滚动
+                        itemCount: _data.monthAdditionData!.length,
+                        itemBuilder: (context, index) {
+                          ShopDataMonthAdditionData item = _data.monthAdditionData![index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.white70), // 行底部边框
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                _buildDataCell('Reach ${item.days} days at Grade ${item.level}', flex: 3),
+                                _buildDataCell(Utils.formatPrice2(item.bonus!)),
+                                if (item.completeDays! >= item.days!) _buildDataCell('Achieved! ✅', flex: 3) else _buildDataCell('${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})', flex: 3),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Center(
                 child: DataTable(
                   columnSpacing: 34,
@@ -575,6 +622,41 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   ShopPagePresenter createPresenter() => ShopPagePresenter();
+  // 构建表头单元格
+  Widget _buildHeaderCell(String text, {int flex = 1}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(color: Colors.white70), // 单元格右侧边框
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(fontWeight: FontWeight.w400),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  // 构建数据单元格
+  Widget _buildDataCell(String text, {int flex = 1}) {
+    return Expanded(
+      flex: flex,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(color: Colors.white70), // 单元格右侧边框
+          ),
+        ),
+        child: Text(text, style: TextStyle(fontSize: 11)),
+      ),
+    );
+  }
 }
 
 class _ShopFunctionModule extends StatelessWidget {

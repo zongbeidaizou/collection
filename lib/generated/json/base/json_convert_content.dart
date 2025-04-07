@@ -363,6 +363,10 @@ class JsonConvert {
       return data.map<ShopDataMonthBonusData>((Map<String, dynamic> e) =>
           ShopDataMonthBonusData.fromJson(e)).toList() as M;
     }
+    if (<ShopDataMonthAdditionData>[] is M) {
+      return data.map<ShopDataMonthAdditionData>((Map<String, dynamic> e) =>
+          ShopDataMonthAdditionData.fromJson(e)).toList() as M;
+    }
     if (<SearchEntity>[] is M) {
       return data.map<SearchEntity>((Map<String, dynamic> e) =>
           SearchEntity.fromJson(e)).toList() as M;
@@ -471,6 +475,7 @@ class JsonConvertClassCollection {
     (ShopDataWeekBonusData).toString(): ShopDataWeekBonusData.fromJson,
     (ShopDataMonthCaseData).toString(): ShopDataMonthCaseData.fromJson,
     (ShopDataMonthBonusData).toString(): ShopDataMonthBonusData.fromJson,
+    (ShopDataMonthAdditionData).toString(): ShopDataMonthAdditionData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,
     (SearchItems).toString(): SearchItems.fromJson,
     (SearchItemsOwner).toString(): SearchItemsOwner.fromJson,

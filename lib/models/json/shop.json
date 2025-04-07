@@ -96,7 +96,8 @@
     "show_week_bonus_data": true,
     "week_bonus_data": [{
       "name": "Tommi",
-      "value": 19800
+      "value": 19800,
+      "gradeValues": [945,1540,4760,9340]
     }],
     "show_month_case_data": true,
     "month_case_data": [{
@@ -107,6 +108,13 @@
     "month_bonus_data": [{
       "date": "01/03",
       "value": 1200
+    }],
+    "show_month_addition_data": true,
+    "month_addition_data": [{
+      "level": "A",
+      "days": 1200,
+      "bonus": 1200,
+      "complete_days": 1200
     }]
   },
   "other": [],

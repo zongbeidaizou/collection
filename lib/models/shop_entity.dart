@@ -50,6 +50,10 @@ class ShopData {
 	bool? showMonthBonusData = false;
 	@JSONField(name: 'month_bonus_data')
 	List<ShopDataMonthBonusData>? monthBonusData = [];
+	@JSONField(name: 'show_month_addition_data')
+	bool? showMonthAdditionData = false;
+	@JSONField(name: 'month_addition_data')
+	List<ShopDataMonthAdditionData>? monthAdditionData = [];
 
 	ShopData();
 
@@ -303,6 +307,26 @@ class ShopDataMonthBonusData {
 	factory ShopDataMonthBonusData.fromJson(Map<String, dynamic> json) => $ShopDataMonthBonusDataFromJson(json);
 
 	Map<String, dynamic> toJson() => $ShopDataMonthBonusDataToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class ShopDataMonthAdditionData {
+	String? level = '';
+	int? days = 0;
+	int? bonus = 0;
+	@JSONField(name: 'complete_days')
+	int? completeDays = 0;
+
+	ShopDataMonthAdditionData();
+
+	factory ShopDataMonthAdditionData.fromJson(Map<String, dynamic> json) => $ShopDataMonthAdditionDataFromJson(json);
+
+	Map<String, dynamic> toJson() => $ShopDataMonthAdditionDataToJson(this);
 
 	@override
 	String toString() {

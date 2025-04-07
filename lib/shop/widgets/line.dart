@@ -257,7 +257,7 @@ class _LineChart extends StatelessWidget {
 
   LineChartBarData get lineChartBarData1_1{return  LineChartBarData(
     isCurved: true,
-    color: Colors.yellowAccent,
+    color: Colors.blueAccent,
     barWidth: 2,
     isStrokeCapRound: true,
     dotData: const FlDotData(show: true),
@@ -286,21 +286,22 @@ class _LineChart extends StatelessWidget {
 }
 
 class LineChartSample1 extends StatefulWidget {
-  const LineChartSample1({super.key, required this.monthCaseData, required this.monthBonusData});
+  const LineChartSample1({super.key, required this.monthCaseData, required this.monthBonusData, required this.isShowingMainData});
   final List<ShopDataMonthCaseData> monthCaseData;
   final List<ShopDataMonthBonusData> monthBonusData;
+  final bool isShowingMainData;
 
   @override
   State<StatefulWidget> createState() => LineChartSample1State();
 }
 
 class LineChartSample1State extends State<LineChartSample1> {
-  late bool isShowingMainData;
+  // bool _isShowingMainData;
 
   @override
   void initState() {
     super.initState();
-    isShowingMainData = true;
+    // _isShowingMainData = widget.isShowingMainData;
   }
 
   @override
@@ -316,7 +317,7 @@ class LineChartSample1State extends State<LineChartSample1> {
                 height: 17,
               ),
               Text(
-                isShowingMainData ? 'My Daily Bonus Earnings Trend' : 'My Daily Case Recovery Trend',
+                widget.isShowingMainData ? 'My Daily Bonus Earnings Trend' : 'My Daily Case Recovery Trend',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
@@ -330,8 +331,8 @@ class LineChartSample1State extends State<LineChartSample1> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: _LineChart(isShowingMainData: isShowingMainData, monthBonusData: widget.monthBonusData, monthCaseData: widget.monthCaseData,),
+                  padding: const EdgeInsets.only(right: 26, left: 6),
+                  child: _LineChart(isShowingMainData: widget.isShowingMainData, monthBonusData: widget.monthBonusData, monthCaseData: widget.monthCaseData,),
                 ),
               ),
               const SizedBox(
@@ -352,13 +353,13 @@ class LineChartSample1State extends State<LineChartSample1> {
               // Icon(Icons.workspace_premium)
               // Icon(Icons.shuffle_on)
               // Icon(Icons.bubble_chart_outlined)
-              isShowingMainData ? Icons.diamond_outlined : Icons.bubble_chart_outlined,
+              widget.isShowingMainData ? Icons.diamond_outlined : Icons.bubble_chart_outlined,
               color: Colors.white.withOpacity(0.6),
             ),
             onPressed: () {
-              setState(() {
-                isShowingMainData = !isShowingMainData;
-              });
+              // setState(() {
+              //   // _isShowingMainData = !_isShowingMainData;
+              // });
             },
           )
         ],

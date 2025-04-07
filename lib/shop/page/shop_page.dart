@@ -26,6 +26,7 @@ import '../widgets/bar2.dart';
 import '../widgets/level_bar.dart';
 import '../widgets/line.dart';
 import '../widgets/pie.dart';
+import '../widgets/resources/bar_chart_sample6.dart';
 
 const List<Map<String, dynamic>> hallData = [
   {'name': 'Tom', 'value': 160, 'avatar': 'https://api.dasewan.cn/assets/avater1.png'},
@@ -322,9 +323,11 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               ),
 
               if (_data.showWeekBonusData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!,) else Gaps.empty,
+              if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
+              if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
               // 统计
-              LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
-              // BarChartSample3(),
+              // LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
+              BarChartSample6(),
               // Container(
               //   height: 208,
               //   padding: EdgeInsets.all(10),

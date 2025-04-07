@@ -61,7 +61,7 @@ mixin BasePageMixin<T extends StatefulWidget, P extends BasePresenter> on State<
   }
   
   /// 可自定义Progress
-  Widget buildProgress() => const ProgressDialog(hintText: '正在加载...');
+  Widget buildProgress() => const ProgressDialog(hintText: 'Loading...');
 
   @override
   void didChangeDependencies() {

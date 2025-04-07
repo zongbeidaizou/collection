@@ -96,9 +96,8 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
     return Scaffold(
       appBar: MyAppBar(
         isBack: false,
-        actionName: DeerLocalizations.of(context)!.verificationCodeLogin,
+        actionName: '',
         onPressed: () {
-          NavigatorUtils.push(context, LoginRouter.smsLoginPage);
         },
       ),
       body: MyScrollView(
@@ -139,32 +138,9 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
       onPressed: _clickable ? _login : null,
       text: DeerLocalizations.of(context)!.login,
     ),
-    Container(
-      height: 40.0,
-      alignment: Alignment.centerRight,
-      child: GestureDetector(
-        child: Text(
-          DeerLocalizations.of(context)!.forgotPasswordLink,
-          key: const Key('forgotPassword'),
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        onTap: () => NavigatorUtils.push(context, LoginRouter.resetPasswordPage),
-      ),
-    ),
+
     Gaps.vGap16,
-    Container(
-      alignment: Alignment.center,
-      child: GestureDetector(
-        child: Text(
-          DeerLocalizations.of(context)!.noAccountRegisterLink,
-          key: const Key('noAccountRegister'),
-          style: TextStyle(
-            color: Theme.of(context).primaryColor
-          ),
-        ),
-        onTap: () => NavigatorUtils.push(context, LoginRouter.registerPage),
-      )
-    )
+
   ];
 
   @override

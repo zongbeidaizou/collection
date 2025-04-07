@@ -31,7 +31,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(
-        centerTitle: '设置',
+        centerTitle: 'Setting',
       ),
       body: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
@@ -39,44 +39,11 @@ class _SettingPageState extends State<SettingPage> {
             children: <Widget>[
               Gaps.vGap5,
               ClickItem(
-                title: '账号管理',
-                onTap: () => NavigatorUtils.push(context, SettingRouter.accountManagerPage),
-              ),
-              if (Device.isMobile) ClickItem(
-                title: '清除缓存',
-                content: '23.5MB',
-                onTap: () {},
-              ),
-              ClickItem(
-                title: '夜间模式',
-                content: _getCurrentTheme(),
-                onTap: () => NavigatorUtils.push(context, SettingRouter.themePage),
-              ),
-              ClickItem(
-                title: '多语言',
-                content: _getCurrentLocale(),
-                onTap: () => NavigatorUtils.push(context, SettingRouter.localePage),
-              ),
-              if (Device.isMobile) ClickItem(
-                title: '检查更新',
-                onTap: _showUpdateDialog,
-              ),
-              ClickItem(
-                title: '关于我们',
-                onTap: () => NavigatorUtils.push(context, SettingRouter.aboutPage),
-              ),
-              ClickItem(
-                title: '退出当前账号',
+                title: 'Sign out',
                 onTap: _showExitDialog,
               ),
-              if (Device.isMobile) ClickItem(
-                title: 'BountyHunter Web版',
-                onTap: () => NavigatorUtils.goWebViewPage(context, 'Flutter BountyHunter', 'https://simplezhli.github.io/bounty_hunter/'),
-              ),
-              ClickItem(
-                title: '其他Demo',
-                onTap: () => AppNavigator.push(context, const DemoPage()),
-              ),
+
+
             ],
           );
         },

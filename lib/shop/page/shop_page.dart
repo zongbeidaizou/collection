@@ -322,12 +322,13 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                 ),
               ),
 
-              if (_data.showWeekBonusData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!,) else Gaps.empty,
+              if (_data.showWeekBonusData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: true) else Gaps.empty,
+              if (_data.showWeekCaseData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: false) else Gaps.empty,
               if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
               if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
               // 统计
               // LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
-              BarChartSample6(),
+              // BarChartSample6(),
               // Container(
               //   height: 208,
               //   padding: EdgeInsets.all(10),

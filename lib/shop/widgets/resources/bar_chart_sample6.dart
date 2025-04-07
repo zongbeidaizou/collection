@@ -1,98 +1,73 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/shop_entity.dart';
 import 'LegendsListWidget.dart';
 import 'app_colors.dart';
 
 class BarChartSample6 extends StatelessWidget {
-  const BarChartSample6({super.key});
+  const BarChartSample6({super.key, required this.data});
+  final List<ShopDataWeekBonusData> data;
 
-  final pilateColor = AppColors.contentColorPurple;
-  final cyclingColor = AppColors.contentColorCyan;
-  final quickWorkoutColor = AppColors.contentColorBlue;
+  final bColor = AppColors.contentColorCyan;
+  final aColor = Colors.blue;
+  final aaColor = Colors.lightBlue;
+  final aaaColor = AppColors.contentColorBlue;
+
   final betweenSpace = 0;
 
   BarChartGroupData generateGroupData(
       int x,
-      double pilates,
-      double quickWorkout,
-      double cycling,
+      double b,
+      double a,
+      double aa,
+      double aaa,
       ) {
     return BarChartGroupData(
       x: x,
       groupVertically: true,
-      showingTooltipIndicators: [1],
+      showingTooltipIndicators: [3],
       barRods: [
         BarChartRodData(
           fromY: 0,
-          toY: pilates,
-          color: pilateColor,
-          width: 5,
+          toY: b,
+          color: Colors.blue[100],
+          // width: 15,
         ),
         BarChartRodData(
-          fromY: pilates + betweenSpace,
-          toY: pilates + betweenSpace + quickWorkout,
-          color: quickWorkoutColor,
-          width: 5,
+          fromY: b + betweenSpace,
+          toY: b + betweenSpace + a,
+          color: Colors.blue[200],
+          // width: 5,
         ),
         BarChartRodData(
-          fromY: pilates + betweenSpace + quickWorkout + betweenSpace,
-          toY: pilates + betweenSpace + quickWorkout + betweenSpace + cycling,
-          color: cyclingColor,
-          width: 5,
+          fromY: b + betweenSpace + a + betweenSpace,
+          toY: b + betweenSpace + a + betweenSpace + aa,
+          color: Colors.blue[400],
+          // width: 5,
+        ),
+        BarChartRodData(
+          fromY: b + betweenSpace + a + betweenSpace + aa + betweenSpace,
+          toY: b + betweenSpace + a + betweenSpace + aa+ betweenSpace + aaa,
+          color: Colors.blue[600],
+          // width: 5,
         ),
       ],
     );
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-    const style = TextStyle(fontSize: 10);
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'JAN';
-        break;
-      case 1:
-        text = 'FEB';
-        break;
-      case 2:
-        text = 'MAR';
-        break;
-      case 3:
-        text = 'APR';
-        break;
-      case 4:
-        text = 'MAY';
-        break;
-      case 5:
-        text = 'JUN';
-        break;
-      case 6:
-        text = 'JUL';
-        break;
-      case 7:
-        text = 'AUG';
-        break;
-      case 8:
-        text = 'SEP';
-        break;
-      case 9:
-        text = 'OCT';
-        break;
-      case 10:
-        text = 'NOV';
-        break;
-      case 11:
-        text = 'DEC';
-        break;
-      default:
-        text = '';
-    }
+    final style = TextStyle(
+      color: AppColors.contentColorBlue,
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    );
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
-      child: Text(text, style: style),
+      child: Text(data[value.toInt()].name!, style: style),
     );
+
   }
 
   @override
@@ -103,25 +78,9 @@ class BarChartSample6 extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Activity',
-            style: TextStyle(
-              color: AppColors.contentColorBlue,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          LegendsListWidget(
-            legends: [
-              Legend('Pilates', pilateColor),
-              Legend('Quick workouts', quickWorkoutColor),
-              Legend('Cycling', cyclingColor),
-            ],
-          ),
           const SizedBox(height: 14),
           AspectRatio(
-            aspectRatio: 2,
+            aspectRatio: 2.13,
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceBetween,
@@ -145,11 +104,11 @@ class BarChartSample6 extends StatelessWidget {
                 ),
                 barTouchData: BarTouchData(
                   enabled: true,
-                  handleBuiltInTouches: false,
+                  handleBuiltInTouches: true,
                   touchTooltipData: BarTouchTooltipData(
                     tooltipBgColor: Colors.transparent,
                     tooltipPadding: EdgeInsets.zero,
-                    tooltipMargin: 8,
+                    tooltipMargin: 18,
                     getTooltipItem: (
                         BarChartGroupData group,
                         int groupIndex,
@@ -169,47 +128,34 @@ class BarChartSample6 extends StatelessWidget {
                 ),
                 borderData: FlBorderData(show: false),
                 gridData: const FlGridData(show: false),
-                barGroups: [
-                  generateGroupData(0, 12, 3, 2),
-                  generateGroupData(1, 12, 5, 1.7),
-                  generateGroupData(2, 13, 3.1, 2.8),
-                  generateGroupData(3, 13.1, 4, 3.1),
-                  generateGroupData(4, 11.8, 3.3, 3.4),
-                  generateGroupData(5, 12, 5.6, 1.8),
-                  generateGroupData(6, 11.3, 3.2, 2),
-                  generateGroupData(7, 12.3, 3.2, 3),
-                  generateGroupData(8, 12, 4.8, 2.5),
-                  generateGroupData(9, 11.2, 3.2, 2.5),
-                  generateGroupData(10, 11, 4.8, 3),
-                  generateGroupData(11, 12, 4.4, 2.8),
-                ],
-                maxY: 25,
+                barGroups: data.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  final gradeValues = item.gradeValues ?? [];
+
+                  // Make sure there are at least 4 values, fill with 0 if not
+                  final value1 = gradeValues.isNotEmpty ? gradeValues[0] : 0;
+                  final value2 = gradeValues.length > 1 ? gradeValues[1] : 0;
+                  final value3 = gradeValues.length > 2 ? gradeValues[2] : 0;
+                  final value4 = gradeValues.length > 3 ? gradeValues[3] : 0;
+
+                  return generateGroupData(
+                    index,
+                    value1.toDouble(),
+                    value2.toDouble(),
+                    value3.toDouble(),
+                    value4.toDouble(),
+                  );
+                }).toList(),
+                maxY: 20000,
                 extraLinesData: ExtraLinesData(
                   horizontalLines: [
-                    HorizontalLine(
-                      y: 0,
-                      color: Colors.white,
-                      strokeWidth: 1,
-                      dashArray: [20, 4],
-                    ),
-                    HorizontalLine(
-                      y: 3.3,
-                      color: pilateColor,
-                      strokeWidth: 1,
-                      dashArray: [20, 4],
-                    ),
-                    HorizontalLine(
-                      y: 8,
-                      color: quickWorkoutColor,
-                      strokeWidth: 1,
-                      dashArray: [20, 4],
-                    ),
-                    HorizontalLine(
-                      y: 11,
-                      color: cyclingColor,
-                      strokeWidth: 1,
-                      dashArray: [20, 4],
-                    ),
+                    // HorizontalLine(
+                    //   y: 0,
+                    //   color: Colors.white,
+                    //   strokeWidth: 2,
+                    //   dashArray: [20, 4],
+                    // ),
                   ],
                 ),
               ),

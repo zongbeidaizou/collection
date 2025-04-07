@@ -262,6 +262,7 @@ class ShopDataWeekCaseData {
 class ShopDataWeekBonusData {
 	String? name = '';
 	int? value = 0;
+	List<int>? gradeValues = [];
 
 	ShopDataWeekBonusData();
 

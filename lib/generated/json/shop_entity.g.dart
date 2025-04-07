@@ -759,6 +759,11 @@ ShopDataWeekBonusData $ShopDataWeekBonusDataFromJson(
   if (value != null) {
     shopDataWeekBonusData.value = value;
   }
+  final List<int>? gradeValues = (json['gradeValues'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (gradeValues != null) {
+    shopDataWeekBonusData.gradeValues = gradeValues;
+  }
   return shopDataWeekBonusData;
 }
 
@@ -767,6 +772,7 @@ Map<String, dynamic> $ShopDataWeekBonusDataToJson(
   final Map<String, dynamic> data = <String, dynamic>{};
   data['name'] = entity.name;
   data['value'] = entity.value;
+  data['gradeValues'] = entity.gradeValues;
   return data;
 }
 
@@ -774,10 +780,12 @@ extension ShopDataWeekBonusDataExtension on ShopDataWeekBonusData {
   ShopDataWeekBonusData copyWith({
     String? name,
     int? value,
+    List<int>? gradeValues,
   }) {
     return ShopDataWeekBonusData()
       ..name = name ?? this.name
-      ..value = value ?? this.value;
+      ..value = value ?? this.value
+      ..gradeValues = gradeValues ?? this.gradeValues;
   }
 }
 

@@ -326,6 +326,45 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               if (_data.showWeekCaseData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: false) else Gaps.empty,
               if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
               if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
+              Center(
+                child: DataTable(
+                  columnSpacing: 34,
+                  columns: [
+                    DataColumn(label: Text('Performance Target')),
+                    DataColumn(label: Text('Progress Status')),
+                  ],
+                  rows: [
+                    DataRow(cells: [
+                      DataCell(Text('Reach 20 days at Grade A')),
+                      DataCell(Row(
+                        children: [
+                          Text('Achieved! '),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(50), // 圆形边框
+                              border: Border.all(
+                                color: Colors.green.shade800, // 边框颜色
+                                width: 2, // 边框宽度
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          ),
+                        ],
+                      )),
+                    ]),
+                    DataRow(
+                        cells: [
+                      DataCell(Text('Reach 25 days at Grade A')),
+                      DataCell(Text('18/20 (¥2,000 available)')),
+                    ]),
+                  ],
+                ),
+              ),
               // 统计
               // LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
               // BarChartSample6(),

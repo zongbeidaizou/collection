@@ -327,91 +327,68 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               if (_data.showWeekCaseData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: false) else Gaps.empty,
               if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
               if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white70), // 外层边框
+              if (_data.showMonthAdditionData!) Column(
+                children: [
+                  Text(
+                    'My Monthly Bonus',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  child: Column(
-                    children: [
-                      // 表头 - 带背景色
-                      Container(
-                        color: Color(0xFF50E4FF), // 表头背景色
-                        child: Row(
-                          children: [
-                            _buildHeaderCell('Performance Target', flex: 3),
-                            _buildHeaderCell('Bonus'),
-                            _buildHeaderCell('Progress Status', flex: 3),
-                          ],
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white70), // 外层边框
                       ),
-                      // 表格内容
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(), // 禁止单独滚动
-                        itemCount: _data.monthAdditionData!.length,
-                        itemBuilder: (context, index) {
-                          ShopDataMonthAdditionData item = _data.monthAdditionData![index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(color: Colors.white70), // 行底部边框
-                              ),
-                            ),
+                      child: Column(
+                        children: [
+
+                          // 表头 - 带背景色
+                          Container(
+                            color: Color(0xFF50E4FF), // 表头背景色
                             child: Row(
                               children: [
-                                _buildDataCell('Reach ${item.days} days at Grade ${item.level}', flex: 3),
-                                _buildDataCell(Utils.formatPrice2(item.bonus!)),
-                                if (item.completeDays! >= item.days!) _buildDataCell('Achieved! ✅', flex: 3) else _buildDataCell('${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})', flex: 3),
+                                _buildHeaderCell('Performance Target', flex: 3),
+                                _buildHeaderCell('Bonus'),
+                                _buildHeaderCell('Progress Status', flex: 3),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Center(
-                child: DataTable(
-                  columnSpacing: 34,
-                  columns: [
-                    DataColumn(label: Text('Performance Target')),
-                    DataColumn(label: Text('Progress Status')),
-                  ],
-                  rows: [
-                    DataRow(cells: [
-                      DataCell(Text('Reach 20 days at Grade A')),
-                      DataCell(Row(
-                        children: [
-                          Text('Achieved! '),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(50), // 圆形边框
-                              border: Border.all(
-                                color: Colors.green.shade800, // 边框颜色
-                                width: 2, // 边框宽度
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 12,
-                            ),
+                          ),
+                          // 表格内容
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(), // 禁止单独滚动
+                            itemCount: _data.monthAdditionData!.length,
+                            itemBuilder: (context, index) {
+                              ShopDataMonthAdditionData item = _data.monthAdditionData![index];
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(color: Colors.white70), // 行底部边框
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    _buildDataCell('Reach ${item.days} days at Grade ${item.level}', flex: 3),
+                                    _buildDataCell(Utils.formatPrice2(item.bonus!)),
+                                    if (item.completeDays! >= item.days!) _buildDataCell('Achieved! ✅', flex: 3) else _buildDataCell('${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})', flex: 3),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ],
-                      )),
-                    ]),
-                    DataRow(
-                        cells: [
-                      DataCell(Text('Reach 25 days at Grade A')),
-                      DataCell(Text('18/20 (¥2,000 available)')),
-                    ]),
-                  ],
-                ),
-              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ) else Gaps.empty,
+
               // 统计
               // LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
               // BarChartSample6(),

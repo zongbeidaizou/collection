@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/order/page/order_list_page.dart';
@@ -35,6 +37,7 @@ class _OrderPageState extends State<OrderPage>
   OrderListProvider provider3 = OrderListProvider();
 
   int _lastReportedPage = 0;
+  int _sloganIndex = 0;
 
   @override
   void initState() {
@@ -102,7 +105,7 @@ class _OrderPageState extends State<OrderPage>
               key: const Key('order_list'),
               physics: const ClampingScrollPhysics(),
               headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                  _sliverBuilder(context),
+                  _sliverBuilder(context, _sloganIndex),
               body: NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification notification) {
                   /// PageView的onPageChanged是监听ScrollUpdateNotification，会造成滑动中卡顿。这里修改为监听滚动结束再更新、
@@ -113,6 +116,9 @@ class _OrderPageState extends State<OrderPage>
                     final int currentPage = (metrics.page ?? 0).round();
                     if (currentPage != _lastReportedPage) {
                       _lastReportedPage = currentPage;
+                      setState(() {
+                        _sloganIndex = currentPage;
+                      });
                       _onPageChange(currentPage);
                     }
                   }
@@ -132,7 +138,15 @@ class _OrderPageState extends State<OrderPage>
     );
   }
 
-  List<Widget> _sliverBuilder(BuildContext context) {
+  List<Widget> _sliverBuilder(BuildContext context, int sloganIndex) {
+    final List<String> messages = [
+      'Every call is a chance to collect—did you move closer to your goal today?',
+      'No account left behind, no payment lost!',
+      "Hang-ups don't hurt—what hurts is giving up!",
+      'The golden 48 hours—miss them, lose the payment!',
+      'More calls today, bigger paychecks tomorrow!',
+      'Average collectors earn flat rates. Elite collectors earn exponential rewards!'
+    ];
     return <Widget>[
       SliverOverlapAbsorber(
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -174,7 +188,13 @@ class _OrderPageState extends State<OrderPage>
                 const EdgeInsetsDirectional.only(start: 16.0, bottom: 14.0),
             collapseMode: CollapseMode.pin,
             title: Text(
-              'Every call is a chance to collect—did you move closer to your goal today?',
+              // 'Every call is a chance to collect—did you move closer to your goal today?',
+              // 'No account left behind, no payment lost!',
+              // 'Hang-ups don’t hurt—what hurts is giving up!',
+              // 'The golden 48 hours—miss them, lose the payment!',
+              // 'More calls today, bigger paychecks tomorrow!',
+              // 'Average collectors earn flat rates. Elite collectors earn exponential rewards!',
+              messages[Random().nextInt(messages.length)],
               style: TextStyle(color: ThemeUtils.getIconColor(context)),
             ),
           ),

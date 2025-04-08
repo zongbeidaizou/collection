@@ -52,7 +52,7 @@ class _BarChart extends StatelessWidget {
     final style = TextStyle(
       color: AppColors.contentColorBlue,
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: data.length > 5 ? 6 : 14,
     );
     String text = data[value.toInt()].name!;
 

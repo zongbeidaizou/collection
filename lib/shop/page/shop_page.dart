@@ -29,17 +29,7 @@ import '../widgets/line.dart';
 import '../widgets/pie.dart';
 import '../widgets/resources/bar_chart_sample6.dart';
 
-const List<Map<String, dynamic>> hallData = [
-  {'name': 'Tom', 'value': 160, 'avatar': 'https://api.dasewan.cn/assets/avater1.png'},
-  {'name': 'Jerry', 'value': 142, 'avatar': 'https://api.dasewan.cn/assets/avater2.png'},
-  {'name': 'Spike', 'value': 120, 'avatar': 'https://api.dasewan.cn/assets/avater3.png'},
-  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater4.png'},
-  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater5.png'},
-  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater6.png'},
-  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater7.png'},
-  {'name': 'Tyke', 'value': 110, 'avatar': 'https://api.dasewan.cn/assets/avater8.png'},
 
-];
 /// design/6店铺-账户/index.html#artboard0
 class ShopPage extends StatefulWidget {
   const ShopPage({
@@ -299,7 +289,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                                 child: CircleAvatar(
                                   radius: 28.0,
                                   backgroundColor: Colors.transparent,
-                                  backgroundImage: ImageUtils.getImageProvider(hallData[index]['avatar'] as String, holderImg: 'store/icon_zj'),
+                                  backgroundImage: ImageUtils.getImageProvider(_data.monthData![index].avatar, holderImg: 'store/icon_zj'),
                                 ),
                               ),
                               Positioned(
@@ -314,7 +304,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                             ],
                           ),
                           SizedBox(height: 8.0),
-                          Text('${hallData[index]['value']}K'),
+                          Text(formatNumberToK(_data.monthData![index].value!)),
                         ],
                       ),
                     );

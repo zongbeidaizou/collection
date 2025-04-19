@@ -93,7 +93,7 @@ class LevelBar extends StatelessWidget {
                                 text: '${data.currentRate}',
                                 style: const TextStyle(fontSize: 10),
                               ),
-                              const TextSpan(text: ' commission. \nTo reach the next level (Level '),
+                              const TextSpan(text: ' bonus. \nTo reach the next level (Level '),
                               TextSpan(
                                 text: '${data.nextGrade}',
                                 style: const TextStyle(fontSize: 10),
@@ -103,7 +103,7 @@ class LevelBar extends StatelessWidget {
                                 text: '${data.nextRate}',
                                 style: const TextStyle(fontSize: 10),
                               ),
-                              const TextSpan(text: ' commission plus an additional bonus of '),
+                              const TextSpan(text: ' bonus plus an additional bonus of '),
                               TextSpan(
                                 text: '${Utils.formatPrice2(data.nextAdditionBonus!)}',
                                 style: const TextStyle(fontSize: 10),

@@ -130,7 +130,7 @@ class _SmsDialogDialog extends State<SmsDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Gaps.hGap8,
-              const Text('Select an SMS template:'),
+              const Text('SMS Template:'),
               Gaps.hGap8,
               DropdownButton<String>(
                 value: _dropdownValue,

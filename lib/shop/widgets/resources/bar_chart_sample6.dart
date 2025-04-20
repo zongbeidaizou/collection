@@ -60,7 +60,7 @@ class BarChartSample6 extends StatelessWidget {
     final style = TextStyle(
       color: AppColors.contentColorBlue,
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: data.length > 5 ? 6 : 14,
     );
     return SideTitleWidget(
       axisSide: meta.axisSide,

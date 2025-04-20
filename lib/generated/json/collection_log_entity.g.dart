@@ -286,6 +286,21 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (smsHistory != null) {
     collectionLogOther.smsHistory = smsHistory;
   }
+  final String? hJSmsTemplateNewestUpdatedAt = jsonConvert.convert<String>(
+      json['h_j_sms_template_newest_updated_at']);
+  if (hJSmsTemplateNewestUpdatedAt != null) {
+    collectionLogOther.hJSmsTemplateNewestUpdatedAt =
+        hJSmsTemplateNewestUpdatedAt;
+  }
+  final List<
+      CollectionLogOtherHJSmsTemplate>? hJSmsTemplate = (json['h_j_sms_template'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherHJSmsTemplate>(
+          e) as CollectionLogOtherHJSmsTemplate).toList();
+  if (hJSmsTemplate != null) {
+    collectionLogOther.hJSmsTemplate = hJSmsTemplate;
+  }
   return collectionLogOther;
 }
 
@@ -296,6 +311,10 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['repay_info'] = entity.repayInfo?.toJson();
   data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
+  data['h_j_sms_template_newest_updated_at'] =
+      entity.hJSmsTemplateNewestUpdatedAt;
+  data['h_j_sms_template'] =
+      entity.hJSmsTemplate?.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -306,13 +325,18 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherRepayInfo? repayInfo,
     List<CollectionLogOtherContactInfo>? contactInfo,
     List<CollectionLogOtherSmsHistory>? smsHistory,
+    String? hJSmsTemplateNewestUpdatedAt,
+    List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
   }) {
     return CollectionLogOther()
       ..track = track ?? this.track
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo
       ..contactInfo = contactInfo ?? this.contactInfo
-      ..smsHistory = smsHistory ?? this.smsHistory;
+      ..smsHistory = smsHistory ?? this.smsHistory
+      ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??
+          this.hJSmsTemplateNewestUpdatedAt
+      ..hJSmsTemplate = hJSmsTemplate ?? this.hJSmsTemplate;
   }
 }
 
@@ -860,5 +884,52 @@ extension CollectionLogOtherSmsHistoryExtension on CollectionLogOtherSmsHistory 
       ..kSendStatus = kSendStatus ?? this.kSendStatus
       ..createdAt = createdAt ?? this.createdAt
       ..id = id ?? this.id;
+  }
+}
+
+CollectionLogOtherHJSmsTemplate $CollectionLogOtherHJSmsTemplateFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherHJSmsTemplate collectionLogOtherHJSmsTemplate = CollectionLogOtherHJSmsTemplate();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherHJSmsTemplate.id = id;
+  }
+  final String? dTemplate = jsonConvert.convert<String>(json['d_template']);
+  if (dTemplate != null) {
+    collectionLogOtherHJSmsTemplate.dTemplate = dTemplate;
+  }
+  final String? sName = jsonConvert.convert<String>(json['s_name']);
+  if (sName != null) {
+    collectionLogOtherHJSmsTemplate.sName = sName;
+  }
+  final String? eDays = jsonConvert.convert<String>(json['e_days']);
+  if (eDays != null) {
+    collectionLogOtherHJSmsTemplate.eDays = eDays;
+  }
+  return collectionLogOtherHJSmsTemplate;
+}
+
+Map<String, dynamic> $CollectionLogOtherHJSmsTemplateToJson(
+    CollectionLogOtherHJSmsTemplate entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['d_template'] = entity.dTemplate;
+  data['s_name'] = entity.sName;
+  data['e_days'] = entity.eDays;
+  return data;
+}
+
+extension CollectionLogOtherHJSmsTemplateExtension on CollectionLogOtherHJSmsTemplate {
+  CollectionLogOtherHJSmsTemplate copyWith({
+    int? id,
+    String? dTemplate,
+    String? sName,
+    String? eDays,
+  }) {
+    return CollectionLogOtherHJSmsTemplate()
+      ..id = id ?? this.id
+      ..dTemplate = dTemplate ?? this.dTemplate
+      ..sName = sName ?? this.sName
+      ..eDays = eDays ?? this.eDays;
   }
 }

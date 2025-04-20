@@ -3,6 +3,7 @@ import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/widgets/base_dialog.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../models/collection_log_entity.dart';
 
@@ -61,20 +62,56 @@ class _SmsDialogDialog extends State<SmsDialog> {
 
     return template;
   }
+
+  bool isNumberInRange(String rangeStr, int number) {
+    // 去除所有空格
+    String trimmedStr = rangeStr.replaceAll(' ', '');
+    if (trimmedStr.isEmpty) return false;
+
+    // 范围格式（如"1-4"）
+    if (trimmedStr.contains('-')) {
+      List<String> parts = trimmedStr.split('-');
+      if (parts.length != 2) return false;
+
+      int? start = int.tryParse(parts[0]);
+      int? end = int.tryParse(parts[1]);
+
+      if (start == null || end == null) return false;
+      return number >= start && number <= end;
+    }
+    // 多个数字格式（如"1,3,4"）
+    else if (trimmedStr.contains(',')) {
+      List<String> numbers = trimmedStr.split(',');
+      return numbers.any((numStr) {
+        int? num = int.tryParse(numStr);
+        return num != null && num == number;
+      });
+    }
+    // 单个数字格式（如"2"）
+    else {
+      int? singleNum = int.tryParse(trimmedStr);
+      return singleNum == number;
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
     bool withBorder = false;
     String labelText = 'send a message';
     String errorText = 'Comment cannot be blank';
-    final templateList = ['Customize Message','Info','Link','Apply','Collection'];
-    final templateContentList = [
-      '',
-      'Your account number is @accountNumber@, and your bank is @bank@. The account name is @accountName@.',
-      'Hello @name@, your phone number is @phone@ and your loan amount is @loanAmount@. Expected repay time is @expectRepayTime@.',
-      'You have applied for the @productName@. The receiving bank is @recieveBank@, and the bank account number is @recieveBankNo@.',
-      'Dear @name@, your loan details are as follows:\nLoan Amount: @loanAmount@\nRepayment Amount: @repayAmount@\nExpected Repayment Time: @expectRepayTime@\nOverdue Days: @overdueDays@\nBank: @bank@\nAccount Number: @accountNumber@.'
-    ];
+    // final templateList = ['Customize Message','Info','Link','Apply','Collection'];
+    List<Map<String, dynamic>> dataList = SpUtil.getObjectList("hJSmsTemplates")!.cast<Map<String, dynamic>>();
+    List<CollectionLogOtherHJSmsTemplate> templates = List<CollectionLogOtherHJSmsTemplate>.from(dataList.map((value) {
+      return $CollectionLogOtherHJSmsTemplateFromJson(value);
+    })).where((item) => item.eDays == null || item.eDays == '' || isNumberInRange(item.eDays!, widget.repayInfo!.overdueDays!)).toList();
+
+    // final templateContentList = [
+    //   '',
+    //   'Your account number is @accountNumber@, and your bank is @bank@. The account name is @accountName@.',
+    //   'Hello @name@, your phone number is @phone@ and your loan amount is @loanAmount@. Expected repay time is @expectRepayTime@.',
+    //   'You have applied for the @productName@. The receiving bank is @recieveBank@, and the bank account number is @recieveBankNo@.',
+    //   'Dear @name@, your loan details are as follows:\nLoan Amount: @loanAmount@\nRepayment Amount: @repayAmount@\nExpected Repayment Time: @expectRepayTime@\nOverdue Days: @overdueDays@\nBank: @bank@\nAccount Number: @accountNumber@.'
+    // ];
     final templateContentIdList = [
       0,
       11,
@@ -105,16 +142,16 @@ class _SmsDialogDialog extends State<SmsDialog> {
                   color: Colors.blueAccent,
                 ),
                 onChanged: (String? value) {
-                  _commentController.text = replacePlaceholders(templateContentList[templateList.indexOf(value!)], widget.repayInfo!);
+                  _commentController.text = replacePlaceholders(templates.firstWhere((item) => item.sName == value).dTemplate!, widget.repayInfo!);
                   // This is called when the user selects an item.
                   setState(() {
-                    _dropdownValue = value;
+                    _dropdownValue = value!;
                   });
                 },
-                items: templateList.map<DropdownMenuItem<String>>((String value) {
+                items: templates.map<DropdownMenuItem<String>>((CollectionLogOtherHJSmsTemplate value) {
                   return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+                    value: value.sName,
+                    child: Text(value.sName!),
                   );
                 }).toList(),
               ),
@@ -161,7 +198,7 @@ class _SmsDialogDialog extends State<SmsDialog> {
       ),
       onPressed: () {
         NavigatorUtils.goBack(context);
-        widget.onPressed?.call(templateContentIdList[templateList.indexOf(_dropdownValue)], _commentController.text);
+        widget.onPressed?.call(templates.firstWhere((item) => item.sName == _dropdownValue).id!, _commentController.text);
       },
     );
   }

@@ -10,6 +10,7 @@ import 'package:call_e_log/call_log.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
@@ -40,12 +41,17 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     List<CollectionLogData> _list = <CollectionLogData>[];
     CollectionLogEntity _data = CollectionLogEntity() ;
     FormData formData = FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
-    await requestNetwork<CollectionLogEntity>(Method.get, url: HttpApi.collectionLogs, queryParameters: {"page": page, 'p_collection_order_id': orderId}, onSuccess: (data) async {
+    String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    await requestNetwork<CollectionLogEntity>(Method.get, url: HttpApi.collectionLogs, queryParameters: {"page": page, 'p_collection_order_id': orderId, 'h_j_sms_template_newest_updated_at': hJSmsTemplateNewestUpdatedAt}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
         _data = data;
-
+        if (hJSmsTemplateNewestUpdatedAt == null || hJSmsTemplateNewestUpdatedAt != data.other!.hJSmsTemplateNewestUpdatedAt) {
+          SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
+          SpUtil.putObjectList("hJSmsTemplates", data.other!.hJSmsTemplate!);
+        }
       }
+
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {

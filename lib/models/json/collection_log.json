@@ -98,6 +98,13 @@
       "k_send_status": 50,
       "created_at": "2024-11-28T07:53:28.000000Z",
       "id": 1018
+    }],
+    "h_j_sms_template_newest_updated_at": "Sat Apr 19 2025 16:59:17 GMT+0800",
+    "h_j_sms_template": [{
+      "id": 0,
+      "d_template": "15921181128",
+      "s_name": "15921181128",
+      "e_days": "your otp is 1208"
     }]
   },
   "total": 33,

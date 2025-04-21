@@ -208,6 +208,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                   'n_sms_template_id': smsTemplateId,
                   'h_phone': phone ?? '',
                   'o_contact_id': contactId ?? 0,
+                  'p_collection_order_id': widget.orderId ,
                 };
                 _addNotePresenter.store(logData,  true);
               },

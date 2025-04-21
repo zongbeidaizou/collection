@@ -580,77 +580,103 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
 CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
     Map<String, dynamic> json) {
   final CollectionLogOtherRepayInfo collectionLogOtherRepayInfo = CollectionLogOtherRepayInfo();
-  final String? phone = jsonConvert.convert<String>(json['phone']);
-  if (phone != null) {
-    collectionLogOtherRepayInfo.phone = phone;
-  }
-  final String? name = jsonConvert.convert<String>(json['name']);
-  if (name != null) {
-    collectionLogOtherRepayInfo.name = name;
-  }
-  final int? loanAmount = jsonConvert.convert<int>(json['loan_amount']);
-  if (loanAmount != null) {
-    collectionLogOtherRepayInfo.loanAmount = loanAmount;
-  }
-  final int? repayAmount = jsonConvert.convert<int>(json['repay_amount']);
-  if (repayAmount != null) {
-    collectionLogOtherRepayInfo.repayAmount = repayAmount;
+  final String? expectRepayAmount = jsonConvert.convert<String>(
+      json['expect_repay_amount']);
+  if (expectRepayAmount != null) {
+    collectionLogOtherRepayInfo.expectRepayAmount = expectRepayAmount;
   }
   final String? expectRepayTime = jsonConvert.convert<String>(
       json['expect_repay_time']);
   if (expectRepayTime != null) {
     collectionLogOtherRepayInfo.expectRepayTime = expectRepayTime;
   }
-  final int? borrowDays = jsonConvert.convert<int>(json['borrow_days']);
+  final String? overdueDays = jsonConvert.convert<String>(json['overdue_days']);
+  if (overdueDays != null) {
+    collectionLogOtherRepayInfo.overdueDays = overdueDays;
+  }
+  final String? mobile = jsonConvert.convert<String>(json['mobile']);
+  if (mobile != null) {
+    collectionLogOtherRepayInfo.mobile = mobile;
+  }
+  final String? name = jsonConvert.convert<String>(json['name']);
+  if (name != null) {
+    collectionLogOtherRepayInfo.name = name;
+  }
+  final String? borrowAmount = jsonConvert.convert<String>(
+      json['borrow_amount']);
+  if (borrowAmount != null) {
+    collectionLogOtherRepayInfo.borrowAmount = borrowAmount;
+  }
+  final String? loanAmount = jsonConvert.convert<String>(json['loan_amount']);
+  if (loanAmount != null) {
+    collectionLogOtherRepayInfo.loanAmount = loanAmount;
+  }
+  final String? borrowDays = jsonConvert.convert<String>(json['borrow_days']);
   if (borrowDays != null) {
     collectionLogOtherRepayInfo.borrowDays = borrowDays;
   }
-  final int? upAmount = jsonConvert.convert<int>(json['up_amount']);
-  if (upAmount != null) {
-    collectionLogOtherRepayInfo.upAmount = upAmount;
-  }
-  final String? bankcardBank = jsonConvert.convert<String>(
-      json['bankcard_bank']);
-  if (bankcardBank != null) {
-    collectionLogOtherRepayInfo.bankcardBank = bankcardBank;
-  }
-  final int? overdueDays = jsonConvert.convert<int>(json['overdue_days']);
-  if (overdueDays != null) {
-    collectionLogOtherRepayInfo.overdueDays = overdueDays;
+  final String? appName = jsonConvert.convert<String>(json['app_name']);
+  if (appName != null) {
+    collectionLogOtherRepayInfo.appName = appName;
   }
   final String? productName = jsonConvert.convert<String>(json['product_name']);
   if (productName != null) {
     collectionLogOtherRepayInfo.productName = productName;
   }
-  final String? recieveBank = jsonConvert.convert<String>(json['recieve_bank']);
-  if (recieveBank != null) {
-    collectionLogOtherRepayInfo.recieveBank = recieveBank;
+  final String? loanTime = jsonConvert.convert<String>(json['loan_time']);
+  if (loanTime != null) {
+    collectionLogOtherRepayInfo.loanTime = loanTime;
   }
-  final String? recieveBankNo = jsonConvert.convert<String>(
-      json['recieve_bank_no']);
-  if (recieveBankNo != null) {
-    collectionLogOtherRepayInfo.recieveBankNo = recieveBankNo;
+  final String? receiveBank = jsonConvert.convert<String>(json['receive_bank']);
+  if (receiveBank != null) {
+    collectionLogOtherRepayInfo.receiveBank = receiveBank;
   }
-  final String? accountNumber = jsonConvert.convert<String>(
-      json['account_number']);
-  if (accountNumber != null) {
-    collectionLogOtherRepayInfo.accountNumber = accountNumber;
-  }
-  final String? bank = jsonConvert.convert<String>(json['bank']);
-  if (bank != null) {
-    collectionLogOtherRepayInfo.bank = bank;
+  final String? receiveBankNo = jsonConvert.convert<String>(
+      json['receive_bank_no']);
+  if (receiveBankNo != null) {
+    collectionLogOtherRepayInfo.receiveBankNo = receiveBankNo;
   }
   final String? accountName = jsonConvert.convert<String>(json['account_name']);
   if (accountName != null) {
     collectionLogOtherRepayInfo.accountName = accountName;
   }
-  final String? email = jsonConvert.convert<String>(json['email']);
-  if (email != null) {
-    collectionLogOtherRepayInfo.email = email;
+  final String? accountNo = jsonConvert.convert<String>(json['account_no']);
+  if (accountNo != null) {
+    collectionLogOtherRepayInfo.accountNo = accountNo;
   }
-  final String? whatsapp = jsonConvert.convert<String>(json['whatsapp']);
-  if (whatsapp != null) {
-    collectionLogOtherRepayInfo.whatsapp = whatsapp;
+  final String? accountBank = jsonConvert.convert<String>(json['account_bank']);
+  if (accountBank != null) {
+    collectionLogOtherRepayInfo.accountBank = accountBank;
+  }
+  final String? beforeCreditAmount = jsonConvert.convert<String>(
+      json['before_credit_amount']);
+  if (beforeCreditAmount != null) {
+    collectionLogOtherRepayInfo.beforeCreditAmount = beforeCreditAmount;
+  }
+  final String? afterCreditAmount = jsonConvert.convert<String>(
+      json['after_credit_amount']);
+  if (afterCreditAmount != null) {
+    collectionLogOtherRepayInfo.afterCreditAmount = afterCreditAmount;
+  }
+  final String? changeCreditAmount = jsonConvert.convert<String>(
+      json['change_credit_amount']);
+  if (changeCreditAmount != null) {
+    collectionLogOtherRepayInfo.changeCreditAmount = changeCreditAmount;
+  }
+  final String? beforeCreditFraction = jsonConvert.convert<String>(
+      json['before_credit_fraction']);
+  if (beforeCreditFraction != null) {
+    collectionLogOtherRepayInfo.beforeCreditFraction = beforeCreditFraction;
+  }
+  final String? afterCreditFraction = jsonConvert.convert<String>(
+      json['after_credit_fraction']);
+  if (afterCreditFraction != null) {
+    collectionLogOtherRepayInfo.afterCreditFraction = afterCreditFraction;
+  }
+  final String? changeCreditFraction = jsonConvert.convert<String>(
+      json['change_credit_fraction']);
+  if (changeCreditFraction != null) {
+    collectionLogOtherRepayInfo.changeCreditFraction = changeCreditFraction;
   }
   return collectionLogOtherRepayInfo;
 }
@@ -658,64 +684,80 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
 Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
     CollectionLogOtherRepayInfo entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
-  data['phone'] = entity.phone;
-  data['name'] = entity.name;
-  data['loan_amount'] = entity.loanAmount;
-  data['repay_amount'] = entity.repayAmount;
+  data['expect_repay_amount'] = entity.expectRepayAmount;
   data['expect_repay_time'] = entity.expectRepayTime;
-  data['borrow_days'] = entity.borrowDays;
-  data['up_amount'] = entity.upAmount;
-  data['bankcard_bank'] = entity.bankcardBank;
   data['overdue_days'] = entity.overdueDays;
+  data['mobile'] = entity.mobile;
+  data['name'] = entity.name;
+  data['borrow_amount'] = entity.borrowAmount;
+  data['loan_amount'] = entity.loanAmount;
+  data['borrow_days'] = entity.borrowDays;
+  data['app_name'] = entity.appName;
   data['product_name'] = entity.productName;
-  data['recieve_bank'] = entity.recieveBank;
-  data['recieve_bank_no'] = entity.recieveBankNo;
-  data['account_number'] = entity.accountNumber;
-  data['bank'] = entity.bank;
+  data['loan_time'] = entity.loanTime;
+  data['receive_bank'] = entity.receiveBank;
+  data['receive_bank_no'] = entity.receiveBankNo;
   data['account_name'] = entity.accountName;
-  data['email'] = entity.email;
-  data['whatsapp'] = entity.whatsapp;
+  data['account_no'] = entity.accountNo;
+  data['account_bank'] = entity.accountBank;
+  data['before_credit_amount'] = entity.beforeCreditAmount;
+  data['after_credit_amount'] = entity.afterCreditAmount;
+  data['change_credit_amount'] = entity.changeCreditAmount;
+  data['before_credit_fraction'] = entity.beforeCreditFraction;
+  data['after_credit_fraction'] = entity.afterCreditFraction;
+  data['change_credit_fraction'] = entity.changeCreditFraction;
   return data;
 }
 
 extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
   CollectionLogOtherRepayInfo copyWith({
-    String? phone,
-    String? name,
-    int? loanAmount,
-    int? repayAmount,
+    String? expectRepayAmount,
     String? expectRepayTime,
-    int? borrowDays,
-    int? upAmount,
-    String? bankcardBank,
-    int? overdueDays,
+    String? overdueDays,
+    String? mobile,
+    String? name,
+    String? borrowAmount,
+    String? loanAmount,
+    String? borrowDays,
+    String? appName,
     String? productName,
-    String? recieveBank,
-    String? recieveBankNo,
-    String? accountNumber,
-    String? bank,
+    String? loanTime,
+    String? receiveBank,
+    String? receiveBankNo,
     String? accountName,
-    String? email,
-    String? whatsapp,
+    String? accountNo,
+    String? accountBank,
+    String? beforeCreditAmount,
+    String? afterCreditAmount,
+    String? changeCreditAmount,
+    String? beforeCreditFraction,
+    String? afterCreditFraction,
+    String? changeCreditFraction,
   }) {
     return CollectionLogOtherRepayInfo()
-      ..phone = phone ?? this.phone
-      ..name = name ?? this.name
-      ..loanAmount = loanAmount ?? this.loanAmount
-      ..repayAmount = repayAmount ?? this.repayAmount
+      ..expectRepayAmount = expectRepayAmount ?? this.expectRepayAmount
       ..expectRepayTime = expectRepayTime ?? this.expectRepayTime
-      ..borrowDays = borrowDays ?? this.borrowDays
-      ..upAmount = upAmount ?? this.upAmount
-      ..bankcardBank = bankcardBank ?? this.bankcardBank
       ..overdueDays = overdueDays ?? this.overdueDays
+      ..mobile = mobile ?? this.mobile
+      ..name = name ?? this.name
+      ..borrowAmount = borrowAmount ?? this.borrowAmount
+      ..loanAmount = loanAmount ?? this.loanAmount
+      ..borrowDays = borrowDays ?? this.borrowDays
+      ..appName = appName ?? this.appName
       ..productName = productName ?? this.productName
-      ..recieveBank = recieveBank ?? this.recieveBank
-      ..recieveBankNo = recieveBankNo ?? this.recieveBankNo
-      ..accountNumber = accountNumber ?? this.accountNumber
-      ..bank = bank ?? this.bank
+      ..loanTime = loanTime ?? this.loanTime
+      ..receiveBank = receiveBank ?? this.receiveBank
+      ..receiveBankNo = receiveBankNo ?? this.receiveBankNo
       ..accountName = accountName ?? this.accountName
-      ..email = email ?? this.email
-      ..whatsapp = whatsapp ?? this.whatsapp;
+      ..accountNo = accountNo ?? this.accountNo
+      ..accountBank = accountBank ?? this.accountBank
+      ..beforeCreditAmount = beforeCreditAmount ?? this.beforeCreditAmount
+      ..afterCreditAmount = afterCreditAmount ?? this.afterCreditAmount
+      ..changeCreditAmount = changeCreditAmount ?? this.changeCreditAmount
+      ..beforeCreditFraction = beforeCreditFraction ?? this.beforeCreditFraction
+      ..afterCreditFraction = afterCreditFraction ?? this.afterCreditFraction
+      ..changeCreditFraction = changeCreditFraction ??
+          this.changeCreditFraction;
   }
 }
 

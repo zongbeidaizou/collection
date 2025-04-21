@@ -108,7 +108,7 @@ class _SmsDialogDialog extends State<SmsDialog> {
     List<Map<String, dynamic>> dataList = SpUtil.getObjectList("hJSmsTemplates")!.cast<Map<String, dynamic>>();
     List<CollectionLogOtherHJSmsTemplate> templates = List<CollectionLogOtherHJSmsTemplate>.from(dataList.map((value) {
       return $CollectionLogOtherHJSmsTemplateFromJson(value);
-    })).where((item) => item.eDays == null || item.eDays == '' || isNumberInRange(item.eDays!, widget.repayInfo!.overdueDays!)).toList();
+    })).where((item) => item.eDays == null || item.eDays == '' || isNumberInRange(item.eDays!, int.parse(widget.repayInfo!.overdueDays!))).toList();
 
     // final templateContentList = [
     //   '',

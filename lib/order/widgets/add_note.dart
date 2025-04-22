@@ -501,6 +501,10 @@ class _InnerTimeline extends StatelessWidget {
               return 100;
             }else if(messages[index].toString().length < 180){
               return 105;
+            }else if(messages[index].toString().length < 280){
+              return 125;
+            }else if(messages[index].toString().length < 580){
+              return 155;
             }else{
               return 50;
             }

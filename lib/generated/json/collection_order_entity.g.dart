@@ -640,6 +640,10 @@ extension CollectionOrderOtherProgressAmountProgressExtension on CollectionOrder
 CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
     Map<String, dynamic> json) {
   final CollectionOrderOtherProfile collectionOrderOtherProfile = CollectionOrderOtherProfile();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionOrderOtherProfile.id = id;
+  }
   final String? aName = jsonConvert.convert<String>(json['a_name']);
   if (aName != null) {
     collectionOrderOtherProfile.aName = aName;
@@ -806,6 +810,7 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
 Map<String, dynamic> $CollectionOrderOtherProfileToJson(
     CollectionOrderOtherProfile entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['a_name'] = entity.aName;
   data['b_admin_id'] = entity.bAdminId;
   data['c_collection_agency_id'] = entity.cCollectionAgencyId;
@@ -845,6 +850,7 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
 
 extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
   CollectionOrderOtherProfile copyWith({
+    int? id,
     String? aName,
     int? bAdminId,
     int? cCollectionAgencyId,
@@ -879,6 +885,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     String? aFLastCallAt,
   }) {
     return CollectionOrderOtherProfile()
+      ..id = id ?? this.id
       ..aName = aName ?? this.aName
       ..bAdminId = bAdminId ?? this.bAdminId
       ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId

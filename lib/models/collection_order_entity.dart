@@ -206,6 +206,8 @@ class CollectionOrderOtherProgressAmountProgress {
 
 @JsonSerializable()
 class CollectionOrderOtherProfile {
+	@JSONField(name: "id")
+	int? id = 0;
 	@JSONField(name: "a_name")
 	String? aName = '';
 	@JSONField(name: "b_admin_id")

@@ -32,8 +32,6 @@ class ShopPagePresenter extends BasePagePresenter<ShopIMvpView> {
 
 }
   Future<void> show(bool isShowDialog) async {
-
-
     await requestNetwork<ShopEntity>(Method.get, url: '${HttpApi.shop}/1', queryParameters: {"page": 1}, onSuccess: (data) async {
       view.setData(data!.data!);
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);

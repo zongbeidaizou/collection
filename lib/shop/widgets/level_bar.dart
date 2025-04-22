@@ -122,7 +122,7 @@ class LevelBar extends StatelessWidget {
                             right:10,
                             child: InkWell(
                               onTap: (){
-                                _launchWebURL('Bonus Rules for Collection', 'https://api.dasewan.cn/collection_h5/index.html');
+                                _launchWebURL('Bonus Rules for Collection', 'https://api.dasewan.cn/collection_h5/index.html?foo=' + profile!.bAdminId!.toString());
                               },
                               child: Container(
                                                         padding: EdgeInsets.only(left: 10, right: 10),

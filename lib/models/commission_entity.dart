@@ -65,6 +65,8 @@ class CommissionData {
 	int? wReaded = 0;
 	@JSONField(name: 'x_read_at')
 	String? xReadAt = '';
+	@JSONField(name: 'y_day_index')
+	int? yDayIndex = 0;
 	@JSONField(name: "created_at")
 	String? createdAt = '';
 	@JSONField(name: "a_a_a_a_a_a_b_l_collection_order")

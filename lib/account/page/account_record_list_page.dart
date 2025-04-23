@@ -147,7 +147,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
           fit: BoxFit.fill,
         ),
         // toolbarHeight: 30,
-        title: Text("Commission Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        title: Text("Bonus Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
         actions: <Widget>[
           IconButton(
             tooltip: 'Search',
@@ -269,6 +269,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
           children: <Widget>[
             Row(
               children: [
+                Gaps.hGap32,
                 Text( log.aAAAAABLCollectionOrder!.tBorrowSn!),
                 Gaps.hGap4,
                 Row(
@@ -300,8 +301,13 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
               ),
             ),
             Positioned(
-              bottom: 0.0,
+              bottom: 10.0,
               left: 0.0,
+              child: Center(child: Text(log.yDayIndex!.toString(), style: TextStyle(fontSize: 14,color: Colors.grey.shade500))),
+            ),
+            Positioned(
+              bottom: 0.0,
+              left: 32.0,
               child: Text(DateFormat('hh:mm a', 'en_US').format(DateTime.parse(log.createdAt!)), style: Theme.of(context).textTheme.titleSmall),
             ),
             Positioned(

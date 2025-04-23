@@ -166,6 +166,10 @@ CommissionData $CommissionDataFromJson(Map<String, dynamic> json) {
   if (xReadAt != null) {
     commissionData.xReadAt = xReadAt;
   }
+  final int? yDayIndex = jsonConvert.convert<int>(json['y_day_index']);
+  if (yDayIndex != null) {
+    commissionData.yDayIndex = yDayIndex;
+  }
   final String? createdAt = jsonConvert.convert<String>(json['created_at']);
   if (createdAt != null) {
     commissionData.createdAt = createdAt;
@@ -198,6 +202,7 @@ Map<String, dynamic> $CommissionDataToJson(CommissionData entity) {
       entity.tCommissionAmountWithoutAssist;
   data['w_readed'] = entity.wReaded;
   data['x_read_at'] = entity.xReadAt;
+  data['y_day_index'] = entity.yDayIndex;
   data['created_at'] = entity.createdAt;
   data['a_a_a_a_a_a_b_l_collection_order'] =
       entity.aAAAAABLCollectionOrder?.toJson();
@@ -223,6 +228,7 @@ extension CommissionDataExtension on CommissionData {
     int? tCommissionAmountWithoutAssist,
     int? wReaded,
     String? xReadAt,
+    int? yDayIndex,
     String? createdAt,
     CollectionOrderData? aAAAAABLCollectionOrder,
   }) {
@@ -245,6 +251,7 @@ extension CommissionDataExtension on CommissionData {
           this.tCommissionAmountWithoutAssist
       ..wReaded = wReaded ?? this.wReaded
       ..xReadAt = xReadAt ?? this.xReadAt
+      ..yDayIndex = yDayIndex ?? this.yDayIndex
       ..createdAt = createdAt ?? this.createdAt
       ..aAAAAABLCollectionOrder = aAAAAABLCollectionOrder ??
           this.aAAAAABLCollectionOrder;

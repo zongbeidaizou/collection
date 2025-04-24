@@ -10,10 +10,12 @@ import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../goods/goods_router.dart';
 import '../../models/commission_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../order/page/order_page.dart';
+import '../../providers/user_provider.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../widgets/load_image.dart';
 const List<Color> bgColors = [
@@ -55,6 +57,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
+      final refreshProvider = Provider.of<UserProvider>(context, listen: false);
+      refreshProvider.addListener(() {
+        if (refreshProvider.userEntity.profile!.aGCollectionCommissionNewCount! > 0) {
+          _onRefresh();
+        }
+      });
     });
   }
   @override

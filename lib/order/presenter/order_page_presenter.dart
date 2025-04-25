@@ -13,6 +13,7 @@ import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
@@ -40,6 +41,7 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
         _list =  data.data!;
       }
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {

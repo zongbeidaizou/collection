@@ -6,6 +6,7 @@ import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/order/iview/order_search_iview.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
+import 'package:bounty_hunter/providers/refresh_provider.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,6 +40,7 @@ class AccountRecordListPresenter extends BasePagePresenter<AccountRecordListMvpV
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
     await requestNetwork<CommissionEntity>(Method.get, url: HttpApi.commission, queryParameters:{"page": currentPage,  'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
       if (data != null) {
         _list =  data.data!;
         _data = data;

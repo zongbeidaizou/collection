@@ -15,6 +15,7 @@ import '../../models/authoriz_store_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/goods_list_iview.dart';
@@ -40,6 +41,7 @@ class GoodsListPresenter extends BasePagePresenter<GoodsListMvpView> {
     await requestNetwork<CollectionLog2Entity>(Method.get, url: HttpApi.collectionLogs2, queryParameters:{"page": currentPage, 'g_type': type, 'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
       if (data != null) {
         view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+        view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
         _list =  data.data!;
         _data = data;
         view.setLogs(_list);

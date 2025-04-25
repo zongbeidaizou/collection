@@ -15,9 +15,11 @@ import '../../goods/goods_router.dart';
 import '../../models/commission_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../order/page/order_page.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../widgets/load_image.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 const List<Color> bgColors = [
   Colors.white,
   Colors.white,
@@ -57,12 +59,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
-      final refreshProvider = Provider.of<UserProvider>(context, listen: false);
-      refreshProvider.addListener(() {
-        if (refreshProvider.userEntity.profile!.aGCollectionCommissionNewCount! > 0) {
-          _onRefresh();
-        }
-      });
+
     });
   }
   @override
@@ -144,46 +141,56 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
-    return Scaffold(
-      appBar: widget.searchKeyword == '' ? AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colours.app_main,
-        flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
-          width: context.width,
-          height: 115.0,
-          fit: BoxFit.fill,
-        ),
-        // toolbarHeight: 30,
-        title: Text("Bonus Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
-        actions: <Widget>[
-          IconButton(
-            tooltip: 'Search',
-            onPressed: () {
-              NavigatorUtils.push(context, AccountRouter.search);
-            },
-            icon: LoadAssetImage(
-              'goods/search',
-              key: const Key('search'),
-              width: 24.0,
-              // height: 24.0,
-              color: iconColor,
-            ),
+    return VisibilityDetector(
+      key: Key('my-widget-key'),
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+        if(visiblePercentage >10 && context.read<RefreshProvider>().bonusRefresh){
+          _onRefresh();
+          context.read<RefreshProvider>().setBonusRefresh(false);
+        }
+      },
+      child: Scaffold(
+        appBar: widget.searchKeyword == '' ? AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colours.app_main,
+          flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
+            width: context.width,
+            height: 115.0,
+            fit: BoxFit.fill,
           ),
-        ],
-      ): null,
-      body: NotificationListener(
-        onNotification: (ScrollNotification note) {
-          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-            _loadMore();
-          }
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          displacement: 120.0,
-          child: CustomScrollView(
-            slivers: _list.isNotEmpty ? _buildGroups() : [const SliverFillRemaining(child: Center(child: Text('no data, search by phone or sn')))],
+          // toolbarHeight: 30,
+          title: Text("Bonus Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          actions: <Widget>[
+            IconButton(
+              tooltip: 'Search',
+              onPressed: () {
+                NavigatorUtils.push(context, AccountRouter.search);
+              },
+              icon: LoadAssetImage(
+                'goods/search',
+                key: const Key('search'),
+                width: 24.0,
+                // height: 24.0,
+                color: iconColor,
+              ),
+            ),
+          ],
+        ): null,
+        body: NotificationListener(
+          onNotification: (ScrollNotification note) {
+            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+              _loadMore();
+            }
+            return true;
+          },
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            displacement: 120.0,
+            child: CustomScrollView(
+              slivers: _list.isNotEmpty ? _buildGroups() : [const SliverFillRemaining(child: Center(child: Text('no data, search by phone or sn')))],
+            ),
           ),
         ),
       ),

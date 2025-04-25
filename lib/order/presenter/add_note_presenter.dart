@@ -18,6 +18,7 @@ import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../providers/order_list_provider.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/add_note_iview.dart';
@@ -145,6 +146,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
 
     await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
       var a = data.data!.first;
       var c = view.getContext().read<UserProvider>();
       var b = view.getContext().read<OrderListProvider>();

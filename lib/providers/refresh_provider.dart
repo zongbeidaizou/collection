@@ -24,7 +24,10 @@ class RefreshProvider extends ChangeNotifier {
       _bonusRefresh = true;
       notifyListeners();
     }
-
+  }
+  void setBonusRefresh(bool newValue) {
+    _bonusRefresh = newValue;
+    notifyListeners();
   }
 
 

@@ -18,6 +18,7 @@ import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/commission_entity.dart';
 import '../../models/product_entity.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../util/cache.dart';
 import '../iview/message_page_iview.dart';
@@ -38,6 +39,7 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
     await requestNetwork<CollectionNotificationEntity>(Method.get, url: HttpApi.notification, queryParameters:{"page": currentPage,  'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
       if (data != null) {
         _list =  data.data!;
         _data = data;
@@ -45,6 +47,7 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
         view.setPageSize((data.total!/data.perPage!).ceil());
         view.setCurrentPage(data.currentPage!);
         view.getContext().read<UserProvider>().setUserEntity(data.other!);
+        view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
 
       }
     }, onError: (_, __) async {
@@ -62,6 +65,7 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
     FormData formData = FormData.fromMap(loginInfo);
     await requestNetwork<CollectionNotificationEntity>(Method.put, url: '${HttpApi.notification}/1', params: formData, isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
 
         }, onError: (_, __) async {
       if (_ == 200006) {

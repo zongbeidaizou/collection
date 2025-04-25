@@ -1,4 +1,5 @@
 import 'package:bounty_hunter/providers/order_list_provider.dart';
+import 'package:bounty_hunter/providers/refresh_provider.dart';
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider<OrderListProvider>(create: (_) => OrderListProvider()),
-        ChangeNotifierProvider(create: (_) => UserProvider())
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => RefreshProvider())
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (_, ThemeProvider provider, LocaleProvider localeProvider, __) {

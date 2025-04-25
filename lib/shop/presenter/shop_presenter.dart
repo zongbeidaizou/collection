@@ -7,6 +7,7 @@ import 'package:bounty_hunter/shop/models/user_entity.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/shop_entity.dart';
+import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
 
 
@@ -35,6 +36,7 @@ class ShopPagePresenter extends BasePagePresenter<ShopIMvpView> {
     await requestNetwork<ShopEntity>(Method.get, url: '${HttpApi.shop}/1', queryParameters: {"page": 1}, onSuccess: (data) async {
       view.setData(data!.data!);
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {

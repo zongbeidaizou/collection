@@ -197,7 +197,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
           },
           child: RefreshIndicator(
             onRefresh: _onRefresh,
-            displacement: 120.0,
+            displacement: 20.0,
             child: CustomScrollView(
               slivers: _list.isNotEmpty ? _buildGroups() : [const SliverFillRemaining(child: Center(child: Text('no data, search by phone or sn')))],
             ),

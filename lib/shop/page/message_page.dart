@@ -10,10 +10,13 @@ import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../goods/goods_router.dart';
 import '../../models/commission_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../order/page/order_page.dart';
+import '../../providers/refresh_provider.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../widgets/load_image.dart';
 import '../../widgets/my_card.dart';
@@ -101,7 +104,10 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
   }
 
   @override
-  void setLogs(List<CollectionNotificationData> logs) {
+  void setLogs(List<CollectionNotificationData> logs, {bool clear = false}) {
+    if (clear) {
+      _list.clear();
+    }
     setState(() {
       _list.addAll(logs);
       _isLoading = false;
@@ -143,47 +149,57 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colours.app_main,
-        flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
-          width: context.width,
-          height: 115.0,
-          fit: BoxFit.fill,
+    return VisibilityDetector(
+      key: Key('news-visibility-key'),
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+        if(visiblePercentage >10 && context.read<RefreshProvider>().newsRefresh){
+          _onRefresh();
+          context.read<RefreshProvider>().setNewsRefresh(false);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: Colours.app_main,
+          flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
+            width: context.width,
+            height: 115.0,
+            fit: BoxFit.fill,
+          ),
+          // toolbarHeight: 30,
+          title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          actions: <Widget>[
+            InkWell(
+              onTap: () {
+                _accountRecordListPresenter.markAsRead(true);
+              },
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                  child: Center(child: Text('Mark All as Read'))),
+            )
+          ],
         ),
-        // toolbarHeight: 30,
-        title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
-        actions: <Widget>[
-          InkWell(
-            onTap: () {
-              _accountRecordListPresenter.markAsRead(true);
-            },
-            child: Container(
-              padding: EdgeInsets.only(left: 16, right: 16),
-                child: Center(child: Text('Mark All as Read'))),
-          )
-        ],
-      ),
-      body: NotificationListener(
-        onNotification: (ScrollNotification note) {
-          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-            _loadMore();
-          }
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          displacement: 120.0,
-          child: Scrollbar( // 加个滚动条
-            controller: _scrollController,
-            child: ListView.builder(
-              itemCount: _list.length,
+        body: NotificationListener(
+          onNotification: (ScrollNotification note) {
+            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+              _loadMore();
+            }
+            return true;
+          },
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            displacement: 120.0,
+            child: Scrollbar( // 加个滚动条
               controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
-              itemBuilder: (_, index) => _MessageItem(item: _list[index]),
+              child: ListView.builder(
+                itemCount: _list.length,
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
+                itemBuilder: (_, index) => _MessageItem(item: _list[index]),
+              ),
             ),
           ),
         ),
@@ -206,7 +222,8 @@ class _MessageItem extends StatelessWidget {
         Gaps.vGap15,
         Gaps.vGap8,
         MyCard(
-          shadowColor: bgColors[item.gCat!].withOpacity(0.46),
+          shadowColor: item.eReaded == 1 ? Colors.white : bgColors[item.gCat!].withOpacity(0.46),
+          color:item.eReaded == 1 ? Colors.grey.shade200 : Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

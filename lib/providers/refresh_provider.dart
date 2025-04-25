@@ -15,6 +15,8 @@ class RefreshProvider extends ChangeNotifier {
   int get bonusNewCount => _bonusNewCount;
   bool _newsRefresh = false;
   bool get newsRefresh => _newsRefresh;
+  int _newsNewCount = 0;
+  int get newsNewCount => _newsNewCount;
   bool _homeRefresh = false;
   bool get homeRefresh => _homeRefresh;
 
@@ -24,11 +26,21 @@ class RefreshProvider extends ChangeNotifier {
       _bonusRefresh = true;
       notifyListeners();
     }
+    if(userEntity.profile!.aHCollectionNotificationCount != _newsNewCount){
+      _newsNewCount = userEntity.profile!.aHCollectionNotificationCount!;
+      _newsRefresh = true;
+      notifyListeners();
+    }
   }
   void setBonusRefresh(bool newValue) {
     _bonusRefresh = newValue;
     notifyListeners();
   }
+  void setNewsRefresh(bool newValue) {
+    _newsRefresh = newValue;
+    notifyListeners();
+  }
+
 
 
 }

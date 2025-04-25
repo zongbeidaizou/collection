@@ -11,7 +11,7 @@ import '../../models/product_entity.dart';
 
 abstract class MessagePageMvpView implements IMvpView {
   void onRefresh();
-  void setLogs(List<CollectionNotificationData> logs);
+  void setLogs(List<CollectionNotificationData> logs,{bool clear = false});
   void setPageSize(int pageSize);
   void setCurrentPage(int currentPage);
 

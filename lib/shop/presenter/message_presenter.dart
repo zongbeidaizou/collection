@@ -63,11 +63,20 @@ class MessagePresenter extends BasePagePresenter<MessagePageMvpView> {
       'grant_type': 'password',
     };
     FormData formData = FormData.fromMap(loginInfo);
+    List<CollectionNotificationData> _list = <CollectionNotificationData>[];
     await requestNetwork<CollectionNotificationEntity>(Method.put, url: '${HttpApi.notification}/1', params: formData, isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
+      if (data != null) {
+        _list =  data.data!;
+        view.setLogs(_list, clear: true);
+        view.setPageSize((data.total!/data.perPage!).ceil());
+        view.setCurrentPage(data.currentPage!);
+        view.getContext().read<UserProvider>().setUserEntity(data.other!);
+        view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
 
-        }, onError: (_, __) async {
+      }
+    }, onError: (_, __) async {
       if (_ == 200006) {
       } else {
         view.showToast(__);

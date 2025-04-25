@@ -99,7 +99,10 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   }
 
   @override
-  void setLogs(List<CommissionData> logs) {
+  void setLogs(List<CommissionData> logs, {bool clear = false}) {
+    if (clear) {
+      _list.clear();
+    }
     setState(() {
       _list.addAll(logs);
       _isLoading = false;
@@ -163,6 +166,13 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
           // toolbarHeight: 30,
           title: Text("Bonus Record",style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
+            IconButton(
+              tooltip: 'mark all as read',
+              onPressed: () {
+                _accountRecordListPresenter.markAsRead(true);
+              },
+              icon: Icon(Icons.remove_red_eye_outlined,color: Colors.black54,),
+            ),
             IconButton(
               tooltip: 'Search',
               onPressed: () {

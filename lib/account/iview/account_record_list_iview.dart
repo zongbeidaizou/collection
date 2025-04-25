@@ -10,7 +10,7 @@ import '../../models/product_entity.dart';
 
 abstract class AccountRecordListMvpView implements IMvpView {
   void onRefresh();
-  void setLogs(List<CommissionData> logs);
+  void setLogs(List<CommissionData> logs, {bool clear = false});
   void setPageSize(int pageSize);
   void setCurrentPage(int currentPage);
   void setProduct(List<ProductData> product);

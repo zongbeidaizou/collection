@@ -95,4 +95,27 @@ class AccountRecordListPresenter extends BasePagePresenter<AccountRecordListMvpV
     }
   }
 
+  Future<void> markAsRead(bool isShowDialog, {String keyword = ''}) async {
+    Map<String, dynamic> loginInfo = {
+      'grant_type': 'password',
+    };
+    List<CommissionData> _list = <CommissionData>[];
+    CommissionEntity _data = CommissionEntity() ;
+    FormData formData = FormData.fromMap(loginInfo);
+    await requestNetwork<CommissionEntity>(Method.put, url: '${HttpApi.commission}/1', params: formData, isShow: isShowDialog, onSuccess: (data) async {
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      _list =  data.data!;
+      _data = data;
+      view.setLogs(_list, clear: true);
+      view.setPageSize(4);
+      view.setCurrentPage(data.currentPage!);
+
+    }, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {
+        view.showToast(__);
+      }
+    });
+  }
+
 }

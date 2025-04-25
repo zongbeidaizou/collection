@@ -7,6 +7,7 @@ import 'package:bounty_hunter/util/change_notifier_manage.dart';
 import 'package:bounty_hunter/widgets/my_refresh_list.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
@@ -14,6 +15,7 @@ import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
+import '../../providers/user_provider.dart';
 import '../iview/order_list_page_iview.dart';
 const List<List<int>> indexMap = [[0], [1], [2], [3], [4,5]];
 
@@ -71,59 +73,73 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return NotificationListener(
-      onNotification: (ScrollNotification note) {
-        if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-          // _loadMore();
+    return VisibilityDetector(
+      key: Key('order_page${widget.index}'),
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction * 100;
+        if(visiblePercentage >10 ){
+          final updateAt = DateTime.parse(context.read<UserProvider>().userEntity.profile!.updatedAt!);
+          final now = DateTime.now().toUtc().add(const Duration(hours: 1));
+          final difference = now.difference(updateAt);
+          if(difference.inHours > 1){
+            _onRefresh();
+          }
         }
-        return true;
       },
-      child: RefreshIndicator(
-        onRefresh: _onRefresh,
-        displacement: 120.0, /// 默认40， 多添加的80为Header高度
-        child: Consumer<OrderPageProvider>(
-          builder: (_, provider, child) {
-            return CustomScrollView(
-              /// 这里指定controller可以与外层NestedScrollView的滚动分离，避免一处滑动，5个Tab中的列表同步滑动。
-              /// 这种方法的缺点是会重新layout列表
-              controller: _index != provider.index ? _controller : null,
-              key: PageStorageKey<String>('$_index'),
-              slivers: <Widget>[
-                SliverOverlapInjector(
-                  ///SliverAppBar的expandedHeight高度,避免重叠
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                ),
-                child!,
-              ],
-            );
-          },
-          child: Consumer<OrderListProvider>(
-              builder: (_, provider2, child) {
-              return SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: Center(child: Text("no data"))) :
-            SliverList(
-              delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                return index < provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length ?
-                OrderItem(
-                  key: Key('order_item_$index'),
-                  index: index,
-                  tabIndex: _index,
-                  item: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList()[index],
-                  products: _product,
-                  admins: _admins,
-                  repayInfo: CollectionLogOtherRepayInfo(),
-                  track: CollectionLogOtherTrack(),
-                  period: CollectionLogOtherPeriod(),
-                  contactList: [],
-                  smsHistory: [],
-                ) :
-                MoreWidget(provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length, _hasMore(), 10);
+      child: NotificationListener(
+        onNotification: (ScrollNotification note) {
+          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+            // _loadMore();
+          }
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          displacement: 120.0, /// 默认40， 多添加的80为Header高度
+          child: Consumer<OrderPageProvider>(
+            builder: (_, provider, child) {
+              return CustomScrollView(
+                /// 这里指定controller可以与外层NestedScrollView的滚动分离，避免一处滑动，5个Tab中的列表同步滑动。
+                /// 这种方法的缺点是会重新layout列表
+                controller: _index != provider.index ? _controller : null,
+                key: PageStorageKey<String>('$_index'),
+                slivers: <Widget>[
+                  SliverOverlapInjector(
+                    ///SliverAppBar的expandedHeight高度,避免重叠
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  ),
+                  child!,
+                ],
+              );
+            },
+            child: Consumer<OrderListProvider>(
+                builder: (_, provider2, child) {
+                return SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: Center(child: Text("no data"))) :
+              SliverList(
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  return index < provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length ?
+                  OrderItem(
+                    key: Key('order_item_$index'),
+                    index: index,
+                    tabIndex: _index,
+                    item: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList()[index],
+                    products: _product,
+                    admins: _admins,
+                    repayInfo: CollectionLogOtherRepayInfo(),
+                    track: CollectionLogOtherTrack(),
+                    period: CollectionLogOtherPeriod(),
+                    contactList: [],
+                    smsHistory: [],
+                  ) :
+                  MoreWidget(provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length, _hasMore(), 10);
 
-              },
-              childCount: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length + 1),
-            ));
-          }),
+                },
+                childCount: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length + 1),
+              ));
+            }),
+          ),
         ),
       ),
     );

@@ -81,7 +81,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
           final updateAt = DateTime.parse(context.read<UserProvider>().userEntity.profile!.updatedAt!);
           final now = DateTime.now().toUtc().add(const Duration(hours: 1));
           final difference = now.difference(updateAt);
-          if(difference.inHours > 1){
+          if(difference.inHours > 2){
             _onRefresh();
           }
         }

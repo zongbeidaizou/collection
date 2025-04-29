@@ -27,9 +27,7 @@ class ContactDialog extends StatelessWidget {
         return SmsDialog(
           repayInfo:repayInfo,
           onPressed: (templateId, smsContent) {
-            Toast.show('收款类型：$templateId');
             onSendSms?.call(templateId, smsContent, contactId: contactId, phone: phone);
-            // Toast.show('收款类型：$type');
           },
         );
       },
@@ -75,7 +73,7 @@ class ContactCard extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw '无法拨打电话';
+      throw 'cant launch $url';
     }
   }
 

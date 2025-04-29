@@ -66,6 +66,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     final targetDir = Directory(targetPath);
 
     if (!await targetDir.exists()) {
+      //todo 提示后端，获取手机信息
       print('目录不存在');
     }
 

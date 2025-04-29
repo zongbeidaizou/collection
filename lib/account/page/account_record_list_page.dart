@@ -30,6 +30,13 @@ const List<Color> bgColors = [
   Colors.greenAccent
 
 ];
+const List<String> groupNames = [
+  '',
+  'BB',
+  'B',
+  'A',
+  'AA',
+];
 
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
@@ -225,6 +232,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
     return groupedLog.entries.map((entry) {
       String date = entry.key;
       List<CommissionData> logList = entry.value;
+      int totalBonus = logList.fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
+      int bbBonus = logList.where((bonus) => bonus.kLevel == 1).fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
+      int bBonus = logList.where((bonus) => bonus.kLevel == 2).fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
+      int aBonus = logList.where((bonus) => bonus.kLevel == 3).fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
+      int aaBonus = logList.where((bonus) => bonus.kLevel == 4).fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
       return SliverMainAxisGroup(
         slivers: [
           SliverPersistentHeader(
@@ -233,19 +245,67 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
               Container(
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
-                color: ThemeUtils.getStickyHeaderColor(context),
+                color: Colors.blue[100],
                 padding: const EdgeInsets.only(left: 10.0),
-                child: Text(date,style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '$date total bonus: ',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500), // 默认黑色
+                      ),
+                      if (totalBonus > 0) ...[
+                          TextSpan(
+                            text: '$totalBonus',
+                            style: TextStyle(
+                              color: Colors.red, // 总奖金用深蓝色
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '  [',
+                            style: TextStyle(color: Colors.grey[600]), // BB奖金用灰色
+                          ),
+                        if (bbBonus > 0)
+                          TextSpan(
+                            text: 'BB:$bbBonus',
+                            style: TextStyle(color: Colors.grey[600]), // B奖金用蓝色
+                          ),
+                        if (bBonus > 0)
+                          TextSpan(
+                            text: ' B:$bBonus',
+                            style: TextStyle(color: Colors.grey[600]), // B奖金用蓝色
+                          ),
+                        if (aBonus > 0)
+                          TextSpan(
+                            text: ' A:$aBonus',
+                            style: TextStyle(color: Colors.grey[600]), // A奖金用绿色
+                          ),
+                        if (aaBonus > 0)
+                          TextSpan(
+                            text: ' AA:$aaBonus',
+                            style: TextStyle(color: Colors.grey[600]), // AA奖金用红色
+                          ),
+                        TextSpan(
+                          text: ']',
+                          style: TextStyle(color: Colors.grey[600]), // BB奖金用灰色
+                        ),
+                      ],
+                    ],
+                  ),
+                ) ,
               ),
               34.0,
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (_, index) {
-                return _buildItem(logList[index], index);
-              },
-              childCount: logList.length,
+          Container(
+            child: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (_, index) {
+                  return _buildItem(logList[index], index);
+                },
+                childCount: logList.length,
+              ),
             ),
           ),
         ],
@@ -271,11 +331,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   }
 
   Widget _buildItem(CommissionData log, int i) {
-    String txt = '${log.jRate}% of total amount ${log.gAmount} (lv.${log.kLevel})';
+    String txt = '${log.jRate}% of total amount ${log.gAmount} (lv.${groupNames[log.kLevel!]})';
     if(log.oType == 2){
-      txt = "Tiered Achievement Bonus (lv.${log.kLevel})";
+      txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
     }else if(log.oType == 3){
-      txt = "Manually Calculated Bonus";
+      txt = 'Manually Calculated Bonus';
     }
 
     return Container(

@@ -125,7 +125,6 @@ class OrderItem extends StatelessWidget {
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               body: ContactDialog(contactList: contactList, repayInfo: repayInfo, onSendSms: (templateId, smsContent, {String? phone, int? contactId}) {
-                Toast.show('收款类型：$templateId');
                 onSendSms?.call(templateId, smsContent, contactId: contactId, phone: phone);
                 // Toast.show('收款类型：$type');
               },),     //AddNote should be your Widget that will be displayed inside the bottomSheet

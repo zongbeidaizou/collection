@@ -71,7 +71,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _initSplash() {
     _subscription = Stream.value(1).delay(const Duration(milliseconds: 1500)).listen((_) {
-      if (SpUtil.getBool(Constant.keyGuide, defValue: true)! || Constant.isDriverTest) {
+      if (SpUtil.getBool(Constant.keyGuide, defValue: false)! || Constant.isDriverTest) {
         SpUtil.putBool(Constant.keyGuide, false);
         _initGuide();
       } else {

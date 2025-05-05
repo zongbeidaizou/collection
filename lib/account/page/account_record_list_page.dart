@@ -65,7 +65,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
+      // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
 
     });
   }

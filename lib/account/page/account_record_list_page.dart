@@ -268,7 +268,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
                           ),
                         if (bbBonus > 0)
                           TextSpan(
-                            text: 'BB:$bbBonus',
+                            text: 'BB:₦$bbBonus',
                             style: TextStyle(color: Colors.grey[600]), // B奖金用蓝色
                           ),
                         if (bBonus > 0)
@@ -278,12 +278,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
                           ),
                         if (aBonus > 0)
                           TextSpan(
-                            text: ' A:$aBonus',
+                            text: ' A:₦$aBonus',
                             style: TextStyle(color: Colors.grey[600]), // A奖金用绿色
                           ),
                         if (aaBonus > 0)
                           TextSpan(
-                            text: ' AA:$aaBonus',
+                            text: ' AA:₦$aaBonus',
                             style: TextStyle(color: Colors.grey[600]), // AA奖金用红色
                           ),
                         TextSpan(
@@ -378,7 +378,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage> with Auto
             Positioned(
               top: 0.0,
               right: 0.0,
-              child: Text("+${log.hCommissionAmount}",
+              child: Text("+₦${log.hCommissionAmount}",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,

@@ -68,7 +68,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _accountRecordListPresenter.index(1, true);
+      // _accountRecordListPresenter.index(1, true);
     });
   }
   @override
@@ -76,7 +76,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
     super.didUpdateWidget(oldWidget);
     // 当搜索关键词变化时，重新请求数据
 
-    _accountRecordListPresenter.index(1, false);
+    // _accountRecordListPresenter.index(1, false);
   }
 
   @override

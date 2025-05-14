@@ -474,7 +474,7 @@ class OrderItem extends StatelessWidget {
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               icon: FaIcon(FontAwesomeIcons.whatsapp, size: 20, color: Colors.white),
               onTap: () async {
-                Utils.launchWhatsAppURL(item.uPhone!);
+                Utils.launchWhatsAppURL("234" + item.uPhone!);
               },
             ),
             Gaps.hGap4,

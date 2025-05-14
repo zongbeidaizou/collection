@@ -179,7 +179,12 @@ class OrderItem extends StatelessWidget {
         },
       );
     }
-
+    int calculateCalendarDaysDifference(DateTime start, DateTime end) {
+      // 将两个日期都设置为午夜时间，只比较日期部分
+      start = DateTime(start.year, start.month, start.day);
+      end = DateTime(end.year, end.month, end.day);
+      return end.difference(start).inDays;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +253,7 @@ class OrderItem extends StatelessWidget {
 
             Gaps.hGap4,
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Row(children: [
                 Container(
                   margin: const EdgeInsets.only(right: 4.0),
@@ -330,7 +335,7 @@ class OrderItem extends StatelessWidget {
 
           Gaps.hGap4,
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Row(children: [
               Container(
                 margin: const EdgeInsets.only(right: 4.0),
@@ -370,7 +375,8 @@ class OrderItem extends StatelessWidget {
                   style: textTextStyle,
                   children: <TextSpan>[
                     // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                    TextSpan(text: 'overdue ${DateTime.parse(item.pExpectRepayTime!).difference(DateTime.now()).inDays} days'),
+                    // TextSpan(text: 'overdue ${DateTime.parse(item.pExpectRepayTime!).difference(DateTime.now()).inDays} days'),
+                    TextSpan(text: 'overdue ${calculateCalendarDaysDifference(DateTime.parse(item.pExpectRepayTime!), DateTime.now())} days'),
                   ],
                 ),
               ),
@@ -421,7 +427,7 @@ class OrderItem extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${(provider.userEntity.profile!.aETodayCommissionRate! * item.lCollectionAmount!/100).toInt()} reward"),
+                        Text("${(provider.userEntity.profile!.aETodayCommissionRate! * item.nBorrowAmount!/100).toInt()} reward"),
                         Text("current lv. ${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}% of amount", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8))
                       ],
                     );

@@ -142,7 +142,7 @@ class OrderItem extends StatelessWidget {
           return SmsDialog(
             repayInfo:repayInfo,
             onPressed: (templateId, smsContent) {
-              Toast.show('收款类型：$templateId');
+              // Toast.show('收款类型：$templateId');
               onSendSms?.call(templateId, smsContent);
               // Toast.show('收款类型：$type');
             },
@@ -193,10 +193,27 @@ class OrderItem extends StatelessWidget {
           children: <Widget>[
 
             Expanded(
-              child: Text(products.where((p) => p.id == item.aJProductId).firstOrNull?.bName ?? '',                 style: const TextStyle(
-                fontSize: Dimens.font_sp14,
-                fontWeight: FontWeight.w500,
-              ),),
+              // child: Text(products.where((p) => p.id == item.aJProductId).firstOrNull?.bName ?? '',                 style: const TextStyle(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'KaKa Loan Market - ',  // 保持原样式
+                      style: TextStyle(
+                        fontSize: Dimens.font_sp14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    TextSpan(
+                      text: products.where((p) => p.id == item.aJProductId).firstOrNull?.bName ?? '',
+                      style: const TextStyle(
+                        fontSize: 11,  // 减小字号
+                        color: Colors.grey,  // 灰色
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),

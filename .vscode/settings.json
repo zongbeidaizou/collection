@@ -1,0 +1,15 @@
+{
+  "dart.debugExternalLibraries": true,
+  "dart.debugSdkLibraries": true,
+  "dart.lineLength": 80,
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    80
+  ],
+  "flutter.runOnDevice": true,
+  "flutter.runOnDeviceIsDeviceSelectedByDefault": true,
+  "flutter.trackWidgetCreation": true,
+  "workbench.preferredHighContrastColorTheme": "Deep Blue",
+  "workbench.preferredHighContrastLightColorTheme": "Deep Blue",
+  "workbench.colorTheme": "Quiet Light",
+}

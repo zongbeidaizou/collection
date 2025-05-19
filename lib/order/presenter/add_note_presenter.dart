@@ -42,13 +42,14 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     List<CollectionLogData> _list = <CollectionLogData>[];
     CollectionLogEntity _data = CollectionLogEntity() ;
     FormData formData = FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
-    String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    // String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    String? hJSmsTemplateNewestUpdatedAt = "0";
     await requestNetwork<CollectionLogEntity>(Method.get, url: HttpApi.collectionLogs, queryParameters: {"page": page, 'p_collection_order_id': orderId, 'h_j_sms_template_newest_updated_at': hJSmsTemplateNewestUpdatedAt}, onSuccess: (data) async {
       if (data != null) {
         _list =  data.data!;
         _data = data;
         if (hJSmsTemplateNewestUpdatedAt == null || hJSmsTemplateNewestUpdatedAt != data.other!.hJSmsTemplateNewestUpdatedAt) {
-          SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
+          // SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
           SpUtil.putObjectList("hJSmsTemplates", data.other!.hJSmsTemplate!);
         }
       }
@@ -63,12 +64,12 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   }
   Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
     final targetPath = '/storage/emulated/0/Documents/CubeCallRecorder/All/';
-    final targetDir = Directory(targetPath);
+    // final targetDir = Directory(targetPath);
 
-    if (!await targetDir.exists()) {
-      //todo 提示后端，获取手机信息
-      print('目录不存在');
-    }
+    // if (!await targetDir.exists()) {
+    //   //todo 提示后端，获取手机信息
+    //   print('目录不存在');
+    // }
 
     final filteredFiles = <File>[];
     // final targetTime = DateTime(2025, 3, 10); // 替换为你的目标时间
@@ -80,18 +81,18 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     }
 
 
-    await for (var entity in targetDir.list()) {
-      if (entity is File) {
-        try {
-          final modified = await entity.lastModified();
-          if (modified.isAfter(targetTime)) {
-            filteredFiles.add(entity);
-          }
-        } catch (e) {
-          print('无法获取文件时间: ${entity.path}');
-        }
-      }
-    }
+    // await for (var entity in targetDir.list()) {
+    //   if (entity is File) {
+    //     try {
+    //       final modified = await entity.lastModified();
+    //       if (modified.isAfter(targetTime)) {
+    //         filteredFiles.add(entity);
+    //       }
+    //     } catch (e) {
+    //       print('无法获取文件时间: ${entity.path}');
+    //     }
+    //   }
+    // }
     print('符合条件的文件数量: ${filteredFiles.length}');
 
     // QUERY CALL LOG (ALL PARAMS ARE OPTIONAL)
@@ -99,50 +100,51 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     int from = targetTime.millisecondsSinceEpoch;
     // int from = targetTime.subtract(Duration(days: 60)).millisecondsSinceEpoch;
     int to = now.millisecondsSinceEpoch;
-    Iterable<CallLogEntry> entries = await CallLog.query(
-      dateFrom: from,
-      dateTo: to,
-      // durationFrom: 0,
-      // durationTo: 60,
-      // name: 'John Doe',
-      // number: '901700000',
-      // type: CallType.incoming,
-    );
+    // Iterable<CallLogEntry> entries = await CallLog.query(
+    //   dateFrom: from,
+    //   dateTo: to,
+    //   // durationFrom: 0,
+    //   // durationTo: 60,
+    //   // name: 'John Doe',
+    //   // number: '901700000',
+    //   // type: CallType.incoming,
+    // );
 
     // 准备表单数据列表
     List<Map<String, dynamic>> callLogsData = [];
 
     // 遍历每个通话记录并转换为Map
-    for (CallLogEntry entry in entries) {
-      Map<String, dynamic> entryMap = {
-        'formattedNumber': entry.formattedNumber,
-        'cachedMatchedNumber': entry.cachedMatchedNumber,
-        'number': entry.number,
-        'name': entry.name,
-        'callType': entry.callType.toString(), // 枚举转字符串
-        'timestamp': entry.timestamp,
-        'duration': entry.duration,
-        'phoneAccountId': entry.phoneAccountId,
-        'simDisplayName': entry.simDisplayName,
-      };
-      callLogsData.add(entryMap);
-    }
+    // for (CallLogEntry entry in entries) {
+    //   Map<String, dynamic> entryMap = {
+    //     'formattedNumber': entry.formattedNumber,
+    //     'cachedMatchedNumber': entry.cachedMatchedNumber,
+    //     'number': entry.number,
+    //     'name': entry.name,
+    //     'callType': entry.callType.toString(), // 枚举转字符串
+    //     'timestamp': entry.timestamp,
+    //     'duration': entry.duration,
+    //     'phoneAccountId': entry.phoneAccountId,
+    //     'simDisplayName': entry.simDisplayName,
+    //   };
+    //   callLogsData.add(entryMap);
+    // }
 
     final formData = FormData.fromMap({
       // 包含原始 data 中的所有字段
       ...data,
       'call_logs': callLogsData,
+      'files': callLogsData,
       // 添加 files 字段
-      'files': await Future.wait(
-        filteredFiles.map((file) async {
-          final filename = file.path.split('/').last;
-          final createdTimestamp = await file.lastModified();
-          return {
-            'file': await MultipartFile.fromFile(file.path, filename: filename),
-            'created_time': createdTimestamp,
-          };
-        }),
-      ),
+      // 'files': await Future.wait(
+      //   filteredFiles.map((file) async {
+      //     final filename = file.path.split('/').last;
+      //     final createdTimestamp = await file.lastModified();
+      //     return {
+      //       'file': await MultipartFile.fromFile(file.path, filename: filename),
+      //       'created_time': createdTimestamp,
+      //     };
+      //   }),
+      // ),
     });
 
     await requestNetwork<CollectionOrderEntity>(Method.post, url: HttpApi.collectionLogs, params: formData,  onSuccess: (data) async {

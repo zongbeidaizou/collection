@@ -52,7 +52,7 @@ class ContactDialog extends StatelessWidget {
           itemBuilder: (context, index) {
             return ContactCard(contact: contactList[index], onSendSms: (int contactId, String phone){
               _showSmsDialog(context, contactId, phone);
-            },);
+            }, contactIndex: index,);
           },
         ),
       ),
@@ -64,8 +64,9 @@ class ContactDialog extends StatelessWidget {
 
 class ContactCard extends StatelessWidget {
   final CollectionLogOtherContactInfo contact;
+  final int contactIndex;
 
-  ContactCard({required this.contact,required this.onSendSms,});
+  ContactCard({required this.contact,required this.onSendSms, required this.contactIndex,});
   final void Function(int, String) onSendSms;
 
   void _callContact() async {
@@ -102,7 +103,7 @@ class ContactCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Gaps.hGap12,
-              Icon(Icons.perm_contact_cal, size: 20, color: Colors.blueAccent),
+              Icon(Icons.perm_contact_cal, size: 20, color: contactIndex == 0 ? Colors.redAccent : Colors.blueAccent.shade100),
               Gaps.hGap10,
               RichText(
                 text: TextSpan(
@@ -110,7 +111,7 @@ class ContactCard extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(text: contact.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                     const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
-                    TextSpan(text: contact.relationship, style: TextStyle(color: Colors.grey)),
+                    TextSpan(text: contact.relationship, style: TextStyle(color: contactIndex == 0 ? Colors.red : Colors.grey)),
                   ],
                 ),
               ),

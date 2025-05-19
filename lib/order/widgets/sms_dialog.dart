@@ -27,7 +27,7 @@ class SmsDialog extends StatefulWidget {
 class _SmsDialogDialog extends State<SmsDialog> {
 
   int _value = 0;
-  String _dropdownValue = "Customize Message";
+  String _dropdownValue = "Send VA";
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -108,7 +108,9 @@ class _SmsDialogDialog extends State<SmsDialog> {
     List<Map<String, dynamic>> dataList = SpUtil.getObjectList("hJSmsTemplates")!.cast<Map<String, dynamic>>();
     List<CollectionLogOtherHJSmsTemplate> templates = List<CollectionLogOtherHJSmsTemplate>.from(dataList.map((value) {
       return $CollectionLogOtherHJSmsTemplateFromJson(value);
-    })).where((item) => item.eDays == null || item.eDays == '' || isNumberInRange(item.eDays!, int.parse(widget.repayInfo!.overdueDays!))).toList();
+    })).where((item) => true).toList();
+    _commentController.text = templates.firstWhere((item) => item.sName == 'Send VA').dTemplate!;
+
 
     // final templateContentList = [
     //   '',
@@ -147,7 +149,8 @@ class _SmsDialogDialog extends State<SmsDialog> {
                   color: Colors.blueAccent,
                 ),
                 onChanged: (String? value) {
-                  _commentController.text = replacePlaceholders(templates.firstWhere((item) => item.sName == value).dTemplate!, widget.repayInfo!);
+                  // _commentController.text = replacePlaceholders(templates.firstWhere((item) => item.sName == value).dTemplate!, widget.repayInfo!);
+                  _commentController.text = templates.firstWhere((item) => item.sName == value).dTemplate!;
                   // This is called when the user selects an item.
                   setState(() {
                     _dropdownValue = value!;

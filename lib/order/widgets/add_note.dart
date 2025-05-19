@@ -85,7 +85,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       typeController.text = '1';
       await Permission.manageExternalStorage.request();
-      await Permission.audio.request();
+      // await Permission.audio.request();
       await Permission.storage.request();
     });
   }

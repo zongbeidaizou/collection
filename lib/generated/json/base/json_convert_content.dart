@@ -16,6 +16,7 @@ import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
@@ -330,6 +331,14 @@ class JsonConvert {
       return data.map<ProductData>((Map<String, dynamic> e) =>
           ProductData.fromJson(e)).toList() as M;
     }
+    if (<SGContactEntity>[] is M) {
+      return data.map<SGContactEntity>((Map<String, dynamic> e) =>
+          SGContactEntity.fromJson(e)).toList() as M;
+    }
+    if (<SGContactData>[] is M) {
+      return data.map<SGContactData>((Map<String, dynamic> e) =>
+          SGContactData.fromJson(e)).toList() as M;
+    }
     if (<ShopEntity>[] is M) {
       return data.map<ShopEntity>((Map<String, dynamic> e) =>
           ShopEntity.fromJson(e)).toList() as M;
@@ -482,6 +491,8 @@ class JsonConvertClassCollection {
     (CommissionData).toString(): CommissionData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
+    (SGContactEntity).toString(): SGContactEntity.fromJson,
+    (SGContactData).toString(): SGContactData.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
     (ShopDataOther).toString(): ShopDataOther.fromJson,

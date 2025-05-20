@@ -1,6 +1,7 @@
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/b_f_review_borrow_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/res/styles.dart';
@@ -40,11 +41,8 @@ const List<String> catText = [
 
 /// design/6店铺-账户/index.html#artboard1
 class ReviewDetailPage extends StatefulWidget {
-  const ReviewDetailPage({
-    super.key,
-    required this.borrowId,
-    required this.name
-  });
+  const ReviewDetailPage(
+      {super.key, required this.borrowId, required this.name});
   final int borrowId;
   final String name;
   @override
@@ -60,7 +58,7 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   late ReviewDetailPresenter _accountRecordListPresenter;
   final ScrollController _scrollController = ScrollController();
   late int _currentPage = 1;
-  final List<BFReviewBorrowData> _list = [];
+  final List<SGContactData> _list = [];
   bool _isLoading = false;
   late int _maxPage;
   @override
@@ -73,7 +71,7 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // _accountRecordListPresenter.index(1, true);
+      _accountRecordListPresenter.index(widget.borrowId, true);
     });
   }
 
@@ -101,16 +99,10 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   }
 
   @override
-  Future<void> _onRefresh() async {
-    setState(() {
-      _list.clear();
-      _currentPage = 1;
-    });
-    _accountRecordListPresenter.index(1, true);
-  }
+  Future<void> _onRefresh() async {}
 
   @override
-  void setLogs(List<BFReviewBorrowData> logs, {bool clear = false}) {
+  void setLogs(List<SGContactData> logs, {bool clear = false}) {
     if (clear) {
       _list.clear();
     }
@@ -150,54 +142,144 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
 
   @override
   bool get wantKeepAlive => true;
+  void _updateRelation(int index, int relation) {
+    setState(() {
+      _list[index].hReviewResult = relation;
+    });
+    // 这里可以添加更新服务器数据的逻辑
+  }
+
+  Widget _buildRelationTag(int index) {
+    final relation = _list[index].hReviewResult ?? 0;
+    return Row(
+      children: [
+        GestureDetector(
+          onTap: () => _updateRelation(index, 1),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: relation == 1 ? Colors.blue : Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              '亲人',
+              style: TextStyle(
+                color: relation == 1 ? Colors.white : Colors.black,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => _updateRelation(index, 2),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: relation == 2 ? Colors.green : Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              '朋友',
+              style: TextStyle(
+                color: relation == 2 ? Colors.white : Colors.black,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => _updateRelation(index, 3),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: relation == 3 ? Colors.orange : Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              '同事',
+              style: TextStyle(
+                color: relation == 3 ? Colors.white : Colors.black,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
-    return VisibilityDetector(
-      key: Key('news-visibility-key'),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if (visiblePercentage > 10 &&
-            context.read<RefreshProvider>().newsRefresh) {
-          _onRefresh();
-          context.read<RefreshProvider>().setNewsRefresh(false);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colours.app_main,
-          flexibleSpace: isDark
-              ? Container(
-                  height: 115.0,
-                  color: Colours.dark_bg_color,
-                )
-              : LoadAssetImage(
-                  'statistic/statistic_bg',
-                  width: context.width,
-                  height: 115.0,
-                  fit: BoxFit.fill,
-                ),
-          // toolbarHeight: 30,
-          title: Text(widget.name,
-              style: TextStyle(color: ThemeUtils.getIconColor(context))),
-        ),
-        body: MyScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colours.app_main,
+        flexibleSpace: isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                width: context.width,
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
+        // toolbarHeight: 30,
+        title: Text(widget.name,
+            style: TextStyle(color: ThemeUtils.getIconColor(context))),
+      ),
+      body: MyScrollView(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         tapOutsideToDismiss: true,
         bottomButton: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
           child: MyButton(
-            onPressed: () {
-            },
+            onPressed: () {},
             text: '提交',
           ),
         ),
-        children: [],
-      ),
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _list.length,
+            itemBuilder: (context, index) {
+              final item = _list[index];
+              return MyCard(
+                shadowColor: Colours.app_main.withOpacity(0.46),
+                color: Colours.app_main,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        item.id!.toString(),
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Text(
+                        item.cRelation ?? 'No Name',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      Gaps.vGap8,
+                      Text(item.gPhone ?? 'No Phone',
+                          style: TextStyles.textSize12),
+                      Gaps.vGap8,
+                      _buildRelationTag(index),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

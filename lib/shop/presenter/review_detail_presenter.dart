@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bounty_hunter/account/iview/account_record_list_iview.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_notification_entity.dart';
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/order/iview/order_search_iview.dart';
@@ -29,28 +30,28 @@ import '../iview/message_page_iview.dart';
 class ReviewDetailPresenter extends BasePagePresenter<ReviewDetailPageMvpView> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      view.onRefresh();
+    });
   }
 
-  Future<void> index(int currentPage, bool isShowDialog,
+  Future<void> index(int borrowId, bool isShowDialog,
       {String keyword = ''}) async {
-    List<BFReviewBorrowData> _list = <BFReviewBorrowData>[];
-    BFReviewBorrowEntity _data = BFReviewBorrowEntity();
+    List<SGContactData> _list = <SGContactData>[];
+    SGContactEntity _data = SGContactEntity();
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
-    await requestNetwork<BFReviewBorrowEntity>(Method.get,
-        url: HttpApi.review,
-        queryParameters: {"page": currentPage, 'keyword': keyword},
+    await requestNetwork<SGContactEntity>(Method.get,
+        url: HttpApi.contactlist,
+        queryParameters: {"borrow_id": borrowId, 'keyword': keyword},
         isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
-      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
       if (data != null) {
         _list = data.data!;
         _data = data;
         view.setLogs(_list);
-        view.setPageSize((data.total! / data.perPage!).ceil());
-        view.setCurrentPage(data.currentPage!);
         view.getContext().read<UserProvider>().setUserEntity(data.other!);
-        view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
+        view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
       }
     }, onError: (_, __) async {
       if (_ == 200006) {
@@ -60,31 +61,5 @@ class ReviewDetailPresenter extends BasePagePresenter<ReviewDetailPageMvpView> {
     });
   }
 
-  Future<void> markAsRead(bool isShowDialog, {String keyword = ''}) async {
-    Map<String, dynamic> loginInfo = {
-      'grant_type': 'password',
-    };
-    FormData formData = FormData.fromMap(loginInfo);
-    List<BFReviewBorrowData> _list = <BFReviewBorrowData>[];
-    await requestNetwork<BFReviewBorrowEntity>(Method.put,
-        url: '${HttpApi.notification}/1',
-        params: formData,
-        isShow: isShowDialog, onSuccess: (data) async {
-      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
-      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
-      if (data != null) {
-        _list = data.data!;
-        view.setLogs(_list, clear: true);
-        view.setPageSize((data.total! / data.perPage!).ceil());
-        view.setCurrentPage(data.currentPage!);
-        view.getContext().read<UserProvider>().setUserEntity(data.other!);
-        view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
-      }
-    }, onError: (_, __) async {
-      if (_ == 200006) {
-      } else {
-        view.showToast(__);
-      }
-    });
-  }
+  
 }

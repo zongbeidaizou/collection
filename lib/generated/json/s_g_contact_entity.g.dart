@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 SGContactEntity $SGContactEntityFromJson(Map<String, dynamic> json) {
   final SGContactEntity sGContactEntity = SGContactEntity();
@@ -23,8 +25,8 @@ SGContactEntity $SGContactEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     sGContactEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     sGContactEntity.other = other;
   }
@@ -53,7 +55,7 @@ Map<String, dynamic> $SGContactEntityToJson(SGContactEntity entity) {
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -67,7 +69,7 @@ extension SGContactEntityExtension on SGContactEntity {
     String? errorMessage,
     String? message,
     List<SGContactData>? data,
-    List<dynamic>? other,
+    CollectionOrderOther? other,
     int? total,
     int? currentPage,
     int? perPage,
@@ -88,6 +90,10 @@ extension SGContactEntityExtension on SGContactEntity {
 
 SGContactData $SGContactDataFromJson(Map<String, dynamic> json) {
   final SGContactData sGContactData = SGContactData();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    sGContactData.id = id;
+  }
   final String? aIdnumber = jsonConvert.convert<String>(json['a_idnumber']);
   if (aIdnumber != null) {
     sGContactData.aIdnumber = aIdnumber;
@@ -130,6 +136,7 @@ SGContactData $SGContactDataFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $SGContactDataToJson(SGContactData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
   data['a_idnumber'] = entity.aIdnumber;
   data['b_user_id'] = entity.bUserId;
   data['c_relation'] = entity.cRelation;
@@ -144,6 +151,7 @@ Map<String, dynamic> $SGContactDataToJson(SGContactData entity) {
 
 extension SGContactDataExtension on SGContactData {
   SGContactData copyWith({
+    int? id,
     String? aIdnumber,
     int? bUserId,
     String? cRelation,
@@ -155,6 +163,7 @@ extension SGContactDataExtension on SGContactData {
     int? iNeedReview,
   }) {
     return SGContactData()
+      ..id = id ?? this.id
       ..aIdnumber = aIdnumber ?? this.aIdnumber
       ..bUserId = bUserId ?? this.bUserId
       ..cRelation = cRelation ?? this.cRelation

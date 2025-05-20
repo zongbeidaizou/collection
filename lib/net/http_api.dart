@@ -12,6 +12,7 @@ class HttpApi{
   static const String commission = '/collection/q-g-collection-commission-logs';
   static const String notification = '/collection/e-collection-notifications';
   static const String review = '/collection/b-f-review-borrows';
+  static const String contactlist = '/collection/s-g-contacts';
   static const String product = '/collection/products-enum';
   static const String admins = '/collection/g-m-collection-admins-enum';
   static const String deduction = '/collection/o-a-deductions';

@@ -4,9 +4,11 @@ import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/res/styles.dart';
-import 'package:bounty_hunter/routers/fluro_navigator.dart';
-import 'package:bounty_hunter/shop/shop_router.dart';
+import 'package:bounty_hunter/shop/iview/review_detail_page_iview.dart';
+import 'package:bounty_hunter/shop/presenter/review_detail_presenter.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
+import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:intl/intl.dart';
@@ -37,29 +39,33 @@ const List<String> catText = [
 ];
 
 /// design/6店铺-账户/index.html#artboard1
-class ReviewPage extends StatefulWidget {
-  const ReviewPage({
+class ReviewDetailPage extends StatefulWidget {
+  const ReviewDetailPage({
     super.key,
+    required this.borrowId,
+    required this.name
   });
+  final int borrowId;
+  final String name;
   @override
   _AccountRecordListPageState createState() => _AccountRecordListPageState();
 }
 
-class _AccountRecordListPageState extends State<ReviewPage>
+class _AccountRecordListPageState extends State<ReviewDetailPage>
     with
-        AutomaticKeepAliveClientMixin<ReviewPage>,
+        AutomaticKeepAliveClientMixin<ReviewDetailPage>,
         SingleTickerProviderStateMixin,
-        BasePageMixin<ReviewPage, ReviewPresenter>
-    implements ReviewPageMvpView {
-  late ReviewPresenter _accountRecordListPresenter;
+        BasePageMixin<ReviewDetailPage, ReviewDetailPresenter>
+    implements ReviewDetailPageMvpView {
+  late ReviewDetailPresenter _accountRecordListPresenter;
   final ScrollController _scrollController = ScrollController();
   late int _currentPage = 1;
   final List<BFReviewBorrowData> _list = [];
   bool _isLoading = false;
   late int _maxPage;
   @override
-  ReviewPresenter createPresenter() {
-    _accountRecordListPresenter = ReviewPresenter();
+  ReviewDetailPresenter createPresenter() {
+    _accountRecordListPresenter = ReviewDetailPresenter();
     return _accountRecordListPresenter;
   }
 
@@ -72,7 +78,7 @@ class _AccountRecordListPageState extends State<ReviewPage>
   }
 
   @override
-  void didUpdateWidget(ReviewPage oldWidget) {
+  void didUpdateWidget(ReviewDetailPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 当搜索关键词变化时，重新请求数据
 
@@ -176,44 +182,22 @@ class _AccountRecordListPageState extends State<ReviewPage>
                   fit: BoxFit.fill,
                 ),
           // toolbarHeight: 30,
-          title: Text("Verify",
+          title: Text(widget.name,
               style: TextStyle(color: ThemeUtils.getIconColor(context))),
-          actions: <Widget>[
-            InkWell(
-              onTap: () {
-                _accountRecordListPresenter.markAsRead(true);
-              },
-              child: Container(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  child: Center(child: Text('Mark All as Read'))),
-            )
-          ],
         ),
-        body: NotificationListener(
-          onNotification: (ScrollNotification note) {
-            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-              _loadMore();
-            }
-            return true;
-          },
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 120.0,
-            child: Scrollbar(
-              // 加个滚动条
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: _list.length,
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 28.0),
-                itemBuilder: (_, index) =>
-                    _BorrowerList(item: _list[index], color: Colors.black),
-              ),
-            ),
+        body: MyScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        tapOutsideToDismiss: true,
+        bottomButton: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
+          child: MyButton(
+            onPressed: () {
+            },
+            text: '提交',
           ),
         ),
+        children: [],
+      ),
       ),
     );
   }
@@ -228,42 +212,36 @@ class _BorrowerList extends StatelessWidget {
   Color color;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        NavigatorUtils.push(context,
-            '${ShopRouter.reviewDetailPage}?borrowId=${item.aBorrowId}&name=${item.aAName}');
-      },
-      child: Column(
-        children: <Widget>[
-          Gaps.vGap15,
-          Gaps.vGap8,
-          // 实现点击这个订单号，弹出通讯录，选择联系人，然后发送消息的功能
-          MyCard(
-            shadowColor: color.withOpacity(0.46),
-            color: color,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        item.xSn!,
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  ),
-                  Gaps.vGap8,
-                  Gaps.line,
-                  Gaps.vGap8,
-                  Text(item.createdAt!, style: TextStyles.textSize12),
-                ],
-              ),
+    return Column(
+      children: <Widget>[
+        Gaps.vGap15,
+        Gaps.vGap8,
+        // 实现点击这个订单号，弹出通讯录，选择联系人，然后发送消息的功能
+        MyCard(
+          shadowColor: color.withOpacity(0.46),
+          color: color,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      item.xSn!,
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+                Gaps.vGap8,
+                Gaps.line,
+                Gaps.vGap8,
+                Text(item.createdAt!, style: TextStyles.textSize12),
+              ],
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

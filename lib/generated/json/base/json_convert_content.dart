@@ -9,6 +9,7 @@ import 'package:bounty_hunter/account/models/city_entity.dart';
 import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
+import 'package:bounty_hunter/models/b_f_review_borrow_entity.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_notification_entity.dart';
@@ -81,7 +82,8 @@ class JsonConvert {
       return null;
     }
     try {
-      return value.map((dynamic e) => _asT<T>(e, enumConvert: enumConvert))
+      return value
+          .map((dynamic e) => _asT<T>(e, enumConvert: enumConvert))
           .toList();
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
@@ -183,6 +185,14 @@ class JsonConvert {
       return data.map<AuthorizStorePassport>((Map<String, dynamic> e) =>
           AuthorizStorePassport.fromJson(e)).toList() as M;
     }
+    if (<BFReviewBorrowEntity>[] is M) {
+      return data.map<BFReviewBorrowEntity>((Map<String, dynamic> e) =>
+          BFReviewBorrowEntity.fromJson(e)).toList() as M;
+    }
+    if (<BFReviewBorrowData>[] is M) {
+      return data.map<BFReviewBorrowData>((Map<String, dynamic> e) =>
+          BFReviewBorrowData.fromJson(e)).toList() as M;
+    }
     if (<CollectionLog2Entity>[] is M) {
       return data.map<CollectionLog2Entity>((Map<String, dynamic> e) =>
           CollectionLog2Entity.fromJson(e)).toList() as M;
@@ -256,13 +266,15 @@ class JsonConvert {
           CollectionNotificationOtherProgress.fromJson(e)).toList() as M;
     }
     if (<CollectionNotificationOtherProgressLevelProgress>[] is M) {
-      return data.map<CollectionNotificationOtherProgressLevelProgress>((
+      return data
+          .map<CollectionNotificationOtherProgressLevelProgress>((
           Map<String, dynamic> e) =>
           CollectionNotificationOtherProgressLevelProgress.fromJson(e))
           .toList() as M;
     }
     if (<CollectionNotificationOtherProgressAmountProgress>[] is M) {
-      return data.map<CollectionNotificationOtherProgressAmountProgress>((
+      return data
+          .map<CollectionNotificationOtherProgressAmountProgress>((
           Map<String, dynamic> e) =>
           CollectionNotificationOtherProgressAmountProgress.fromJson(e))
           .toList() as M;
@@ -420,6 +432,8 @@ class JsonConvertClassCollection {
     (AdminData).toString(): AdminData.fromJson,
     (AuthorizStoreEntity).toString(): AuthorizStoreEntity.fromJson,
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
+    (BFReviewBorrowEntity).toString(): BFReviewBorrowEntity.fromJson,
+    (BFReviewBorrowData).toString(): BFReviewBorrowData.fromJson,
     (CollectionLog2Entity).toString(): CollectionLog2Entity.fromJson,
     (CollectionLog2Data).toString(): CollectionLog2Data.fromJson,
     (CollectionLog2DataAAAAAABLCollectionOrder)

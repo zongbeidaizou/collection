@@ -791,7 +791,11 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aIWeekRepayCount != null) {
     collectionOrderOtherProfile.aIWeekRepayCount = aIWeekRepayCount;
   }
-  final int? aJWeekRank = jsonConvert.convert<int>(json['a_j_week_rank']);
+  final int? cCReviewingCount = jsonConvert.convert<int>(json['a_j_week_rank']);
+  if (cCReviewingCount != null) {
+    collectionOrderOtherProfile.cCReviewingCount = cCReviewingCount;
+  }
+  final int? aJWeekRank = jsonConvert.convert<int>(json['c_c_reviewing_count']);
   if (aJWeekRank != null) {
     collectionOrderOtherProfile.aJWeekRank = aJWeekRank;
   }
@@ -842,7 +846,8 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['a_h_collection_notification_count'] =
       entity.aHCollectionNotificationCount;
   data['a_i_week_repay_count'] = entity.aIWeekRepayCount;
-  data['a_j_week_rank'] = entity.aJWeekRank;
+  data['a_j_week_rank'] = entity.cCReviewingCount;
+  data['c_c_reviewing_count'] = entity.aJWeekRank;
   data['updated_at'] = entity.updatedAt;
   data['a_f_last_call_at'] = entity.aFLastCallAt;
   return data;
@@ -880,6 +885,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? aGCollectionCommissionNewCount,
     int? aHCollectionNotificationCount,
     int? aIWeekRepayCount,
+    int? cCReviewingCount,
     int? aJWeekRank,
     String? updatedAt,
     String? aFLastCallAt,
@@ -924,6 +930,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..aHCollectionNotificationCount = aHCollectionNotificationCount ??
           this.aHCollectionNotificationCount
       ..aIWeekRepayCount = aIWeekRepayCount ?? this.aIWeekRepayCount
+      ..cCReviewingCount = cCReviewingCount ?? this.cCReviewingCount
       ..aJWeekRank = aJWeekRank ?? this.aJWeekRank
       ..updatedAt = updatedAt ?? this.updatedAt
       ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt;

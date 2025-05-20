@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/shop/page/review_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/goods/page/goods_page.dart';
 import 'package:bounty_hunter/home/provider/home_provider.dart';
@@ -27,7 +28,7 @@ class _HomeState extends State<Home> with RestorationMixin{
   static const double _imageSize = 25.0;
 
   late List<Widget> _pageList;
-  final List<String> _appBarTitles = ['Cases', 'Logs', 'Bonus','News', 'Account'];
+  final List<String> _appBarTitles = ['Cases', 'Verify', 'Logs', 'Bonus','News', 'Account'];
   final PageController _pageController = PageController();
 
   HomeProvider provider = HomeProvider();
@@ -50,6 +51,7 @@ class _HomeState extends State<Home> with RestorationMixin{
   void initData() {
     _pageList = [
       const OrderPage(),
+      const ReviewPage(),
       const GoodsPage(),
       const AccountRecordListPage(searchKeyword:''),
       const MessagePage(),
@@ -63,6 +65,10 @@ class _HomeState extends State<Home> with RestorationMixin{
         const [
           Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.unselected_item_color,),
           Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.app_main,),
+        ],
+        const [
+          Icon(Icons.fact_check, size: _imageSize, color: Colours.unselected_item_color,),
+          Icon(Icons.fact_check, size: _imageSize, color: Colours.app_main,),
         ],
         const [
           Icon(Icons.flag_circle_rounded, size: _imageSize, color: Colours.unselected_item_color,),
@@ -208,6 +214,10 @@ class _HomeState extends State<Home> with RestorationMixin{
   List<BottomNavigationBarItem> _buildDarkBottomNavigationBarItem() {
     if (_listDark == null) {
       const tabImagesDark = [
+        [
+          LoadAssetImage('home/icon_order', width: _imageSize),
+          LoadAssetImage('home/icon_order', width: _imageSize, color: Colours.dark_app_main,),
+        ],
         [
           LoadAssetImage('home/icon_order', width: _imageSize),
           LoadAssetImage('home/icon_order', width: _imageSize, color: Colours.dark_app_main,),

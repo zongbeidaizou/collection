@@ -2,6 +2,7 @@ import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/b_f_review_borrow_entity.g.dart';
 import 'dart:convert';
 export 'package:bounty_hunter/generated/json/b_f_review_borrow_entity.g.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 
 @JsonSerializable()
 class BFReviewBorrowEntity {
@@ -9,7 +10,7 @@ class BFReviewBorrowEntity {
 	String? errorMessage = '';
 	String? message = '';
 	List<BFReviewBorrowData>? data = [];
-	List<dynamic>? other = [];
+	CollectionOrderOther? other;
 	int? total = 0;
 	int? currentPage = 0;
 	int? perPage = 0;

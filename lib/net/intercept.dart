@@ -199,7 +199,7 @@ class AdapterInterceptor extends Interceptor{
               msg = '未知异常';
             }
             if (map.containsKey(_kCode)) {
-              code = map[_kCode];
+              code = map[_kCode] as int;
               if (code == 0 && response.statusCode != ExceptionHandle.success) {
                 code = response.statusCode!;
               }

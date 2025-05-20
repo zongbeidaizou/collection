@@ -267,6 +267,8 @@ class CollectionOrderOtherProfile {
 	@JSONField(name: "a_i_week_repay_count")
 	int? aIWeekRepayCount = 0;
 	@JSONField(name: "a_j_week_rank")
+	int? cCReviewingCount = 0;
+	@JSONField(name: "c_c_reviewing_count")
 	int? aJWeekRank = 0;
 	@JSONField(name: "updated_at")
 	String? updatedAt = '';

@@ -89,6 +89,8 @@ class BFReviewBorrowData {
 	int? aBNotKnowCount = 0;
 	@JSONField(name: 'created_at')
 	String? createdAt = '';
+	@JSONField(name: 'a_c_avatar')
+	String? aCAvatar = '';
 
 	BFReviewBorrowData();
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/b_f_review_borrow_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -153,8 +155,7 @@ class _AccountRecordListPageState extends State<ReviewPage>
       key: Key('news-visibility-key'),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if (visiblePercentage > 10 &&
-            context.read<RefreshProvider>().newsRefresh) {
+        if (visiblePercentage > 10 ) {
           _onRefresh();
           context.read<RefreshProvider>().setNewsRefresh(false);
         }
@@ -230,8 +231,10 @@ class _BorrowerList extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        final avatarUrl = Uri.tryParse(item.aCAvatar ?? '')?.toString() ?? '';
+        final base64Avatar = base64Encode(utf8.encode(avatarUrl));
         NavigatorUtils.push(context,
-            '${ShopRouter.reviewDetailPage}?borrowId=${item.aBorrowId}&name=${item.aAName}');
+            '${ShopRouter.reviewDetailPage}?borrowId=${item.aBorrowId}&name=${item.aAName}&avatar=$base64Avatar');
       },
       child: Column(
         children: <Widget>[

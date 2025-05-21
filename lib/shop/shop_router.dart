@@ -30,13 +30,13 @@ class ShopRouter implements IRouterProvider{
     router.define(messagePage, handler: Handler(handlerFunc: (_, __) => const MessagePage()));
     router.define(reviewPage, handler: Handler(handlerFunc: (_, __) => const ReviewPage()));
     router.define(reviewDetailPage, handler: Handler(handlerFunc: (_, params) {
-      print(params['id']);
-      print(params['item']);
       final String borrowId = params['borrowId']!.first;
       final String name = params['name']!.first;
+      final String avatar = params['avatar']!.first;
       return ReviewDetailPage(
         borrowId: int.parse(borrowId),
         name: name,
+        avatar: avatar,
       );
     }));
     router.define(allHallPage, handler: Handler(handlerFunc: (_, __) => const AllHallPage()));

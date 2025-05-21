@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/b_f_review_borrow_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -26,9 +28,10 @@ import '../presenter/review_presenter.dart';
 /// design/6店铺-账户/index.html#artboard1
 class ReviewDetailPage extends StatefulWidget {
   const ReviewDetailPage(
-      {super.key, required this.borrowId, required this.name});
+      {super.key, required this.borrowId, required this.name, required this.avatar});
   final int borrowId;
   final String name;
+  final String avatar;
   @override
   _AccountRecordListPageState createState() => _AccountRecordListPageState();
 }
@@ -299,8 +302,42 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                 height: 115.0,
                 fit: BoxFit.fill,
               ),
-        title: Text(widget.name,
-            style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Image.network(
+                        utf8.decode(base64Decode(widget.avatar)),
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(utf8.decode(base64Decode(widget.avatar))),
+                radius: 24,
+                backgroundColor: Colors.transparent,
+                child: ClipOval(
+                  child: Image.network(
+                    utf8.decode(base64Decode(widget.avatar)),
+                    fit: BoxFit.cover,
+                    width: 48,
+                    height: 48,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(widget.name,
+                style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          ],
+        ),
       ),
       body: MyScrollView(
         padding: const EdgeInsets.symmetric(vertical: 16.0),

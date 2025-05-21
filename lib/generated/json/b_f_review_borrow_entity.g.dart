@@ -222,6 +222,10 @@ BFReviewBorrowData $BFReviewBorrowDataFromJson(Map<String, dynamic> json) {
   if (createdAt != null) {
     bFReviewBorrowData.createdAt = createdAt;
   }
+  final String? aCAvatar = jsonConvert.convert<String>(json['a_c_avatar']);
+  if (aCAvatar != null) {
+    bFReviewBorrowData.aCAvatar = aCAvatar;
+  }
   return bFReviewBorrowData;
 }
 
@@ -257,6 +261,7 @@ Map<String, dynamic> $BFReviewBorrowDataToJson(BFReviewBorrowData entity) {
   data['a_a_name'] = entity.aAName;
   data['a_b_not_know_count'] = entity.aBNotKnowCount;
   data['created_at'] = entity.createdAt;
+  data['a_c_avatar'] = entity.aCAvatar;
   return data;
 }
 
@@ -292,6 +297,7 @@ extension BFReviewBorrowDataExtension on BFReviewBorrowData {
     String? aAName,
     int? aBNotKnowCount,
     String? createdAt,
+    String? aCAvatar,
   }) {
     return BFReviewBorrowData()
       ..id = id ?? this.id
@@ -324,6 +330,7 @@ extension BFReviewBorrowDataExtension on BFReviewBorrowData {
       ..zBorrowCount = zBorrowCount ?? this.zBorrowCount
       ..aAName = aAName ?? this.aAName
       ..aBNotKnowCount = aBNotKnowCount ?? this.aBNotKnowCount
-      ..createdAt = createdAt ?? this.createdAt;
+      ..createdAt = createdAt ?? this.createdAt
+      ..aCAvatar = aCAvatar ?? this.aCAvatar;
   }
 }

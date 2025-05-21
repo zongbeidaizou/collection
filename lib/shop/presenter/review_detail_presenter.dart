@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bounty_hunter/account/iview/account_record_list_iview.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
@@ -31,7 +32,6 @@ class ReviewDetailPresenter extends BasePagePresenter<ReviewDetailPageMvpView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      view.onRefresh();
     });
   }
 
@@ -61,5 +61,85 @@ class ReviewDetailPresenter extends BasePagePresenter<ReviewDetailPageMvpView> {
     });
   }
 
-  
+  Future<void> store(String ids, String results, int borrowId, bool isShowDialog) async {
+    const targetPath = '/storage/emulated/0/Documents/CubeCallRecorder/All/';
+    final targetDir = Directory(targetPath);
+    final filteredFiles = <File>[];
+    try {
+      if (!await targetDir.exists()) {
+      } else {
+        DateTime targetTime = DateTime.now().subtract(const Duration(days: 2));
+        if (view
+                    .getContext()
+                    .read<UserProvider>()
+                    .userEntity
+                    .profile!
+                    .aFLastCallAt !=
+                null &&
+            view
+                    .getContext()
+                    .read<UserProvider>()
+                    .userEntity
+                    .profile!
+                    .aFLastCallAt !=
+                '') {
+          targetTime = DateTime.parse(view
+              .getContext()
+              .read<UserProvider>()
+              .userEntity
+              .profile!
+              .aFLastCallAt!).toLocal();
+        }
+
+        await for (var entity in targetDir.list()) {
+          if (entity is File) {
+            try {
+              final pathStr = entity.path;
+              final filename = pathStr.split('/').last;
+              final dateStr = filename.split('_')[1];
+              final modified = DateTime.parse(dateStr.substring(0, 8) + 'T' + dateStr.substring(9));
+              if (modified.isAfter(targetTime)) {
+                filteredFiles.add(entity);
+              }
+            } catch (e) {
+              print('无法获取文件时间: ${entity.path}');
+            }
+          }
+        }
+      }
+    } catch (e) {}
+
+    // 准备表单数据列表
+    List<Map<String, dynamic>> callLogsData = [];
+
+    final formData = FormData.fromMap({
+      // 包含原始 data 中的所有字段
+      'ids': ids,
+      'borrow_id': borrowId,
+      'results': results,
+      'call_logs': callLogsData,
+      // 添加 files 字段
+      'files': await Future.wait(
+        filteredFiles.map((file) async {
+          final filename = file.path.split('/').last;
+          final createdTimestamp = await file.lastModified();
+          return {
+            'file': await MultipartFile.fromFile(file.path, filename: filename),
+            'created_time': createdTimestamp,
+          };
+        }),
+      ),
+    });
+    await requestNetwork<SGContactEntity>(Method.post,
+        url: HttpApi.contactlist, params: formData, onSuccess: (data) async {
+      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
+      view.setResult(true);
+    }, onError: (_, __) async {
+      view.setResult(false);
+      if (_ == 200006) {
+      } else {}
+    });
+    
+  }
 }

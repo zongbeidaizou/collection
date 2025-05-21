@@ -12,7 +12,7 @@ import '../../models/commission_entity.dart';
 import '../../models/product_entity.dart';
 
 abstract class ReviewDetailPageMvpView implements IMvpView {
-  void onRefresh();
+  void setResult(bool result);
   void setLogs(List<SGContactData> logs, {bool clear = false});
   void setPageSize(int pageSize);
   void setCurrentPage(int currentPage);

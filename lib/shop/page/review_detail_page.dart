@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/refresh_provider.dart';
@@ -21,23 +22,6 @@ import '../../widgets/load_image.dart';
 import '../../widgets/my_card.dart';
 import '../iview/review_page_iview.dart';
 import '../presenter/review_presenter.dart';
-
-const List<Color> bgColors = [
-  Colours.app_main,
-  Colors.orangeAccent,
-  Color(0xFF3BA28D),
-  Colours.dark_button_disabled,
-  Colours.dark_red,
-  Colours.unselected_item_color,
-];
-const List<String> catText = [
-  'Personal ',
-  'Bonus Awards',
-  'Rankings ',
-  'System Alerts ',
-  'Promise-to-Pay Reminders ',
-  'Others ',
-];
 
 /// design/6店铺-账户/index.html#artboard1
 class ReviewDetailPage extends StatefulWidget {
@@ -56,9 +40,10 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
         BasePageMixin<ReviewDetailPage, ReviewDetailPresenter>
     implements ReviewDetailPageMvpView {
   late ReviewDetailPresenter _accountRecordListPresenter;
-  final ScrollController _scrollController = ScrollController();
   late int _currentPage = 1;
+  int _selectedIndex = -1;
   final List<SGContactData> _list = [];
+  final Map<int, SGContactData> _modifiedRecords = {}; // 新增：存储修改过的记录
   bool _isLoading = false;
   late int _maxPage;
   @override
@@ -84,8 +69,10 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   }
 
   @override
-  void onRefresh() {
-    // TODO: implement onRefresh
+  void setResult(bool result) {
+    if(result){
+    Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -143,8 +130,24 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   @override
   bool get wantKeepAlive => true;
   void _updateRelation(int index, int relation) {
+    if (_selectedIndex != index) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            content: Text('Please click the call button to confirm the contact!'),
+          );
+        },
+      );
+      return;
+    }
+    final item = _list[index];
     setState(() {
-      _list[index].hReviewResult = relation;
+      item.hReviewResult = relation;
+      _modifiedRecords[index] = item; // 更新修改记录
     });
     // 这里可以添加更新服务器数据的逻辑
   }
@@ -152,21 +155,28 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   Widget _buildRelationTag(int index) {
     final relation = _list[index].hReviewResult ?? 0;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
           onTap: () => _updateRelation(index, 1),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
-              color: relation == 1 ? Colors.blue : Colors.grey[200],
+              color: relation == 1 ? Colors.green : Colors.grey[200],
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '亲人',
-              style: TextStyle(
-                color: relation == 1 ? Colors.white : Colors.black,
-                fontSize: 12,
-              ),
+            child: Row(
+              children: [
+                Icon(Icons.group_outlined, size: 16, color: relation == 1 ? Colors.white : Colors.black),
+                SizedBox(width: 2),
+                Text(
+                  'Verified & Correct',
+                  style: TextStyle(
+                    color: relation == 1 ? Colors.white : Colors.black,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -174,17 +184,23 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
         GestureDetector(
           onTap: () => _updateRelation(index, 2),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
-              color: relation == 2 ? Colors.green : Colors.grey[200],
+              color: relation == 2 ? Colors.orange : Colors.grey[200],
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '朋友',
-              style: TextStyle(
-                color: relation == 2 ? Colors.white : Colors.black,
-                fontSize: 12,
-              ),
+            child: Row(
+              children: [
+                Icon(Icons.group_off_outlined, size: 16, color: relation == 2 ? Colors.white : Colors.black),
+                SizedBox(width: 2),
+                Text(
+                  '​​No Connection​',
+                  style: TextStyle(
+                    color: relation == 2 ? Colors.white : Colors.black,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -192,17 +208,23 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
         GestureDetector(
           onTap: () => _updateRelation(index, 3),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             decoration: BoxDecoration(
-              color: relation == 3 ? Colors.orange : Colors.grey[200],
+              color: relation == 3 ? Colors.red : Colors.grey[200],
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '同事',
-              style: TextStyle(
-                color: relation == 3 ? Colors.white : Colors.black,
-                fontSize: 12,
-              ),
+            child: Row(
+              children: [
+                Icon(Icons.phone_disabled_outlined, size: 16, color: relation == 3 ? Colors.white : Colors.black),
+                SizedBox(width: 2),
+                Text(
+                  'Unreachable',
+                  style: TextStyle(
+                    color: relation == 3 ? Colors.white : Colors.black,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -210,10 +232,56 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
     );
   }
 
+  void _callContact(String phoneNumber) async {
+    final url = 'tel:${phoneNumber}';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'cant launch $url';
+    }
+  }
+
+  void _onSubmit() {
+    // 统计修改过的记录数量
+    final modifiedCount = _modifiedRecords.length;
+    // 统计hReviewResult为1的记录数量
+    final verifiedCount = _list.where((item) => item.hReviewResult == 1).length;
+
+    if (modifiedCount > 4 || verifiedCount > 1) {
+      final ids = _modifiedRecords.values.map((item) => item.id).join(',');
+      final relations = _modifiedRecords.values.map((item) => item.hReviewResult).join(',');
+      _accountRecordListPresenter.store(ids, relations, widget.borrowId, true);
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            content: Text('提交成功'),
+          );
+        },
+      );
+    } else {
+      final remainingModified = 5 - modifiedCount;
+      final remainingVerified = 2 - verifiedCount;
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            content: Text('Submission failed: You need to modify $remainingModified more records or verify $remainingVerified more records as "Verified & Correct"'),
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
-    final Color? iconColor = ThemeUtils.getIconColor(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -231,7 +299,6 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                 height: 115.0,
                 fit: BoxFit.fill,
               ),
-        // toolbarHeight: 30,
         title: Text(widget.name,
             style: TextStyle(color: ThemeUtils.getIconColor(context))),
       ),
@@ -241,8 +308,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
         bottomButton: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
           child: MyButton(
-            onPressed: () {},
-            text: '提交',
+            onPressed: _onSubmit,
+            text: 'Submit',
           ),
         ),
         children: [
@@ -252,28 +319,48 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             itemCount: _list.length,
             itemBuilder: (context, index) {
               final item = _list[index];
-              return MyCard(
-                shadowColor: Colours.app_main.withOpacity(0.46),
-                color: Colours.app_main,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        item.id!.toString(),
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Text(
-                        item.cRelation ?? 'No Name',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      Gaps.vGap8,
-                      Text(item.gPhone ?? 'No Phone',
-                          style: TextStyles.textSize12),
-                      Gaps.vGap8,
-                      _buildRelationTag(index),
-                    ],
+              return GestureDetector(
+                child: Container(
+                  color: _selectedIndex == index
+                      ? const Color.fromARGB(255, 210, 234, 253)
+                      : Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, bottom: 2.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '${item.cRelation ?? ''} ${item.fName ?? 'No Name'}',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Gaps.hGap8,
+                            IconButton(
+                              icon: Icon(Icons.call,
+                                  size: 20, color: Colors.blueAccent),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                                _callContact(item.gPhone!);
+                              },
+                            ),
+                          ],
+                        ),
+                        _buildRelationTag(index),
+                        Gaps.vGap16,
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.grey[300],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -281,49 +368,6 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BorrowerList extends StatelessWidget {
-  _BorrowerList({
-    required this.item,
-    required this.color,
-  });
-  BFReviewBorrowData item;
-  Color color;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Gaps.vGap15,
-        Gaps.vGap8,
-        // 实现点击这个订单号，弹出通讯录，选择联系人，然后发送消息的功能
-        MyCard(
-          shadowColor: color.withOpacity(0.46),
-          color: color,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      item.xSn!,
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-                Gaps.vGap8,
-                Gaps.line,
-                Gaps.vGap8,
-                Text(item.createdAt!, style: TextStyles.textSize12),
-              ],
-            ),
-          ),
-        )
-      ],
     );
   }
 }

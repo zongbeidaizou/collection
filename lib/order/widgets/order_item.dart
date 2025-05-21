@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -54,7 +55,7 @@ class OrderItem extends StatelessWidget {
   final CollectionOrderData item;
   final List<ProductData> products;
   final List<AdminData> admins;
-  final List<CollectionLogOtherContactInfo> contactList;
+  final List<SGContactData> contactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo ;
   final CollectionLogOtherTrack? track ;
@@ -485,34 +486,42 @@ class OrderItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             OrderItemButton(
-              key: Key('whatsapp'),
-              text: "Whatsapp",
+              key: Key('order_reducation'),
+              text: "Reduce",
+              icon: Icon(Icons.next_plan_outlined, size: 15, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              icon: FaIcon(FontAwesomeIcons.whatsapp, size: 20, color: Colors.white),
+              onTap: () {
+                NavigatorUtils.push(context, '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
+              },
+            ),
+            Gaps.hGap4,
+            OrderItemButton(
+              key: Key('whatsapp2'),
+              text: "Recs",
+              textColor: isDark ? Colours.dark_button_text : Colors.white,
+              bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+              icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
               onTap: () async {
                 Utils.launchWhatsAppURL("234" + item.uPhone!);
               },
             ),
             Gaps.hGap4,
             OrderItemButton(
-              key: Key('order_button_2_$index'),
-              text: "Call",
+              key: Key('whatsapp'),
+              text: "WA",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              icon: Icon(Icons.call, size: 20, color: Colors.white),
+              icon: FaIcon(FontAwesomeIcons.whatsapp, size: 16, color: Colors.white),
               onTap: () async {
-                var now = DateTime.now();
-                int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
-                int to = now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
-                _showContactListModal();
+                Utils.launchWhatsAppURL("234" + item.uPhone!);
               },
             ),
             Gaps.hGap4,
             OrderItemButton(
               key: Key('order_button_2_send'),
               text: "Sms",
-              icon: Icon(Icons.message, size: 18, color: Colors.white),
+              icon: Icon(Icons.message, size: 15, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {
@@ -521,22 +530,21 @@ class OrderItem extends StatelessWidget {
               },
             ),
             Gaps.hGap4,
-            // Icon(Icons.recycling),
+            
             OrderItemButton(
-              key: Key('order_reducation'),
-              text: "Reduce",
-              icon: Icon(Icons.next_plan_outlined, size: 18, color: Colors.white),
+              key: Key('order_button_2_$index'),
+              text: "Call",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              onTap: () {
-                NavigatorUtils.push(context, '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
-
+              icon: Icon(Icons.call, size: 15, color: Colors.white),
+              onTap: () async {
+                var now = DateTime.now();
+                int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
+                int to = now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
+                _showContactListModal();
               },
             ),
-
-
-
-
+            
           ],
         )
       ],

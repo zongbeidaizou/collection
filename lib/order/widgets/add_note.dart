@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
@@ -71,6 +72,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   late CollectionOrderData item;
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
+  List<SGContactData> _contact2List = [];
 
   final ScrollController _scrollController = ScrollController();
 
@@ -109,12 +111,13 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   Future<void> _onRefresh() async {
     _data = await _addNotePresenter.index(1, widget.orderId, true);
     _list = _data!.data!;
-    _contactList = _data!.other!.contactInfo!;
+    _contactList = _data!.other!.contactInfo ?? [];
     _smsHistory = _data!.other!.smsHistory!;
     _repayInfo = _data!.other!.repayInfo!;
     _track = _data!.other!.track!;
     _period = _data!.other!.period!;
     _avatar= _data!.other!.avatar!;
+    _contact2List = _data!.other!.contactInfo2!.data ?? [];
     setState(() {
     });
     _scrollToBottom();
@@ -257,7 +260,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
               key: Key('order_item_'),
               index: 1, tabIndex: 1,inList: false,admins: _admins,
               products: _product, item: item,
-              smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contactList,
+              smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contact2List,
               track: _track, period: _period,
               onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
                 logData = {

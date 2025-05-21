@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class ContactDialog extends StatelessWidget {
     this.onSendSms,
     this.repayInfo,
   });
-  final List<CollectionLogOtherContactInfo> contactList;
+  final List<SGContactData> contactList;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final CollectionLogOtherRepayInfo? repayInfo;
 
@@ -63,14 +64,14 @@ class ContactDialog extends StatelessWidget {
 
 
 class ContactCard extends StatelessWidget {
-  final CollectionLogOtherContactInfo contact;
+  final SGContactData contact;
   final int contactIndex;
 
   ContactCard({required this.contact,required this.onSendSms, required this.contactIndex,});
   final void Function(int, String) onSendSms;
 
   void _callContact() async {
-    final url = 'tel:${contact.phoneNumber}';
+    final url = 'tel:${contact.gPhone}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -103,15 +104,35 @@ class ContactCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Gaps.hGap12,
-              Icon(Icons.perm_contact_cal, size: 20, color: contactIndex == 0 ? Colors.redAccent : Colors.blueAccent.shade100),
+              Icon(
+                contactIndex == 0  
+                    ? Icons.radio_button_on 
+                    : contact.hReviewResult == 1
+                        ? Icons.group_outlined
+                        : contact.hReviewResult == 2
+                            ? Icons.group_off_outlined
+                            : contact.hReviewResult == 3
+                            ? Icons.phone_disabled_outlined
+                            : Icons.perm_contact_cal,
+                size: 20,
+                color: contactIndex == 0  
+                    ? Colors.redAccent 
+                    : contact.hReviewResult == 1
+                        ? Colors.green
+                        : contact.hReviewResult == 2
+                            ? Colors.orange
+                            : contact.hReviewResult == 3
+                            ? Colors.red
+                            : Colors.grey,
+              ),
               Gaps.hGap10,
               RichText(
                 text: TextSpan(
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 12),
                   children: <TextSpan>[
-                    TextSpan(text: contact.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                    const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
-                    TextSpan(text: contact.relationship, style: TextStyle(color: contactIndex == 0 ? Colors.red : Colors.grey)),
+                    TextSpan(text: '${contact.cRelation ?? ''} ${contact.fName ?? ''}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                    // const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
+                    // TextSpan(text: contact.relationship, style: TextStyle(color: contactIndex == 0 ? Colors.red : Colors.grey)),
                   ],
                 ),
               ),
@@ -122,33 +143,34 @@ class ContactCard extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.message, size: 20, color: Colors.greenAccent),
-                onPressed: () => onSendSms.call(contact.id!, contact.phoneNumber!),
+                onPressed: () => onSendSms.call(contact.id!, contact.gPhone!),
               ),
             ],
           ),
           Divider(thickness: 1.2,),
-          if (contact.callRecords != null && contact.callRecords!.isNotEmpty) // 检查是否有通话记录
-            Container(
-              height: 100, // 固定高度
-              padding: EdgeInsets.only(top: 6),
-              child: ListView.builder(
-                itemCount: contact.callRecords!.length,
-                itemBuilder: (context, index) {
-                  final record = contact.callRecords![index];
-                  return Row(
-                    children: [
-                      Gaps.hGap12,
-                      Icon(Icons.access_time_filled_sharp, size: 12, color: Colors.blueGrey.withOpacity(0.6)),
-                      Gaps.hGap4,
-                      Expanded(child: Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(record.time!)), style: TextStyle(fontSize: 12),),flex: 2,),
-                      Icon(Icons.timelapse, size: 18, color: Colors.blueGrey.withOpacity(0.6)),
-                      Gaps.hGap4,
-                      Expanded(child: Text(formatDuration(record.duration!), style: TextStyle(fontSize: 12))),
-                    ],
-                  );
-                },
-              ),
-            ),
+          //todo 显示通话记录
+          // if (contact.callRecords != null && contact.callRecords!.isNotEmpty) // 检查是否有通话记录
+          //   Container(
+          //     height: 100, // 固定高度
+          //     padding: EdgeInsets.only(top: 6),
+          //     child: ListView.builder(
+          //       itemCount: contact.callRecords!.length,
+          //       itemBuilder: (context, index) {
+          //         final record = contact.callRecords![index];
+          //         return Row(
+          //           children: [
+          //             Gaps.hGap12,
+          //             Icon(Icons.access_time_filled_sharp, size: 12, color: Colors.blueGrey.withOpacity(0.6)),
+          //             Gaps.hGap4,
+          //             Expanded(child: Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(record.time!)), style: TextStyle(fontSize: 12),),flex: 2,),
+          //             Icon(Icons.timelapse, size: 18, color: Colors.blueGrey.withOpacity(0.6)),
+          //             Gaps.hGap4,
+          //             Expanded(child: Text(formatDuration(record.duration!), style: TextStyle(fontSize: 12))),
+          //           ],
+          //         );
+          //       },
+          //     ),
+          //   ),
         ],
       ),
     );

@@ -379,7 +379,7 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                               flex: 1,
                               child: Text(
                                 '${item.cRelation ?? ''} ${item.fName ?? 'No Name'}',
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
                             Gaps.hGap8,

@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -281,6 +283,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
+  final SGContactEntity? contactInfo2 = jsonConvert.convert<SGContactEntity>(
+      json['contact_info2']);
+  if (contactInfo2 != null) {
+    collectionLogOther.contactInfo2 = contactInfo2;
+  }
   final List<
       CollectionLogOtherSmsHistory>? smsHistory = (json['sms_history'] as List<
       dynamic>?)?.map(
@@ -315,6 +322,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
   data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
+  data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
   data['h_j_sms_template_newest_updated_at'] =
       entity.hJSmsTemplateNewestUpdatedAt;
@@ -330,6 +338,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
     List<CollectionLogOtherContactInfo>? contactInfo,
+    SGContactEntity? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
@@ -340,6 +349,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo
       ..contactInfo = contactInfo ?? this.contactInfo
+      ..contactInfo2 = contactInfo2 ?? this.contactInfo2
       ..smsHistory = smsHistory ?? this.smsHistory
       ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??
           this.hJSmsTemplateNewestUpdatedAt

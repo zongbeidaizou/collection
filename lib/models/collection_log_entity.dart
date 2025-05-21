@@ -1,6 +1,8 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 import 'dart:convert';
+
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 
 @JsonSerializable()
@@ -90,6 +92,8 @@ class CollectionLogOther {
 	CollectionLogOtherRepayInfo? repayInfo;
 	@JSONField(name: "contact_info")
 	List<CollectionLogOtherContactInfo>? contactInfo = [];
+	@JSONField(name: "contact_info2")
+	SGContactEntity? contactInfo2 ;
 	@JSONField(name: "sms_history")
 	List<CollectionLogOtherSmsHistory>? smsHistory = [];
 	@JSONField(name: "h_j_sms_template_newest_updated_at")

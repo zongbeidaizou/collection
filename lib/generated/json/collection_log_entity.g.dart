@@ -253,6 +253,10 @@ extension CollectionLogDataExtension on CollectionLogData {
 
 CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   final CollectionLogOther collectionLogOther = CollectionLogOther();
+  final String? avatar = jsonConvert.convert<String>(json['avatar']);
+  if (avatar != null) {
+    collectionLogOther.avatar = avatar;
+  }
   final CollectionLogOtherTrack? track = jsonConvert.convert<
       CollectionLogOtherTrack>(json['track']);
   if (track != null) {
@@ -306,6 +310,7 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['avatar'] = entity.avatar;
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
@@ -320,6 +325,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
 
 extension CollectionLogOtherExtension on CollectionLogOther {
   CollectionLogOther copyWith({
+    String? avatar,
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
@@ -329,6 +335,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
   }) {
     return CollectionLogOther()
+      ..avatar = avatar ?? this.avatar
       ..track = track ?? this.track
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo

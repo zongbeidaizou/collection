@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/util/screen_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
@@ -59,6 +62,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   List<CollectionLogOtherContactInfo> _contactList = <CollectionLogOtherContactInfo>[];
   List<CollectionLogOtherSmsHistory> _smsHistory = <CollectionLogOtherSmsHistory>[];
   CollectionLogOtherRepayInfo? _repayInfo ;
+  String? _avatar ;
   CollectionLogOtherTrack? _track ;
   CollectionLogOtherPeriod? _period ;
   final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.do_not_touch, Icons.phone_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
@@ -110,6 +114,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     _repayInfo = _data!.other!.repayInfo!;
     _track = _data!.other!.track!;
     _period = _data!.other!.period!;
+    _avatar= _data!.other!.avatar!;
     setState(() {
     });
     _scrollToBottom();
@@ -176,6 +181,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
   }
   @override
   Widget build(BuildContext context) {
+    final bool isDark = context.isDark;
     Map<String, Object> logData;
     return       Scaffold(
       //todo 搜索
@@ -184,9 +190,64 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
       //   onPressed: (text) =>  _updateSearchKeyword(text),
       //   controller: _controller,
       // ),
-        appBar: MyAppBar(
-          centerTitle: 'Details',
+        appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
+        centerTitle: true,
+        backgroundColor: Colours.app_main,
+        flexibleSpace: isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                width: context.width,
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Image.network(
+                        _avatar?? '',
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(_avatar?? '',),
+                radius: 24,
+                backgroundColor: Colors.transparent,
+                child: ClipOval(
+                  child: Image.network(
+                    _avatar?? '',
+                    fit: BoxFit.cover,
+                    width: 48,
+                    height: 48,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(item.vName ?? '',
+                style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          ],
+        ),
+      ),
         body:SafeArea(
       child: Container(
         color: Colors.grey.withOpacity(0.2),

@@ -289,6 +289,12 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         centerTitle: true,
         backgroundColor: Colours.app_main,
         flexibleSpace: isDark

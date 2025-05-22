@@ -34,6 +34,8 @@ class HKContactSmsData {
 	int? dateSent = 0;
 	int? type = 0;
 	String? address = '';
+	@JSONField(name: 'a_b_contact_name')
+	String? aBContactName = '';
 	String? body = '';
 	@JSONField(name: 'a_a_contact_id')
 	int? aAContactId = 0;

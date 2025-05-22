@@ -15,6 +15,7 @@ import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
+import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
@@ -323,6 +324,14 @@ class JsonConvert {
       return data.map<CommissionData>((Map<String, dynamic> e) =>
           CommissionData.fromJson(e)).toList() as M;
     }
+    if (<HKContactSmsEntity>[] is M) {
+      return data.map<HKContactSmsEntity>((Map<String, dynamic> e) =>
+          HKContactSmsEntity.fromJson(e)).toList() as M;
+    }
+    if (<HKContactSmsData>[] is M) {
+      return data.map<HKContactSmsData>((Map<String, dynamic> e) =>
+          HKContactSmsData.fromJson(e)).toList() as M;
+    }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
           ProductEntity.fromJson(e)).toList() as M;
@@ -489,6 +498,8 @@ class JsonConvertClassCollection {
         .fromJson,
     (CommissionEntity).toString(): CommissionEntity.fromJson,
     (CommissionData).toString(): CommissionData.fromJson,
+    (HKContactSmsEntity).toString(): HKContactSmsEntity.fromJson,
+    (HKContactSmsData).toString(): HKContactSmsData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SGContactEntity).toString(): SGContactEntity.fromJson,

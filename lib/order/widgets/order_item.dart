@@ -1,4 +1,5 @@
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'package:bounty_hunter/order/page/sms_history_page.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,7 +122,7 @@ class OrderItem extends StatelessWidget {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return Container(
-            height: 500,
+            height: 580,
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
@@ -474,7 +475,7 @@ class OrderItem extends StatelessWidget {
             Gaps.hGap4,
             OrderItemButton(
               key: Key('order_button_3_$index'),
-              text: "Detail",
+              text: 'Detail',
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: buttonColor,
               onTap: () {
@@ -487,7 +488,7 @@ class OrderItem extends StatelessWidget {
           children: <Widget>[
             OrderItemButton(
               key: Key('order_reducation'),
-              text: "Reduce",
+              text: "Rdc",
               icon: Icon(Icons.next_plan_outlined, size: 15, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
@@ -497,13 +498,22 @@ class OrderItem extends StatelessWidget {
             ),
             Gaps.hGap4,
             OrderItemButton(
-              key: Key('whatsapp2'),
+              key: Key('sms_recording'),
               text: "Recs",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
               onTap: () async {
-                Utils.launchWhatsAppURL("234" + item.uPhone!);
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return Container(
+                      height: 580,
+                      color: Colors.grey,
+                      child: SmsHistoryPage());
+                  },
+                );
               },
             ),
             Gaps.hGap4,

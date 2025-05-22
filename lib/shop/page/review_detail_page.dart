@@ -28,7 +28,10 @@ import '../presenter/review_presenter.dart';
 /// design/6店铺-账户/index.html#artboard1
 class ReviewDetailPage extends StatefulWidget {
   const ReviewDetailPage(
-      {super.key, required this.borrowId, required this.name, required this.avatar});
+      {super.key,
+      required this.borrowId,
+      required this.name,
+      required this.avatar});
   final int borrowId;
   final String name;
   final String avatar;
@@ -73,8 +76,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
 
   @override
   void setResult(bool result) {
-    if(result){
-    Navigator.of(context).pop();
+    if (result) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -141,7 +144,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             Navigator.of(context).pop();
           });
           return AlertDialog(
-            content: Text('Please click the call button to confirm the contact!'),
+            content:
+                Text('Please click the call button to confirm the contact!'),
           );
         },
       );
@@ -170,7 +174,9 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             ),
             child: Row(
               children: [
-                Icon(Icons.group_outlined, size: 16, color: relation == 1 ? Colors.white : Colors.black),
+                Icon(Icons.group_outlined,
+                    size: 16,
+                    color: relation == 1 ? Colors.white : Colors.black),
                 SizedBox(width: 2),
                 Text(
                   'Verified & Correct',
@@ -194,7 +200,9 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             ),
             child: Row(
               children: [
-                Icon(Icons.group_off_outlined, size: 16, color: relation == 2 ? Colors.white : Colors.black),
+                Icon(Icons.group_off_outlined,
+                    size: 16,
+                    color: relation == 2 ? Colors.white : Colors.black),
                 SizedBox(width: 2),
                 Text(
                   '​​No Connection​',
@@ -218,7 +226,9 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             ),
             child: Row(
               children: [
-                Icon(Icons.phone_disabled_outlined, size: 16, color: relation == 3 ? Colors.white : Colors.black),
+                Icon(Icons.phone_disabled_outlined,
+                    size: 16,
+                    color: relation == 3 ? Colors.white : Colors.black),
                 SizedBox(width: 2),
                 Text(
                   'Unreachable',
@@ -252,7 +262,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
 
     if (modifiedCount > 4 || verifiedCount > 1) {
       final ids = _modifiedRecords.values.map((item) => item.id).join(',');
-      final relations = _modifiedRecords.values.map((item) => item.hReviewResult).join(',');
+      final relations =
+          _modifiedRecords.values.map((item) => item.hReviewResult).join(',');
       _accountRecordListPresenter.store(ids, relations, widget.borrowId, true);
       showDialog(
         context: context,
@@ -275,7 +286,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             Navigator.of(context).pop();
           });
           return AlertDialog(
-            content: Text('Submission failed: You need to modify $remainingModified more records or verify $remainingVerified more records as "Verified & Correct"'),
+            content: Text(
+                'Submission failed: You need to modify $remainingModified more records or verify $remainingVerified more records as "Verified & Correct"'),
           );
         },
       );
@@ -326,7 +338,8 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                 );
               },
               child: CircleAvatar(
-                backgroundImage: NetworkImage(utf8.decode(base64Decode(widget.avatar))),
+                backgroundImage:
+                    NetworkImage(utf8.decode(base64Decode(widget.avatar))),
                 radius: 24,
                 backgroundColor: Colors.transparent,
                 child: ClipOval(
@@ -378,18 +391,37 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                             Expanded(
                               child: Text(
                                 '${item.cRelation ?? ''} ${item.fName ?? 'No Name'}',
-                                style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
                             if (item.lSmsCount != null && item.lSmsCount! > 0)
-                              Text(
-                                '${item.lSmsCount} SMS',
-                                style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  '${item.lSmsCount} SMS',
+                                  style: const TextStyle(
+                                      fontSize: 10, color: Colors.blueAccent),
+                                ),
                               ),
-                              if (item.nCallCount != null && item.nCallCount! > 0)
-                              Text(
-                                '${item.nCallCount} Calls',
-                                style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                            if (item.nCallCount != null && item.nCallCount! > 0)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  '${item.nCallCount} Calls',
+                                  style: const TextStyle(
+                                      fontSize: 10, color: Colors.redAccent),
+                                ),
                               ),
                             Gaps.hGap8,
                             IconButton(

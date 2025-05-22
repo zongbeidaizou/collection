@@ -113,11 +113,14 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     _list = _data!.data!;
     _contactList = _data!.other!.contactInfo ?? [];
     _smsHistory = _data!.other!.smsHistory!;
-    _repayInfo = _data!.other!.repayInfo!;
-    _track = _data!.other!.track!;
-    _period = _data!.other!.period!;
-    _avatar= _data!.other!.avatar!;
-    _contact2List = _data!.other!.contactInfo2!.data ?? [];
+    _repayInfo = _data!.other!.repayInfo;
+    _track = _data!.other!.track;
+    _period = _data!.other!.period;
+    _avatar= _data!.other!.avatar;
+    _contact2List = [
+      $SGContactDataFromJson({'id': 0, 'c_relation': '', 'f_name': item.vName, 'g_phone': item.uPhone, 'h_review_result': 0, 'l_sms_count': null, 'n_call_count': 0}),
+      ..._data!.other!.contactInfo2!.data ?? []
+    ];
     setState(() {
     });
     _scrollToBottom();
@@ -162,7 +165,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     final List<_DeliveryProcess> deliveryProcesses = [];
     groupedData.forEach((date, items) {
       final messages = items.map((item) {
-        final time = DateFormat("hh:mm a").format(DateTime.parse(item.createdAt!));
+        final time = DateFormat('hh:mm a').format(DateTime.parse(item.createdAt!));
         return _DeliveryMessage(time, item.jContent!, item.gType!, _iconList[item.gType!], _colorList[item.gType!], _colorList[item.gType!], item.eCollectionAdminId!, item.kPromiseTime ?? '');
       }).toList();
       deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!, Icons.import_contacts, Colors.black54, Colors.black87, messages: messages));
@@ -278,7 +281,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
               },
               // track: ,
             ),
-            // Text("My Collection Log"),
+            // Text('My Collection Log'),
             Gaps.vGap4,
             Expanded(
               child: Container(
@@ -310,7 +313,7 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
                         // typeController.clear();
                         FocusScope.of(context).unfocus();
                       } else {
-                        print("Not validated");
+                        print('Not validated');
                       }
                     },
                     formKey: formKey,

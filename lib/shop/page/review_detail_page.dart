@@ -376,15 +376,24 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                         Row(
                           children: [
                             Expanded(
-                              flex: 1,
                               child: Text(
                                 '${item.cRelation ?? ''} ${item.fName ?? 'No Name'}',
-                                style: TextStyle(fontSize: 16, color: Colors.blueAccent),
+                                style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
+                            if (item.lSmsCount != null && item.lSmsCount! > 0)
+                              Text(
+                                '${item.lSmsCount} SMS',
+                                style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                              ),
+                              if (item.nCallCount != null && item.nCallCount! > 0)
+                              Text(
+                                '${item.nCallCount} Calls',
+                                style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                              ),
                             Gaps.hGap8,
                             IconButton(
-                              icon: Icon(Icons.call,
+                              icon: const Icon(Icons.call,
                                   size: 20, color: Colors.blueAccent),
                               onPressed: () {
                                 setState(() {

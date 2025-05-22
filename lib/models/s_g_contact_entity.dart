@@ -50,6 +50,10 @@ class SGContactData {
 	int? hReviewResult = 0;
 	@JSONField(name: 'i_need_review')
 	int? iNeedReview = 0;
+	@JSONField(name: 'l_sms_count')
+	int? lSmsCount = 0;
+	@JSONField(name: 'n_call_count')
+	int? nCallCount = 0;
 
 	SGContactData();
 

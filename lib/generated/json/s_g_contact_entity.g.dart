@@ -131,6 +131,14 @@ SGContactData $SGContactDataFromJson(Map<String, dynamic> json) {
   if (iNeedReview != null) {
     sGContactData.iNeedReview = iNeedReview;
   }
+  final int? lSmsCount = jsonConvert.convert<int>(json['l_sms_count']);
+  if (lSmsCount != null) {
+    sGContactData.lSmsCount = lSmsCount;
+  }
+  final int? nCallCount = jsonConvert.convert<int>(json['n_call_count']);
+  if (nCallCount != null) {
+    sGContactData.nCallCount = nCallCount;
+  }
   return sGContactData;
 }
 
@@ -146,6 +154,8 @@ Map<String, dynamic> $SGContactDataToJson(SGContactData entity) {
   data['g_phone'] = entity.gPhone;
   data['h_review_result'] = entity.hReviewResult;
   data['i_need_review'] = entity.iNeedReview;
+  data['l_sms_count'] = entity.lSmsCount;
+  data['n_call_count'] = entity.nCallCount;
   return data;
 }
 
@@ -161,6 +171,8 @@ extension SGContactDataExtension on SGContactData {
     String? gPhone,
     int? hReviewResult,
     int? iNeedReview,
+    int? lSmsCount,
+    int? nCallCount,
   }) {
     return SGContactData()
       ..id = id ?? this.id
@@ -172,6 +184,8 @@ extension SGContactDataExtension on SGContactData {
       ..fName = fName ?? this.fName
       ..gPhone = gPhone ?? this.gPhone
       ..hReviewResult = hReviewResult ?? this.hReviewResult
-      ..iNeedReview = iNeedReview ?? this.iNeedReview;
+      ..iNeedReview = iNeedReview ?? this.iNeedReview
+      ..lSmsCount = lSmsCount ?? this.lSmsCount
+      ..nCallCount = nCallCount ?? this.nCallCount;
   }
 }

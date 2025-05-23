@@ -348,6 +348,15 @@ class JsonConvert {
       return data.map<SGContactData>((Map<String, dynamic> e) =>
           SGContactData.fromJson(e)).toList() as M;
     }
+    if (<SGContactDataAAAAANIAdminRecordings>[] is M) {
+      return data.map<SGContactDataAAAAANIAdminRecordings>((
+          Map<String, dynamic> e) =>
+          SGContactDataAAAAANIAdminRecordings.fromJson(e)).toList() as M;
+    }
+    if (<SGContactOther>[] is M) {
+      return data.map<SGContactOther>((Map<String, dynamic> e) =>
+          SGContactOther.fromJson(e)).toList() as M;
+    }
     if (<ShopEntity>[] is M) {
       return data.map<ShopEntity>((Map<String, dynamic> e) =>
           ShopEntity.fromJson(e)).toList() as M;
@@ -504,6 +513,9 @@ class JsonConvertClassCollection {
     (ProductData).toString(): ProductData.fromJson,
     (SGContactEntity).toString(): SGContactEntity.fromJson,
     (SGContactData).toString(): SGContactData.fromJson,
+    (SGContactDataAAAAANIAdminRecordings)
+        .toString(): SGContactDataAAAAANIAdminRecordings.fromJson,
+    (SGContactOther).toString(): SGContactOther.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
     (ShopDataOther).toString(): ShopDataOther.fromJson,

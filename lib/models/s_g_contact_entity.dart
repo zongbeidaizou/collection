@@ -1,6 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/s_g_contact_entity.g.dart';
 import 'dart:convert';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 export 'package:bounty_hunter/generated/json/s_g_contact_entity.g.dart';
 
 @JsonSerializable()
@@ -9,7 +10,7 @@ class SGContactEntity {
 	String? errorMessage = '';
 	String? message = '';
 	List<SGContactData>? data = [];
-	SGContactOther? other;
+	CollectionOrderOther? other;
 	int? total = 0;
 	int? currentPage = 0;
 	int? perPage = 0;

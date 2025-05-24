@@ -341,7 +341,7 @@ class OrderItem extends StatelessWidget {
                     style: textTextStyle,
                     children: <TextSpan>[
                       // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                      TextSpan(text: Utils.formatPrice2(item.nBorrowAmount!)),
+                      TextSpan(text: Utils.formatPrice2(item.lCollectionAmount!)),
                     ],
                   ),
                 ),
@@ -446,7 +446,7 @@ class OrderItem extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${(provider.userEntity.profile!.aETodayCommissionRate! * item.nBorrowAmount!/100).toInt()} reward"),
+                        Text("${(provider.userEntity.profile!.aETodayCommissionRate! * item.lCollectionAmount!/100).toInt()} reward"),
                         Text("current lv. ${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}% of amount", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 8))
                       ],
                     );

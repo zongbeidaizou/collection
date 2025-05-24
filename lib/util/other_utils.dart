@@ -35,8 +35,12 @@ class Utils {
   }
 
   /// 调起whatapp
-  static Future<void> launchWhatsAppURL(String phone) async {
-    final Uri uri = Uri.parse('https://wa.me/$phone');
+  static Future<void> launchWhatsAppURL(String phone, {String? message}) async {
+    final Uri uri = Uri.parse(
+      message != null 
+        ? 'https://wa.me/$phone?text=${Uri.encodeComponent(message)}'
+        : 'https://wa.me/$phone'
+    );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {

@@ -39,7 +39,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
 
   @override
   void onRefresh() {
-    _smsHistoryPresenter.index(1, 1, true); // Implement your logic her
+    _smsHistoryPresenter.index(widget.borrowId, 1, true); // Implement your logic her
   }
 
   @override

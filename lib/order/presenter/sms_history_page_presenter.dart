@@ -35,7 +35,7 @@ class SmsHistoryPresenter extends BasePagePresenter<SmsHistoryPageMvpView> {
 
     final String? cacheData = await Cache().checkCache('sms_history_$borrowId');
     if (cacheData == null) {
-    await requestNetwork<HKContactSmsEntity>(Method.get, url: HttpApi.smsHistory, queryParameters: {'page': page, 'keyword': keyword}, onSuccess: (data) async {
+    await requestNetwork<HKContactSmsEntity>(Method.get, url: HttpApi.smsHistory, queryParameters: {'page': page, 'borrow_id': borrowId}, onSuccess: (data) async {
       if (data != null) {
         Cache().cacheData('sms_history_$borrowId', data.toString(), 3600);
         view.setList(data.data!);

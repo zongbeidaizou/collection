@@ -14,7 +14,11 @@ import 'package:url_launcher/url_launcher.dart';
 class SmsHistoryPage extends StatefulWidget {
   const SmsHistoryPage({
     super.key,
+    required this.repayInfo,
+    required this.borrowId,
   });
+  final CollectionLogOtherRepayInfo? repayInfo;
+  final int borrowId;
 
   @override
   State<SmsHistoryPage> createState() => _SmsHistoryPageState();
@@ -25,6 +29,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
     implements SmsHistoryPageMvpView {
   List<HKContactSmsData> _list = <HKContactSmsData>[];
   late SmsHistoryPresenter _smsHistoryPresenter;
+  int _selectedIndex = -1;
 
   @override
   SmsHistoryPresenter createPresenter() {
@@ -61,7 +66,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius:  BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8.0),
             topRight: Radius.circular(8.0),
           ),
@@ -72,6 +77,9 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
             final record = _list[index];
             return Card(
               margin: const EdgeInsets.all(8.0),
+              color: _selectedIndex == index
+                  ? const Color.fromARGB(255, 210, 234, 253)
+                  : Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -79,32 +87,54 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                   children: [
                     Row(
                       children: [
-                        Icon(record.aAContactId! > 0  ? Icons.perm_contact_calendar : Icons.device_unknown,
-                              size: 16, color: record.aAContactId! > 0  ?Colors.blueAccent : Colors.grey.shade400),
+                        Icon(
+                            record.aAContactId! > 0
+                                ? Icons.perm_contact_calendar
+                                : Icons.device_unknown,
+                            size: 16,
+                            color: record.aAContactId! > 0
+                                ? Colors.blueAccent
+                                : Colors.grey.shade400),
                         Text(
-                          record.aBContactName != null && record.aBContactName!.isNotEmpty 
-                              ? record.aBContactName! 
+                          record.aBContactName != null &&
+                                  record.aBContactName!.isNotEmpty
+                              ? record.aBContactName!
                               : record.address!,
                           style: const TextStyle(fontSize: 14),
                         ),
                         const Expanded(child: Gaps.empty),
-                        
                         IconButton(
-                          icon: const FaIcon(FontAwesomeIcons.whatsapp, size: 16, color: Colors.greenAccent),
-                          onPressed: () =>
-                              Utils.launchWhatsAppURL('234${record.address!}'),
+                          icon: const FaIcon(FontAwesomeIcons.whatsapp,
+                              size: 16, color: Colors.greenAccent),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                            Utils.launchWhatsAppURL('234${record.address!}',
+                                message:
+                                    "${widget.repayInfo!.name!}'s loan of NGN ${widget.repayInfo!.expectRepayAmount!} on the <${widget.repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(widget.repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
+                          },
                         ),
                         IconButton(
-                          icon:const  Icon(Icons.call,
+                          icon: const Icon(Icons.call,
                               size: 16, color: Colors.blueAccent),
                           onPressed: () {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
                             _callContact(record.address!);
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.message,
                               size: 16, color: Colors.blueAccent),
-                          onPressed: () => launch('sms:${record.address}'),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                            launch(
+                                "sms:${record.address}?body=${widget.repayInfo!.name!}'s loan of NGN ${widget.repayInfo!.expectRepayAmount!} on the <${widget.repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(widget.repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
+                          },
                         ),
                       ],
                     ),
@@ -121,10 +151,13 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                       children: [
                         const Expanded(child: Gaps.empty),
                         Text(
-                              DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.fromMillisecondsSinceEpoch(record.dateSent! * 1000)),
-                              style: const TextStyle(fontSize: 10, color: Colors.grey),
-                            ),
-                            Gaps.hGap8
+                          DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  record.dateSent! * 1000)),
+                          style:
+                              const TextStyle(fontSize: 10, color: Colors.grey),
+                        ),
+                        Gaps.hGap8
                       ],
                     ),
                   ],

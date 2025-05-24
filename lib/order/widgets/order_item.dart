@@ -488,7 +488,7 @@ class OrderItem extends StatelessWidget {
           children: <Widget>[
             OrderItemButton(
               key: Key('order_reducation'),
-              text: "Rdc",
+              text: "Reduce",
               icon: Icon(Icons.next_plan_outlined, size: 15, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
@@ -499,7 +499,7 @@ class OrderItem extends StatelessWidget {
             Gaps.hGap4,
             OrderItemButton(
               key: Key('sms_recording'),
-              text: "Recs",
+              text: "Sms Record",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
@@ -511,27 +511,27 @@ class OrderItem extends StatelessWidget {
                     return Container(
                       height: 580,
                       color: Colors.grey,
-                      child: SmsHistoryPage());
+                      child: SmsHistoryPage(borrowId: item.aBorrowId!,repayInfo: repayInfo,));
                   },
                 );
               },
             ),
-            Gaps.hGap4,
-            OrderItemButton(
-              key: Key('whatsapp'),
-              text: "WA",
-              textColor: isDark ? Colours.dark_button_text : Colors.white,
-              bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              icon: FaIcon(FontAwesomeIcons.whatsapp, size: 16, color: Colors.white),
-              onTap: () async {
-                Utils.launchWhatsAppURL("234" + item.uPhone!);
-              },
-            ),
+            // Gaps.hGap4,
+            // OrderItemButton(
+            //   key: Key('whatsapp'),
+            //   text: "WA",
+            //   textColor: isDark ? Colours.dark_button_text : Colors.white,
+            //   bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+            //   icon: FaIcon(FontAwesomeIcons.whatsapp, size: 16, color: Colors.white),
+            //   onTap: () async {
+            //     Utils.launchWhatsAppURL("234" + item.uPhone!);
+            //   },
+            // ),
             Gaps.hGap4,
             OrderItemButton(
               key: Key('order_button_2_send'),
-              text: "Sms",
-              icon: Icon(Icons.message, size: 15, color: Colors.white),
+              text: "VA",
+              icon: Icon(Icons.credit_card, size: 15, color: Colors.white),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
               onTap: () {

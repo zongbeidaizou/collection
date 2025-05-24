@@ -31,9 +31,13 @@ class SmsHistoryPresenter extends BasePagePresenter<SmsHistoryPageMvpView> {
     });
   }
 
-  Future<void> index(int userId, int page,  bool isShowDialog, {String keyword = ''}) async {
+  Future<void> index(int borrowId, int page,  bool isShowDialog, {String keyword = ''}) async {
+
+    final String? cacheData = await Cache().checkCache('sms_history_$borrowId');
+    if (cacheData == null) {
     await requestNetwork<HKContactSmsEntity>(Method.get, url: HttpApi.smsHistory, queryParameters: {'page': page, 'keyword': keyword}, onSuccess: (data) async {
       if (data != null) {
+        Cache().cacheData('sms_history_$borrowId', data.toString(), 3600);
         view.setList(data.data!);
       }
     }, onError: (_, __) async {
@@ -42,6 +46,12 @@ class SmsHistoryPresenter extends BasePagePresenter<SmsHistoryPageMvpView> {
         view.showToast(__);
       }
     });
+    }else{
+      view.setList(HKContactSmsEntity.fromJson(jsonDecode(cacheData) as Map<String, dynamic >).data!);
+    }
+
+
+
   }
 
 

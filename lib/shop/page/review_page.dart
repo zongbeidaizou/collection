@@ -210,7 +210,7 @@ class _AccountRecordListPageState extends State<ReviewPage>
                 padding: const EdgeInsets.only(
                     left: 16.0, right: 16.0, bottom: 28.0),
                 itemBuilder: (_, index) =>
-                    _BorrowerList(item: _list[index], color: Colors.black),
+                    _BorrowerList(item: _list[index], color: Colors.white),
               ),
             ),
           ),
@@ -242,25 +242,21 @@ class _BorrowerList extends StatelessWidget {
           Gaps.vGap8,
           // 实现点击这个订单号，弹出通讯录，选择联系人，然后发送消息的功能
           MyCard(
-            shadowColor: color.withOpacity(0.46),
+            shadowColor: Colors.blueAccent,
             color: color,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        item.xSn!,
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ],
+                  Expanded(
+                    child: Text(
+                      item.xSn!,
+                      style: TextStyle(fontSize: 12),
+                    ),
                   ),
-                  Gaps.vGap8,
-                  Gaps.line,
-                  Gaps.vGap8,
-                  Text(item.createdAt!, style: TextStyles.textSize12),
+                  Text(DateFormat('MMM d, hh:mm a').format(DateTime.parse(item.createdAt!)), style: TextStyles.textSize12),
+                  Gaps.hGap10,
+                  const Icon(Icons.edit, size: 16, color: Colors.blueAccent)
                 ],
               ),
             ),

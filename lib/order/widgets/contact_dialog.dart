@@ -191,7 +191,7 @@ class ContactCard extends StatelessWidget {
                           ),
                           const Expanded(child: Gaps.hGap2),
                           if (contact.lSmsCount != null &&
-                              contact.lSmsCount! > 0)
+                              contact.lSmsCount! > 0 && contact.lSmsCount! != 999)
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 4, vertical: 2),

@@ -395,7 +395,7 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                                     fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
-                            if (item.lSmsCount != null && item.lSmsCount! > 0)
+                            if (item.lSmsCount != null && item.lSmsCount! > 0 && item.lSmsCount! != 999)
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 4, vertical: 2),

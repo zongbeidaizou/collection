@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'package:bounty_hunter/util/image_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
@@ -32,8 +34,7 @@ import '../presenter/add_note_presenter.dart';
 import 'MyCommentBox.dart';
 import 'order_item.dart';
 
-void main() {
-}
+void main() {}
 
 class AddNote extends StatefulWidget {
   const AddNote({
@@ -42,7 +43,6 @@ class AddNote extends StatefulWidget {
     // required this.admins,
     required this.item,
     // required this.products,
-
   });
   final int orderId;
   // final List<AdminData> admins;
@@ -52,22 +52,47 @@ class AddNote extends StatefulWidget {
   _AddNoteState createState() => _AddNoteState();
 }
 
-class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<AddNote>,  BasePageMixin<AddNote, AddNotePresenter>
-    implements AddNoteIMvpView   {
+class _AddNoteState extends State<AddNote>
+    with
+        AutomaticKeepAliveClientMixin<AddNote>,
+        BasePageMixin<AddNote, AddNotePresenter>
+    implements AddNoteIMvpView {
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   List<CollectionLogData> _list = <CollectionLogData>[];
-  CollectionLogEntity? _data = null ;
-  List<CollectionLogOtherContactInfo> _contactList = <CollectionLogOtherContactInfo>[];
-  List<CollectionLogOtherSmsHistory> _smsHistory = <CollectionLogOtherSmsHistory>[];
-  CollectionLogOtherRepayInfo? _repayInfo ;
-  String? _avatar ;
-  CollectionLogOtherTrack? _track ;
-  CollectionLogOtherPeriod? _period ;
-  final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.do_not_touch, Icons.phone_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
-  final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue,Colors.orange,  Colors.purpleAccent, Colors.red, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
+  CollectionLogEntity? _data = null;
+  List<CollectionLogOtherContactInfo> _contactList =
+      <CollectionLogOtherContactInfo>[];
+  List<CollectionLogOtherSmsHistory> _smsHistory =
+      <CollectionLogOtherSmsHistory>[];
+  CollectionLogOtherRepayInfo? _repayInfo;
+  String? _avatar;
+  CollectionLogOtherTrack? _track;
+  CollectionLogOtherPeriod? _period;
+  final List<IconData> _iconList = [
+    Icons.input,
+    Icons.sync,
+    Icons.more_time,
+    Icons.hourglass_disabled,
+    Icons.do_not_touch,
+    Icons.phone_disabled,
+    Icons.payment,
+    Icons.check_circle,
+    Icons.sms_outlined
+  ];
+  final List<Color> _colorList = [
+    Colors.brown,
+    Colors.grey,
+    Colors.blue,
+    Colors.orange,
+    Colors.purpleAccent,
+    Colors.red,
+    Colors.green,
+    const Color(0xFF1B5E20),
+    Colors.blueGrey,
+  ];
   late AddNotePresenter _addNotePresenter;
   late CollectionOrderData item;
   List<ProductData> _product = <ProductData>[];
@@ -83,10 +108,12 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
       curve: Curves.easeOut,
     );
   }
+
   @override
   void initState() {
     super.initState();
-    item = CollectionOrderData.fromJson(jsonDecode(widget.item) as Map<String, dynamic >);
+    item = CollectionOrderData.fromJson(
+        jsonDecode(widget.item) as Map<String, dynamic>);
     // 在初始化时自动滚动到底部
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       typeController.text = '1';
@@ -95,12 +122,14 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
       await Permission.storage.request();
     });
   }
+
   @override
   void setProduct(List<ProductData> product) {
     setState(() {
       _product = product;
     });
   }
+
   @override
   void setAdmin(List<AdminData> admin) {
     setState(() {
@@ -116,16 +145,15 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     _repayInfo = _data!.other!.repayInfo;
     _track = _data!.other!.track;
     _period = _data!.other!.period;
-    _avatar= _data!.other!.avatar;
-    _contact2List = [
-      $SGContactDataFromJson({'id': 0, 'c_relation': '', 'f_name': item.vName, 'g_phone': item.uPhone, 'h_review_result': 0, 'l_sms_count': null, 'n_call_count': 0}),
-      ..._data!.other!.contactInfo2!.data ?? []
-    ];
-    setState(() {
-    });
+    _avatar = _data!.other!.avatar;
+    // _contact2List = [
+    //   $SGContactDataFromJson({'id': 0, 'c_relation': '', 'f_name': item.vName, 'g_phone': item.uPhone, 'h_review_result': 0, 'l_sms_count': null, 'n_call_count': 0}),
+    //   ..._data!.other!.contactInfo2!.data ?? []
+    // ];
+    _contact2List = _data!.other!.contactInfo2!.data ?? [];
+    setState(() {});
     _scrollToBottom();
   }
-
 
   @override
   AddNotePresenter createPresenter() {
@@ -153,11 +181,12 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     final Map<String, List<CollectionLogData>> groupedData = {};
     final Map<String, int> groupedOverdueDayData = {};
     for (final item in data) {
-      final dateKey = DateFormat('MMM d, yyyy', 'en_US').format(DateTime.parse(item.createdAt!));
+      final dateKey = DateFormat('MMM d, yyyy', 'en_US')
+          .format(DateTime.parse(item.createdAt!));
       if (!groupedData.containsKey(dateKey)) {
         groupedData[dateKey] = [];
       }
-      if(groupedData[dateKey]!.isEmpty){
+      if (groupedData[dateKey]!.isEmpty) {
         groupedOverdueDayData[dateKey] = item.mOverdueDays!;
       }
       groupedData[dateKey]!.add(item);
@@ -165,10 +194,21 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
     final List<_DeliveryProcess> deliveryProcesses = [];
     groupedData.forEach((date, items) {
       final messages = items.map((item) {
-        final time = DateFormat('hh:mm a').format(DateTime.parse(item.createdAt!));
-        return _DeliveryMessage(time, item.jContent!, item.gType!, _iconList[item.gType!], _colorList[item.gType!], _colorList[item.gType!], item.eCollectionAdminId!, item.kPromiseTime ?? '');
+        final time =
+            DateFormat('hh:mm a').format(DateTime.parse(item.createdAt!));
+        return _DeliveryMessage(
+            time,
+            item.jContent!,
+            item.gType!,
+            _iconList[item.gType!],
+            _colorList[item.gType!],
+            _colorList[item.gType!],
+            item.eCollectionAdminId!,
+            item.kPromiseTime ?? '');
       }).toList();
-      deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!, Icons.import_contacts, Colors.black54, Colors.black87, messages: messages));
+      deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!,
+          Icons.import_contacts, Colors.black54, Colors.black87,
+          messages: messages));
     });
     return Container(
       child: SingleChildScrollView(
@@ -178,168 +218,186 @@ class _AddNoteState extends State<AddNote> with AutomaticKeepAliveClientMixin<Ad
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            _DeliveryProcesses(processes: deliveryProcesses, admins: _admins,),
+            _DeliveryProcesses(
+              processes: deliveryProcesses,
+              admins: _admins,
+            ),
             Divider(height: 1.0),
           ],
         ),
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     Map<String, Object> logData;
-    return       Scaffold(
-      //todo 搜索
-      // appBar: MySearchBar(
-      //   hintText: 'Search by Phone, Order, Code, Log',
-      //   onPressed: (text) =>  _updateSearchKeyword(text),
-      //   controller: _controller,
-      // ),
+    return Scaffold(
+        //todo 搜索
+        // appBar: MySearchBar(
+        //   hintText: 'Search by Phone, Order, Code, Log',
+        //   onPressed: (text) =>  _updateSearchKeyword(text),
+        //   controller: _controller,
+        // ),
         appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        centerTitle: true,
-        backgroundColor: Colours.app_main,
-        flexibleSpace: isDark
-            ? Container(
-                height: 115.0,
-                color: Colours.dark_bg_color,
-              )
-            : LoadAssetImage(
-                'statistic/statistic_bg',
-                width: context.width,
-                height: 115.0,
-                fit: BoxFit.fill,
-              ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Dialog(
-                      child: Image.network(
-                        _avatar?? '',
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          centerTitle: true,
+          backgroundColor: Colours.app_main,
+          flexibleSpace: isDark
+              ? Container(
+                  height: 115.0,
+                  color: Colours.dark_bg_color,
+                )
+              : LoadAssetImage(
+                  'statistic/statistic_bg',
+                  width: context.width,
+                  height: 115.0,
+                  fit: BoxFit.fill,
+                ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Image.network(
+                          _avatar ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: CircleAvatar(
+                  // backgroundImage: NetworkImage(_avatar?? '',),
+                  // backgroundImage:
+                  //     ImageUtils.getAssetImage('order/icon_avatar'),
+                  radius: 24,
+                  backgroundColor: Colors.transparent,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: _avatar ?? '',
+                      fit: BoxFit.cover,
+                      width: 48,
+                      height: 48,
+                      placeholder: (context, url) => Image.asset(
+                        'assets/images/order/icon_avatar.png', // 加载中的占位图
                         fit: BoxFit.cover,
                       ),
-                    );
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/order/icon_avatar.png', // 加载失败显示默认头像
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              Text(item.vName ?? '',
+                  style: TextStyle(color: ThemeUtils.getIconColor(context))),
+            ],
+          ),
+        ),
+        body: SafeArea(
+          child: Container(
+            color: Colors.grey.withOpacity(0.2),
+            child: Column(
+              children: [
+                OrderItem(
+                  key: Key('order_item_'),
+                  index: 1, tabIndex: 1, inList: false, admins: _admins,
+                  products: _product, item: item,
+                  smsHistory: _smsHistory, repayInfo: _repayInfo,
+                  contactList: _contact2List,
+                  track: _track, period: _period,
+                  onSendSms: (smsTemplateId, smsContent,
+                      {String? phone, int? contactId}) {
+                    logData = {
+                      'g_type': 8,
+                      'j_content': smsContent.trim(),
+                      'created_at': DateTime.now(),
+                      'e_collection_admin_id': 0,
+                      'k_promise_time': '',
+                      'n_sms_template_id': smsTemplateId,
+                      'h_phone': phone ?? '',
+                      'o_contact_id': contactId ?? 0,
+                      'p_collection_order_id': widget.orderId,
+                    };
+                    _addNotePresenter.store(logData, true);
                   },
-                );
-              },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(_avatar?? '',),
-                radius: 24,
-                backgroundColor: Colors.transparent,
-                child: ClipOval(
-                  child: Image.network(
-                    _avatar?? '',
-                    fit: BoxFit.cover,
-                    width: 48,
-                    height: 48,
+                  // track: ,
+                ),
+                // Text('My Collection Log'),
+                Gaps.vGap4,
+                Expanded(
+                  child: Container(
+                    // margin: EdgeInsets.only(left: 4, right: 4),
+                    child: MyCard(
+                      shadowColor: Colors.grey.withOpacity(0.2),
+                      child: MyCommentBox(
+                        child: commentChild(_list),
+                        labelText: 'Write a comment...',
+                        errorText: 'Comment cannot be blank',
+                        withBorder: false,
+                        sendButtonMethod: () async {
+                          if (formKey.currentState!.validate()) {
+                            var value = {
+                              'g_type': typeController.text,
+                              'j_content': commentController.text.trim(),
+                              'created_at': DateTime.now(),
+                              'e_collection_admin_id': 0,
+                              'k_promise_time': dateController.text,
+                            };
+                            showToast(typeController.text);
+                            setState(() {
+                              _list.add(CollectionLogData.fromJson(value));
+                            });
+                            print(value);
+                            await _addNotePresenter.store({
+                              'p_collection_order_id': widget.orderId,
+                              ...value
+                            }, true);
+                            commentController.clear();
+                            // dateController.clear();
+                            // typeController.clear();
+                            FocusScope.of(context).unfocus();
+                          } else {
+                            print('Not validated');
+                          }
+                        },
+                        formKey: formKey,
+                        commentController: commentController,
+                        dateController: dateController,
+                        typeController: typeController,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.black,
+                        sendWidget: Icon(Icons.send_sharp,
+                            size: 28, color: Colours.app_main),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Gaps.line,
+              ],
             ),
-            SizedBox(width: 8),
-            Text(item.vName ?? '',
-                style: TextStyle(color: ThemeUtils.getIconColor(context))),
-          ],
-        ),
-      ),
-        body:SafeArea(
-      child: Container(
-        color: Colors.grey.withOpacity(0.2),
-        child: Column(
-          children: [
-            OrderItem(
-              key: Key('order_item_'),
-              index: 1, tabIndex: 1,inList: false,admins: _admins,
-              products: _product, item: item,
-              smsHistory: _smsHistory, repayInfo: _repayInfo, contactList: _contact2List,
-              track: _track, period: _period,
-              onSendSms: (smsTemplateId, smsContent, {String? phone, int? contactId}) {
-                logData = {
-                  'g_type': 8,
-                  'j_content': smsContent.trim(),
-                  'created_at': DateTime.now(),
-                  'e_collection_admin_id': 0,
-                  'k_promise_time': '',
-                  'n_sms_template_id': smsTemplateId,
-                  'h_phone': phone ?? '',
-                  'o_contact_id': contactId ?? 0,
-                  'p_collection_order_id': widget.orderId ,
-                };
-                _addNotePresenter.store(logData,  true);
-              },
-              // track: ,
-            ),
-            // Text('My Collection Log'),
-            Gaps.vGap4,
-            Expanded(
-              child: Container(
-                // margin: EdgeInsets.only(left: 4, right: 4),
-                child: MyCard(
-                  shadowColor: Colors.grey.withOpacity(0.2),
-                  child: MyCommentBox(
-                    child: commentChild(_list),
-                    labelText: 'Write a comment...',
-                    errorText: 'Comment cannot be blank',
-                    withBorder: false,
-                    sendButtonMethod: () async {
-                      if (formKey.currentState!.validate()) {
-                        var value = {
-                          'g_type': typeController.text,
-                          'j_content': commentController.text.trim(),
-                          'created_at': DateTime.now(),
-                          'e_collection_admin_id': 0,
-                          'k_promise_time': dateController.text,
-                        };
-                        showToast(typeController.text);
-                        setState(() {
-                          _list.add(CollectionLogData.fromJson(value));
-                        });
-                        print(value);
-                        await _addNotePresenter.store({'p_collection_order_id': widget.orderId ,...value},  true);
-                        commentController.clear();
-                        // dateController.clear();
-                        // typeController.clear();
-                        FocusScope.of(context).unfocus();
-                      } else {
-                        print('Not validated');
-                      }
-                    },
-                    formKey: formKey,
-                    commentController: commentController,
-                    dateController: dateController,
-                    typeController: typeController,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.black,
-                    sendWidget: Icon(Icons.send_sharp, size: 28, color: Colours.app_main),
-                  ),
-                ),
-              ),
-            ),
-            Gaps.line,
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
-
-
-
 }
 
 class _DeliveryProcesses extends StatelessWidget {
-  const _DeliveryProcesses({Key? key, required this.processes, required this.admins})
+  const _DeliveryProcesses(
+      {Key? key, required this.processes, required this.admins})
       : super(key: key);
 
   final List<_DeliveryProcess> processes;
@@ -381,19 +439,23 @@ class _DeliveryProcesses extends StatelessWidget {
                       Text(
                         processes[index].date,
                         style: DefaultTextStyle.of(context).style.copyWith(
-                          fontSize: 18.0,
-                        ),
+                              fontSize: 18.0,
+                            ),
                       ),
                       Text(
-                        processes[index].overdueDays == 0 ? '' : ' (${processes[index].overdueDays} days)',
-                        style: DefaultTextStyle.of(context).style.copyWith(
-                          fontSize: 14.0,
-                          color: Colors.grey
-                        ),
+                        processes[index].overdueDays == 0
+                            ? ''
+                            : ' (${processes[index].overdueDays} days)',
+                        style: DefaultTextStyle.of(context)
+                            .style
+                            .copyWith(fontSize: 14.0, color: Colors.grey),
                       ),
                     ],
                   ),
-                  _InnerTimeline(messages: processes[index].messages, admins: admins,),
+                  _InnerTimeline(
+                    messages: processes[index].messages,
+                    admins: admins,
+                  ),
                 ],
               );
             },
@@ -423,14 +485,15 @@ class _DeliveryProcesses extends StatelessWidget {
   }
 }
 
-
-
-
 class _DeliveryProcess {
   const _DeliveryProcess(
-      this.date,this.overdueDays, this.icon, this.color, this.iconColor, {
-        this.messages = const [],
-      });
+    this.date,
+    this.overdueDays,
+    this.icon,
+    this.color,
+    this.iconColor, {
+    this.messages = const [],
+  });
 
   const _DeliveryProcess.complete()
       : this.date = 'Done',
@@ -451,7 +514,8 @@ class _DeliveryProcess {
 }
 
 class _DeliveryMessage {
-  const _DeliveryMessage(this.createdAt, this.message, this.status, this.icon, this.color, this.iconColor, this.adminId, this.promiseTime);
+  const _DeliveryMessage(this.createdAt, this.message, this.status, this.icon,
+      this.color, this.iconColor, this.adminId, this.promiseTime);
 
   final String createdAt; // final DateTime createdAt;
   final String message;
@@ -483,7 +547,11 @@ class _InnerTimeline extends StatelessWidget {
       // return index == 0 || index == messages.length + 1;
       return false;
     }
-    final TextStyle? textTextStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: Dimens.font_sp14);
+
+    final TextStyle? textTextStyle = Theme.of(context)
+        .textTheme
+        .bodyMedium
+        ?.copyWith(fontSize: Dimens.font_sp14);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -492,25 +560,31 @@ class _InnerTimeline extends StatelessWidget {
           nodePosition: 0,
           // indicatorPosition:1,
           connectorTheme: TimelineTheme.of(context).connectorTheme.copyWith(
-            thickness: 1.0,
-            space: 10,
-          ),
+                thickness: 1.0,
+                space: 10,
+              ),
           indicatorTheme: TimelineTheme.of(context).indicatorTheme.copyWith(
-            size: 10.0,
-            position: 0.5,
-          ),
+                size: 10.0,
+                position: 0.5,
+              ),
         ),
         builder: TimelineTileBuilder(
-          indicatorBuilder: (_, index) =>
-          !isEdgeIndex(index) ? DotIndicator(
-            position: 0.5,
-            // border: Border(top:BorderSide(width: 1,color: Colors.black)),
-            color: Colors.white,
-            size: 26,
-            child: Text(messages[index].createdAt, style: TextStyle(fontSize: 10)),
-          ) : null,
-          startConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
-          endConnectorBuilder: (_, index) => Connector.dashedLine(color: messages[index ].iconColor,),
+          indicatorBuilder: (_, index) => !isEdgeIndex(index)
+              ? DotIndicator(
+                  position: 0.5,
+                  // border: Border(top:BorderSide(width: 1,color: Colors.black)),
+                  color: Colors.white,
+                  size: 26,
+                  child: Text(messages[index].createdAt,
+                      style: TextStyle(fontSize: 10)),
+                )
+              : null,
+          startConnectorBuilder: (_, index) => Connector.dashedLine(
+            color: messages[index].iconColor,
+          ),
+          endConnectorBuilder: (_, index) => Connector.dashedLine(
+            color: messages[index].iconColor,
+          ),
           contentsBuilder: (_, index) {
             if (isEdgeIndex(index)) {
               return null;
@@ -520,7 +594,7 @@ class _InnerTimeline extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
               margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
-                color: messages[index ].iconColor.withOpacity(0.14),
+                color: messages[index].iconColor.withOpacity(0.14),
                 borderRadius: BorderRadius.circular(6.0),
               ),
               child: Column(
@@ -530,17 +604,29 @@ class _InnerTimeline extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-
-                      Text( admins.where((admin) => admin.id == messages[index ].adminId).firstOrNull?.aName  ?? 'You' , style: TextStyle(fontSize: 12)),
+                      Text(
+                          admins
+                                  .where((admin) =>
+                                      admin.id == messages[index].adminId)
+                                  .firstOrNull
+                                  ?.aName ??
+                              'You',
+                          style: TextStyle(fontSize: 12)),
                       Text(' :', style: TextStyle(fontSize: 12)),
 
                       const Expanded(child: Gaps.empty),
 
-                      if(messages[index ].status == 2 )  Text('Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index ].promiseTime))}', style: TextStyle(fontSize: 10, color: messages[index ].iconColor)) else Icon(
-            messages[index ].icon,
-            color: messages[index ].iconColor,
-            size: 16.0,
-            ),
+                      if (messages[index].status == 2)
+                        Text(
+                            'Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index].promiseTime))}',
+                            style: TextStyle(
+                                fontSize: 10, color: messages[index].iconColor))
+                      else
+                        Icon(
+                          messages[index].icon,
+                          color: messages[index].iconColor,
+                          size: 16.0,
+                        ),
                       // Icon(messages[index ].icon, color: messages[index ].iconColor, size: 12,),
                     ],
                   ),
@@ -550,8 +636,9 @@ class _InnerTimeline extends StatelessWidget {
                       children: <TextSpan>[
                         // TextSpan(text: messages[index].createdAt),
                         // TextSpan(text: " "),
-                        TextSpan(text: messages[index].message,style: TextStyle(fontSize: 12)),
-
+                        TextSpan(
+                            text: messages[index].message,
+                            style: TextStyle(fontSize: 12)),
                       ],
                     ),
                   ),
@@ -560,25 +647,25 @@ class _InnerTimeline extends StatelessWidget {
             );
           },
           itemExtentBuilder: (_, index) {
-            if(messages[index].toString().length < 45){
+            if (messages[index].toString().length < 45) {
               return 50;
-            }else if(messages[index].toString().length < 90){
+            } else if (messages[index].toString().length < 90) {
               return 70;
-            }else if(messages[index].toString().length < 135){
+            } else if (messages[index].toString().length < 135) {
               return 100;
-            }else if(messages[index].toString().length < 180){
+            } else if (messages[index].toString().length < 180) {
               return 105;
-            }else if(messages[index].toString().length < 280){
+            } else if (messages[index].toString().length < 280) {
               return 125;
-            }else if(messages[index].toString().length < 580){
+            } else if (messages[index].toString().length < 580) {
               return 155;
-            }else{
+            } else {
               return 50;
             }
           },
           nodeItemOverlapBuilder: (_, index) =>
-          isEdgeIndex(index) ? true : null,
-          itemCount: messages.length  ,
+              isEdgeIndex(index) ? true : null,
+          itemCount: messages.length,
           // itemExtent:60,
         ),
       ),

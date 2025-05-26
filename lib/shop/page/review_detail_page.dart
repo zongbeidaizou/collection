@@ -12,6 +12,7 @@ import 'package:bounty_hunter/shop/presenter/review_detail_presenter.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_scroll_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:intl/intl.dart';
@@ -342,14 +343,30 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                     NetworkImage(utf8.decode(base64Decode(widget.avatar))),
                 radius: 24,
                 backgroundColor: Colors.transparent,
-                child: ClipOval(
-                  child: Image.network(
-                    utf8.decode(base64Decode(widget.avatar)),
-                    fit: BoxFit.cover,
-                    width: 48,
-                    height: 48,
-                  ),
-                ),
+                child:ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: utf8.decode(base64Decode(widget.avatar)),
+                      fit: BoxFit.cover,
+                      width: 48,
+                      height: 48,
+                      placeholder: (context, url) => Image.asset(
+                        'assets/images/order/icon_avatar.png', // 加载中的占位图
+                        fit: BoxFit.cover,
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/order/icon_avatar.png', // 加载失败显示默认头像
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                // child: ClipOval(
+                //   child: Image.network(
+                //     utf8.decode(base64Decode(widget.avatar)),
+                //     fit: BoxFit.cover,
+                //     width: 48,
+                //     height: 48,
+                //   ),
+                // ),
               ),
             ),
             SizedBox(width: 8),

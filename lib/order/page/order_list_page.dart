@@ -77,14 +77,14 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
       key: Key('order_page${widget.index}'),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if(visiblePercentage >10 ){
-          final updateAt = DateTime.parse(context.read<UserProvider>().userEntity.profile!.updatedAt!);
-          final now = DateTime.now().toUtc().add(const Duration(hours: 1));
-          final difference = now.difference(updateAt);
-          if(difference.inHours > 2){
-            _onRefresh();
-          }
-        }
+        // if(visiblePercentage >10 ){
+        //   final updateAt = DateTime.parse(context.read<UserProvider>().userEntity.profile!.updatedAt!);
+        //   final now = DateTime.now().toUtc().add(const Duration(hours: 1));
+        //   final difference = now.difference(updateAt);
+        //   if(difference.inHours > 2){
+        //     _onRefresh();
+        //   }
+        // }
       },
       child: NotificationListener(
         onNotification: (ScrollNotification note) {

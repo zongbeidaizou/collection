@@ -157,7 +157,7 @@ class _AccountRecordListPageState extends State<ReviewPage>
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
         if (visiblePercentage > 10 ) {
           _onRefresh();
-          context.read<RefreshProvider>().setNewsRefresh(false);
+          // context.read<RefreshProvider>().setNewsRefresh(false);
         }
       },
       child: Scaffold(

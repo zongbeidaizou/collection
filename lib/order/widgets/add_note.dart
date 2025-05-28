@@ -205,7 +205,7 @@ class _AddNoteState extends State<AddNote>
             _colorList[item.gType!],
             item.eCollectionAdminId!,
             item.kPromiseTime ?? '');
-      }).toList();
+      }).toList().reversed.toList();
       deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!,
           Icons.import_contacts, Colors.black54, Colors.black87,
           messages: messages));
@@ -219,7 +219,7 @@ class _AddNoteState extends State<AddNote>
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _DeliveryProcesses(
-              processes: deliveryProcesses,
+              processes: deliveryProcesses.reversed.toList(),
               admins: _admins,
             ),
             Divider(height: 1.0),
@@ -360,7 +360,8 @@ class _AddNoteState extends State<AddNote>
                             };
                             showToast(typeController.text);
                             setState(() {
-                              _list.add(CollectionLogData.fromJson(value));
+                              // 修改为在列表最前面追加元素
+                              _list.insert(0, CollectionLogData.fromJson(value));
                             });
                             print(value);
                             await _addNotePresenter.store({

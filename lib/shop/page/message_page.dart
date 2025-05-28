@@ -68,7 +68,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // _onRefresh();
+      _onRefresh();
     });
   }
   @override

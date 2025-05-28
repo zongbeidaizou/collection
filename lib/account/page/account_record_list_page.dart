@@ -4,6 +4,7 @@ import 'package:bounty_hunter/account/presenter/account_record_list_presenter.da
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _onRefresh();
       // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });
   }
@@ -373,7 +375,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
 
   Widget _buildItem(CommissionData log, int i) {
     String txt =
-        '${log.jRate}% of total amount ${log.gAmount} (lv.${groupNames[log.kLevel!]})';
+        '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
     if (log.oType == 2) {
       txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
     } else if (log.oType == 3) {
@@ -401,11 +403,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: log.aAAAAABLCollectionOrder!.uPhone,
+                        text: log.pPhone,
                         style: const TextStyle(color: Colors.black),
                       ),
                       TextSpan(
-                        text: ' - ${log.aAAAAABLCollectionOrder!.tBorrowSn!}',
+                        text: ' - ${log.nBorrowSn}',
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],
@@ -421,7 +423,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 InkWell(
                   onTap: () {
                     FlutterClipboard.copy(
-                        '${log.aAAAAABLCollectionOrder!.uPhone!} - ${log.aAAAAABLCollectionOrder!.tBorrowSn!}');
+                        '${log.pPhone!} - ${log.nBorrowSn!}');
                   },
                   child: Row(
                     children: <Widget>[
@@ -467,16 +469,22 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
             Positioned(
               bottom: 0.0,
               left: 16.0,
-              child: Text(
-                  DateFormat('hh:mm a', 'en_US')
-                      .format(DateTime.parse(log.createdAt!)),
-                  style: Theme.of(context).textTheme.titleSmall),
+              child: Row(
+                children: [
+                  Text(
+                      log.oType == 2 
+                        ? txt
+                        : 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a', 'en_US').format(DateTime.parse(log.createdAt!))}, $txt',
+                      style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
+              ),
             ),
-            Positioned(
-              bottom: 0.0,
-              right: 0.0,
-              child: Text(txt, style: Theme.of(context).textTheme.titleSmall),
-            ),
+            // Positioned(
+            //   bottom: 0.0,
+            //   right: 0.0,
+            //   child: Text(txt, style: Theme.of(context).textTheme.titleSmall),
+            // ),
           ],
         ),
       ),

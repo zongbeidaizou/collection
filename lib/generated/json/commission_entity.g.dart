@@ -144,6 +144,27 @@ CommissionData $CommissionDataFromJson(Map<String, dynamic> json) {
   if (oType != null) {
     commissionData.oType = oType;
   }
+  final String? pPhone = jsonConvert.convert<String>(json['p_phone']);
+  if (pPhone != null) {
+    commissionData.pPhone = pPhone;
+  }
+  final String? nBorrowSn = jsonConvert.convert<String>(json['n_borrow_sn']);
+  if (nBorrowSn != null) {
+    commissionData.nBorrowSn = nBorrowSn;
+  }
+  final int? rCurrentRate = jsonConvert.convert<int>(json['r_current_rate']);
+  if (rCurrentRate != null) {
+    commissionData.rCurrentRate = rCurrentRate;
+  }
+  final int? vPaidAmount = jsonConvert.convert<int>(json['v_paid_amount']);
+  if (vPaidAmount != null) {
+    commissionData.vPaidAmount = vPaidAmount;
+  }
+  final String? zAccountNumber = jsonConvert.convert<String>(
+      json['z_account_number']);
+  if (zAccountNumber != null) {
+    commissionData.zAccountNumber = zAccountNumber;
+  }
   final int? lRepayLogId = jsonConvert.convert<int>(json['l_repay_log_id']);
   if (lRepayLogId != null) {
     commissionData.lRepayLogId = lRepayLogId;
@@ -196,6 +217,11 @@ Map<String, dynamic> $CommissionDataToJson(CommissionData entity) {
   data['j_rate'] = entity.jRate;
   data['k_level'] = entity.kLevel;
   data['o_type'] = entity.oType;
+  data['p_phone'] = entity.pPhone;
+  data['n_borrow_sn'] = entity.nBorrowSn;
+  data['r_current_rate'] = entity.rCurrentRate;
+  data['v_paid_amount'] = entity.vPaidAmount;
+  data['z_account_number'] = entity.zAccountNumber;
   data['l_repay_log_id'] = entity.lRepayLogId;
   data['s_assist_rate'] = entity.sAssistRate;
   data['t_commission_amount_without_assist'] =
@@ -223,6 +249,11 @@ extension CommissionDataExtension on CommissionData {
     double? jRate,
     int? kLevel,
     int? oType,
+    String? pPhone,
+    String? nBorrowSn,
+    int? rCurrentRate,
+    int? vPaidAmount,
+    String? zAccountNumber,
     int? lRepayLogId,
     int? sAssistRate,
     int? tCommissionAmountWithoutAssist,
@@ -245,6 +276,11 @@ extension CommissionDataExtension on CommissionData {
       ..jRate = jRate ?? this.jRate
       ..kLevel = kLevel ?? this.kLevel
       ..oType = oType ?? this.oType
+      ..pPhone = pPhone ?? this.pPhone
+      ..nBorrowSn = nBorrowSn ?? this.nBorrowSn
+      ..rCurrentRate = rCurrentRate ?? this.rCurrentRate
+      ..vPaidAmount = vPaidAmount ?? this.vPaidAmount
+      ..zAccountNumber = zAccountNumber ?? this.zAccountNumber
       ..lRepayLogId = lRepayLogId ?? this.lRepayLogId
       ..sAssistRate = sAssistRate ?? this.sAssistRate
       ..tCommissionAmountWithoutAssist = tCommissionAmountWithoutAssist ??

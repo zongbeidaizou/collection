@@ -55,6 +55,20 @@ class CommissionData {
 	int? kLevel = 0;
 	@JSONField(name: 'o_type')
 	int? oType = 0;
+	@JSONField(name: 'p_phone')
+	String? pPhone = '';
+	@JSONField(name: 'n_borrow_sn')
+	String? nBorrowSn = '';
+
+	@JSONField(name: 'r_current_rate')
+	int? rCurrentRate = 0;
+
+	@JSONField(name: 'v_paid_amount')
+	int? vPaidAmount = 0;
+
+	@JSONField(name: 'z_account_number')
+	String? zAccountNumber = '';
+
 	@JSONField(name: 'l_repay_log_id')
 	int? lRepayLogId = 0;
 	@JSONField(name: 's_assist_rate')

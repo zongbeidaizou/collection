@@ -396,7 +396,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
           children: <Widget>[
             Row(
               children: [
-                Gaps.hGap32,
+                Gaps.hGap16,
                 RichText(
                   text: TextSpan(
                     children: [
@@ -429,7 +429,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         offstage: !(log.oType == 2),
                         child: _buildGoodsTag(
                             Theme.of(context).colorScheme.error,
-                            'Achievement Bonus'),
+                            'Achievement'),
                       ),
                       Offstage(
                         offstage: !(log.oType == 3),
@@ -466,7 +466,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
             ),
             Positioned(
               bottom: 0.0,
-              left: 32.0,
+              left: 16.0,
               child: Text(
                   DateFormat('hh:mm a', 'en_US')
                       .format(DateTime.parse(log.createdAt!)),

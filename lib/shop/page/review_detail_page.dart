@@ -145,8 +145,7 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             Navigator.of(context).pop();
           });
           return AlertDialog(
-            content:
-                Text('Please click the call button to confirm the contact!'),
+            content: Text('Please call to confirm the contact!'),
           );
         },
       );
@@ -256,10 +255,53 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
   }
 
   void _onSubmit() {
+    // 检查 _list 是否为空
+    if (_list.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.of(context).pop();
+          });
+          return const AlertDialog(
+            content: Text(
+                "Please call to verify this person's relationship with the borrower.."),
+          );
+        },
+      );
+      return;
+    }
+
+    final firstPhone = _list[0].gPhone;
+    bool containsPhone = false;
+
     // 统计修改过的记录数量
     final modifiedCount = _modifiedRecords.length;
     // 统计hReviewResult为1的记录数量
     final verifiedCount = _list.where((item) => item.hReviewResult == 1).length;
+
+    // 检查 _modifiedRecords 中的元素的 gPhone 是否包含 firstPhone
+    for (final item in _modifiedRecords.values) {
+      if (item.gPhone == firstPhone) {
+        containsPhone = true;
+        break;
+      }
+    }
+
+    if (!containsPhone) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.of(context).pop();
+          });
+          return const AlertDialog(
+            content: Text('Please call to verify the borrower.'),
+          );
+        },
+      );
+      return;
+    }
 
     if (modifiedCount > 4 || verifiedCount > 1) {
       final ids = _modifiedRecords.values.map((item) => item.id).join(',');
@@ -273,10 +315,11 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
             Navigator.of(context).pop();
           });
           return AlertDialog(
-            content: Text('提交成功'),
+            content: Text('Approval successful'),
           );
         },
       );
+      Navigator.of(context).pop();
     } else {
       final remainingModified = 5 - modifiedCount;
       final remainingVerified = 2 - verifiedCount;
@@ -339,11 +382,11 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                 );
               },
               child: CircleAvatar(
-                backgroundImage:
-                    NetworkImage(utf8.decode(base64Decode(widget.avatar))),
-                radius: 24,
-                backgroundColor: Colors.transparent,
-                child:ClipOval(
+                  backgroundImage:
+                      NetworkImage(utf8.decode(base64Decode(widget.avatar))),
+                  radius: 24,
+                  backgroundColor: Colors.transparent,
+                  child: ClipOval(
                     child: CachedNetworkImage(
                       imageUrl: utf8.decode(base64Decode(widget.avatar)),
                       fit: BoxFit.cover,
@@ -359,15 +402,15 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                       ),
                     ),
                   )
-                // child: ClipOval(
-                //   child: Image.network(
-                //     utf8.decode(base64Decode(widget.avatar)),
-                //     fit: BoxFit.cover,
-                //     width: 48,
-                //     height: 48,
-                //   ),
-                // ),
-              ),
+                  // child: ClipOval(
+                  //   child: Image.network(
+                  //     utf8.decode(base64Decode(widget.avatar)),
+                  //     fit: BoxFit.cover,
+                  //     width: 48,
+                  //     height: 48,
+                  //   ),
+                  // ),
+                  ),
             ),
             SizedBox(width: 8),
             Text(widget.name,
@@ -412,7 +455,9 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                                     fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
-                            if (item.lSmsCount != null && item.lSmsCount! > 0 && item.lSmsCount! != 999)
+                            if (item.lSmsCount != null &&
+                                item.lSmsCount! > 0 &&
+                                item.lSmsCount! != 999)
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 4, vertical: 2),

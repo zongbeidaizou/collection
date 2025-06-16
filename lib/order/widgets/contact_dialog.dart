@@ -103,13 +103,6 @@ class ContactCard extends StatelessWidget {
     }
   }
 
-  
-  Future<void> _whatsapp() async {
-    onCallOrSms(contactIndex, 1);
-    Utils.launchWhatsAppURL('234${contact.gPhone!}', message: "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
-
-  }
-
   Future<void> _sms() async {
     onCallOrSms(contactIndex, 2);
     launch(
@@ -132,6 +125,75 @@ class ContactCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> whatsapp() async {
+      onCallOrSms(contactIndex, 1);
+      List<String> templates = [
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+        "${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.",
+      ];
+
+      // 显示模板选择对话框
+      String? selectedTemplate = await showModalBottomSheet<String>(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: templates.map((template) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context, template),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          template,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.4,
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          );
+        },
+      );
+
+      if (selectedTemplate != null) {
+        Utils.launchWhatsAppURL('234${contact.gPhone!}',
+            message: selectedTemplate);
+      }
+    }
+
     return Card(
       shadowColor: Colors.blue,
       margin: const EdgeInsets.all(4.0),
@@ -191,7 +253,8 @@ class ContactCard extends StatelessWidget {
                           ),
                           const Expanded(child: Gaps.hGap2),
                           if (contact.lSmsCount != null &&
-                              contact.lSmsCount! > 0 && contact.lSmsCount! != 999)
+                              contact.lSmsCount! > 0 &&
+                              contact.lSmsCount! != 999)
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 4, vertical: 2),
@@ -254,7 +317,7 @@ class ContactCard extends StatelessWidget {
                   IconButton(
                     icon: const FaIcon(FontAwesomeIcons.whatsapp,
                         size: 16, color: Colors.greenAccent),
-                    onPressed: _whatsapp,
+                    onPressed: whatsapp,
                   ),
                   IconButton(
                     icon: const Icon(Icons.call,

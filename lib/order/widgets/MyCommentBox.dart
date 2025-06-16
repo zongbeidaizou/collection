@@ -1,6 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../../routers/fluro_navigator.dart';
@@ -48,15 +49,53 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   final FocusNode _focusNode = FocusNode();
   DateTime? _savedDateTime;
 
+  bool _showCustomTime = false;
+
+  void _selectPresetTime(int hour) {
+    final now = DateTime.now();
+    final selectedTime = DateTime(now.year, now.month, now.day, hour, 0);
+  _handleTimeSelection(selectedTime);
+  }
+
+  void _handleTimeSelection(DateTime selectedTime) {
+    setState(() {
+      _savedDateTime = selectedTime;
+    });
+    widget.dateController?.text = selectedTime.toString();
+    widget.commentController?.text = 'PTP by ${DateFormat('MMM d, HH:mm').format(selectedTime)}';
+    NavigatorUtils.goBack(context);
+    setState(() {
+      _focus = true;
+    });
+    _focusNode.requestFocus();
+  }
+
+  void _selectEndOfDay() {
+    final now = DateTime.now();
+    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59);
+    _handleTimeSelection(endOfDay);
+  }
+
+  void _selectTomorrowTime(int hour) {
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    final selectedTime = DateTime(tomorrow.year, tomorrow.month, tomorrow.day, hour, 0);
+    _handleTimeSelection(selectedTime);
+  }
+
+  void _selectEndOfFutureDay(int daysFromNow) {
+    final futureDate = DateTime.now().add(Duration(days: daysFromNow));
+    final endOfDay = DateTime(futureDate.year, futureDate.month, futureDate.day, 23, 59);
+    _handleTimeSelection(endOfDay);
+  }
+
   void _showDialog() {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Select Promiss Repay Time"), // 这个就是标题
-            scrollable:true,
+          title: const Text("Select Promiss Repay Time"),
+          scrollable: true,
           actions: <Widget>[
             TextButton(
               onPressed: () => NavigatorUtils.goBack(context),
@@ -68,8 +107,6 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   showToast("Please select a time");
                   return;
                 }
-                print(123123123);
-                print(_savedDateTime);
                 NavigatorUtils.goBack(context);
                 setState(() {
                   _focus = true;
@@ -77,38 +114,82 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 _focusNode.requestFocus();
               },
               style: ButtonStyle(
-                // 按下高亮颜色
                 overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.error.withOpacity(0.2)),
               ),
               child: Text('write a promiss comment', style: TextStyle(color: Theme.of(context).colorScheme.error),),
             ),
           ],
-          content: Container(
-            height: 120, // 这个可以根据你的需要进行更改
-              width: 6400,
-              child: FormBuilderDateTimePicker(
-                name: 'date',
-                initialEntryMode: DatePickerEntryMode.calendar,
-                initialValue: DateTime.now(),
-                inputType: InputType.both,
-                decoration: InputDecoration(
-                  labelText: 'Appointment Time',
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: const Text('by 11 AM today'),
+                onTap: () => _selectPresetTime(11),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by 7 PM today'),
+                onTap: () => _selectPresetTime(19),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by the end of today'),
+                onTap: _selectEndOfDay,
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by 11 AM tomorrow'),
+                onTap: () => _selectTomorrowTime(11),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by 7 PM tomorrow'),
+                onTap: () => _selectTomorrowTime(19),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by the end of tomorrow'),
+                onTap: () => _selectEndOfFutureDay(1),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('​​by the day after tomorrow'),
+                onTap: () => _selectEndOfFutureDay(2),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: const Text('by two days after tomorrow'),
+                onTap: () => _selectEndOfFutureDay(3),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              ),
+              ListTile(
+                title: Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  child: FormBuilderDateTimePicker(
+                    name: 'date',
+                                    decoration: InputDecoration(
+                  labelText: 'Other Time',
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () {
                     },
                   ),
                 ),
-                initialTime: const TimeOfDay(hour: 8, minute: 0),
-                onChanged: (DateTime? value) {
-                  setState(() {
-                    _savedDateTime = value; // 实时更新选中时间
-                  });
-                  widget.dateController?.text = value.toString();
-                  print('选中的时间: $value');
-                },
-                // locale: const Locale.fromSubtags(languageCode: 'fr'),
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    onChanged: (DateTime? value) {
+                      _handleTimeSelection(value!);
+                      // setState(() {
+                      //   _savedDateTime = value;
+                      // });
+                      // widget.dateController?.text = value.toString();
+                    },
+                  ),
+                ),
+                onTap: () => setState(() => _showCustomTime = true),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               ),
+             
+            ],
           ),
         );
       },
@@ -117,7 +198,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
 
   @override
   Widget build(BuildContext context) {
-    final List<IconData> typeList = [Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled];
+    final List<IconData> typeList = [Icons.sync, Icons.more_time,  Icons.phone_disabled, Icons.delete_forever,];
     final List<int> typeList2 = [1, 2, 4, 5];
     final List<String> typeToastList = ["Under negotiation selected", "Promise to repay selected", "Refusal to repay selected","Unable to dial selected", ];
 
@@ -157,6 +238,16 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   // value: _dates,
                   borderRadius: BorderRadius.circular(15),
                   );*/
+                  }else if(value == Icons.phone_disabled){
+                    widget.commentController?.text = 'Number unavailable';
+          /*                var results = await showCalendarDatePicker2Dialog(
+                  context: context,
+
+                  config: CalendarDatePicker2WithActionButtonsConfig(),
+                  dialogSize: const Size(325, 400),
+                  // value: _dates,
+                  borderRadius: BorderRadius.circular(15),
+                  );*/
                   }else{
                     _focusNode.requestFocus();
                   }
@@ -169,11 +260,11 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   if(icon == Icons.sync){
                     iconColor =  Colors.grey;
                   }else if(icon == Icons.phone_disabled){
-                    iconColor =  Colors.red;
+                    iconColor =  Colors.purpleAccent;
                   }else if(icon == Icons.more_time){
                     iconColor =  Colors.green;
-                  }else if(icon == Icons.do_not_touch){
-                    iconColor =  Colors.purpleAccent;
+                  }else if(icon == Icons.delete_forever){
+                    iconColor =  Colors.red;
                   }
                   return DropdownMenuItem<IconData>(
                     value: icon,

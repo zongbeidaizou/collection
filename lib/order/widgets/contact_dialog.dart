@@ -142,7 +142,7 @@ class ContactCard extends StatelessWidget {
       // 显示模板选择对话框
       String? selectedTemplate = await showModalBottomSheet<String>(
         context: context,
-        isScrollControlled: true,
+        isScrollControlled: false,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),

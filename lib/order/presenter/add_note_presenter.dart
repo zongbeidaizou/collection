@@ -40,8 +40,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     CollectionLogEntity _data = CollectionLogEntity();
     FormData formData =
         FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
-    // String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
-    String? hJSmsTemplateNewestUpdatedAt = "0";
+    String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    // String? hJSmsTemplateNewestUpdatedAt = "0";
     await requestNetwork<CollectionLogEntity>(Method.get,
         url: HttpApi.collectionLogs,
         queryParameters: {
@@ -55,7 +55,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         if (hJSmsTemplateNewestUpdatedAt == null ||
             hJSmsTemplateNewestUpdatedAt !=
                 data.other!.hJSmsTemplateNewestUpdatedAt) {
-          // SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
+          SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
           SpUtil.putObjectList("hJSmsTemplates", data.other!.hJSmsTemplate!);
         }
       }

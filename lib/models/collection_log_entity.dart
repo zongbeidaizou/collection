@@ -203,6 +203,8 @@ class CollectionLogOtherRepayInfo {
 	@JSONField(name: "overdue_days")
 	String? overdueDays = '';
 	String? mobile = '';
+	String? phone = '';
+	String? bvn = '';
 	String? name = '';
 	@JSONField(name: "borrow_amount")
 	String? borrowAmount = '';

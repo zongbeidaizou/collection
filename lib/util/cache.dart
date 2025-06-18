@@ -12,10 +12,16 @@ class Cache {
   Future<void> cacheData(String key, String data, int expiredSecond) async {
     final DateTime expiredTime = DateTime.now().add(Duration(seconds: expiredSecond));
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await prefs.setString(key, data);
     await prefs.setString("${key}ExpiredTime", expiredTime.toIso8601String());
   }
+
+  Future<bool> appendToStringList(String key, String value) async {
+  final prefs = await SharedPreferences.getInstance();
+  final List<String> currentList = prefs.getStringList(key) ?? [];
+  currentList.add(value);
+  return prefs.setStringList(key, currentList);
+}
 
   Future<String?> checkCache(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

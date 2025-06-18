@@ -615,6 +615,14 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
   if (mobile != null) {
     collectionLogOtherRepayInfo.mobile = mobile;
   }
+  final String? phone = jsonConvert.convert<String>(json['phone']);
+  if (phone != null) {
+    collectionLogOtherRepayInfo.phone = phone;
+  }
+  final String? bvn = jsonConvert.convert<String>(json['bvn']);
+  if (bvn != null) {
+    collectionLogOtherRepayInfo.bvn = bvn;
+  }
   final String? name = jsonConvert.convert<String>(json['name']);
   if (name != null) {
     collectionLogOtherRepayInfo.name = name;
@@ -705,6 +713,8 @@ Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
   data['expect_repay_time'] = entity.expectRepayTime;
   data['overdue_days'] = entity.overdueDays;
   data['mobile'] = entity.mobile;
+  data['phone'] = entity.phone;
+  data['bvn'] = entity.bvn;
   data['name'] = entity.name;
   data['borrow_amount'] = entity.borrowAmount;
   data['loan_amount'] = entity.loanAmount;
@@ -732,6 +742,8 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
     String? expectRepayTime,
     String? overdueDays,
     String? mobile,
+    String? phone,
+    String? bvn,
     String? name,
     String? borrowAmount,
     String? loanAmount,
@@ -756,6 +768,8 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
       ..expectRepayTime = expectRepayTime ?? this.expectRepayTime
       ..overdueDays = overdueDays ?? this.overdueDays
       ..mobile = mobile ?? this.mobile
+      ..phone = phone ?? this.phone
+      ..bvn = bvn ?? this.bvn
       ..name = name ?? this.name
       ..borrowAmount = borrowAmount ?? this.borrowAmount
       ..loanAmount = loanAmount ?? this.loanAmount

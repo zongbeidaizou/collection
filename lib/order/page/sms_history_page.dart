@@ -3,12 +3,14 @@ import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/order/iview/sms_history_page_iview.dart';
 import 'package:bounty_hunter/order/presenter/sms_history_page_presenter.dart';
+import 'package:bounty_hunter/util/cache.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SmsHistoryPage extends StatefulWidget {
@@ -16,7 +18,9 @@ class SmsHistoryPage extends StatefulWidget {
     super.key,
     required this.repayInfo,
     required this.borrowId,
+    required this.collectionOrderId,
   });
+  final int collectionOrderId;
   final CollectionLogOtherRepayInfo? repayInfo;
   final int borrowId;
 
@@ -39,7 +43,8 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
 
   @override
   void onRefresh() {
-    _smsHistoryPresenter.index(widget.borrowId, 1, true); // Implement your logic her
+    _smsHistoryPresenter.index(
+        widget.borrowId, 1, true); // Implement your logic her
   }
 
   @override
@@ -58,8 +63,120 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
     }
   }
 
+  int calculateCalendarDaysDifference(DateTime start, DateTime end) {
+    // 将两个日期都设置为午夜时间，只比较日期部分
+    start = DateTime(start.year, start.month, start.day);
+    end = DateTime(end.year, end.month, end.day);
+    return end.difference(start).inDays;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final int overdueDays = calculateCalendarDaysDifference(
+        DateTime.parse(widget.repayInfo!.expectRepayTime!), DateTime.now());
+    final List<Map<String, dynamic>> dataList =
+        SpUtil.getObjectList('hJSmsTemplates')!.cast<Map<String, dynamic>>();
+    // 先过滤e_days为1的元素，再进行后续处理
+    final List<CollectionLogOtherHJSmsTemplate> templates2 =
+        List<CollectionLogOtherHJSmsTemplate>.from(dataList
+            .where((value) =>
+                int.parse(value['e_days'] as String) <= overdueDays) // 先过滤原始数据
+            .map((value) {
+      final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
+      // 替换所有占位符
+      String processedTemplate = template.dTemplate!
+          .replaceAll('@name@', widget.repayInfo!.name!)
+          .replaceAll('@phone@', widget.repayInfo!.phone!)
+          .replaceAll('@bvn@', widget.repayInfo!.bvn!)
+          .replaceAll(
+              '@expect_repay_time@',
+              DateFormat('MMM d, yyyy')
+                  .format(DateTime.parse(widget.repayInfo!.expectRepayTime!)))
+          .replaceAll(
+              '@expect_repay_amount@', widget.repayInfo!.expectRepayAmount!)
+          .replaceAll(
+              '@overdue_days@', widget.repayInfo!.overdueDays.toString())
+          .replaceAll('@mobile@', widget.repayInfo!.mobile!)
+          .replaceAll('@borrow_amount@', widget.repayInfo!.borrowAmount!)
+          .replaceAll('@loan_amount@', widget.repayInfo!.loanAmount!)
+          .replaceAll('@borrow_days@', widget.repayInfo!.borrowDays.toString())
+          .replaceAll('@account_no@', widget.repayInfo!.accountNo!)
+          .replaceAll('@account_bank@', widget.repayInfo!.accountBank!);
+      return template.copyWith(dTemplate: processedTemplate);
+    })).toList();
+
+    Future<void> launchAction(int type, HKContactSmsData record) async {
+      // 显示模板选择对话框
+      if (type != 2) {
+        final CollectionLogOtherHJSmsTemplate? selectedTemplate =
+            await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          builder: (BuildContext context) {
+            return Container(
+              padding: EdgeInsets.only(
+                top: 16,
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: templates2.map((template) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: InkWell(
+                        onTap: () => Navigator.pop(context, template),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            template.dTemplate!,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              height: 1.4,
+                            ),
+                            softWrap: true,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
+        );
+        if (selectedTemplate != null) {
+          if (type == 1) {
+            await Cache().appendToStringList('action_sms_history',
+                '$type:${widget.collectionOrderId}:${record.id}:${selectedTemplate.id}');
+            Utils.launchWhatsAppURL('234${record.address!}',
+                message: selectedTemplate.dTemplate);
+          } else if (type == 3) {
+            await Cache().appendToStringList('action_sms_history',
+                '$type:${widget.collectionOrderId}:${record.id}:${selectedTemplate.id}');
+            launch('sms:${record.address}?body=${selectedTemplate.dTemplate}');
+          }
+        }
+      } else if (type == 2) {
+        await Cache().appendToStringList(
+            'action_sms_history', '$type:${widget.collectionOrderId}:${record.id}:0');
+        final url = 'tel:${record.address}';
+        if (await canLaunch(url)) {
+          await launch(url);
+        }
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.only(left: 6, right: 6, top: 6),
       color: Colors.grey.shade200,
@@ -110,19 +227,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                             setState(() {
                               _selectedIndex = index;
                             });
-                            Utils.launchWhatsAppURL('234${record.address!}',
-                                message:
-                                    "${widget.repayInfo!.name!}'s loan of NGN ${widget.repayInfo!.expectRepayAmount!} on the <${widget.repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(widget.repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.call,
-                              size: 16, color: Colors.blueAccent),
-                          onPressed: () {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                            _callContact(record.address!);
+                            launchAction(1, record);
                           },
                         ),
                         IconButton(
@@ -132,8 +237,17 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                             setState(() {
                               _selectedIndex = index;
                             });
-                            launch(
-                                "sms:${record.address}?body=${widget.repayInfo!.name!}'s loan of NGN ${widget.repayInfo!.expectRepayAmount!} on the <${widget.repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(widget.repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
+                            launchAction(3, record);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.call,
+                              size: 16, color: Colors.blueAccent),
+                          onPressed: () {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                            launchAction(2, record);
                           },
                         ),
                       ],

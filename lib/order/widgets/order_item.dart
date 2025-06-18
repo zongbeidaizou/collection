@@ -126,7 +126,7 @@ class OrderItem extends StatelessWidget {
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: ContactDialog(contactList: contactList, repayInfo: repayInfo, onSendSms: (templateId, smsContent, {String? phone, int? contactId}) {
+              body: ContactDialog(contactList: contactList, repayInfo: repayInfo, collectionOrderId:item.id!,onSendSms: (templateId, smsContent, {String? phone, int? contactId}) {
                 onSendSms?.call(templateId, smsContent, contactId: contactId, phone: phone);
                 // Toast.show('收款类型：$type');
               },),     //AddNote should be your Widget that will be displayed inside the bottomSheet
@@ -511,7 +511,7 @@ class OrderItem extends StatelessWidget {
                     return Container(
                       height: 580,
                       color: Colors.grey,
-                      child: SmsHistoryPage(borrowId: item.aBorrowId!,repayInfo: repayInfo,));
+                      child: SmsHistoryPage(borrowId: item.aBorrowId!,collectionOrderId:item.id!,repayInfo: repayInfo,));
                   },
                 );
               },

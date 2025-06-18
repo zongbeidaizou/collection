@@ -41,6 +41,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     FormData formData =
         FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
     String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    var a = SpUtil.getStringList("action_contact");
+
     // String? hJSmsTemplateNewestUpdatedAt = "0";
     await requestNetwork<CollectionLogEntity>(Method.get,
         url: HttpApi.collectionLogs,

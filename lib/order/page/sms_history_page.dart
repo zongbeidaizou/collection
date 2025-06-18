@@ -81,7 +81,9 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
         List<CollectionLogOtherHJSmsTemplate>.from(dataList
             .where((value) =>
                 int.parse(value['e_days'] as String) <= overdueDays) // 先过滤原始数据
-            .map((value) {
+            .where((value) {
+      return value['c_type'] == 28;
+    }).map((value) {
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
       // 替换所有占位符
       String processedTemplate = template.dTemplate!
@@ -168,8 +170,8 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
           }
         }
       } else if (type == 2) {
-        await Cache().appendToStringList(
-            'action_sms_history', '$type:${widget.collectionOrderId}:${record.id}:0');
+        await Cache().appendToStringList('action_sms_history',
+            '$type:${widget.collectionOrderId}:${record.id}:0');
         final url = 'tel:${record.address}';
         if (await canLaunch(url)) {
           await launch(url);

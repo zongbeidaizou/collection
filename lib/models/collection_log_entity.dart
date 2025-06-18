@@ -324,6 +324,8 @@ class CollectionLogOtherHJSmsTemplate {
 	int? id = 0;
 	@JSONField(name: "d_template")
 	String? dTemplate = '';
+	@JSONField(name: "c_type")
+	int? cType = 0;
 	@JSONField(name: "s_name")
 	String? sName = '';
 	@JSONField(name: "e_days")

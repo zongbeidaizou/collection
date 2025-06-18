@@ -102,20 +102,6 @@ class ContactCard extends StatelessWidget {
     required this.collectionOrderId,
   });
 
-  Future<void> _callContact() async {
-    onCallOrSms(contactIndex, 1);
-    final url = 'tel:${contact.gPhone}';
-    if (await canLaunch(url)) {
-      await launch(url);
-    }
-  }
-
-  Future<void> _sms() async {
-    onCallOrSms(contactIndex, 2);
-    launch(
-        "sms:${contact.gPhone}?body=${repayInfo!.name!}'s loan of NGN ${repayInfo!.expectRepayAmount!} on the <${repayInfo!.appName!}> was due on ${DateFormat('MMM d, yyyy').format(DateTime.parse(repayInfo!.expectRepayTime!))}, and remains unpaid to date.");
-  }
-
   String formatDuration(int totalSeconds) {
     int minutes = totalSeconds ~/ 60; // Get the number of minutes
     int seconds = totalSeconds % 60; // Get the remaining seconds
@@ -146,8 +132,15 @@ class ContactCard extends StatelessWidget {
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList
-            .where((value) =>
-                int.parse(value['e_days'] as String) <= overdueDays) // 先过滤原始数据
+            .where(
+                (value) => int.parse(value['e_days'] as String) <= overdueDays)
+            .where((value) {
+      if (contactIndex == 0) {
+        return value['c_type'] == 26;
+      } else {
+        return value['c_type'] == 28;
+      }
+    }) // 先过滤原始数据
             .map((value) {
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
       // 替换所有占位符

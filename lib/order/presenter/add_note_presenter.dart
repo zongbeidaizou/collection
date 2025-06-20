@@ -40,8 +40,32 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     CollectionLogEntity _data = CollectionLogEntity();
     FormData formData =
         FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
-    String? hJSmsTemplateNewestUpdatedAt = SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
-    var a = SpUtil.getStringList("action_contact");
+    String? hJSmsTemplateNewestUpdatedAt =
+        SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+
+    final List<String>? actionContact = SpUtil.getStringList('action_contact');
+    final List<String>? actionSmsHistory =
+        SpUtil.getStringList('action_sms_history');
+
+    // 检查是否有需要提交的数据
+    bool hasDataToSubmit = (actionContact?.isNotEmpty ?? false) ||
+        (actionSmsHistory?.isNotEmpty ?? false);
+    if (hasDataToSubmit) {
+      // 将列表用逗号拼接成字符串
+      String? actionContactStr = actionContact?.join(',');
+      String? actionSmsHistoryStr = actionSmsHistory?.join(',');
+
+      final formData2 = FormData.fromMap({
+        if (actionContactStr != null) 'action_contact': actionContactStr,
+        if (actionSmsHistoryStr != null)
+          'action_sms_history': actionSmsHistoryStr,
+      });
+      requestNetwork<CollectionOrderEntity>(Method.post,
+          url: HttpApi.qCCollectionNewsAction,
+          params: formData2,
+          onSuccess: (data) async {},
+          onError: (_, __) async {});
+    }
 
     // String? hJSmsTemplateNewestUpdatedAt = "0";
     await requestNetwork<CollectionLogEntity>(Method.get,
@@ -57,7 +81,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         if (hJSmsTemplateNewestUpdatedAt == null ||
             hJSmsTemplateNewestUpdatedAt !=
                 data.other!.hJSmsTemplateNewestUpdatedAt) {
-          SpUtil.putString("hJSmsTemplateNewestUpdatedAt", data.other!.hJSmsTemplateNewestUpdatedAt!);
+          SpUtil.putString("hJSmsTemplateNewestUpdatedAt",
+              data.other!.hJSmsTemplateNewestUpdatedAt!);
           SpUtil.putObjectList("hJSmsTemplates", data.other!.hJSmsTemplate!);
         }
       }

@@ -9,6 +9,7 @@ class HttpApi{
   static const String collectionOrders = '/collection/b-l-collection-orders';
   static const String smsHistory = '/collection/h-k-contact-sms';
   static const String collectionLogs = '/collection/q-c-collection-news';
+  static const String qCCollectionNewsAction = '/collection/q-c-collection-news-action';
   static const String collectionLogs2 = '/collection/q-c-collection-news-index2';
   static const String commission = '/collection/q-g-collection-commission-logs';
   static const String notification = '/collection/e-collection-notifications';

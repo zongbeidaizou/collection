@@ -212,8 +212,8 @@ class _HomeState extends State<Home> with RestorationMixin{
   }
 
   List<BottomNavigationBarItem> _buildDarkBottomNavigationBarItem(int aGCollectionCommissionNewCount, int aHCollectionNotificationCount) {
-    if (_listDark == null) {
-      var tabImagesDark = [
+      // if (_list == null) {
+      var tabImages = [
         const [
           Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.unselected_item_color,),
           Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.app_main,),
@@ -351,17 +351,16 @@ class _HomeState extends State<Home> with RestorationMixin{
           Icon(Icons.emoji_events_rounded, size: _imageSize, color: Colours.app_main,),
         ]
       ];
-
-      _listDark = List.generate(tabImagesDark.length, (i) {
+      _list = List.generate(tabImages.length, (i) {
         return BottomNavigationBarItem(
-          icon: tabImagesDark[i][0],
-          activeIcon: tabImagesDark[i][1],
+          icon: tabImages[i][0],
+          activeIcon: tabImages[i][1],
           label: _appBarTitles[i],
           tooltip: _appBarTitles[i],
         );
       });
-    }
-    return _listDark!;
+    // }
+    return _list!;
   }
 
   @override

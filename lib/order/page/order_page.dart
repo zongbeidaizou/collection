@@ -16,7 +16,20 @@ import 'package:provider/provider.dart';
 
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
-final List<IconData> _iconList = [Icons.play_for_work_sharp,Icons.sync, Icons.more_time,Icons.hourglass_disabled, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+
+final List<IconData> _iconList = [
+  Icons.play_for_work_sharp,
+  Icons.sync,
+  Icons.more_time,
+  Icons.hourglass_disabled,
+  Icons.do_not_touch,
+  Icons.phone_disabled,
+  Icons.hourglass_disabled,
+  Icons.payment,
+  Icons.check_circle,
+  Icons.sms_outlined
+];
+
 /// design/3订单/index.html
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -74,13 +87,12 @@ class _OrderPageState extends State<OrderPage>
   Widget build(BuildContext context) {
     super.build(context);
     isDark = context.isDark;
-    return
-      MultiProvider(
-          providers: [
-            ChangeNotifierProvider<OrderPageProvider>(
-                create: (_) => provider,
-            )
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<OrderPageProvider>(
+          create: (_) => provider,
+        )
+      ],
       child: Scaffold(
         body: Stack(
           children: <Widget>[
@@ -234,8 +246,8 @@ class _OrderPageState extends State<OrderPage>
                     tabs: const <Widget>[
                       _TabView(0, 'New', 10),
                       _TabView(1, 'Negotiating', 10),
-                      _TabView(2, 'Promised', 10),
-                      _TabView(3, 'Broken Promise', 10),
+                      _TabView(2, 'PTP', 10),
+                      _TabView(3, 'Broken PTP', 10),
                       _TabView(4, 'Refused', 10),
                     ],
                     onTap: (index) {
@@ -292,7 +304,6 @@ class _TabView extends StatefulWidget {
 }
 
 class _TabViewState extends State<_TabView> {
-
   @override
   Widget build(BuildContext context) {
     final List<List<String>> imgList = context.isDark ? darkImg : img;
@@ -305,8 +316,25 @@ class _TabViewState extends State<_TabView> {
             children: <Widget>[
               /// 使用context.select替代Consumer
               SizedBox(
-                width:28,height: 28,
-                  child: Center(child: Icon(_iconList[widget.index], size: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 30 : 20,weight: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? 800 : 400, color: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? Colors.blue : Colors.grey))),
+                  width: 28,
+                  height: 28,
+                  child: Center(
+                      child: Icon(_iconList[widget.index],
+                          size: context.select<OrderPageProvider, int>(
+                                      (value) => value.index) ==
+                                  widget.index
+                              ? 30
+                              : 20,
+                          weight: context.select<OrderPageProvider, int>(
+                                      (value) => value.index) ==
+                                  widget.index
+                              ? 800
+                              : 400,
+                          color: context.select<OrderPageProvider, int>(
+                                      (value) => value.index) ==
+                                  widget.index
+                              ? Colors.blue
+                              : Colors.grey))),
 
               // LoadAssetImage(
               //   context.select<OrderPageProvider, int>(
@@ -320,70 +348,117 @@ class _TabViewState extends State<_TabView> {
               Gaps.vGap4,
               Text(
                 widget.text,
-                style: context.select<OrderPageProvider, int>((value) => value.index) == widget.index ? TextStyle(fontSize: 10, color: Colors.blue) : TextStyle(fontSize: 10),
+                style: context.select<OrderPageProvider, int>(
+                            (value) => value.index) ==
+                        widget.index
+                    ? TextStyle(fontSize: 10, color: Colors.blue)
+                    : TextStyle(fontSize: 10),
               ),
             ],
           ),
         ),
         Positioned(
           right: 6.0,
-          child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.error,
-                    borderRadius: BorderRadius.circular(11.0),
+          child: Consumer<UserProvider>(builder: (_, provider, __) {
+            if (widget.index == 0 &&
+                ((provider.userEntity.profile?.kCurrentNewCount ?? 0) != 0)) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5.5, vertical: 2.0),
+                  child: Text(
+                    provider.userEntity.profile?.kCurrentNewCount?.toString() ??
+                        '0',
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Dimens.font_sp12),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 5.5, vertical: 2.0),
-                    child:Consumer<UserProvider>(builder: (_, provider, __) {
-                              if(widget.index == 0){
-                                return Text(
-                                  provider.userEntity.profile?.kCurrentNewCount?.toString()?? '0',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Dimens.font_sp12),
-                                );
-                              }else if(widget.index == 1){
-                                return Text(
-                                  provider.userEntity.profile?.lCurrentNegotiatingCount?.toString()?? '0',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Dimens.font_sp12),
-                                );
-                              }else if(widget.index == 2){
-                                return Text(
-                                  provider.userEntity.profile?.mCurrrentPromisedCount?.toString()?? '0',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Dimens.font_sp12),
-                                );
-                              }else if(widget.index == 3){
-                                return Text(
-                                  provider.userEntity.profile?.nCurrentBrokenCount?.toString()?? '0',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Dimens.font_sp12),
-                                );
-                              }
-                              else if(widget.index == 4){
-                                return Text(
-                                  provider.userEntity.profile?.oCurrentRefusedCount?.toString()?? '0',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: Dimens.font_sp12),
-                                );
-                              }
-                              return Text(
-                                "0",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: Dimens.font_sp12),
-                              );
+                ),
+              );
+            } else if (widget.index == 1 &&
+                ((provider.userEntity.profile?.lCurrentNegotiatingCount ?? 0) != 0)) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5.5, vertical: 2.0),
+                  child: Text(
+                    provider.userEntity.profile?.lCurrentNegotiatingCount
+                            ?.toString() ??
+                        '0',
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Dimens.font_sp12),
+                  ),
+                ),
+              );
+            } else if (widget.index == 2 &&
+                ((provider.userEntity.profile?.mCurrrentPromisedCount ?? 0) != 0)) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5.5, vertical: 2.0),
+                  child: Text(
+                    provider.userEntity.profile?.mCurrrentPromisedCount
+                            ?.toString() ??
+                        '0',
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Dimens.font_sp12),
+                  ),
+                ),
+              );
+            } else if (widget.index == 3 &&
+                ((provider.userEntity.profile?.nCurrentBrokenCount ?? 0) != 0)) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5.5, vertical: 2.0),
+                  child: Text(
+                    provider.userEntity.profile?.nCurrentBrokenCount
+                            ?.toString() ??
+                        '0',
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Dimens.font_sp12),
+                  ),
+                ),
+              );
+            } else if (widget.index == 4 &&
+                ((provider.userEntity.profile?.oCurrentRefusedCount ?? 0) != 0)) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.error,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5.5, vertical: 2.0),
+                  child: Text(
+                    provider.userEntity.profile?.oCurrentRefusedCount
+                            ?.toString() ??
+                        '0',
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Dimens.font_sp12),
+                  ),
+                ),
+              );
+            }else{
+              return Gaps.empty;
+            }
 
-                        }),
-                  ),
-                )
-              ,
+          }),
         )
       ],
     );

@@ -211,32 +211,144 @@ class _HomeState extends State<Home> with RestorationMixin{
     return _list!;
   }
 
-  List<BottomNavigationBarItem> _buildDarkBottomNavigationBarItem() {
+  List<BottomNavigationBarItem> _buildDarkBottomNavigationBarItem(int aGCollectionCommissionNewCount, int aHCollectionNotificationCount) {
     if (_listDark == null) {
-      const tabImagesDark = [
-        [
-          LoadAssetImage('home/icon_order', width: _imageSize),
-          LoadAssetImage('home/icon_order', width: _imageSize, color: Colours.dark_app_main,),
+      var tabImagesDark = [
+        const [
+          Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.unselected_item_color,),
+          Icon(Icons.app_registration_rounded, size: _imageSize, color: Colours.app_main,),
+        ],
+        const [
+          Icon(Icons.fact_check, size: _imageSize, color: Colours.unselected_item_color,),
+          Icon(Icons.fact_check, size: _imageSize, color: Colours.app_main,),
+        ],
+        const [
+          Icon(Icons.flag_circle_rounded, size: _imageSize, color: Colours.unselected_item_color,),
+          Icon(Icons.flag_circle_rounded, size: _imageSize, color: Colours.app_main,),
         ],
         [
-          LoadAssetImage('home/icon_order', width: _imageSize),
-          LoadAssetImage('home/icon_order', width: _imageSize, color: Colours.dark_app_main,),
+          SizedBox(
+            width: 56,
+            child: Stack(
+              children: <Widget>[
+                Center(child: Icon(Icons.iso, size: _imageSize, color: Colours.unselected_item_color,),),
+                if (aGCollectionCommissionNewCount == 0) const SizedBox() else Positioned(
+                  right: 0.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(11.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3.5, vertical: 1.0),
+                      child:Text(
+                        aGCollectionCommissionNewCount.toString(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: Dimens.font_sp10),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 56,
+            child: Stack(
+              children: <Widget>[
+                Center(child: Icon(Icons.iso, size: _imageSize, color: Colours.app_main,),),
+                if (aGCollectionCommissionNewCount == 0) const SizedBox() else Positioned(
+                  right: 0.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(11.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3.5, vertical: 1.0),
+                      child:Text(
+                        aGCollectionCommissionNewCount.toString(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: Dimens.font_sp10),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
         ],
         [
-          LoadAssetImage('home/icon_commodity', width: _imageSize),
-          LoadAssetImage('home/icon_commodity', width: _imageSize, color: Colours.dark_app_main,),
+          SizedBox(
+            width: 56,
+            child: Stack(
+              children: <Widget>[
+                Center(child: const Icon(Icons.campaign_sharp, size: _imageSize, color: Colours.unselected_item_color,),),
+                if (aHCollectionNotificationCount == 0) const SizedBox() else Positioned(
+                  right: 4.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(11.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3.5, vertical: 1.0),
+                      child:Text(
+                        aHCollectionNotificationCount.toString(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: Dimens.font_sp10),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 56,
+            child: Stack(
+              children: <Widget>[
+                Center(child: const Icon(Icons.campaign_sharp, size: _imageSize, color: Colours.app_main,),),
+                if (aHCollectionNotificationCount == 0) const SizedBox() else Positioned(
+                  right: 4.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(11.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3.5, vertical: 1.0),
+                      child:Text(
+                        aHCollectionNotificationCount.toString(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: Dimens.font_sp10),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
         ],
-        [
-          LoadAssetImage('home/icon_statistics', width: _imageSize),
-          LoadAssetImage('home/icon_statistics', width: _imageSize, color: Colours.dark_app_main,),
-        ],
-        [
-          LoadAssetImage('home/icon_statistics', width: _imageSize),
-          LoadAssetImage('home/icon_statistics', width: _imageSize, color: Colours.dark_app_main,),
-        ],
-        [
-          LoadAssetImage('home/icon_shop', width: _imageSize),
-          LoadAssetImage('home/icon_shop', width: _imageSize, color: Colours.dark_app_main,),
+        const [
+          Icon(Icons.emoji_events_rounded, size: _imageSize, color: Colours.unselected_item_color,),
+          Icon(Icons.emoji_events_rounded, size: _imageSize, color: Colours.app_main,),
         ]
       ];
 
@@ -263,7 +375,7 @@ class _HomeState extends State<Home> with RestorationMixin{
             builder: (_, provider, provider2, __) {
               return BottomNavigationBar(
                 backgroundColor: context.backgroundColor,
-                items: isDark ? _buildDarkBottomNavigationBarItem() : _buildBottomNavigationBarItem(provider2.userEntity.profile?.aGCollectionCommissionNewCount?? 0, provider2.userEntity.profile?.aHCollectionNotificationCount?? 0),
+                items: isDark ? _buildDarkBottomNavigationBarItem(provider2.userEntity.profile?.aGCollectionCommissionNewCount?? 0, provider2.userEntity.profile?.aHCollectionNotificationCount?? 0) : _buildBottomNavigationBarItem(provider2.userEntity.profile?.aGCollectionCommissionNewCount?? 0, provider2.userEntity.profile?.aHCollectionNotificationCount?? 0),
                 type: BottomNavigationBarType.fixed,
                 currentIndex: provider.value,
                 elevation: 5.0,

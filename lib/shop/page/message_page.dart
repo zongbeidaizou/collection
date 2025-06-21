@@ -171,14 +171,16 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
           // toolbarHeight: 30,
           title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
-            InkWell(
-              onTap: () {
-                _accountRecordListPresenter.markAsRead(true);
-              },
-              child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                  child: Center(child: Text('Mark All as Read'))),
-            )
+            IconButton(
+                    tooltip: 'mark all as read',
+                    onPressed: () {
+                      _accountRecordListPresenter.markAsRead(true);
+                    },
+                    icon: Icon(
+                      Icons.auto_awesome_outlined,
+                      color: Colors.white,
+                    ),
+                  )
           ],
         ),
         body: NotificationListener(

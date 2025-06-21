@@ -71,7 +71,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _onRefresh();
+      // _onRefresh();
       // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });
   }
@@ -197,8 +197,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       _accountRecordListPresenter.markAsRead(true);
                     },
                     icon: Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: Colors.black54,
+                      Icons.auto_awesome_outlined,
+                      color: Colors.white,
                     ),
                   ),
                   IconButton(
@@ -206,13 +206,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                     onPressed: () {
                       NavigatorUtils.push(context, AccountRouter.search);
                     },
-                    icon: LoadAssetImage(
-                      'goods/search',
-                      key: const Key('search'),
-                      width: 24.0,
-                      // height: 24.0,
-                      color: iconColor,
-                    ),
+                    icon: Icon(Icons.content_paste_search_outlined, color: Colors.white,),
                   ),
                 ],
               )

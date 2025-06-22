@@ -527,26 +527,26 @@ class OrderItem extends StatelessWidget {
             //     Utils.launchWhatsAppURL("234" + item.uPhone!);
             //   },
             // ),
-            Gaps.hGap4,
-            OrderItemButton(
-              key: Key('order_button_2_send'),
-              text: "VA",
-              icon: Icon(Icons.credit_card, size: 15, color: Colors.white),
-              textColor: isDark ? Colours.dark_button_text : Colors.white,
-              bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              onTap: () {
-                _showSmsDialog(context, repayInfo!);
+            // Gaps.hGap4,
+            // OrderItemButton(
+            //   key: Key('order_button_2_send'),
+            //   text: "VA",
+            //   icon: Icon(Icons.credit_card, size: 15, color: Colors.white),
+            //   textColor: isDark ? Colours.dark_button_text : Colors.white,
+            //   bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+            //   onTap: () {
+            //     _showSmsDialog(context, repayInfo!);
 
-              },
-            ),
+            //   },
+            // ),
             Gaps.hGap4,
             
             OrderItemButton(
               key: Key('order_button_2_$index'),
-              text: "Call",
+              text: "Contacts",
               textColor: isDark ? Colours.dark_button_text : Colors.white,
               bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              icon: Icon(Icons.call, size: 15, color: Colors.white),
+              icon: Icon(Icons.people_alt_outlined, size: 15, color: Colors.white),
               onTap: () async {
                 var now = DateTime.now();
                 int from = now.subtract(Duration(days: 60)).millisecondsSinceEpoch;

@@ -9,6 +9,7 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:call_e_log/call_log.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -63,7 +64,10 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       requestNetwork<CollectionOrderEntity>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
           params: formData2,
-          onSuccess: (data) async {},
+          onSuccess: (data) async {
+            SpUtil.remove('action_contact');
+            SpUtil.remove('action_sms_history');
+          },
           onError: (_, __) async {});
     }
 
@@ -95,7 +99,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     return _data;
   }
 
-  Future<void> store(Map<String, dynamic> data, bool isShowDialog) async {
+  Future<void> store(Map<String, dynamic> data, List<XFile>? pickedFiles,
+      bool isShowDialog) async {
     const targetPath = '/storage/emulated/0/Documents/CubeCallRecorder/All/';
     final targetDir = Directory(targetPath);
     final filteredFiles = <File>[];
@@ -148,6 +153,12 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     // 准备表单数据列表
     List<Map<String, dynamic>> callLogsData = [];
 
+    pickedFiles?.map((image) async {
+        final String path = image.path;
+        final String name = path.substring(path.lastIndexOf('/') + 1);
+        return MultipartFile.fromFile(path, filename: name);
+      });
+
     final formData = FormData.fromMap({
       // 包含原始 data 中的所有字段
       ...data,
@@ -162,6 +173,11 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
           };
         }),
       ),
+      'images': pickedFiles?.map((image) async {
+        final String path = image.path;
+        final String name = path.substring(path.lastIndexOf('/') + 1);
+        return MultipartFile.fromFile(path, filename: name);
+      }),
     });
 
     await requestNetwork<CollectionOrderEntity>(Method.post,

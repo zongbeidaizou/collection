@@ -80,7 +80,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList
             .where((value) =>
-                int.parse(value['e_days'] as String) <= overdueDays) // 先过滤原始数据
+                int.parse(value['e_days'] as String) <= overdueDays || int.parse(value['e_days'] as String) == 999 ) // 先过滤原始数据
             .where((value) {
       return value['c_type'] == 28;
     }).map((value) {
@@ -141,7 +141,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            template.dTemplate!,
+                            template.dTemplate! != '' ? template.dTemplate! : 'Custom message.',
                             style: const TextStyle(
                               fontSize: 15,
                               height: 1.4,

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -232,6 +233,7 @@ class _AddNoteState extends State<AddNote>
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
+    
     Map<String, Object> logData;
     return Scaffold(
         //todo 搜索
@@ -333,7 +335,7 @@ class _AddNoteState extends State<AddNote>
                       'o_contact_id': contactId ?? 0,
                       'p_collection_order_id': widget.orderId,
                     };
-                    _addNotePresenter.store(logData, true);
+                    _addNotePresenter.store(logData,null, true);
                   },
                   // track: ,
                 ),
@@ -349,7 +351,7 @@ class _AddNoteState extends State<AddNote>
                         labelText: 'Write a comment...',
                         errorText: 'Comment cannot be blank',
                         withBorder: false,
-                        sendButtonMethod: () async {
+                        sendButtonMethod: (List<XFile>? pickedFiles) async {
                           if (formKey.currentState!.validate()) {
                             var value = {
                               'g_type': typeController.text,
@@ -363,11 +365,12 @@ class _AddNoteState extends State<AddNote>
                               // 修改为在列表最前面追加元素
                               _list.insert(0, CollectionLogData.fromJson(value));
                             });
-                            print(value);
+                            //上传图片
+                            print(pickedFiles);
                             await _addNotePresenter.store({
                               'p_collection_order_id': widget.orderId,
                               ...value
-                            }, true);
+                            }, pickedFiles, true);
                             commentController.clear();
                             // dateController.clear();
                             // typeController.clear();

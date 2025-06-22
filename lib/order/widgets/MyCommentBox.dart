@@ -1,6 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -11,7 +12,7 @@ import '../../util/toast_utils.dart';
 class MyCommentBox extends StatefulWidget {
   Widget? child;
   Key? formKey;
-  GestureTapCallback? sendButtonMethod;
+  void Function(List<XFile>?)? sendButtonMethod;
   TextEditingController? commentController;
   TextEditingController? dateController;
   TextEditingController? typeController;
@@ -25,19 +26,19 @@ class MyCommentBox extends StatefulWidget {
   FocusNode? focusNode;
   MyCommentBox(
       {this.child,
-        this.header,
-        this.sendButtonMethod,
-        this.formKey,
-        this.commentController,
-        this.dateController,
-        this.typeController,
-        this.sendWidget,
-        this.labelText,
-        this.focusNode,
-        this.errorText,
-        this.withBorder = true,
-        this.backgroundColor,
-        this.textColor});
+      this.header,
+      this.sendButtonMethod,
+      this.formKey,
+      this.commentController,
+      this.dateController,
+      this.typeController,
+      this.sendWidget,
+      this.labelText,
+      this.focusNode,
+      this.errorText,
+      this.withBorder = true,
+      this.backgroundColor,
+      this.textColor});
 
   @override
   State<MyCommentBox> createState() => _MyCommentBoxState();
@@ -48,13 +49,14 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   bool _focus = false;
   final FocusNode _focusNode = FocusNode();
   DateTime? _savedDateTime;
+  List<XFile>? _pickedFiles;
 
   bool _showCustomTime = false;
 
   void _selectPresetTime(int hour) {
     final now = DateTime.now();
     final selectedTime = DateTime(now.year, now.month, now.day, hour, 0);
-  _handleTimeSelection(selectedTime);
+    _handleTimeSelection(selectedTime);
   }
 
   void _handleTimeSelection(DateTime selectedTime) {
@@ -62,7 +64,8 @@ class _MyCommentBoxState extends State<MyCommentBox> {
       _savedDateTime = selectedTime;
     });
     widget.dateController?.text = selectedTime.toString();
-    widget.commentController?.text = 'PTP by ${DateFormat('MMM d, HH:mm').format(selectedTime)}';
+    widget.commentController?.text =
+        'PTP by ${DateFormat('MMM d, HH:mm').format(selectedTime)}';
     NavigatorUtils.goBack(context);
     setState(() {
       _focus = true;
@@ -78,13 +81,15 @@ class _MyCommentBoxState extends State<MyCommentBox> {
 
   void _selectTomorrowTime(int hour) {
     final tomorrow = DateTime.now().add(const Duration(days: 1));
-    final selectedTime = DateTime(tomorrow.year, tomorrow.month, tomorrow.day, hour, 0);
+    final selectedTime =
+        DateTime(tomorrow.year, tomorrow.month, tomorrow.day, hour, 0);
     _handleTimeSelection(selectedTime);
   }
 
   void _selectEndOfFutureDay(int daysFromNow) {
     final futureDate = DateTime.now().add(Duration(days: daysFromNow));
-    final endOfDay = DateTime(futureDate.year, futureDate.month, futureDate.day, 23, 59);
+    final endOfDay =
+        DateTime(futureDate.year, futureDate.month, futureDate.day, 23, 59);
     _handleTimeSelection(endOfDay);
   }
 
@@ -103,7 +108,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
             ),
             TextButton(
               onPressed: () {
-                if(_savedDateTime == null){
+                if (_savedDateTime == null) {
                   showToast("Please select a time");
                   return;
                 }
@@ -114,9 +119,13 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 _focusNode.requestFocus();
               },
               style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.error.withOpacity(0.2)),
+                overlayColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.error.withOpacity(0.2)),
               ),
-              child: Text('write a promiss comment', style: TextStyle(color: Theme.of(context).colorScheme.error),),
+              child: Text(
+                'write a promiss comment',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           ],
           content: Column(
@@ -167,14 +176,13 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   margin: const EdgeInsets.only(top: 16),
                   child: FormBuilderDateTimePicker(
                     name: 'date',
-                                    decoration: InputDecoration(
-                  labelText: 'Other Time',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                    },
-                  ),
-                ),
+                    decoration: InputDecoration(
+                      labelText: 'Other Time',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {},
+                      ),
+                    ),
                     initialEntryMode: DatePickerEntryMode.calendarOnly,
                     onChanged: (DateTime? value) {
                       _handleTimeSelection(value!);
@@ -188,7 +196,6 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                 onTap: () => setState(() => _showCustomTime = true),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               ),
-             
             ],
           ),
         );
@@ -198,9 +205,19 @@ class _MyCommentBoxState extends State<MyCommentBox> {
 
   @override
   Widget build(BuildContext context) {
-    final List<IconData> typeList = [Icons.sync, Icons.more_time,  Icons.phone_disabled, Icons.delete_forever,];
+    final List<IconData> typeList = [
+      Icons.sync,
+      Icons.more_time,
+      Icons.phone_disabled,
+      Icons.transfer_within_a_station,
+    ];
     final List<int> typeList2 = [1, 2, 4, 5];
-    final List<String> typeToastList = ["Under negotiation selected", "Promise to repay selected", "Refusal to repay selected","Unable to dial selected", ];
+    final List<String> typeToastList = [
+      "Under negotiation selected",
+      "Promise to repay selected",
+      "Refusal to repay selected",
+      "Unable to dial selected",
+    ];
 
     return Column(
       children: [
@@ -226,11 +243,11 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   color: Colors.transparent,
                 ),
                 onChanged: (IconData? value) async {
-                  Toast.show(typeToastList[typeList.indexOf(value!)]);
-                  widget.typeController?.text = typeList2[typeList.indexOf(value!)].toString();
-                  if(value == Icons.more_time){
+                  widget.typeController?.text =
+                      typeList2[typeList.indexOf(value!)].toString();
+                  if (value == Icons.more_time) {
                     _showDialog();
-          /*                var results = await showCalendarDatePicker2Dialog(
+                    /*                var results = await showCalendarDatePicker2Dialog(
                   context: context,
 
                   config: CalendarDatePicker2WithActionButtonsConfig(),
@@ -238,9 +255,9 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   // value: _dates,
                   borderRadius: BorderRadius.circular(15),
                   );*/
-                  }else if(value == Icons.phone_disabled){
-                    widget.commentController?.text = 'Number unavailable';
-          /*                var results = await showCalendarDatePicker2Dialog(
+                  } else if (value == Icons.phone_disabled) {
+                    widget.commentController?.text = 'Number unavailable.';
+                    /*                var results = await showCalendarDatePicker2Dialog(
                   context: context,
 
                   config: CalendarDatePicker2WithActionButtonsConfig(),
@@ -248,27 +265,39 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   // value: _dates,
                   borderRadius: BorderRadius.circular(15),
                   );*/
-                  }else{
+                  } else if (value == Icons.transfer_within_a_station) {
+                    widget.commentController?.text =
+                        'Temporarily assign to someone else.';
+                    final ImagePicker _picker = ImagePicker();
+                    List<XFile>? pickedFiles = await _picker.pickMultiImage();
+                    setState(() {
+                      _pickedFiles = pickedFiles;
+                    });
+                  } else {
                     _focusNode.requestFocus();
                   }
                   setState(() {
                     _value = value;
                   });
                 },
-                items: typeList.map<DropdownMenuItem<IconData>>((IconData icon) {
-                  Color  iconColor = Colors.grey;
-                  if(icon == Icons.sync){
-                    iconColor =  Colors.grey;
-                  }else if(icon == Icons.phone_disabled){
-                    iconColor =  Colors.purpleAccent;
-                  }else if(icon == Icons.more_time){
-                    iconColor =  Colors.green;
-                  }else if(icon == Icons.delete_forever){
-                    iconColor =  Colors.red;
+                items:
+                    typeList.map<DropdownMenuItem<IconData>>((IconData icon) {
+                  Color iconColor = Colors.grey;
+                  if (icon == Icons.sync) {
+                    iconColor = Colors.grey;
+                  } else if (icon == Icons.phone_disabled) {
+                    iconColor = Colors.purpleAccent;
+                  } else if (icon == Icons.more_time) {
+                    iconColor = Colors.green;
+                  } else if (icon == Icons.transfer_within_a_station) {
+                    iconColor = Colors.red;
                   }
                   return DropdownMenuItem<IconData>(
                     value: icon,
-                    child: Icon(icon, color: iconColor,),
+                    child: Icon(
+                      icon,
+                      color: iconColor,
+                    ),
                   );
                 }).toList(),
               ),
@@ -289,33 +318,33 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                       enabledBorder: !widget.withBorder
                           ? InputBorder.none
                           : UnderlineInputBorder(
-                        borderSide: BorderSide(color: widget.textColor!),
-                      ),
+                              borderSide: BorderSide(color: widget.textColor!),
+                            ),
                       focusedBorder: !widget.withBorder
                           ? InputBorder.none
                           : UnderlineInputBorder(
-                        borderSide: BorderSide(color: widget.textColor!),
-                      ),
+                              borderSide: BorderSide(color: widget.textColor!),
+                            ),
                       border: !widget.withBorder
                           ? InputBorder.none
                           : UnderlineInputBorder(
-                        borderSide: BorderSide(color: widget.textColor!),
-                      ),
+                              borderSide: BorderSide(color: widget.textColor!),
+                            ),
                       labelText: widget.labelText,
                       focusColor: Colors.red,
                       filled: true,
                       fillColor: Colors.white,
                       labelStyle: TextStyle(color: Colors.grey),
                     ),
-                    validator: (value) => value!.isEmpty ? widget.errorText : null,
+                    validator: (value) =>
+                        value!.isEmpty ? widget.errorText : null,
                   ),
-
                 ],
               ),
             ),
             trailing: GestureDetector(
-              onTap: widget.sendButtonMethod,
-              child: Container(width:18, child: widget.sendWidget),
+              onTap: () => widget.sendButtonMethod!(_pickedFiles),
+              child: Container(width: 18, child: widget.sendWidget),
             ),
           ),
         ),

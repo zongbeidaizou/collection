@@ -171,16 +171,16 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
           // toolbarHeight: 30,
           title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
-            IconButton(
-                    tooltip: 'mark all as read',
-                    onPressed: () {
-                      _accountRecordListPresenter.markAsRead(true);
-                    },
-                    icon: Icon(
-                      Icons.auto_awesome_outlined,
-                      color: Colors.white,
-                    ),
-                  )
+            // IconButton(
+            //         tooltip: 'mark all as read',
+            //         onPressed: () {
+            //           _accountRecordListPresenter.markAsRead(true);
+            //         },
+            //         icon: Icon(
+            //           Icons.auto_awesome_outlined,
+            //           color: Colors.white,
+            //         ),
+            //       )
           ],
         ),
         body: NotificationListener(
@@ -225,7 +225,7 @@ class _MessageItem extends StatelessWidget {
         Gaps.vGap8,
         MyCard(
           shadowColor: item.eReaded == 1 ? Colors.white : bgColors[item.gCat!].withOpacity(0.46),
-          color:item.eReaded == 1 ? Colors.grey.shade200 : Colors.white,
+          color:item.eReaded == 1 ? Colors.grey.shade200 :  Colors.blue.shade200,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -243,13 +243,13 @@ class _MessageItem extends StatelessWidget {
                       ),
                     ),
                     Expanded(child: Text(catText[item.gCat!])),
-                    Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(item.createdAt!)), style: TextStyle(fontSize: 12),),
+                    Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(item.createdAt!)), style: item.eReaded == 1 ? TextStyles.textSize12 : TextStyle(fontSize: 12 ,color:Colors.black)),
                   ],
                 ),
                 Gaps.vGap8,
                 Gaps.line,
                 Gaps.vGap8,
-                Text(item.hContent!, style: TextStyles.textSize12),
+                Text(item.hContent!, style:item.eReaded == 1 ? TextStyles.textSize12 : TextStyle(fontSize: 12 ,color:Colors.black)),
               ],
             ),
           ),

@@ -83,6 +83,8 @@ class CommissionData {
 	int? yDayIndex = 0;
 	@JSONField(name: "created_at")
 	String? createdAt = '';
+	@JSONField(name: "a_a_comment")
+	String? aAComment = '';
 	@JSONField(name: "a_a_a_a_a_a_b_l_collection_order")
 	CollectionOrderData? aAAAAABLCollectionOrder;
 

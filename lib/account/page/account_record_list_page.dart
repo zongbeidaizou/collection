@@ -71,7 +71,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // _onRefresh();
+      _onRefresh();
       // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });
   }
@@ -80,13 +80,13 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   void didUpdateWidget(AccountRecordListPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 当搜索关键词变化时，重新请求数据
-    if (oldWidget.searchKeyword != widget.searchKeyword) {
-      setState(() {
-        _list.clear();
-      });
-      _accountRecordListPresenter.index(1, false,
-          keyword: widget.searchKeyword);
-    }
+    // if (oldWidget.searchKeyword != widget.searchKeyword) {
+    //   setState(() {
+    //     _list.clear();
+    //   });
+    //   _accountRecordListPresenter.index(1, false,
+    //       keyword: widget.searchKeyword);
+    // }
   }
 
   @override
@@ -191,16 +191,16 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 title: Text("Bonus Record",
                     style: TextStyle(color: ThemeUtils.getIconColor(context))),
                 actions: <Widget>[
-                  IconButton(
-                    tooltip: 'mark all as read',
-                    onPressed: () {
-                      _accountRecordListPresenter.markAsRead(true);
-                    },
-                    icon: Icon(
-                      Icons.auto_awesome_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
+                  // IconButton(
+                  //   tooltip: 'mark all as read',
+                  //   onPressed: () {
+                  //     _accountRecordListPresenter.markAsRead(true);
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.auto_awesome_outlined,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                   IconButton(
                     tooltip: 'Search',
                     onPressed: () {
@@ -372,6 +372,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
         '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
     if (log.oType == 2) {
       txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
+    } else if (log.oType == 3) {
+      txt = 'Manually Calculated Bonus';
     } else if (log.oType == 3) {
       txt = 'Manually Calculated Bonus';
     }

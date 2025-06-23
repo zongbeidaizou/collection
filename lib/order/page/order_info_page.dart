@@ -79,16 +79,20 @@ implements OrderInfoPageIMvpView {
   }
   Future<void> _verify() async {
     final price = _controller.text;
-    if (price.isEmpty || double.parse(price) < 1000) {
-      Toast.show('The minimum amount is 1000.');
+    if (price.isEmpty || double.parse(price) < 100) {
+      Toast.show('The minimum amount is 100.');
       return;
     }
     if(_period.kExpectOverdueAmount! <= 0){
-      Toast.show('This order is not overdue and therefore cannot be subject to any reduction.');
+      Toast.show('This order is not overdue and therefore cannot be subject to any Waived.');
+      return;
+    }
+    if(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount! - double.parse(price) <= 0){
+      Toast.show('Incorrect waived amount.');
       return;
     }
     if (price.isEmpty || double.parse(price) > calculateAndRoundToThousand(_period.kExpectOverdueAmount!)) {
-      Toast.show('The maximum amount is ${calculateAndRoundToThousand(_period.kExpectOverdueAmount!)}.');
+      Toast.show('The maximum amount is ${calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!)}.');
       return;
     }
 
@@ -104,6 +108,7 @@ implements OrderInfoPageIMvpView {
 
   }
   int calculateAndRoundToThousand(int amount) {
+    return amount;
     // 计算60%的金额
     double sixtyPercent = amount * 0.6;
 
@@ -131,7 +136,7 @@ implements OrderInfoPageIMvpView {
           children: <Widget>[
             Expanded(
               child: MyButton(
-                text: 'Application for Reduction.',
+                text: 'Application for waived',
                 minHeight: 45,
                 onPressed: () {_verify();},
               ),
@@ -179,9 +184,9 @@ implements OrderInfoPageIMvpView {
               Gaps.line,
               Gaps.vGap4,
               _buildGoodsInfoItem('Expect Repay Time', DateFormat('MMM d, yyyy', 'en_US').format(DateTime.parse(_period.aPExpectRepayTime!))),
-              _buildGoodsInfoItem('Should Repay Amount', Utils.formatPrice2(_period.fExpectRepayTotalAmount!)),
+              // _buildGoodsInfoItem('Should Repay Amount', Utils.formatPrice2(_period.fExpectRepayTotalAmount!)),
               _buildGoodsInfoItem('Overdue Days', _period.lOverdueDays.toString()),
-              _buildGoodsInfoItem('Overdue Fee', Utils.formatPrice2(_period.kExpectOverdueAmount!)),
+              _buildGoodsInfoItem('Overdue Fee', Utils.formatPrice2(_period.kExpectOverdueAmount!) + ' - ' +Utils.formatPrice2(_period.uDeductionTotalAmount!)),
               _buildGoodsInfoItem('Paid', Utils.formatPrice2(_period.nPaidAmount!)),
               _buildGoodsInfoItem('Left Repay Amount', _period.aZLeftAmount.toString()),
             ],),
@@ -194,14 +199,14 @@ implements OrderInfoPageIMvpView {
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
               const Text(
-                'deduction Info',
+                'Waived Info',
                 style: TextStyles.textBold14,
               ),
               Gaps.vGap8,
               Gaps.line,
               Gaps.vGap4,
-              _buildGoodsInfoItem('deduction Amount ', Utils.formatPrice2(_period.uDeductionTotalAmount!)),
-              _buildGoodsInfoItem('deduction Times ', _period.tDeductionTimes.toString()),
+              _buildGoodsInfoItem('Amount Waived  ', Utils.formatPrice2(_period.uDeductionTotalAmount!)),
+              _buildGoodsInfoItem('Times waived  ', _period.tDeductionTimes.toString()),
               Gaps.vGap8,
               Row(
                 children: <Widget>[
@@ -229,7 +234,7 @@ implements OrderInfoPageIMvpView {
                           fontWeight: FontWeight.normal,
                           color: Colours.text_gray_c,
                         ),
-                        hintText: 'Not less than 1,000',
+                        hintText: 'Not less than 1,00',
                         counterText: '',
                         border: InputBorder.none,
                       ),
@@ -243,14 +248,14 @@ implements OrderInfoPageIMvpView {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('The maximum penalty reduction is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.kExpectOverdueAmount!))}.', style: Theme.of(context).textTheme.titleSmall),
+                  Text('The maximum penalty waived is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!))}.', style: Theme.of(context).textTheme.titleSmall),
                   GestureDetector(
                       onTap: () {
-                        _controller.text = '70';
+                        _controller.text = calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!).toString();
                       },
                       child: SizedBox(
                         height: 20.0,
-                        child: Text('Full reduction', style: TextStyle(
+                        child: Text('Full waived', style: TextStyle(
                           fontSize: Dimens.font_sp12,
                           color: Theme.of(context).primaryColor,
                         )),
@@ -263,7 +268,7 @@ implements OrderInfoPageIMvpView {
                 controller: _controller2,
                 maxLines: 2, // 设置最大行数，超过时会自动滚动
                 decoration: InputDecoration(
-                  labelText: 'Reduction Remarks (Optional)',
+                  labelText: 'waived Remarks (Optional)',
                   border: OutlineInputBorder(),
                 ),
               ),

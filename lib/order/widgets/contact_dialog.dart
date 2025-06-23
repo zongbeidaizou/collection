@@ -136,7 +136,7 @@ class ContactCard extends StatelessWidget {
       if (contactIndex == 0) {
         return value['c_type'] == 26 && (int.parse(value['e_days'] as String) == overdueDays || int.parse(value['e_days'] as String) == (overdueDays - 1) || int.parse(value['e_days'] as String) == 999 );
       } else {
-        return value['c_type'] == 28;
+        return value['c_type'] == 28 && (overdueDays > 0  || int.parse(value['e_days'] as String) == 999);
       }
     }) // 先过滤原始数据
             .map((value) {

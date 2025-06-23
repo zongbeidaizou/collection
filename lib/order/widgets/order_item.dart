@@ -380,7 +380,8 @@ class OrderItem extends StatelessWidget {
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
                               text:
-                                  Utils.formatPrice2(item.lCollectionAmount!)),
+                                  // Utils.formatPrice2(item.lCollectionAmount!)),
+                                  Utils.formatPrice2(period!.fExpectRepayTotalAmount! - period!.qPaidServiceFee! - period!.qPaidServiceFee!  - period!.nPaidAmount! - period!.uDeductionTotalAmount!)),
                         ],
                       ),
                     ),

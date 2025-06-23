@@ -63,12 +63,10 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       });
       requestNetwork<CollectionOrderEntity>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
-          params: formData2,
-          onSuccess: (data) async {
-            SpUtil.remove('action_contact');
-            SpUtil.remove('action_sms_history');
-          },
-          onError: (_, __) async {});
+          params: formData2, onSuccess: (data) async {
+        SpUtil.remove('action_contact');
+        SpUtil.remove('action_sms_history');
+      }, onError: (_, __) async {});
     }
 
     // String? hJSmsTemplateNewestUpdatedAt = "0";
@@ -151,13 +149,30 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     } catch (e) {}
 
     // 准备表单数据列表
-    List<Map<String, dynamic>> callLogsData = [];
+    final List<Map<String, dynamic>> callLogsData = [];
+    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      // 处理所有图片文件并转换为MultipartFile
+      List<MultipartFile> imageFiles = await Future.wait(
+        pickedFiles.map((image) async {
+          final String path = image.path;
+          final String name = path.substring(path.lastIndexOf('/') + 1);
+          return MultipartFile.fromFile(path, filename: name);
+        }),
+      );
 
-    pickedFiles?.map((image) async {
-        final String path = image.path;
-        final String name = path.substring(path.lastIndexOf('/') + 1);
-        return MultipartFile.fromFile(path, filename: name);
-      });
+      // 创建图片参数映射
+      Map<String, MultipartFile> imageParams = {};
+      for (int i = 0; i < imageFiles.length; i++) {
+        imageParams['image${i + 1}'] = imageFiles[i];
+      }
+
+      // 合并到数据中
+      data = {
+        ...data,
+        ...imageParams,
+        'imageCount':imageFiles.length,
+      };
+    }
 
     final formData = FormData.fromMap({
       // 包含原始 data 中的所有字段
@@ -173,11 +188,6 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
           };
         }),
       ),
-      'images': pickedFiles?.map((image) async {
-        final String path = image.path;
-        final String name = path.substring(path.lastIndexOf('/') + 1);
-        return MultipartFile.fromFile(path, filename: name);
-      }),
     });
 
     await requestNetwork<CollectionOrderEntity>(Method.post,

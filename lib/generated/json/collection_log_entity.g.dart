@@ -2,6 +2,8 @@ import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -312,6 +314,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (hJSmsTemplate != null) {
     collectionLogOther.hJSmsTemplate = hJSmsTemplate;
   }
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
+  if (other != null) {
+    collectionLogOther.other = other;
+  }
   return collectionLogOther;
 }
 
@@ -328,6 +335,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
       entity.hJSmsTemplateNewestUpdatedAt;
   data['h_j_sms_template'] =
       entity.hJSmsTemplate?.map((v) => v.toJson()).toList();
+  data['other'] = entity.other?.toJson();
   return data;
 }
 
@@ -342,6 +350,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     List<CollectionLogOtherSmsHistory>? smsHistory,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
+    CollectionOrderOther? other,
   }) {
     return CollectionLogOther()
       ..avatar = avatar ?? this.avatar
@@ -353,7 +362,8 @@ extension CollectionLogOtherExtension on CollectionLogOther {
       ..smsHistory = smsHistory ?? this.smsHistory
       ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??
           this.hJSmsTemplateNewestUpdatedAt
-      ..hJSmsTemplate = hJSmsTemplate ?? this.hJSmsTemplate;
+      ..hJSmsTemplate = hJSmsTemplate ?? this.hJSmsTemplate
+      ..other = other ?? this.other;
   }
 }
 

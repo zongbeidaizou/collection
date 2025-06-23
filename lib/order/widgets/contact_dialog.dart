@@ -132,11 +132,9 @@ class ContactCard extends StatelessWidget {
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList
-            .where(
-                (value) => int.parse(value['e_days'] as String) <= overdueDays || int.parse(value['e_days'] as String) == 999 )
             .where((value) {
       if (contactIndex == 0) {
-        return value['c_type'] == 26;
+        return value['c_type'] == 26 && (int.parse(value['e_days'] as String) == overdueDays || int.parse(value['e_days'] as String) == (overdueDays - 1) || int.parse(value['e_days'] as String) == 999 );
       } else {
         return value['c_type'] == 28;
       }

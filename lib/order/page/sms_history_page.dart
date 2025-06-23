@@ -79,8 +79,6 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList
-            .where((value) =>
-                int.parse(value['e_days'] as String) <= overdueDays || int.parse(value['e_days'] as String) == 999 ) // 先过滤原始数据
             .where((value) {
       return value['c_type'] == 28;
     }).map((value) {

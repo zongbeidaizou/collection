@@ -96,22 +96,22 @@ class LevelBar extends StatelessWidget {
                               const TextSpan(text: ' bonus. \nTo reach the next level (Level '),
                               TextSpan(
                                 text: '${data.nextGrade}',
-                                style: const TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
                               ),
                               const TextSpan(text: ') and earn a '),
                               TextSpan(
                                 text: '${data.nextRate}',
-                                style: const TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
                               ),
                               const TextSpan(text: ' bonus plus an additional bonus of '),
                               TextSpan(
                                 text: '${Utils.formatPrice2(data.nextAdditionBonus!)}',
-                                style: const TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
                               ),
                               const TextSpan(text: ', \nyou need '),
                               TextSpan(
                                 text: '${data.more}',
-                                style: const TextStyle(fontSize: 10),
+                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
                               ),
                               const TextSpan(text: ' more successful recoveries today.'),
                             ],

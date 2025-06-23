@@ -80,6 +80,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       if (data != null) {
         _list = data.data!;
         _data = data;
+        view.getContext().read<UserProvider>().setUserEntity(data.other!.other!);
         if (hJSmsTemplateNewestUpdatedAt == null ||
             hJSmsTemplateNewestUpdatedAt !=
                 data.other!.hJSmsTemplateNewestUpdatedAt) {

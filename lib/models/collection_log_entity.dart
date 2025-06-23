@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 
 @JsonSerializable()
 class CollectionLogEntity {
@@ -100,6 +101,7 @@ class CollectionLogOther {
 	String? hJSmsTemplateNewestUpdatedAt = '';
 	@JSONField(name: "h_j_sms_template")
 	List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate = [];
+  CollectionOrderOther? other;
 
 	CollectionLogOther();
 

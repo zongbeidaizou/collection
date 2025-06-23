@@ -65,7 +65,7 @@ class Bar2State extends State<Bar2> {
                   Gaps.hGap16,
                   Expanded(
                     child: Text(
-                      widget.isShowingMainData ? 'Live Bonus Rankings' : 'Live Case Rankings',
+                      widget.isShowingMainData ? 'Live Weekly Bonus' : 'Live Weekly Case Rankings',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -75,7 +75,7 @@ class Bar2State extends State<Bar2> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  widget.isShowingMainData ? Gaps.hGap8: Gaps.empty,
+                  // widget.isShowingMainData ? Gaps.hGap8: Gaps.empty,
                   widget.isShowingMainData ? LegendsListWidget(
                     legends: [
                       Legend('B', Colors.blue[100]!),

@@ -42,6 +42,8 @@ class CollectionOrderData {
 	int? dCollectionGroupId = 0;
 	@JSONField(name: "e_collection_admin_id")
 	int? eCollectionAdminId = 0;
+	@JSONField(name: "a_v_tmp_collection_admin_id")
+	int? aVTmpCollectionAdminId = 0;
 	@JSONField(name: "f_collection_news_id")
 	int? fCollectionNewsId = 0;
 	@JSONField(name: "g_collection_order_flow_history_count")

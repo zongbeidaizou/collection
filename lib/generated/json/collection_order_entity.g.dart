@@ -119,6 +119,11 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (eCollectionAdminId != null) {
     collectionOrderData.eCollectionAdminId = eCollectionAdminId;
   }
+  final int? aVTmpCollectionAdminId = jsonConvert.convert<int>(
+      json['a_v_tmp_collection_admin_id']);
+  if (aVTmpCollectionAdminId != null) {
+    collectionOrderData.aVTmpCollectionAdminId = aVTmpCollectionAdminId;
+  }
   final int? fCollectionNewsId = jsonConvert.convert<int>(
       json['f_collection_news_id']);
   if (fCollectionNewsId != null) {
@@ -298,6 +303,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['c_collection_agency_id'] = entity.cCollectionAgencyId;
   data['d_collection_group_id'] = entity.dCollectionGroupId;
   data['e_collection_admin_id'] = entity.eCollectionAdminId;
+  data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['f_collection_news_id'] = entity.fCollectionNewsId;
   data['g_collection_order_flow_history_count'] =
       entity.gCollectionOrderFlowHistoryCount;
@@ -346,6 +352,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? cCollectionAgencyId,
     int? dCollectionGroupId,
     int? eCollectionAdminId,
+    int? aVTmpCollectionAdminId,
     int? fCollectionNewsId,
     int? gCollectionOrderFlowHistoryCount,
     int? hCollectionAdminLogCount,
@@ -390,6 +397,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId
       ..dCollectionGroupId = dCollectionGroupId ?? this.dCollectionGroupId
       ..eCollectionAdminId = eCollectionAdminId ?? this.eCollectionAdminId
+      ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
+          this.aVTmpCollectionAdminId
       ..fCollectionNewsId = fCollectionNewsId ?? this.fCollectionNewsId
       ..gCollectionOrderFlowHistoryCount = gCollectionOrderFlowHistoryCount ??
           this.gCollectionOrderFlowHistoryCount

@@ -372,12 +372,18 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
 
   Widget _buildItem(CommissionData log, int i) {
     String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
-    if (log.oType == 2) {
+    if(log.oType == 1){
+      txt = 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(
+              DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1))
+            )}, $txt';
+    }else if (log.oType == 2) {
       txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
     } else if (log.oType == 3) {
       txt = 'Manually Calculated Bonus';
-    } else if (log.oType == 3) {
-      txt = 'Manually Calculated Bonus';
+    } else if (log.oType == 5) {
+      txt = log.aAComment!;
+    } else if (log.oType == 4) {
+      txt = log.aAComment!;
     }
 
     return Container(
@@ -435,6 +441,16 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                             Theme.of(context).colorScheme.error, 'Achievement'),
                       ),
                       Offstage(
+                        offstage: !(log.oType == 5),
+                        child: _buildGoodsTag(
+                            Colors.purple, 'Monthly Bonus'),
+                      ),
+                      Offstage(
+                        offstage: !(log.oType == 4),
+                        child: _buildGoodsTag(
+                            const Color.fromARGB(255, 39, 197, 160), 'Weekly Bonus'),
+                      ),
+                      Offstage(
                         offstage: !(log.oType == 3),
                         child: _buildGoodsTag(
                             Theme.of(context).primaryColor, 'Manually Bonus'),
@@ -472,12 +488,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               left: 16.0,
               child: Row(
                 children: [
-                  Text(
-                    log.oType == 2
-                        ? txt
-                        : 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(
-              DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1))
-            )}, $txt',
+                  Text(txt
+                    ,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],

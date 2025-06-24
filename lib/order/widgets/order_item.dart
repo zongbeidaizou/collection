@@ -297,7 +297,7 @@ class OrderItem extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
-                  FlutterClipboard.copy(item.tBorrowSn!);
+                  FlutterClipboard.copy('${item.uPhone!}-${item.tBorrowSn!}');
                 },
               ),
             ),
@@ -381,7 +381,8 @@ class OrderItem extends StatelessWidget {
                           TextSpan(
                               text:
                                   // Utils.formatPrice2(item.lCollectionAmount!)),
-                                  Utils.formatPrice2(period!.fExpectRepayTotalAmount! - period!.qPaidServiceFee! - period!.qPaidServiceFee!  - period!.nPaidAmount! - period!.uDeductionTotalAmount!)),
+                                  Utils.formatPrice2((period?.fExpectRepayTotalAmount ?? 0) - (period?.qPaidServiceFee?? 0) - (period?.qPaidServiceFee??0)  - (period?.nPaidAmount??0) - (period?.uDeductionTotalAmount??0))),
+
                         ],
                       ),
                     ),
@@ -566,7 +567,7 @@ class OrderItem extends StatelessWidget {
             children: <Widget>[
               OrderItemButton(
                 key: Key('order_reducation'),
-                text: "Reduce",
+                text: "Waive",
                 icon: Icon(Icons.next_plan_outlined,
                     size: 15, color: Colors.white),
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
@@ -669,7 +670,7 @@ class OrderItemButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 22.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4.0),

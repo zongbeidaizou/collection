@@ -424,7 +424,7 @@ _OrderInfo _data(int id) => _OrderInfo(
         _DeliveryMessage('11:30am', 'Under negotiation 协商中Under negotiation 协商中Under negotiation 协商中Under negotiation 协商中Under negotiation 协商中', 1, Icons.sync, Colors.black, Colors.grey),
         _DeliveryMessage('2:12pm', 'Package received by Package received by', 1, Icons.more_time, Colors.green, Colors.green),
         _DeliveryMessage('3:41pm', 'Package received by driver承诺未还', 1, Icons.hourglass_disabled, Colors.black, Colors.redAccent),
-        _DeliveryMessage('7:08pm', 'Package received by driver拒不还款', 1, Icons.do_not_touch, Colors.black, Colors.purpleAccent),
+        _DeliveryMessage('7:08pm', 'Package received by driver拒不还款', 1, Icons.transfer_within_a_station, Colors.black, Colors.purpleAccent),
       ],
     ),
     const _DeliveryProcess(

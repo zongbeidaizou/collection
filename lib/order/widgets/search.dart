@@ -135,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 FormBuilderChipOption(
                   value: 'Refusal to repay ',
-                  avatar: CircleAvatar(backgroundColor: Colors.white, child: Icon(Icons.do_not_touch, color: Colors.purpleAccent,)),
+                  avatar: CircleAvatar(backgroundColor: Colors.white, child: Icon(Icons.transfer_within_a_station, color: Colors.purpleAccent,)),
                 ),
 
               ],

@@ -77,8 +77,8 @@ class _AddNoteState extends State<AddNote>
     Icons.sync,
     Icons.more_time,
     Icons.hourglass_disabled,
-    Icons.do_not_touch,
     Icons.phone_disabled,
+    Icons.transfer_within_a_station,
     Icons.payment,
     Icons.check_circle,
     Icons.sms_outlined
@@ -196,7 +196,9 @@ class _AddNoteState extends State<AddNote>
     groupedData.forEach((date, items) {
       final messages = items.map((item) {
         final time =
-            DateFormat('hh:mm a').format(DateTime.parse(item.createdAt!));
+            DateFormat('hh:mm a').format(
+              DateTime.parse(item.createdAt!).toUtc().add(const Duration(hours: 1))
+            ); // 转换为尼日利亚时区(UTC+1)
         return _DeliveryMessage(
             time,
             item.jContent!,

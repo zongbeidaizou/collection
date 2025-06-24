@@ -22,7 +22,7 @@ final List<IconData> _iconList = [
   Icons.sync,
   Icons.more_time,
   Icons.hourglass_disabled,
-  Icons.do_not_touch,
+  Icons.phone_disabled,
   Icons.phone_disabled,
   Icons.hourglass_disabled,
   Icons.payment,

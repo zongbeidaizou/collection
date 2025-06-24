@@ -256,7 +256,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                   borderRadius: BorderRadius.circular(15),
                   );*/
                   } else if (value == Icons.phone_disabled) {
-                    widget.commentController?.text = 'Number unavailable.';
+                    widget.commentController?.text = 'cx is not reachable.';
                     /*                var results = await showCalendarDatePicker2Dialog(
                   context: context,
 

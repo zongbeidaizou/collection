@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/my_search_bar.dart';
 
-final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.phone_disabled, Icons.transfer_within_a_station, Icons.payment, Icons.check_circle, Icons.sms_outlined];
 /// design/4商品/index.html
 class GoodsPage extends StatefulWidget {
 
@@ -123,9 +123,9 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                   _TabView('All', 0),
                   _TabView('Negotiation', 1),
                   _TabView('Promise', 2),
-                  _TabView('Fraud', 3),
+                  _TabView('Broken Promise', 3),
                   _TabView('No Answer', 4),
-                  _TabView('Broken Promise', 5),
+                  _TabView('Fraud', 5),
                   _TabView('SMS', 8),
                 ],
               ),

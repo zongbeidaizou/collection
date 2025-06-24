@@ -22,6 +22,7 @@ import '../../widgets/load_image.dart';
 import '../../widgets/my_card.dart';
 import '../iview/message_page_iview.dart';
 import '../presenter/message_presenter.dart';
+
 const List<Color> bgColors = [
   Colours.app_main,
   Colors.orangeAccent,
@@ -37,12 +38,10 @@ const List<String> catText = [
   'System Alerts ',
   'Promise-to-Pay Reminders ',
   'Others ',
-
 ];
 
 /// design/6店铺-账户/index.html#artboard1
 class MessagePage extends StatefulWidget {
-
   const MessagePage({
     super.key,
   });
@@ -50,8 +49,12 @@ class MessagePage extends StatefulWidget {
   _AccountRecordListPageState createState() => _AccountRecordListPageState();
 }
 
-class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepAliveClientMixin<MessagePage>, SingleTickerProviderStateMixin,BasePageMixin<MessagePage, MessagePresenter>
-    implements MessagePageMvpView{
+class _AccountRecordListPageState extends State<MessagePage>
+    with
+        AutomaticKeepAliveClientMixin<MessagePage>,
+        SingleTickerProviderStateMixin,
+        BasePageMixin<MessagePage, MessagePresenter>
+    implements MessagePageMvpView {
   final GlobalKey _addKey = GlobalKey();
   late MessagePresenter _accountRecordListPresenter;
   final ScrollController _scrollController = ScrollController();
@@ -64,6 +67,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
     _accountRecordListPresenter = MessagePresenter();
     return _accountRecordListPresenter;
   }
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +75,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
       _onRefresh();
     });
   }
+
   @override
   void didUpdateWidget(MessagePage oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -93,6 +98,7 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
   void setCurrentPage(int currentPage) {
     _currentPage = currentPage;
   }
+
   @override
   Future<void> _onRefresh() async {
     setState(() {
@@ -100,7 +106,6 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
       _currentPage = 1;
     });
     _accountRecordListPresenter.index(1, true);
-
   }
 
   @override
@@ -137,9 +142,9 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
     }
     _isLoading = true;
     setState(() {
-      _currentPage ++;
+      _currentPage++;
     });
-    _accountRecordListPresenter.index(_currentPage,  true);
+    _accountRecordListPresenter.index(_currentPage, true);
   }
 
   @override
@@ -153,7 +158,8 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
       key: Key('news-visibility-key'),
       onVisibilityChanged: (visibilityInfo) {
         var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if(visiblePercentage >10 && context.read<RefreshProvider>().newsRefresh){
+        if (visiblePercentage > 10 &&
+            context.read<RefreshProvider>().newsRefresh) {
           _onRefresh();
           context.read<RefreshProvider>().setNewsRefresh(false);
         }
@@ -163,13 +169,20 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
           automaticallyImplyLeading: false,
           centerTitle: true,
           backgroundColor: Colours.app_main,
-          flexibleSpace: isDark ? Container(height: 115.0, color: Colours.dark_bg_color,) : LoadAssetImage('statistic/statistic_bg',
-            width: context.width,
-            height: 115.0,
-            fit: BoxFit.fill,
-          ),
+          flexibleSpace: isDark
+              ? Container(
+                  height: 115.0,
+                  color: Colours.dark_bg_color,
+                )
+              : LoadAssetImage(
+                  'statistic/statistic_bg',
+                  width: context.width,
+                  height: 115.0,
+                  fit: BoxFit.fill,
+                ),
           // toolbarHeight: 30,
-          title: Text("News",style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          title: Text("News",
+              style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
             // IconButton(
             //         tooltip: 'mark all as read',
@@ -193,13 +206,15 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
           child: RefreshIndicator(
             onRefresh: _onRefresh,
             displacement: 120.0,
-            child: Scrollbar( // 加个滚动条
+            child: Scrollbar(
+              // 加个滚动条
               controller: _scrollController,
               child: ListView.builder(
                 itemCount: _list.length,
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 28.0),
                 itemBuilder: (_, index) => _MessageItem(item: _list[index]),
               ),
             ),
@@ -208,7 +223,6 @@ class _AccountRecordListPageState extends State<MessagePage> with AutomaticKeepA
       ),
     );
   }
-
 }
 
 class _MessageItem extends StatelessWidget {
@@ -224,8 +238,11 @@ class _MessageItem extends StatelessWidget {
         Gaps.vGap15,
         Gaps.vGap8,
         MyCard(
-          shadowColor: item.eReaded == 1 ? Colors.white : bgColors[item.gCat!].withOpacity(0.46),
-          color:item.eReaded == 1 ? Colors.grey.shade200 :  Colors.blue.shade200,
+          shadowColor: item.eReaded == 1
+              ? Colors.white
+              : bgColors[item.gCat!].withOpacity(0.46),
+          color:
+              item.eReaded == 1 ? Colors.grey.shade200 : Colors.blue.shade200,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -243,13 +260,23 @@ class _MessageItem extends StatelessWidget {
                       ),
                     ),
                     Expanded(child: Text(catText[item.gCat!])),
-                    Text(DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(DateTime.parse(item.createdAt!)), style: item.eReaded == 1 ? TextStyles.textSize12 : TextStyle(fontSize: 12 ,color:Colors.black)),
+                    Text(
+                        DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(
+                            DateTime.parse(item.createdAt!)
+                                .toUtc()
+                                .add(const Duration(hours: 1))),
+                        style: item.eReaded == 1
+                            ? TextStyles.textSize12
+                            : TextStyle(fontSize: 12, color: Colors.black)),
                   ],
                 ),
                 Gaps.vGap8,
                 Gaps.line,
                 Gaps.vGap8,
-                Text(item.hContent!, style:item.eReaded == 1 ? TextStyles.textSize12 : TextStyle(fontSize: 12 ,color:Colors.black)),
+                Text(item.hContent!,
+                    style: item.eReaded == 1
+                        ? TextStyles.textSize12
+                        : TextStyle(fontSize: 12, color: Colors.black)),
               ],
             ),
           ),

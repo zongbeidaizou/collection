@@ -205,8 +205,8 @@ implements OrderInfoPageIMvpView {
               Gaps.vGap8,
               Gaps.line,
               Gaps.vGap4,
-              _buildGoodsInfoItem('Amount Waived  ', Utils.formatPrice2(_period.uDeductionTotalAmount!)),
-              _buildGoodsInfoItem('Times waived  ', _period.tDeductionTimes.toString()),
+              _buildGoodsInfoItem('The amount waived', Utils.formatPrice2(_period.uDeductionTotalAmount!)),
+              _buildGoodsInfoItem('Number of times waived', _period.tDeductionTimes.toString()),
               Gaps.vGap8,
               Row(
                 children: <Widget>[
@@ -248,7 +248,7 @@ implements OrderInfoPageIMvpView {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('The maximum penalty waived is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!))}.', style: Theme.of(context).textTheme.titleSmall),
+                  Text('The maximum penalty waived is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!))}.', style: TextStyle(fontSize: Dimens.font_sp12,color:Colors.redAccent.shade200)),
                   GestureDetector(
                       onTap: () {
                         _controller.text = calculateAndRoundToThousand(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount!).toString();
@@ -333,7 +333,7 @@ implements OrderInfoPageIMvpView {
             Positioned(
               left: 24.0,
               right: 0.0,
-              child: Text('The borrower has committed to repay after the reduction.',style: TextStyle(fontSize: 12,color: _immediatelyPay ? Colors.blueAccent : Colors.grey),),
+              child: Text('The cx agrees to clear the loan after the waiver.',style: TextStyle(fontSize: 12,color: _immediatelyPay ? Colors.blueAccent : Colors.grey),),
             ),
 
           ],

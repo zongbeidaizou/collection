@@ -206,7 +206,10 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                     onPressed: () {
                       NavigatorUtils.push(context, AccountRouter.search);
                     },
-                    icon: Icon(Icons.content_paste_search_outlined, color: Colors.white,),
+                    icon: Icon(
+                      Icons.content_paste_search_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               )
@@ -368,8 +371,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   }
 
   Widget _buildItem(CommissionData log, int i) {
-    String txt =
-        '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
+    String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
     if (log.oType == 2) {
       txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
     } else if (log.oType == 3) {
@@ -410,24 +412,27 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   ),
                 ),
                 Gaps.hGap4,
-                Icon(
-                  Icons.content_copy,
-                  size: 14,
-                  color: Colours.app_main.withOpacity(0.6),
+                InkWell(
+                  onTap: () {
+                    FlutterClipboard.copy('${log.pPhone!} - ${log.nBorrowSn!}');
+                  },
+                  child: Icon(
+                    Icons.content_copy,
+                    size: 14,
+                    color: Colours.app_main.withOpacity(0.6),
+                  ),
                 ),
                 Gaps.hGap4,
                 InkWell(
                   onTap: () {
-                    FlutterClipboard.copy(
-                        '${log.pPhone!} - ${log.nBorrowSn!}');
+                    FlutterClipboard.copy('${log.pPhone!} - ${log.nBorrowSn!}');
                   },
                   child: Row(
                     children: <Widget>[
                       Offstage(
                         offstage: !(log.oType == 2),
                         child: _buildGoodsTag(
-                            Theme.of(context).colorScheme.error,
-                            'Achievement'),
+                            Theme.of(context).colorScheme.error, 'Achievement'),
                       ),
                       Offstage(
                         offstage: !(log.oType == 3),
@@ -468,10 +473,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               child: Row(
                 children: [
                   Text(
-                      log.oType == 2 
+                    log.oType == 2
                         ? txt
-                        : 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a', 'en_US').format(DateTime.parse(log.createdAt!))}, $txt',
-                      style: Theme.of(context).textTheme.titleSmall,
+                        : 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(
+              DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1))
+            )}, $txt',
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],
               ),

@@ -28,7 +28,7 @@ import '../../util/theme_utils.dart';
 import '../goods_router.dart';
 import '../widgets/goods_delete_bottom_sheet.dart';
 import '../widgets/goods_item.dart';
-final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.do_not_touch, Icons.phone_disabled, Icons.hourglass_disabled, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+final List<IconData> _iconList = [Icons.input,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.phone_disabled, Icons.transfer_within_a_station, Icons.payment, Icons.check_circle, Icons.sms_outlined];
 final List<Color> _colorList = [Colors.brown,Colors.grey, Colors.blue, Colors.purpleAccent, Colors.red, Colors.orange, Colors.green, const Color(0xFF1B5E20),Colors.blueGrey,];
 final List<int> _typeList = [0, 1, 2, 3, 4, 5, 8];
 
@@ -257,7 +257,10 @@ class _GoodsListPageState extends State<GoodsListPage> with AutomaticKeepAliveCl
                     text: TextSpan(
                       style: textTextStyle,
                       children: <TextSpan>[
-                        TextSpan(text: DateFormat('hh:mm a', 'en_US').format(DateTime.parse(log.createdAt!)), style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500)),
+                        TextSpan(text: DateFormat('hh:mm a', 'en_US').format(
+                            DateTime.parse(log.createdAt!)
+                                .toUtc()
+                                .add(const Duration(hours: 1))), style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ),

@@ -87,7 +87,7 @@ implements OrderInfoPageIMvpView {
       Toast.show('This order is not overdue and therefore cannot be subject to any Waived.');
       return;
     }
-    if(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount! - double.parse(price) <= 0){
+    if(_period.kExpectOverdueAmount! - _period.uDeductionTotalAmount! - double.parse(price) < 0){
       Toast.show('Incorrect waived amount.');
       return;
     }

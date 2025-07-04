@@ -9,12 +9,14 @@ import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/res/styles.dart';
 import 'package:bounty_hunter/shop/iview/review_detail_page_iview.dart';
 import 'package:bounty_hunter/shop/presenter/review_detail_presenter.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_scroll_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -455,6 +457,11 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                                     fontSize: 16, color: Colors.blueAccent),
                               ),
                             ),
+                            Text(
+                                item.gPhone ?? '',
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.blueAccent),
+                              ),
                             if (item.lSmsCount != null &&
                                 item.lSmsCount! > 0 &&
                                 item.lSmsCount! != 999)
@@ -494,6 +501,18 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                                   _selectedIndex = index;
                                 });
                                 _callContact(item.gPhone!);
+                              },
+                            ),
+                            Gaps.hGap8,
+                            IconButton(
+                              icon: const FaIcon(FontAwesomeIcons.whatsapp,
+                        size: 20, color: Colors.greenAccent),
+                              onPressed: () {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                                 Utils.launchWhatsAppURL('234${item.gPhone!}',
+                message: "Hello ! Hope you're doing well. I'm trying to reach someone named ${widget.name}. Do you happen to know anyone by that name? Thanks for your help! 🙏");
                               },
                             ),
                           ],

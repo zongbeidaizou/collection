@@ -212,24 +212,13 @@ class OrderItem extends StatelessWidget {
               child: Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: 'KaKa Loan Market - ', // 保持原样式
+                    TextSpan(
+                      text: item.aZPackage!, // 保持原样式
                       style: TextStyle(
                         fontSize: Dimens.font_sp14,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    TextSpan(
-                      text: products
-                              .where((p) => p.id == item.aJProductId)
-                              .firstOrNull
-                              ?.bName ??
-                          '',
-                      style: const TextStyle(
-                        fontSize: 11, // 减小字号
-                        color: Colors.grey, // 灰色
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),

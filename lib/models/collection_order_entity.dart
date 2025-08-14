@@ -114,6 +114,8 @@ class CollectionOrderData {
 	int? aNCurrentDayLogCount = 0;
 	@JSONField(name: "a_o_current_day_call_count")
 	int? aOCurrentDayCallCount = 0;
+	@JSONField(name: "a_z_package")
+	String? aZPackage = '';
 	@JSONField(name: "a_a_a_a_a_q_b_periods")
 	CollectionLogOtherPeriod? aAAAAQBPeriods;
 

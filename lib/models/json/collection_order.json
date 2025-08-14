@@ -43,9 +43,28 @@
       "a_j_product_id": 0,
       "a_k_no": "1dfs",
       "a_l_last_log": "asjdfi",
+      "a_z_package": "asjdfi",
       "a_a_a_a_a_q_b_periods": {
-        "a_borrow_id": 1030,
-        "a_z_left_amount": 0
+        "id": 1065,
+        "a_borrow_id": 1095,
+        "f_expect_repay_total_amount": 24750,
+        "p_paid_interest": 5250,
+        "q_paid_service_fee": 4500,
+        "s_paid_overdue_amount": 0,
+        "o_paid_borrow_amount": 0,
+        "g_expect_borrow_amount": 15000,
+        "h_expect_interest": 5250,
+        "n_paid_amount": 5250,
+        "i_expect_service_fee": 4500,
+        "j_expect_violate_fee": 0,
+        "k_expect_overdue_amount": 0,
+        "l_overdue_days": -6,
+        "t_deduction_times": 0,
+        "u_deduction_total_amount": 0,
+        "a_h_part_times": 0,
+        "a_u_current_deduction_fee": 0,
+        "a_z_left_amount": 0,
+        "a_p_expect_repay_time": "2025-02-06T07:06:28.000000Z"
       }
     }
   ],

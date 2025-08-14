@@ -287,6 +287,10 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aOCurrentDayCallCount != null) {
     collectionOrderData.aOCurrentDayCallCount = aOCurrentDayCallCount;
   }
+  final String? aZPackage = jsonConvert.convert<String>(json['a_z_package']);
+  if (aZPackage != null) {
+    collectionOrderData.aZPackage = aZPackage;
+  }
   final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
       CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
   if (aAAAAQBPeriods != null) {
@@ -340,6 +344,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_l_last_log'] = entity.aLLastLog;
   data['a_n_current_day_log_count'] = entity.aNCurrentDayLogCount;
   data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
+  data['a_z_package'] = entity.aZPackage;
   data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
 }
@@ -388,6 +393,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     String? aLLastLog,
     int? aNCurrentDayLogCount,
     int? aOCurrentDayCallCount,
+    String? aZPackage,
     CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
@@ -439,6 +445,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aNCurrentDayLogCount = aNCurrentDayLogCount ?? this.aNCurrentDayLogCount
       ..aOCurrentDayCallCount = aOCurrentDayCallCount ??
           this.aOCurrentDayCallCount
+      ..aZPackage = aZPackage ?? this.aZPackage
       ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
   }
 }

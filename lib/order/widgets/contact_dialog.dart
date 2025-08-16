@@ -123,6 +123,41 @@ class ContactCard extends StatelessWidget {
     return end.difference(start).inDays;
   }
 
+  // 获取WhatsApp状态文本
+  String getWhatsAppStatus() {
+    // 这里可以根据实际业务逻辑返回状态
+    // 示例：未注册、不认识借款人、认识借款人
+    if (contact.hReviewResult == 1) {
+      return '认识借款人';
+    } else if (contact.hReviewResult == 2) {
+      return '不认识借款人';
+    } else if (contact.hReviewResult == 3) {
+      return '未注册';
+    }
+    return '未知';
+  }
+
+  // 获取电话状态文本
+  String getPhoneStatus() {
+    // 这里可以根据实际业务逻辑返回状态
+    // 示例：无法拨通、不认识借款人、认识借款人
+    if (contact.hReviewResult == 1) {
+      return '认识借款人';
+    } else if (contact.hReviewResult == 2) {
+      return '不认识借款人';
+    } else if (contact.hReviewResult == 3) {
+      return '无法拨通';
+    }
+    return '未知';
+  }
+
+  // 获取上次点击时间
+  String getLastClickTime(String actionType) {
+    // 这里可以从缓存或数据库中获取上次点击时间
+    // 示例实现，实际应该从数据源获取
+    return '2024-01-15 14:30';
+  }
+
   @override
   Widget build(BuildContext context) {
     final int overdueDays = calculateCalendarDaysDifference(
@@ -271,177 +306,242 @@ class ContactCard extends StatelessWidget {
       margin: const EdgeInsets.all(4.0),
       child: ColoredBox(
         color: bgColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 上面显示姓名和电话
+              Row(
+                children: [
+                  Icon(
+                    contactIndex == 0
+                        ? Icons.radio_button_on
+                        : contact.hReviewResult == 1
+                            ? Icons.group_outlined
+                            : contact.hReviewResult == 2
+                                ? Icons.group_off_outlined
+                                : contact.hReviewResult == 3
+                                    ? Icons.phone_disabled_outlined
+                                    : Icons.perm_contact_cal,
+                    size: 20,
+                    color: contactIndex == 0
+                        ? Colors.redAccent
+                        : contact.hReviewResult == 1
+                            ? Colors.green
+                            : contact.hReviewResult == 2
+                                ? Colors.orange
+                                : contact.hReviewResult == 3
+                                    ? Colors.red
+                                    : Colors.grey,
+                  ),
+                  Gaps.hGap8,
+                  Text(
+                    '${contact.cRelation ?? ''} ${contact.fName ?? ''}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Gaps.hGap4,
+                  Expanded(
+                    child: Gaps.empty,
+                  ),
+                  Text(
+                    contact.gPhone ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                ],
+              ),
+
+              // 下面显示三列
+              Row(
+                children: [
+                  // 第一列：短信
+                  Expanded(
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.message,
+                            size: 24,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () => launchAction(3),
+                        ),
+                        Text(
+                          '短信',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Gaps.vGap4,
+                        Text(
+                          getLastClickTime('sms'),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // 第二列：电话
+                  Expanded(
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.call,
+                            size: 24,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () => launchAction(2),
+                        ),
+                        Text(
+                          getPhoneStatus(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Gaps.vGap4,
+                        Text(
+                          getLastClickTime('call'),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // 第三列：WhatsApp
+                  Expanded(
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: const FaIcon(
+                            FontAwesomeIcons.whatsapp,
+                            size: 24,
+                            color: Colors.green,
+                          ),
+                          onPressed: () => launchAction(1),
+                        ),
+                        Gaps.vGap4,
+                        Text(
+                          getWhatsAppStatus(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          getLastClickTime('whatsapp'),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // 显示通话记录（如果有的话）
+              if (contact.aAAAANIAdminRecordings != null &&
+                  contact.aAAAANIAdminRecordings!.isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Gaps.hGap12,
-                          Icon(
-                            contactIndex == 0
-                                ? Icons.radio_button_on
-                                : contact.hReviewResult == 1
-                                    ? Icons.group_outlined
-                                    : contact.hReviewResult == 2
-                                        ? Icons.group_off_outlined
-                                        : contact.hReviewResult == 3
-                                            ? Icons.phone_disabled_outlined
-                                            : Icons.perm_contact_cal,
-                            size: 20,
-                            color: contactIndex == 0
-                                ? Colors.redAccent
-                                : contact.hReviewResult == 1
-                                    ? Colors.green
-                                    : contact.hReviewResult == 2
-                                        ? Colors.orange
-                                        : contact.hReviewResult == 3
-                                            ? Colors.red
-                                            : Colors.grey,
-                          ),
-                          Gaps.hGap2,
-                          RichText(
-                            text: TextSpan(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(fontSize: 12),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text:
-                                        '${contact.cRelation ?? ''} ${contact.fName ?? ''}',
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400)),
-                                // const TextSpan(text: '  relationship: ', style: TextStyle(color: Colors.grey)),
-                                // TextSpan(text: contact.relationship, style: TextStyle(color: contactIndex == 0 ? Colors.red : Colors.grey)),
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: Gaps.hGap2),
-                          if (contact.lSmsCount != null &&
-                              contact.lSmsCount! > 0 &&
-                              contact.lSmsCount! != 999)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[50],
-                                borderRadius: BorderRadius.circular(4),
+                      const Text(
+                        '通话记录:',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Gaps.vGap8,
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          crossAxisSpacing: 1.0,
+                          mainAxisSpacing: 6.0,
+                          mainAxisExtent: 24,
+                        ),
+                        itemCount: contact.aAAAANIAdminRecordings!.length,
+                        itemBuilder: (context, index) {
+                          final record = contact.aAAAANIAdminRecordings![index];
+                          final numberIcons = [
+                            Icons.looks_one_outlined,
+                            Icons.looks_two_outlined,
+                            Icons.looks_3_outlined,
+                            Icons.looks_4_outlined,
+                            Icons.looks_5_outlined,
+                          ];
+
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (index < numberIcons.length)
+                                Icon(
+                                  numberIcons[index],
+                                  size: 10,
+                                  color: Colors.grey,
+                                )
+                              else
+                                Text(
+                                  '${index + 1}.',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  DateFormat('MMM d, hh:mm', 'en_US')
+                                      .format(DateTime.parse(record.kCallAt!)),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                               ),
-                              child: Text(
-                                '${contact.lSmsCount} SMS',
-                                style: const TextStyle(
-                                    fontSize: 10, color: Colors.blueAccent),
-                              ),
-                            ),
-                          if (contact.nCallCount != null &&
-                              contact.nCallCount! > 0)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 4, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[50],
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                '${contact.nCallCount} Calls',
-                                style: const TextStyle(
-                                    fontSize: 10, color: Colors.blueAccent),
-                              ),
-                            ),
-                        ],
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
-                Row(children: [
-                  IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.whatsapp,
-                        size: 16, color: Colors.greenAccent),
-                    onPressed: () => launchAction(1),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.message,
-                        size: 16, color: Colors.blueAccent),
-                    // onPressed: () => onSendSms.call(contact.id!, contact.gPhone!),
-                    onPressed: () => launchAction(3),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.call,
-                        size: 16, color: Colors.blueAccent),
-                    onPressed: () => launchAction(2),
-                  ),
-                ])
-              ],
-            ),
-            if (contact.aAAAANIAdminRecordings != null &&
-                contact.aAAAANIAdminRecordings!.isNotEmpty) // 检查是否有通话记录
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                constraints: const BoxConstraints(minHeight: 20), // 调整最小高度
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 1.0,
-                    mainAxisSpacing: 6.0, // 增加垂直间距
-                    mainAxisExtent: 24, // 明确设置每个item的高度
-                  ),
-                  itemCount: contact.aAAAANIAdminRecordings!.length,
-                  itemBuilder: (context, index) {
-                    final record = contact.aAAAANIAdminRecordings![index];
-                    final numberIcons = [
-                      Icons.looks_one_outlined,
-                      Icons.looks_two_outlined,
-                      Icons.looks_3_outlined,
-                      Icons.looks_4_outlined,
-                      Icons.looks_5_outlined,
-                      // ...其他图标
-                    ];
-
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (index < numberIcons.length)
-                          Icon(
-                            numberIcons[index],
-                            size: 10, // 调整图标尺寸
-                            color: Colors.grey,
-                          )
-                        else
-                          Text(
-                            '${index + 1}.',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        const SizedBox(width: 4), // 增加间距
-                        Expanded(
-                          // 添加弹性布局
-                          child: Text(
-                            DateFormat('MMM d, hh:mm', 'en_US')
-                                .format(DateTime.parse(record.kCallAt!)),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                              overflow: TextOverflow.ellipsis, // 添加溢出处理
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

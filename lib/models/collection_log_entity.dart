@@ -93,8 +93,8 @@ class CollectionLogOther {
   CollectionLogOtherPeriod? period;
   @JSONField(name: "repay_info")
   CollectionLogOtherRepayInfo? repayInfo;
-  // @JSONField(name: "contact_info")
-  // List<CollectionLogOtherContactInfo>? contactInfo = [];
+  @JSONField(name: "contact_info")
+  List<CollectionLogOtherContactInfo>? contactInfo = [];
   @JSONField(name: "contact_info2")
   SGContactEntity? contactInfo2;
   @JSONField(name: "sms_history")

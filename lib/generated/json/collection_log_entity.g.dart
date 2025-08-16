@@ -276,6 +276,15 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (repayInfo != null) {
     collectionLogOther.repayInfo = repayInfo;
   }
+  final List<
+      CollectionLogOtherContactInfo>? contactInfo = (json['contact_info'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherContactInfo>(
+          e) as CollectionLogOtherContactInfo).toList();
+  if (contactInfo != null) {
+    collectionLogOther.contactInfo = contactInfo;
+  }
   final SGContactEntity? contactInfo2 = jsonConvert.convert<SGContactEntity>(
       json['contact_info2']);
   if (contactInfo2 != null) {
@@ -319,6 +328,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
+  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
   data['h_j_sms_template_newest_updated_at'] =
@@ -335,6 +345,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
+    List<CollectionLogOtherContactInfo>? contactInfo,
     SGContactEntity? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     String? hJSmsTemplateNewestUpdatedAt,
@@ -346,6 +357,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
       ..track = track ?? this.track
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo
+      ..contactInfo = contactInfo ?? this.contactInfo
       ..contactInfo2 = contactInfo2 ?? this.contactInfo2
       ..smsHistory = smsHistory ?? this.smsHistory
       ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??

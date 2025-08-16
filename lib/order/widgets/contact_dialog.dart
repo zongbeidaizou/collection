@@ -146,32 +146,8 @@ class ContactCard extends StatelessWidget {
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
       // 替换所有占位符
 
-// "expect_repay_amount" => RepayService::shouldRepayAmount($qPeriod),
-//                 "expect_repay_time" => $qPeriod->a_p_expect_repay_time,
-//                 "overdue_days" => $qPeriod->l_overdue_days,
-//                 "mobile" => $aUser->a_phone,
-//                 "phone" => $aUser->a_phone,
-//                 "bvn" => $aUser->d_id_number,
-//                 "name" => $aUser->b_name,
-//                 "borrow_amount" => $dBorrow->m_borrow_amount,
-//                 "loan_amount" => $dBorrow->p_loan_amount,
-//                 "borrow_days" => $dBorrow->a_n_days,
-//                 "app_name" => 'kaka',
-//                 "url" => 'https://www.baidu.com',
-//                 "product_name" => "",
-//                 "loan_time" => $dBorrow->o_loan_time,
-//                 "receive_bank" => $mBloan->h_receiver_bankcard_number,
-//                 "receive_bank_no" => $mBloan->h_receiver_bankcard_number,
-//                 "account_name" => "account_name",
-//                 "account_no" => $virtualAccount->e_account_number,
-//                 "account_bank" => $virtualAccount->h_bank_name,
-//                 "before_credit_amount" => "before_credit_amount",
-//                 "after_credit_amount" => "after_credit_amount",
-//                 "change_credit_amount" => "change_credit_amount",
-//                 "before_credit_fraction" => "before_credit_fraction",
-//                 "after_credit_fraction" => "after_credit_fraction",
-//                 "change_credit_fraction" => "change_credit_fraction"
       String processedTemplate = template.dTemplate!
+          .replaceAll('@expect_repay_amount@', repayInfo!.expectRepayAmount!)
           .replaceAll(
               '@expect_repay_time@',
               DateFormat('MMM d, yyyy')
@@ -184,21 +160,34 @@ class ContactCard extends StatelessWidget {
           .replaceAll('@borrow_amount@', repayInfo!.borrowAmount!)
           .replaceAll('@loan_amount@', repayInfo!.loanAmount!)
           .replaceAll('@borrow_days@', repayInfo!.borrowDays.toString())
-          .replaceAll('@app_name@', 'kaka')
-          .replaceAll('@url@', 'https://www.baidu.com')
-          .replaceAll('@product_name@', '')
+          .replaceAll('@app_name@', repayInfo!.appName!)
+          .replaceAll('@url@', repayInfo!.url!)
+          .replaceAll('@product_name@', repayInfo!.productName!)
           .replaceAll('@loan_time@', repayInfo!.loanTime!)
           .replaceAll('@receive_bank@', repayInfo!.receiveBank!)
           .replaceAll('@receive_bank_no@', repayInfo!.receiveBankNo!)
-          .replaceAll('@account_name@', 'account_name')
+          .replaceAll('@account_name@', repayInfo!.accountName!)
           .replaceAll('@account_no@', repayInfo!.accountNo!)
           .replaceAll('@account_bank@', repayInfo!.accountBank!)
-          .replaceAll('@before_credit_amount@', 'before_credit_amount')
-          .replaceAll('@after_credit_amount@', 'after_credit_amount')
-          .replaceAll('@change_credit_amount@', 'change_credit_amount')
-          .replaceAll('@before_credit_fraction@', 'before_credit_fraction')
-          .replaceAll('@after_credit_fraction@', 'after_credit_fraction')
-          .replaceAll('@change_credit_fraction@', 'change_credit_fraction');
+          .replaceAll('@before_credit_amount@', repayInfo!.beforeCreditAmount!)
+          .replaceAll('@after_credit_amount@', repayInfo!.afterCreditAmount!)
+          .replaceAll('@change_credit_amount@', repayInfo!.changeCreditAmount!)
+          .replaceAll(
+              '@before_credit_fraction@', repayInfo!.beforeCreditFraction!)
+          .replaceAll(
+              '@after_credit_fraction@', repayInfo!.afterCreditFraction!)
+          .replaceAll(
+              '@change_credit_fraction@', repayInfo!.changeCreditFraction!)
+          .replaceAll('@var1@', repayInfo!.var1!)
+          .replaceAll('@var2@', repayInfo!.var2!)
+          .replaceAll('@var3@', repayInfo!.var3!)
+          .replaceAll('@var4@', repayInfo!.var4!)
+          .replaceAll('@var5@', repayInfo!.var5!)
+          .replaceAll('@var6@', repayInfo!.var6!)
+          .replaceAll('@var7@', repayInfo!.var7!)
+          .replaceAll('@var8@', repayInfo!.var8!)
+          .replaceAll('@var9@', repayInfo!.var9!)
+          .replaceAll('@var10@', repayInfo!.var10!);
 
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
@@ -368,31 +357,6 @@ class ContactCard extends StatelessWidget {
                             ),
                         ],
                       ),
-                      // if (contact.nCallCount != null && contact.nCallCount! > 0)
-                      //   Row(
-                      //     children: [
-                      //       Gaps.hGap12,
-                      //       const Icon(
-                      //         Icons.history,
-                      //         size: 20,
-                      //         color: Colors.blueAccent,
-                      //       ),
-                      //       Gaps.hGap10,
-                      //       Text(
-                      //           '${contact.nCallCount} Calls,',
-                      //           style: const TextStyle(
-                      //               fontSize: 12, color: Colors.blueAccent),
-                      //         ),
-                      //         Gaps.hGap10,
-                      //         Text(
-                      //           'Last call: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(contact.eLastCallTime!))}',
-                      //           style: const TextStyle(
-                      //               fontSize: 12, color: Colors.blueAccent),
-                      //         ),
-                      //     ],
-                      //   )
-                      // else
-                      //   Gaps.empty,
                     ],
                   ),
                 ),

@@ -47,6 +47,10 @@ class SGContactData {
 	int? lSmsCount = 0;
 	@JSONField(name: 'n_call_count')
 	int? nCallCount = 0;
+	@JSONField(name: 'q_phone_status')
+	int? QPhoneStatus = 0;
+	@JSONField(name: 'r_wa_status')
+	int? RWaStatus = 0;
 	@JSONField(name: 'a_a_a_a_a_n_i_admin_recordings')
 	List<SGContactDataAAAAANIAdminRecordings>? aAAAANIAdminRecordings = [];
 

@@ -276,15 +276,6 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (repayInfo != null) {
     collectionLogOther.repayInfo = repayInfo;
   }
-  final List<
-      CollectionLogOtherContactInfo>? contactInfo = (json['contact_info'] as List<
-      dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<CollectionLogOtherContactInfo>(
-          e) as CollectionLogOtherContactInfo).toList();
-  if (contactInfo != null) {
-    collectionLogOther.contactInfo = contactInfo;
-  }
   final SGContactEntity? contactInfo2 = jsonConvert.convert<SGContactEntity>(
       json['contact_info2']);
   if (contactInfo2 != null) {
@@ -328,7 +319,6 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
-  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
   data['h_j_sms_template_newest_updated_at'] =
@@ -345,7 +335,6 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    List<CollectionLogOtherContactInfo>? contactInfo,
     SGContactEntity? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     String? hJSmsTemplateNewestUpdatedAt,
@@ -357,7 +346,6 @@ extension CollectionLogOtherExtension on CollectionLogOther {
       ..track = track ?? this.track
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo
-      ..contactInfo = contactInfo ?? this.contactInfo
       ..contactInfo2 = contactInfo2 ?? this.contactInfo2
       ..smsHistory = smsHistory ?? this.smsHistory
       ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??
@@ -662,6 +650,10 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
   if (appName != null) {
     collectionLogOtherRepayInfo.appName = appName;
   }
+  final String? url = jsonConvert.convert<String>(json['url']);
+  if (url != null) {
+    collectionLogOtherRepayInfo.url = url;
+  }
   final String? productName = jsonConvert.convert<String>(json['product_name']);
   if (productName != null) {
     collectionLogOtherRepayInfo.productName = productName;
@@ -721,6 +713,46 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
   if (changeCreditFraction != null) {
     collectionLogOtherRepayInfo.changeCreditFraction = changeCreditFraction;
   }
+  final String? var1 = jsonConvert.convert<String>(json['var1']);
+  if (var1 != null) {
+    collectionLogOtherRepayInfo.var1 = var1;
+  }
+  final String? var2 = jsonConvert.convert<String>(json['var2']);
+  if (var2 != null) {
+    collectionLogOtherRepayInfo.var2 = var2;
+  }
+  final String? var3 = jsonConvert.convert<String>(json['var3']);
+  if (var3 != null) {
+    collectionLogOtherRepayInfo.var3 = var3;
+  }
+  final String? var4 = jsonConvert.convert<String>(json['var4']);
+  if (var4 != null) {
+    collectionLogOtherRepayInfo.var4 = var4;
+  }
+  final String? var5 = jsonConvert.convert<String>(json['var5']);
+  if (var5 != null) {
+    collectionLogOtherRepayInfo.var5 = var5;
+  }
+  final String? var6 = jsonConvert.convert<String>(json['var6']);
+  if (var6 != null) {
+    collectionLogOtherRepayInfo.var6 = var6;
+  }
+  final String? var7 = jsonConvert.convert<String>(json['var7']);
+  if (var7 != null) {
+    collectionLogOtherRepayInfo.var7 = var7;
+  }
+  final String? var8 = jsonConvert.convert<String>(json['var8']);
+  if (var8 != null) {
+    collectionLogOtherRepayInfo.var8 = var8;
+  }
+  final String? var9 = jsonConvert.convert<String>(json['var9']);
+  if (var9 != null) {
+    collectionLogOtherRepayInfo.var9 = var9;
+  }
+  final String? var10 = jsonConvert.convert<String>(json['var10']);
+  if (var10 != null) {
+    collectionLogOtherRepayInfo.var10 = var10;
+  }
   return collectionLogOtherRepayInfo;
 }
 
@@ -738,6 +770,7 @@ Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
   data['loan_amount'] = entity.loanAmount;
   data['borrow_days'] = entity.borrowDays;
   data['app_name'] = entity.appName;
+  data['url'] = entity.url;
   data['product_name'] = entity.productName;
   data['loan_time'] = entity.loanTime;
   data['receive_bank'] = entity.receiveBank;
@@ -751,6 +784,16 @@ Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
   data['before_credit_fraction'] = entity.beforeCreditFraction;
   data['after_credit_fraction'] = entity.afterCreditFraction;
   data['change_credit_fraction'] = entity.changeCreditFraction;
+  data['var1'] = entity.var1;
+  data['var2'] = entity.var2;
+  data['var3'] = entity.var3;
+  data['var4'] = entity.var4;
+  data['var5'] = entity.var5;
+  data['var6'] = entity.var6;
+  data['var7'] = entity.var7;
+  data['var8'] = entity.var8;
+  data['var9'] = entity.var9;
+  data['var10'] = entity.var10;
   return data;
 }
 
@@ -767,6 +810,7 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
     String? loanAmount,
     String? borrowDays,
     String? appName,
+    String? url,
     String? productName,
     String? loanTime,
     String? receiveBank,
@@ -780,6 +824,16 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
     String? beforeCreditFraction,
     String? afterCreditFraction,
     String? changeCreditFraction,
+    String? var1,
+    String? var2,
+    String? var3,
+    String? var4,
+    String? var5,
+    String? var6,
+    String? var7,
+    String? var8,
+    String? var9,
+    String? var10,
   }) {
     return CollectionLogOtherRepayInfo()
       ..expectRepayAmount = expectRepayAmount ?? this.expectRepayAmount
@@ -793,6 +847,7 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
       ..loanAmount = loanAmount ?? this.loanAmount
       ..borrowDays = borrowDays ?? this.borrowDays
       ..appName = appName ?? this.appName
+      ..url = url ?? this.url
       ..productName = productName ?? this.productName
       ..loanTime = loanTime ?? this.loanTime
       ..receiveBank = receiveBank ?? this.receiveBank
@@ -805,8 +860,17 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
       ..changeCreditAmount = changeCreditAmount ?? this.changeCreditAmount
       ..beforeCreditFraction = beforeCreditFraction ?? this.beforeCreditFraction
       ..afterCreditFraction = afterCreditFraction ?? this.afterCreditFraction
-      ..changeCreditFraction = changeCreditFraction ??
-          this.changeCreditFraction;
+      ..changeCreditFraction = changeCreditFraction ?? this.changeCreditFraction
+      ..var1 = var1 ?? this.var1
+      ..var2 = var2 ?? this.var2
+      ..var3 = var3 ?? this.var3
+      ..var4 = var4 ?? this.var4
+      ..var5 = var5 ?? this.var5
+      ..var6 = var6 ?? this.var6
+      ..var7 = var7 ?? this.var7
+      ..var8 = var8 ?? this.var8
+      ..var9 = var9 ?? this.var9
+      ..var10 = var10 ?? this.var10;
   }
 }
 

@@ -127,6 +127,14 @@ SGContactData $SGContactDataFromJson(Map<String, dynamic> json) {
   if (nCallCount != null) {
     sGContactData.nCallCount = nCallCount;
   }
+  final int? QPhoneStatus = jsonConvert.convert<int>(json['q_phone_status']);
+  if (QPhoneStatus != null) {
+    sGContactData.QPhoneStatus = QPhoneStatus;
+  }
+  final int? RWaStatus = jsonConvert.convert<int>(json['r_wa_status']);
+  if (RWaStatus != null) {
+    sGContactData.RWaStatus = RWaStatus;
+  }
   final List<
       SGContactDataAAAAANIAdminRecordings>? aAAAANIAdminRecordings = (json['a_a_a_a_a_n_i_admin_recordings'] as List<
       dynamic>?)?.map(
@@ -150,6 +158,8 @@ Map<String, dynamic> $SGContactDataToJson(SGContactData entity) {
   data['h_review_result'] = entity.hReviewResult;
   data['l_sms_count'] = entity.lSmsCount;
   data['n_call_count'] = entity.nCallCount;
+  data['q_phone_status'] = entity.QPhoneStatus;
+  data['r_wa_status'] = entity.RWaStatus;
   data['a_a_a_a_a_n_i_admin_recordings'] =
       entity.aAAAANIAdminRecordings?.map((v) => v.toJson()).toList();
   return data;
@@ -166,6 +176,8 @@ extension SGContactDataExtension on SGContactData {
     int? hReviewResult,
     int? lSmsCount,
     int? nCallCount,
+    int? QPhoneStatus,
+    int? RWaStatus,
     List<SGContactDataAAAAANIAdminRecordings>? aAAAANIAdminRecordings,
   }) {
     return SGContactData()
@@ -178,6 +190,8 @@ extension SGContactDataExtension on SGContactData {
       ..hReviewResult = hReviewResult ?? this.hReviewResult
       ..lSmsCount = lSmsCount ?? this.lSmsCount
       ..nCallCount = nCallCount ?? this.nCallCount
+      ..QPhoneStatus = QPhoneStatus ?? this.QPhoneStatus
+      ..RWaStatus = RWaStatus ?? this.RWaStatus
       ..aAAAANIAdminRecordings = aAAAANIAdminRecordings ??
           this.aAAAANIAdminRecordings;
   }

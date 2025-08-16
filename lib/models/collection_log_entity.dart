@@ -117,6 +117,8 @@ class CollectionLogOther {
 
 @JsonSerializable()
 class CollectionLogOtherTrack {
+	@JSONField(name: "last_active_time")
+	String? lastActiveTime = '';
 	@JSONField(name: "apply_time")
 	String? applyTime = '';
 	@JSONField(name: "borrow_amount")

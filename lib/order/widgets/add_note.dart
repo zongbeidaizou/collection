@@ -194,40 +194,63 @@ class _AddNoteState extends State<AddNote>
     }
     final List<_DeliveryProcess> deliveryProcesses = [];
     groupedData.forEach((date, items) {
-      final messages = items.map((item) {
-        final time =
-            DateFormat('hh:mm a').format(
-              DateTime.parse(item.createdAt!).toUtc().add(const Duration(hours: 1))
-            ); // 转换为尼日利亚时区(UTC+1)
-        return _DeliveryMessage(
-            time,
-            item.jContent!,
-            item.gType!,
-            _iconList[item.gType!],
-            _colorList[item.gType!],
-            _colorList[item.gType!],
-            item.eCollectionAdminId!,
-            item.kPromiseTime ?? '');
-      }).toList().reversed.toList();
+      final messages = items
+          .map((item) {
+            final time = DateFormat('hh:mm a').format(
+                DateTime.parse(item.createdAt!)
+                    .toUtc()
+                    .add(const Duration(hours: 1))); // 转换为尼日利亚时区(UTC+1)
+            return _DeliveryMessage(
+                time,
+                item.jContent!,
+                item.gType!,
+                _iconList[item.gType!],
+                _colorList[item.gType!],
+                _colorList[item.gType!],
+                item.eCollectionAdminId!,
+                item.kPromiseTime ?? '');
+          })
+          .toList()
+          .reversed
+          .toList();
       deliveryProcesses.add(_DeliveryProcess(date, groupedOverdueDayData[date]!,
           Icons.import_contacts, Colors.black54, Colors.black87,
           messages: messages));
     });
     return Container(
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          // mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _DeliveryProcesses(
-              processes: deliveryProcesses.reversed.toList(),
-              admins: _admins,
+      child: Stack(
+        children: [
+          // 背景文字
+          Positioned.fill(
+            child: Center(
+              child: Text(
+                item.aZPackage ?? '',
+                style: TextStyle(
+                  fontSize: 72,
+                  fontWeight: FontWeight.bold,
+                  color: Colours.app_main.withOpacity(0.6),
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            Divider(height: 1.0),
-          ],
-        ),
+          ),
+          // 主要内容
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              // mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _DeliveryProcesses(
+                  processes: deliveryProcesses.reversed.toList(),
+                  admins: _admins,
+                ),
+                Divider(height: 1.0),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -235,7 +258,7 @@ class _AddNoteState extends State<AddNote>
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
-    
+
     Map<String, Object> logData;
     return Scaffold(
         //todo 搜索
@@ -337,7 +360,7 @@ class _AddNoteState extends State<AddNote>
                       'o_contact_id': contactId ?? 0,
                       'p_collection_order_id': widget.orderId,
                     };
-                    _addNotePresenter.store(logData,null, true);
+                    _addNotePresenter.store(logData, null, true);
                   },
                   // track: ,
                 ),
@@ -365,7 +388,8 @@ class _AddNoteState extends State<AddNote>
                             showToast(typeController.text);
                             setState(() {
                               // 修改为在列表最前面追加元素
-                              _list.insert(0, CollectionLogData.fromJson(value));
+                              _list.insert(
+                                  0, CollectionLogData.fromJson(value));
                             });
                             //上传图片
                             print(pickedFiles);

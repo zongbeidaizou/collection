@@ -224,10 +224,17 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             if (item.eCollectionAdminId != item.aVTmpCollectionAdminId)
-              const Icon(
-                Icons.transfer_within_a_station,
-                color: Colors.red,
-                size: 12,
+              const Row(
+                children: [
+                  Icon(
+                    Icons.transfer_within_a_station,
+                    color: Colors.red,
+                    size: 12,
+                  ),
+                  Gaps.hGap2,
+                  Text('+5%',
+                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                ],
               )
             else
               Gaps.empty,
@@ -239,7 +246,16 @@ class OrderItem extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
               child: Text(
-                item.aKNo!,
+                inList
+                    ? item.aKNo!
+                    : (DateTime.now()
+                                .difference(DateTime.parse(
+                                    track?.lastActiveTime ??
+                                        '2000-07-10T18:58:39.000000Z'))
+                                .inHours >=
+                            24)
+                        ? '${DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z').difference(DateTime.now()).inDays} days ago'
+                        : '${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,
@@ -368,9 +384,12 @@ class OrderItem extends StatelessWidget {
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
-                              text:
-                                  inList? Utils.formatPrice2(item.lCollectionAmount!) : Utils.formatPrice2((period?.fExpectRepayTotalAmount ?? 0) - (period?.qPaidServiceFee?? 0) - (period?.pPaidInterest??0)  - (period?.nPaidAmount??0) - (period?.uDeductionTotalAmount??0))),
-
+                              text: Utils.formatPrice2(
+                                  (period?.fExpectRepayTotalAmount ?? 0) -
+                                      (period?.qPaidServiceFee ?? 0) -
+                                      (period?.pPaidInterest ?? 0) -
+                                      (period?.nPaidAmount ?? 0) -
+                                      (period?.uDeductionTotalAmount ?? 0))),
                         ],
                       ),
                     ),
@@ -400,8 +419,7 @@ class OrderItem extends StatelessWidget {
                       children: <TextSpan>[
                         // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                         TextSpan(
-                            text: DateFormat('MMM d', 'en_US').format(
-                                DateTime.parse(item.pExpectRepayTime!))),
+                            text: Utils.formatPrice2(period?.nPaidAmount ?? 0)),
                       ],
                     ),
                   ),
@@ -466,8 +484,8 @@ class OrderItem extends StatelessWidget {
                                     .difference(DateTime.now())
                                     .inHours >=
                                 24)
-                            ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
-                            : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
+                            ? '${DateTime.now().difference(DateTime.parse(item.sFlowOutTime!)).inDays} days left'
+                            : '${DateTime.now().difference(DateTime.parse(item.sFlowOutTime!)).inHours} hours left'),
                         Text(
                             item.aDLastLogTime != null &&
                                     item.aDLastLogTime!.isNotEmpty
@@ -505,9 +523,9 @@ class OrderItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "${(provider.userEntity.profile!.aETodayCommissionRate! * item.lCollectionAmount! / 100).toInt()} reward"),
+                              '${((provider.userEntity.profile!.aETodayCommissionRate! + (item.eCollectionAdminId! != item.aVTmpCollectionAdminId! ? 5 : 0)) * (period?.fExpectRepayTotalAmount != null ? period!.fExpectRepayTotalAmount! - period!.pPaidInterest! - period!.qPaidServiceFee! - period!.sPaidOverdueAmount! - period!.oPaidBorrowAmount! - period!.uDeductionTotalAmount! : 0) / 100).toInt()} bonus'),
                           Text(
-                              "current lv. ${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}% of amount",
+                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! ? '+5' : ''}% of amount",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall

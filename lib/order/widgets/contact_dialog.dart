@@ -146,6 +146,7 @@ class ContactCard extends StatelessWidget {
           .replaceAll('@name@', repayInfo!.name!)
           .replaceAll('@phone@', repayInfo!.phone!)
           .replaceAll('@bvn@', repayInfo!.bvn!)
+          .replaceAll('@app_name@', repayInfo!.appName!)
           .replaceAll(
               '@expect_repay_time@',
               DateFormat('MMM d, yyyy')

@@ -119,11 +119,6 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (eCollectionAdminId != null) {
     collectionOrderData.eCollectionAdminId = eCollectionAdminId;
   }
-  final int? aVTmpCollectionAdminId = jsonConvert.convert<int>(
-      json['a_v_tmp_collection_admin_id']);
-  if (aVTmpCollectionAdminId != null) {
-    collectionOrderData.aVTmpCollectionAdminId = aVTmpCollectionAdminId;
-  }
   final int? fCollectionNewsId = jsonConvert.convert<int>(
       json['f_collection_news_id']);
   if (fCollectionNewsId != null) {
@@ -287,6 +282,11 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aOCurrentDayCallCount != null) {
     collectionOrderData.aOCurrentDayCallCount = aOCurrentDayCallCount;
   }
+  final int? aVTmpCollectionAdminId = jsonConvert.convert<int>(
+      json['a_v_tmp_collection_admin_id']);
+  if (aVTmpCollectionAdminId != null) {
+    collectionOrderData.aVTmpCollectionAdminId = aVTmpCollectionAdminId;
+  }
   final String? aZPackage = jsonConvert.convert<String>(json['a_z_package']);
   if (aZPackage != null) {
     collectionOrderData.aZPackage = aZPackage;
@@ -307,7 +307,6 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['c_collection_agency_id'] = entity.cCollectionAgencyId;
   data['d_collection_group_id'] = entity.dCollectionGroupId;
   data['e_collection_admin_id'] = entity.eCollectionAdminId;
-  data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['f_collection_news_id'] = entity.fCollectionNewsId;
   data['g_collection_order_flow_history_count'] =
       entity.gCollectionOrderFlowHistoryCount;
@@ -344,6 +343,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_l_last_log'] = entity.aLLastLog;
   data['a_n_current_day_log_count'] = entity.aNCurrentDayLogCount;
   data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
+  data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['a_z_package'] = entity.aZPackage;
   data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
@@ -357,7 +357,6 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? cCollectionAgencyId,
     int? dCollectionGroupId,
     int? eCollectionAdminId,
-    int? aVTmpCollectionAdminId,
     int? fCollectionNewsId,
     int? gCollectionOrderFlowHistoryCount,
     int? hCollectionAdminLogCount,
@@ -393,6 +392,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     String? aLLastLog,
     int? aNCurrentDayLogCount,
     int? aOCurrentDayCallCount,
+    int? aVTmpCollectionAdminId,
     String? aZPackage,
     CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
@@ -403,8 +403,6 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId
       ..dCollectionGroupId = dCollectionGroupId ?? this.dCollectionGroupId
       ..eCollectionAdminId = eCollectionAdminId ?? this.eCollectionAdminId
-      ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
-          this.aVTmpCollectionAdminId
       ..fCollectionNewsId = fCollectionNewsId ?? this.fCollectionNewsId
       ..gCollectionOrderFlowHistoryCount = gCollectionOrderFlowHistoryCount ??
           this.gCollectionOrderFlowHistoryCount
@@ -445,6 +443,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aNCurrentDayLogCount = aNCurrentDayLogCount ?? this.aNCurrentDayLogCount
       ..aOCurrentDayCallCount = aOCurrentDayCallCount ??
           this.aOCurrentDayCallCount
+      ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
+          this.aVTmpCollectionAdminId
       ..aZPackage = aZPackage ?? this.aZPackage
       ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
   }

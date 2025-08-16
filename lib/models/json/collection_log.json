@@ -11,6 +11,7 @@
     "b_collection_stage_id": 92,
     "c_collection_agency_id": 92,
     "d_collection_group_id": 21,
+    "a_v_tmp_collection_admin_id": 3,
     "e_collection_admin_id": 3,
     "f_cat": 3,
     "g_type": 1,
@@ -22,10 +23,13 @@
     "m_overdue_days": 1,
     "n_sms_template_id": 0,
     "o_contact_id": 0,
-    "created_at": "2025-02-06T07:06:28.000000Z"
+    "created_at": "2025-02-06T07:06:28.000000Z",
+    "a_z_package": ""
   }],
   "other": {
+    "avatar": "",
     "track": {
+      "last_active_time": "",
       "apply_time": "123",
       "borrow_amount": 123,
       "loan_time": "123",

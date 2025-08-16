@@ -17,26 +17,36 @@ import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
 import '../../providers/user_provider.dart';
 import '../iview/order_list_page_iview.dart';
-const List<List<int>> indexMap = [[0], [1], [2], [3], [4,5]];
+
+const List<List<int>> indexMap = [
+  [0],
+  [1],
+  [2],
+  [3],
+  [4, 5]
+];
 
 class OrderListPage extends StatefulWidget {
-
   const OrderListPage({
     super.key,
     required this.index,
   });
 
   final int index;
-  
+
   @override
   _OrderListPageState createState() => _OrderListPageState();
 }
 
-class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveClientMixin<OrderListPage>, ChangeNotifierMixin<OrderListPage>, BasePageMixin<OrderListPage, OrderListPagePresenter>
+class _OrderListPageState extends State<OrderListPage>
+    with
+        AutomaticKeepAliveClientMixin<OrderListPage>,
+        ChangeNotifierMixin<OrderListPage>,
+        BasePageMixin<OrderListPage, OrderListPagePresenter>
     implements OrderListPageIMvpView {
-
   final ScrollController _controller = ScrollController();
   final StateType _stateType = StateType.loading;
+
   /// 是否正在加载数据
   bool _isLoading = false;
   final int _maxPage = 3;
@@ -48,7 +58,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
   OrderListProvider provider2 = OrderListProvider();
-  
+
   @override
   void initState() {
     super.initState();
@@ -60,16 +70,16 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   Map<ChangeNotifier, List<VoidCallback>?>? changeNotifier() {
     return {_controller: null};
   }
+
   @override
   bool get wantKeepAlive => true;
-
 
   @override
   OrderListPagePresenter createPresenter() {
     _orderListPagePresenter = OrderListPagePresenter();
     return _orderListPagePresenter;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -95,7 +105,9 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
         },
         child: RefreshIndicator(
           onRefresh: _onRefresh,
-          displacement: 120.0, /// 默认40， 多添加的80为Header高度
+          displacement: 120.0,
+
+          /// 默认40， 多添加的80为Header高度
           child: Consumer<OrderPageProvider>(
             builder: (_, provider, child) {
               return CustomScrollView(
@@ -106,50 +118,86 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
                 slivers: <Widget>[
                   SliverOverlapInjector(
                     ///SliverAppBar的expandedHeight高度,避免重叠
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                        context),
                   ),
                   child!,
                 ],
               );
             },
-            child: Consumer<OrderListProvider>(
-                builder: (_, provider2, child) {
-                return SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              sliver: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().isEmpty ? SliverFillRemaining(child: Center(child: Text("no data"))) :
-              SliverList(
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                  return index < provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length ?
-                  OrderItem(
-                    key: Key('order_item_$index'),
-                    index: index,
-                    tabIndex: _index,
-                    item: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList()[index],
-                    products: _product,
-                    admins: _admins,
-                    repayInfo: CollectionLogOtherRepayInfo(),
-                    track: CollectionLogOtherTrack(),
-                    period: CollectionLogOtherPeriod(),
-                    contactList: [],
-                    smsHistory: [],
-                  ) :
-                  MoreWidget(provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length, _hasMore(), 10);
-
-                },
-                childCount: provider2.list.where((element) => indexMap[widget.index].contains(element.kStatus)).toList().length + 1),
-              ));
+            child: Consumer<OrderListProvider>(builder: (_, provider2, child) {
+              return SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  sliver: provider2.list
+                          .where((element) =>
+                              indexMap[widget.index].contains(element.kStatus))
+                          .toList()
+                          .isEmpty
+                      ? SliverFillRemaining(
+                          child: Center(child: Text("no data")))
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            return index <
+                                    provider2.list
+                                        .where((element) =>
+                                            indexMap[widget.index]
+                                                .contains(element.kStatus))
+                                        .toList()
+                                        .length
+                                ? OrderItem(
+                                    key: Key('order_item_$index'),
+                                    index: index,
+                                    tabIndex: _index,
+                                    item: provider2.list
+                                        .where((element) =>
+                                            indexMap[widget.index]
+                                                .contains(element.kStatus))
+                                        .toList()[index],
+                                    products: _product,
+                                    admins: _admins,
+                                    repayInfo: CollectionLogOtherRepayInfo(),
+                                    track: CollectionLogOtherTrack(),
+                                    period: provider2.list
+                                        .where((element) =>
+                                            indexMap[widget.index]
+                                                .contains(element.kStatus))
+                                        .toList()[index]
+                                        .aAAAAQBPeriods,
+                                    contactList: [],
+                                    smsHistory: [],
+                                  )
+                                : MoreWidget(
+                                    provider2.list
+                                        .where((element) =>
+                                            indexMap[widget.index]
+                                                .contains(element.kStatus))
+                                        .toList()
+                                        .length,
+                                    _hasMore(),
+                                    10);
+                          },
+                              childCount: provider2.list
+                                      .where((element) => indexMap[widget.index]
+                                          .contains(element.kStatus))
+                                      .toList()
+                                      .length +
+                                  1),
+                        ));
             }),
           ),
         ),
       ),
     );
   }
+
   @override
   void setProduct(List<ProductData> product) {
     setState(() {
       _product = product;
     });
   }
+
   @override
   void setAdmin(List<AdminData> admin) {
     setState(() {
@@ -183,7 +231,7 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
     }
     _isLoading = true;
     setState(() {
-      _page ++;
+      _page++;
     });
     _listNew = await _orderListPagePresenter.index(_page, widget.index, true);
     setState(() {
@@ -196,12 +244,4 @@ class _OrderListPageState extends State<OrderListPage> with AutomaticKeepAliveCl
   void setList(List<CollectionOrderData> list) {
     // TODO: implement setList
   }
-
-
-
-
-
-
-  
-
 }

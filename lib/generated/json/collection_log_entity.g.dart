@@ -370,6 +370,11 @@ extension CollectionLogOtherExtension on CollectionLogOther {
 CollectionLogOtherTrack $CollectionLogOtherTrackFromJson(
     Map<String, dynamic> json) {
   final CollectionLogOtherTrack collectionLogOtherTrack = CollectionLogOtherTrack();
+  final String? lastActiveTime = jsonConvert.convert<String>(
+      json['last_active_time']);
+  if (lastActiveTime != null) {
+    collectionLogOtherTrack.lastActiveTime = lastActiveTime;
+  }
   final String? applyTime = jsonConvert.convert<String>(json['apply_time']);
   if (applyTime != null) {
     collectionLogOtherTrack.applyTime = applyTime;
@@ -401,6 +406,7 @@ CollectionLogOtherTrack $CollectionLogOtherTrackFromJson(
 Map<String, dynamic> $CollectionLogOtherTrackToJson(
     CollectionLogOtherTrack entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
+  data['last_active_time'] = entity.lastActiveTime;
   data['apply_time'] = entity.applyTime;
   data['borrow_amount'] = entity.borrowAmount;
   data['loan_time'] = entity.loanTime;
@@ -412,6 +418,7 @@ Map<String, dynamic> $CollectionLogOtherTrackToJson(
 
 extension CollectionLogOtherTrackExtension on CollectionLogOtherTrack {
   CollectionLogOtherTrack copyWith({
+    String? lastActiveTime,
     String? applyTime,
     int? borrowAmount,
     String? loanTime,
@@ -420,6 +427,7 @@ extension CollectionLogOtherTrackExtension on CollectionLogOtherTrack {
     String? loanActiveTime,
   }) {
     return CollectionLogOtherTrack()
+      ..lastActiveTime = lastActiveTime ?? this.lastActiveTime
       ..applyTime = applyTime ?? this.applyTime
       ..borrowAmount = borrowAmount ?? this.borrowAmount
       ..loanTime = loanTime ?? this.loanTime

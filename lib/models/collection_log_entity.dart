@@ -218,6 +218,8 @@ class CollectionLogOtherRepayInfo {
 	String? borrowDays = '';
 	@JSONField(name: "app_name")
 	String? appName = '';
+	@JSONField(name: "url")
+	String? url = '';
 	@JSONField(name: "product_name")
 	String? productName = '';
 	@JSONField(name: "loan_time")

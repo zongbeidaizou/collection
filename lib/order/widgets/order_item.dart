@@ -254,8 +254,8 @@ class OrderItem extends StatelessWidget {
                                         '2000-07-10T18:58:39.000000Z'))
                                 .inHours >=
                             24)
-                        ? '${DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z').difference(DateTime.now()).inDays} days ago'
-                        : '${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+                        ? 'last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : 'last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,

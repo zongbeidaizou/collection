@@ -131,34 +131,75 @@ class ContactCard extends StatelessWidget {
         SpUtil.getObjectList('hJSmsTemplates')!.cast<Map<String, dynamic>>();
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
-        List<CollectionLogOtherHJSmsTemplate>.from(dataList
-            .where((value) {
+        List<CollectionLogOtherHJSmsTemplate>.from(dataList.where((value) {
       if (contactIndex == 0) {
-        return value['c_type'] == 26 && (int.parse(value['e_days'] as String) == overdueDays || int.parse(value['e_days'] as String) == (overdueDays - 1) || int.parse(value['e_days'] as String) > 900 );
+        return value['c_type'] == 26 &&
+            (int.parse(value['e_days'] as String) == overdueDays ||
+                int.parse(value['e_days'] as String) == (overdueDays - 1) ||
+                int.parse(value['e_days'] as String) > 900);
       } else {
-        return value['c_type'] == 28 && (overdueDays > 0  || int.parse(value['e_days'] as String) > 900);
+        return value['c_type'] == 28 &&
+            (overdueDays > 0 || int.parse(value['e_days'] as String) > 900);
       }
     }) // 先过滤原始数据
             .map((value) {
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
       // 替换所有占位符
+
+// "expect_repay_amount" => RepayService::shouldRepayAmount($qPeriod),
+//                 "expect_repay_time" => $qPeriod->a_p_expect_repay_time,
+//                 "overdue_days" => $qPeriod->l_overdue_days,
+//                 "mobile" => $aUser->a_phone,
+//                 "phone" => $aUser->a_phone,
+//                 "bvn" => $aUser->d_id_number,
+//                 "name" => $aUser->b_name,
+//                 "borrow_amount" => $dBorrow->m_borrow_amount,
+//                 "loan_amount" => $dBorrow->p_loan_amount,
+//                 "borrow_days" => $dBorrow->a_n_days,
+//                 "app_name" => 'kaka',
+//                 "url" => 'https://www.baidu.com',
+//                 "product_name" => "",
+//                 "loan_time" => $dBorrow->o_loan_time,
+//                 "receive_bank" => $mBloan->h_receiver_bankcard_number,
+//                 "receive_bank_no" => $mBloan->h_receiver_bankcard_number,
+//                 "account_name" => "account_name",
+//                 "account_no" => $virtualAccount->e_account_number,
+//                 "account_bank" => $virtualAccount->h_bank_name,
+//                 "before_credit_amount" => "before_credit_amount",
+//                 "after_credit_amount" => "after_credit_amount",
+//                 "change_credit_amount" => "change_credit_amount",
+//                 "before_credit_fraction" => "before_credit_fraction",
+//                 "after_credit_fraction" => "after_credit_fraction",
+//                 "change_credit_fraction" => "change_credit_fraction"
       String processedTemplate = template.dTemplate!
-          .replaceAll('@name@', repayInfo!.name!)
-          .replaceAll('@phone@', repayInfo!.phone!)
-          .replaceAll('@bvn@', repayInfo!.bvn!)
-          .replaceAll('@app_name@', repayInfo!.appName!)
           .replaceAll(
               '@expect_repay_time@',
               DateFormat('MMM d, yyyy')
                   .format(DateTime.parse(repayInfo!.expectRepayTime!)))
-          .replaceAll('@expect_repay_amount@', repayInfo!.expectRepayAmount!)
           .replaceAll('@overdue_days@', repayInfo!.overdueDays.toString())
           .replaceAll('@mobile@', repayInfo!.mobile!)
+          .replaceAll('@phone@', repayInfo!.phone!)
+          .replaceAll('@bvn@', repayInfo!.bvn!)
+          .replaceAll('@name@', repayInfo!.name!)
           .replaceAll('@borrow_amount@', repayInfo!.borrowAmount!)
           .replaceAll('@loan_amount@', repayInfo!.loanAmount!)
           .replaceAll('@borrow_days@', repayInfo!.borrowDays.toString())
+          .replaceAll('@app_name@', 'kaka')
+          .replaceAll('@url@', 'https://www.baidu.com')
+          .replaceAll('@product_name@', '')
+          .replaceAll('@loan_time@', repayInfo!.loanTime!)
+          .replaceAll('@receive_bank@', repayInfo!.receiveBank!)
+          .replaceAll('@receive_bank_no@', repayInfo!.receiveBankNo!)
+          .replaceAll('@account_name@', 'account_name')
           .replaceAll('@account_no@', repayInfo!.accountNo!)
-          .replaceAll('@account_bank@', repayInfo!.accountBank!);
+          .replaceAll('@account_bank@', repayInfo!.accountBank!)
+          .replaceAll('@before_credit_amount@', 'before_credit_amount')
+          .replaceAll('@after_credit_amount@', 'after_credit_amount')
+          .replaceAll('@change_credit_amount@', 'change_credit_amount')
+          .replaceAll('@before_credit_fraction@', 'before_credit_fraction')
+          .replaceAll('@after_credit_fraction@', 'after_credit_fraction')
+          .replaceAll('@change_credit_fraction@', 'change_credit_fraction');
+
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
     Future<void> launchAction(int type) async {
@@ -196,7 +237,9 @@ class ContactCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            template.dTemplate! != '' ? template.dTemplate! : 'Custom message.',
+                            template.dTemplate! != ''
+                                ? template.dTemplate!
+                                : 'Custom message.',
                             style: const TextStyle(
                               fontSize: 15,
                               height: 1.4,

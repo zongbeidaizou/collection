@@ -1,8 +1,11 @@
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
+import 'package:bounty_hunter/res/colors.dart';
+import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/util/cache.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -68,9 +71,7 @@ class _ContactDialogState extends State<ContactDialog> {
               contact: widget.contactList[index],
               collectionOrderId: widget.collectionOrderId,
               repayInfo: widget.repayInfo,
-              bgColor: _selectedIndex == index
-                  ? const Color.fromARGB(255, 210, 234, 253)
-                  : Colors.transparent,
+              selected: _selectedIndex == index,
               onCallOrSms: (int index, int type) {
                 setState(() {
                   _selectedIndex = index;
@@ -88,18 +89,18 @@ class _ContactDialogState extends State<ContactDialog> {
 class ContactCard extends StatelessWidget {
   final SGContactData contact;
   final int contactIndex;
-  final Color bgColor;
   final void Function(int, int) onCallOrSms;
   final CollectionLogOtherRepayInfo? repayInfo;
   final int collectionOrderId;
+  final bool selected;
 
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
-    required this.bgColor,
     required this.contactIndex,
     required this.repayInfo,
     required this.collectionOrderId,
+    required this.selected,
   });
 
   String formatDuration(int totalSeconds) {
@@ -125,8 +126,29 @@ class ContactCard extends StatelessWidget {
 
   // 获取WhatsApp状态文本
   String getWhatsAppStatus() {
-    // 这里可以根据实际业务逻辑返回状态
-    // 示例：未注册、不认识借款人、认识借款人
+    // 首先检查是否有缓存的WhatsApp状态
+    final String whatsappStatusKey =
+        'whatsapp_status_${contact.id}_$collectionOrderId';
+    final String? cachedStatus = SpUtil.getString(whatsappStatusKey);
+
+    if (cachedStatus != null && cachedStatus.startsWith('result:')) {
+      // 从缓存中获取结果状态
+      final String status = cachedStatus.split(':')[1];
+      switch (status) {
+        case 'registered':
+          return '已注册';
+        case 'not_registered':
+          return '未注册';
+        case 'knows_borrower':
+          return '认识借款人';
+        case 'doesnt_know_borrower':
+          return '不认识借款人';
+        default:
+          break;
+      }
+    }
+
+    // 如果没有缓存状态，使用默认逻辑
     if (contact.hReviewResult == 1) {
       return '认识借款人';
     } else if (contact.hReviewResult == 2) {
@@ -135,6 +157,87 @@ class ContactCard extends StatelessWidget {
       return '未注册';
     }
     return '未知';
+  }
+
+  // 调度WhatsApp状态检查
+  void _scheduleWhatsAppStatusCheck(int contactId, int collectionOrderId) {
+    // 延迟5秒后检查状态，给用户时间在WhatsApp中查看状态
+    Future.delayed(const Duration(seconds: 5), () {
+      _checkWhatsAppStatus(contactId, collectionOrderId);
+    });
+  }
+
+  // 检查WhatsApp状态并显示对话框
+  void _checkWhatsAppStatus(int contactId, int collectionOrderId) {
+    final String whatsappStatusKey =
+        'whatsapp_status_${contactId}_$collectionOrderId';
+    final String? cachedStatus = SpUtil.getString(whatsappStatusKey);
+
+    if (cachedStatus != null && cachedStatus.startsWith('pending:')) {
+      // 显示状态选择对话框
+      _showWhatsAppStatusDialog(contactId, collectionOrderId);
+    }
+  }
+
+  // 显示WhatsApp状态选择对话框
+  void _showWhatsAppStatusDialog(int contactId, int collectionOrderId) {
+    // 这里我们将在build方法中处理对话框显示
+    // 通过设置一个标志来触发对话框显示
+  }
+
+  // 更新WhatsApp状态
+  void _updateWhatsAppStatus(BuildContext context, int contactId,
+      int collectionOrderId, String status) {
+    final String whatsappStatusKey =
+        'whatsapp_status_${contactId}_$collectionOrderId';
+    final String currentTime = DateTime.now().toIso8601String();
+
+    // 更新缓存状态
+    SpUtil.putString(whatsappStatusKey, 'result:$status:$currentTime');
+
+    // 记录状态更新到缓存列表
+    Cache().appendToStringList('whatsapp_status_updates',
+        '$contactId:$collectionOrderId:$status:$currentTime');
+
+    // 关闭对话框
+    Navigator.of(context).pop();
+  }
+
+  // 显示WhatsApp状态选择对话框
+  void _showWhatsAppStatusSelectionDialog(
+      BuildContext context, int contactId, int collectionOrderId) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('WhatsApp状态'),
+          content: const Text('请选择此联系人在WhatsApp中的状态：'),
+          actions: [
+            TextButton(
+              onPressed: () => _updateWhatsAppStatus(
+                  dialogContext, contactId, collectionOrderId, 'registered'),
+              child: const Text('已注册'),
+            ),
+            TextButton(
+              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
+                  collectionOrderId, 'not_registered'),
+              child: const Text('未注册'),
+            ),
+            TextButton(
+              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
+                  collectionOrderId, 'knows_borrower'),
+              child: const Text('认识借款人'),
+            ),
+            TextButton(
+              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
+                  collectionOrderId, 'doesnt_know_borrower'),
+              child: const Text('不认识借款人'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // 获取电话状态文本
@@ -281,10 +384,30 @@ class ContactCard extends StatelessWidget {
         );
         if (selectedTemplate != null) {
           if (type == 1) {
+            // 记录WhatsApp点击事件到缓存
             await Cache().appendToStringList('action_contact',
                 '$type:$collectionOrderId:${contact.id}:${selectedTemplate.id}');
+
+            // 记录WhatsApp状态跟踪信息到SharedPreferences
+            final String whatsappStatusKey =
+                'whatsapp_status_${contact.id}_$collectionOrderId';
+            final String currentTime = DateTime.now().toIso8601String();
+            await SpUtil.putString(whatsappStatusKey, 'pending:$currentTime');
+
+            // 启动WhatsApp
             Utils.launchWhatsAppURL('234${contact.gPhone!}',
                 message: selectedTemplate.dTemplate);
+
+            // 设置一个延迟检查，当用户返回应用时更新状态
+            if (contact.id != null) {
+              _scheduleWhatsAppStatusCheck(contact.id!, collectionOrderId);
+            }
+
+            // 延迟显示WhatsApp状态选择对话框
+            Future.delayed(const Duration(seconds: 2), () {
+              _showWhatsAppStatusSelectionDialog(
+                  context, contact.id!, collectionOrderId);
+            });
           } else if (type == 3) {
             await Cache().appendToStringList('action_contact',
                 '$type:$collectionOrderId:${contact.id}:${selectedTemplate.id}');
@@ -304,244 +427,314 @@ class ContactCard extends StatelessWidget {
     return Card(
       shadowColor: Colors.blue,
       margin: const EdgeInsets.all(4.0),
-      child: ColoredBox(
-        color: bgColor,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 上面显示姓名和电话
-              Row(
-                children: [
-                  Icon(
-                    contactIndex == 0
-                        ? Icons.radio_button_on
-                        : contact.hReviewResult == 1
-                            ? Icons.group_outlined
-                            : contact.hReviewResult == 2
-                                ? Icons.group_off_outlined
-                                : contact.hReviewResult == 3
-                                    ? Icons.phone_disabled_outlined
-                                    : Icons.perm_contact_cal,
-                    size: 20,
-                    color: contactIndex == 0
-                        ? Colors.redAccent
-                        : contact.hReviewResult == 1
-                            ? Colors.green
-                            : contact.hReviewResult == 2
-                                ? Colors.orange
-                                : contact.hReviewResult == 3
-                                    ? Colors.red
-                                    : Colors.grey,
-                  ),
-                  Gaps.hGap8,
-                  Text(
-                    '${contact.cRelation ?? ''} ${contact.fName ?? ''}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Gaps.hGap4,
-                  Expanded(
-                    child: Gaps.empty,
-                  ),
-                  Text(
-                    contact.gPhone ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blueAccent,
-                    ),
-                  ),
-                ],
-              ),
-
-              // 下面显示三列
-              Row(
-                children: [
-                  // 第一列：短信
-                  Expanded(
-                    child: Column(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.message,
-                            size: 24,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () => launchAction(3),
-                        ),
-                        Text(
-                          '短信',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Gaps.vGap4,
-                        Text(
-                          getLastClickTime('sms'),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // 第二列：电话
-                  Expanded(
-                    child: Column(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.call,
-                            size: 24,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () => launchAction(2),
-                        ),
-                        Text(
-                          getPhoneStatus(),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Gaps.vGap4,
-                        Text(
-                          getLastClickTime('call'),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // 第三列：WhatsApp
-                  Expanded(
-                    child: Column(
-                      children: [
-                        IconButton(
-                          icon: const FaIcon(
-                            FontAwesomeIcons.whatsapp,
-                            size: 24,
-                            color: Colors.green,
-                          ),
-                          onPressed: () => launchAction(1),
-                        ),
-                        Gaps.vGap4,
-                        Text(
-                          getWhatsAppStatus(),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          getLastClickTime('whatsapp'),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              // 显示通话记录（如果有的话）
-              if (contact.aAAAANIAdminRecordings != null &&
-                  contact.aAAAANIAdminRecordings!.isNotEmpty)
-                Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '通话记录:',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Gaps.vGap8,
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          crossAxisSpacing: 1.0,
-                          mainAxisSpacing: 6.0,
-                          mainAxisExtent: 24,
-                        ),
-                        itemCount: contact.aAAAANIAdminRecordings!.length,
-                        itemBuilder: (context, index) {
-                          final record = contact.aAAAANIAdminRecordings![index];
-                          final numberIcons = [
-                            Icons.looks_one_outlined,
-                            Icons.looks_two_outlined,
-                            Icons.looks_3_outlined,
-                            Icons.looks_4_outlined,
-                            Icons.looks_5_outlined,
-                          ];
-
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (index < numberIcons.length)
-                                Icon(
-                                  numberIcons[index],
-                                  size: 10,
-                                  color: Colors.grey,
-                                )
-                              else
-                                Text(
-                                  '${index + 1}.',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('MMM d, hh:mm', 'en_US')
-                                      .format(DateTime.parse(record.kCallAt!)),
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.grey,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+      child: Stack(
+        children: [
+          ColoredBox(
+            color: selected
+                ? const Color.fromARGB(255, 210, 234, 253)
+                : Colors.transparent,
           ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 上面显示姓名和电话
+                Row(
+                  children: [
+                    Icon(
+                      contactIndex == 0
+                          ? Icons.radio_button_on
+                          : contact.hReviewResult == 1
+                              ? Icons.group_outlined
+                              : contact.hReviewResult == 2
+                                  ? Icons.group_off_outlined
+                                  : contact.hReviewResult == 3
+                                      ? Icons.phone_disabled_outlined
+                                      : Icons.perm_contact_cal,
+                      size: 20,
+                      color: contactIndex == 0
+                          ? Colors.redAccent
+                          : contact.hReviewResult == 1
+                              ? Colors.green
+                              : contact.hReviewResult == 2
+                                  ? Colors.orange
+                                  : contact.hReviewResult == 3
+                                      ? Colors.red
+                                      : Colors.grey,
+                    ),
+                    Gaps.hGap8,
+                    Text(
+                      '${contact.cRelation ?? ''} ${contact.fName ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Gaps.hGap4,
+                    Expanded(
+                      child: Gaps.empty,
+                    ),
+                    Text(
+                      contact.gPhone ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // 下面显示三列
+                Row(
+                  children: [
+                    // 第一列：短信
+                    Expanded(
+                      child: Column(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.message,
+                              size: 24,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () => launchAction(3),
+                          ),
+                          Text(
+                            '短信',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Gaps.vGap4,
+                          Text(
+                            getLastClickTime('sms'),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 第二列：电话
+                    Expanded(
+                      child: Column(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.call,
+                              size: 24,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () => launchAction(2),
+                          ),
+                          Text(
+                            getPhoneStatus(),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Gaps.vGap4,
+                          Text(
+                            getLastClickTime('call'),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 第三列：WhatsApp
+                    Expanded(
+                      child: Column(
+                        children: [
+                          IconButton(
+                            icon: const FaIcon(
+                              FontAwesomeIcons.whatsapp,
+                              size: 24,
+                              color: Colors.green,
+                            ),
+                            onPressed: () => launchAction(1),
+                          ),
+                          Gaps.vGap4,
+                          Text(
+                            getWhatsAppStatus(),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            getLastClickTime('whatsapp'),
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                // 显示通话记录（如果有的话）
+                if (contact.aAAAANIAdminRecordings != null &&
+                    contact.aAAAANIAdminRecordings!.isNotEmpty)
+                  Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '通话记录:',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Gaps.vGap8,
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 1.0,
+                            mainAxisSpacing: 6.0,
+                            mainAxisExtent: 24,
+                          ),
+                          itemCount: contact.aAAAANIAdminRecordings!.length,
+                          itemBuilder: (context, index) {
+                            final record =
+                                contact.aAAAANIAdminRecordings![index];
+                            final numberIcons = [
+                              Icons.looks_one_outlined,
+                              Icons.looks_two_outlined,
+                              Icons.looks_3_outlined,
+                              Icons.looks_4_outlined,
+                              Icons.looks_5_outlined,
+                            ];
+
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (index < numberIcons.length)
+                                  Icon(
+                                    numberIcons[index],
+                                    size: 10,
+                                    color: Colors.grey,
+                                  )
+                                else
+                                  Text(
+                                    '${index + 1}.',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    DateFormat('MMM d, hh:mm', 'en_US').format(
+                                        DateTime.parse(record.kCallAt!)),
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          selected ? _buildGoodsMenu(context) : Gaps.empty,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGoodsMenu(BuildContext context) {
+    return Positioned.fill(
+      child: _buildGoodsMenuContent(context),
+    );
+  }
+
+  Widget _buildGoodsMenuContent(BuildContext context) {
+    final bool isDark = true;
+    final Color buttonColor = isDark ? Colours.dark_text : Colors.white;
+
+    return InkWell(
+      onTap: () {},
+      child: ColoredBox(
+        color: isDark ? const Color(0xB34D4D4D) : const Color(0x4D000000),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Gaps.hGap15,
+            MyButton(
+              key: Key('goods_edit_item_'),
+              text: '编辑',
+              fontSize: Dimens.font_sp16,
+              radius: 24.0,
+              minWidth: 56.0,
+              minHeight: 56.0,
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              textColor: isDark ? Colours.dark_button_text : Colors.white,
+              backgroundColor:
+                  isDark ? Colours.dark_app_main : Colours.app_main,
+              onPressed: () {},
+            ),
+            MyButton(
+              key: Key('goods_operation_item_'),
+              text: '下架',
+              fontSize: Dimens.font_sp16,
+              radius: 24.0,
+              minWidth: 56.0,
+              minHeight: 56.0,
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              textColor: Colours.text,
+              backgroundColor: buttonColor,
+              onPressed: () {},
+            ),
+            MyButton(
+              key: Key('goods_delete_item_'),
+              text: '删除',
+              fontSize: Dimens.font_sp16,
+              radius: 24.0,
+              minWidth: 56.0,
+              minHeight: 56.0,
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              textColor: Colours.text,
+              backgroundColor: buttonColor,
+              onPressed: () {},
+            ),
+            Gaps.hGap15,
+          ],
         ),
       ),
     );

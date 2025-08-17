@@ -388,7 +388,8 @@ class OrderItem extends StatelessWidget {
                                   (period?.fExpectRepayTotalAmount ?? 0) -
                                       (period?.qPaidServiceFee ?? 0) -
                                       (period?.pPaidInterest ?? 0) -
-                                      (period?.nPaidAmount ?? 0) -
+                                      (period?.sPaidOverdueAmount ?? 0) -
+                                      (period?.oPaidBorrowAmount ?? 0) -
                                       (period?.uDeductionTotalAmount ?? 0))),
                         ],
                       ),

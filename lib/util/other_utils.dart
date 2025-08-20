@@ -13,7 +13,6 @@ import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
-
   /// 打开链接
   static Future<void> launchWebURL(String url) async {
     final Uri uri = Uri.parse(url);
@@ -35,23 +34,25 @@ class Utils {
   }
 
   /// 调起whatapp
-  static Future<void> launchWhatsAppURL(String phone, {String? message}) async {
-    final Uri uri = Uri.parse(
-      message != null 
+  static Future<bool> launchWhatsAppURL(String phone, {String? message}) async {
+    final Uri uri = Uri.parse(message != null
         ? 'https://wa.me/$phone?text=${Uri.encodeComponent(message)}'
-        : 'https://wa.me/$phone'
-    );
+        : 'https://wa.me/$phone');
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      return launchUrl(uri);
     } else {
-      Toast.show('拨号失败！');
+      return false;
     }
   }
 
-  static String formatPrice(String price, {MoneyFormat format = MoneyFormat.END_INTEGER}){
-    return MoneyUtil.changeYWithUnit(NumUtil.getDoubleByValueStr(price) ?? 0, MoneyUnit.YUAN, format: format);
+  static String formatPrice(String price,
+      {MoneyFormat format = MoneyFormat.END_INTEGER}) {
+    return MoneyUtil.changeYWithUnit(
+        NumUtil.getDoubleByValueStr(price) ?? 0, MoneyUnit.YUAN,
+        format: format);
   }
-  static String formatPrice2(num price){
+
+  static String formatPrice2(num price) {
     const CurrencyFormat euroSettings = CurrencyFormat(
       // formatter settings for euro
       code: 'ng',
@@ -65,8 +66,7 @@ class Utils {
   }
 
   static String formatDateTime(String? time) {
-
-    if(time == null || time.isEmpty){
+    if (time == null || time.isEmpty) {
       return '';
     }
     final DateTime now = DateTime.now();
@@ -91,23 +91,26 @@ class Utils {
     }
   }
 
-  static KeyboardActionsConfig getKeyboardActionsConfig(BuildContext context, List<FocusNode> list) {
+  static KeyboardActionsConfig getKeyboardActionsConfig(
+      BuildContext context, List<FocusNode> list) {
     return KeyboardActionsConfig(
       keyboardBarColor: ThemeUtils.getKeyboardActionsColor(context),
-      actions: List.generate(list.length, (i) => KeyboardActionsItem(
-        focusNode: list[i],
-        toolbarButtons: [
-          (node) {
-            return GestureDetector(
-              onTap: () => node.unfocus(),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Text(getCurrLocale() == 'zh' ? '关闭' : 'Close'),
-              ),
-            );
-          },
-        ],
-      )),
+      actions: List.generate(
+          list.length,
+          (i) => KeyboardActionsItem(
+                focusNode: list[i],
+                toolbarButtons: [
+                  (node) {
+                    return GestureDetector(
+                      onTap: () => node.unfocus(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: Text(getCurrLocale() == 'zh' ? '关闭' : 'Close'),
+                      ),
+                    );
+                  },
+                ],
+              )),
     );
   }
 
@@ -118,7 +121,6 @@ class Utils {
     }
     return locale;
   }
-
 }
 
 Future<T?> showElasticDialog<T>({
@@ -126,10 +128,10 @@ Future<T?> showElasticDialog<T>({
   bool barrierDismissible = true,
   required WidgetBuilder builder,
 }) {
-
   return showGeneralDialog(
     context: context,
-    pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+    pageBuilder: (BuildContext buildContext, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
       final Widget pageChild = Builder(builder: builder);
       return SafeArea(
         child: pageChild,
@@ -143,17 +145,19 @@ Future<T?> showElasticDialog<T>({
   );
 }
 
-Widget _buildDialogTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+Widget _buildDialogTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child) {
   return FadeTransition(
     opacity: CurvedAnimation(
       parent: animation,
       curve: Curves.easeOut,
     ),
     child: SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0.0, 0.3),
-        end: Offset.zero
-      ).animate(CurvedAnimation(
+      position: Tween<Offset>(begin: const Offset(0.0, 0.3), end: Offset.zero)
+          .animate(CurvedAnimation(
         parent: animation,
         curve: const ElasticOutCurve(0.85),
         reverseCurve: Curves.easeOutBack,
@@ -161,7 +165,6 @@ Widget _buildDialogTransitions(BuildContext context, Animation<double> animation
       child: child,
     ),
   );
-
 }
 
 /// String 空安全处理

@@ -232,14 +232,28 @@ class JsonConvert {
       return data.map<CollectionLogOtherRepayInfo>((Map<String, dynamic> e) =>
           CollectionLogOtherRepayInfo.fromJson(e)).toList() as M;
     }
-    if (<CollectionLogOtherContactInfo>[] is M) {
-      return data.map<CollectionLogOtherContactInfo>((Map<String, dynamic> e) =>
-          CollectionLogOtherContactInfo.fromJson(e)).toList() as M;
+    if (<CollectionLogOtherContactInfo2>[] is M) {
+      return data
+          .map<CollectionLogOtherContactInfo2>((
+          Map<String, dynamic> e) => CollectionLogOtherContactInfo2.fromJson(e))
+          .toList() as M;
     }
-    if (<CollectionLogOtherContactInfoCallRecords>[] is M) {
-      return data.map<CollectionLogOtherContactInfoCallRecords>((
+    if (<CollectionLogOtherContactInfo2Data>[] is M) {
+      return data.map<CollectionLogOtherContactInfo2Data>((
           Map<String, dynamic> e) =>
-          CollectionLogOtherContactInfoCallRecords.fromJson(e)).toList() as M;
+          CollectionLogOtherContactInfo2Data.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherContactInfo2DataAAAAAHLContactWeights>[] is M) {
+      return data
+          .map<CollectionLogOtherContactInfo2DataAAAAAHLContactWeights>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfo2DataAAAAAHLContactWeights.fromJson(e))
+          .toList() as M;
+    }
+    if (<CollectionLogOtherContactInfo2Links>[] is M) {
+      return data.map<CollectionLogOtherContactInfo2Links>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfo2Links.fromJson(e)).toList() as M;
     }
     if (<CollectionLogOtherSmsHistory>[] is M) {
       return data.map<CollectionLogOtherSmsHistory>((Map<String, dynamic> e) =>
@@ -249,6 +263,21 @@ class JsonConvert {
       return data.map<CollectionLogOtherHJSmsTemplate>((
           Map<String, dynamic> e) =>
           CollectionLogOtherHJSmsTemplate.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherOther>[] is M) {
+      return data.map<CollectionLogOtherOther>((Map<String, dynamic> e) =>
+          CollectionLogOtherOther.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherOtherProgress>[] is M) {
+      return data.map<CollectionLogOtherOtherProgress>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherOtherProgress.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherOtherProfile>[] is M) {
+      return data
+          .map<CollectionLogOtherOtherProfile>((
+          Map<String, dynamic> e) => CollectionLogOtherOtherProfile.fromJson(e))
+          .toList() as M;
     }
     if (<CollectionNotificationEntity>[] is M) {
       return data.map<CollectionNotificationEntity>((Map<String, dynamic> e) =>
@@ -472,14 +501,24 @@ class JsonConvertClassCollection {
     (CollectionLogOtherPeriod).toString(): CollectionLogOtherPeriod.fromJson,
     (CollectionLogOtherRepayInfo).toString(): CollectionLogOtherRepayInfo
         .fromJson,
-    (CollectionLogOtherContactInfo).toString(): CollectionLogOtherContactInfo
+    (CollectionLogOtherContactInfo2).toString(): CollectionLogOtherContactInfo2
         .fromJson,
-    (CollectionLogOtherContactInfoCallRecords)
-        .toString(): CollectionLogOtherContactInfoCallRecords.fromJson,
+    (CollectionLogOtherContactInfo2Data)
+        .toString(): CollectionLogOtherContactInfo2Data.fromJson,
+    (CollectionLogOtherContactInfo2DataAAAAAHLContactWeights)
+        .toString(): CollectionLogOtherContactInfo2DataAAAAAHLContactWeights
+        .fromJson,
+    (CollectionLogOtherContactInfo2Links)
+        .toString(): CollectionLogOtherContactInfo2Links.fromJson,
     (CollectionLogOtherSmsHistory).toString(): CollectionLogOtherSmsHistory
         .fromJson,
     (CollectionLogOtherHJSmsTemplate)
         .toString(): CollectionLogOtherHJSmsTemplate.fromJson,
+    (CollectionLogOtherOther).toString(): CollectionLogOtherOther.fromJson,
+    (CollectionLogOtherOtherProgress)
+        .toString(): CollectionLogOtherOtherProgress.fromJson,
+    (CollectionLogOtherOtherProfile).toString(): CollectionLogOtherOtherProfile
+        .fromJson,
     (CollectionNotificationEntity).toString(): CollectionNotificationEntity
         .fromJson,
     (CollectionNotificationData).toString(): CollectionNotificationData

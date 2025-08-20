@@ -64,8 +64,8 @@ class _AddNoteState extends State<AddNote>
   final TextEditingController typeController = TextEditingController();
   List<CollectionLogData> _list = <CollectionLogData>[];
   CollectionLogEntity? _data = null;
-  List<CollectionLogOtherContactInfo> _contactList =
-      <CollectionLogOtherContactInfo>[];
+  List<CollectionLogOtherContactInfo2Data> _contactList =
+      <CollectionLogOtherContactInfo2Data>[];
   List<CollectionLogOtherSmsHistory> _smsHistory =
       <CollectionLogOtherSmsHistory>[];
   CollectionLogOtherRepayInfo? _repayInfo;
@@ -98,7 +98,7 @@ class _AddNoteState extends State<AddNote>
   late CollectionOrderData item;
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
-  List<SGContactData> _contact2List = [];
+  List<CollectionLogOtherContactInfo2Data> _contact2List = [];
 
   final ScrollController _scrollController = ScrollController();
 
@@ -141,16 +141,13 @@ class _AddNoteState extends State<AddNote>
   Future<void> _onRefresh() async {
     _data = await _addNotePresenter.index(1, widget.orderId, true);
     _list = _data!.data!;
-    _contactList = _data!.other!.contactInfo ?? [];
+    _contactList = _data!.other!.contactInfo!.data ?? [];
     _smsHistory = _data!.other!.smsHistory!;
     _repayInfo = _data!.other!.repayInfo;
     _track = _data!.other!.track;
     _period = _data!.other!.period;
     _avatar = _data!.other!.avatar;
-    // _contact2List = [
-    //   $SGContactDataFromJson({'id': 0, 'c_relation': '', 'f_name': item.vName, 'g_phone': item.uPhone, 'h_review_result': 0, 'l_sms_count': null, 'n_call_count': 0}),
-    //   ..._data!.other!.contactInfo2!.data ?? []
-    // ];
+
     _contact2List = _data!.other!.contactInfo2!.data ?? [];
     setState(() {});
     _scrollToBottom();

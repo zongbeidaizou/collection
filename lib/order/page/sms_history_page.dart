@@ -19,11 +19,12 @@ class SmsHistoryPage extends StatefulWidget {
     required this.repayInfo,
     required this.borrowId,
     required this.collectionOrderId,
+    required this.period,
   });
   final int collectionOrderId;
   final CollectionLogOtherRepayInfo? repayInfo;
   final int borrowId;
-
+  final CollectionLogOtherPeriod period;
   @override
   State<SmsHistoryPage> createState() => _SmsHistoryPageState();
 }
@@ -78,8 +79,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
         SpUtil.getObjectList('hJSmsTemplates')!.cast<Map<String, dynamic>>();
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
-        List<CollectionLogOtherHJSmsTemplate>.from(dataList
-            .where((value) {
+        List<CollectionLogOtherHJSmsTemplate>.from(dataList.where((value) {
       return value['c_type'] == 28;
     }).map((value) {
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
@@ -93,12 +93,20 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
               DateFormat('MMM d, yyyy')
                   .format(DateTime.parse(widget.repayInfo!.expectRepayTime!)))
           .replaceAll(
-              '@expect_repay_amount@', widget.repayInfo!.expectRepayAmount!)
+              '@expect_repay_amount@',
+              Utils.formatPrice2((widget.period.fExpectRepayTotalAmount ?? 0) -
+                  (widget.period.qPaidServiceFee ?? 0) -
+                  (widget.period.pPaidInterest ?? 0) -
+                  (widget.period.sPaidOverdueAmount ?? 0) -
+                  (widget.period.oPaidBorrowAmount ?? 0) -
+                  (widget.period.uDeductionTotalAmount ?? 0)))
           .replaceAll(
               '@overdue_days@', widget.repayInfo!.overdueDays.toString())
           .replaceAll('@mobile@', widget.repayInfo!.mobile!)
-          .replaceAll('@borrow_amount@', widget.repayInfo!.borrowAmount!)
-          .replaceAll('@loan_amount@', widget.repayInfo!.loanAmount!)
+          .replaceAll('@borrow_amount@',
+              Utils.formatPrice2(widget.period.oPaidBorrowAmount!))
+          .replaceAll('@loan_amount@',
+              Utils.formatPrice2(widget.period.oPaidBorrowAmount!))
           .replaceAll('@borrow_days@', widget.repayInfo!.borrowDays.toString())
           .replaceAll('@account_no@', widget.repayInfo!.accountNo!)
           .replaceAll('@account_bank@', widget.repayInfo!.accountBank!);
@@ -139,7 +147,9 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            template.dTemplate! != '' ? template.dTemplate! : 'Custom message.',
+                            template.dTemplate! != ''
+                                ? template.dTemplate!
+                                : 'Custom message.',
                             style: const TextStyle(
                               fontSize: 15,
                               height: 1.4,

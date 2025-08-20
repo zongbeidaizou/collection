@@ -53,7 +53,7 @@ class OrderItem extends StatelessWidget {
   final CollectionOrderData item;
   final List<ProductData> products;
   final List<AdminData> admins;
-  final List<SGContactData> contactList;
+  final List<CollectionLogOtherContactInfo2Data> contactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherTrack? track;
@@ -122,7 +122,7 @@ class OrderItem extends StatelessWidget {
         isScrollControlled: true,
         builder: (BuildContext context) {
           return Container(
-            height: 580,
+            height: 650,
             color: Colors.grey,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
@@ -130,6 +130,7 @@ class OrderItem extends StatelessWidget {
                 contactList: contactList,
                 repayInfo: repayInfo,
                 collectionOrderId: item.id!,
+                period: period!,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
                   onSendSms?.call(templateId, smsContent,
@@ -603,6 +604,7 @@ class OrderItem extends StatelessWidget {
                             borrowId: item.aBorrowId!,
                             collectionOrderId: item.id!,
                             repayInfo: repayInfo,
+                            period: period!,
                           ));
                     },
                   );

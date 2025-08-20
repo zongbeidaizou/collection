@@ -6,6 +6,7 @@ import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/util/cache.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -23,12 +24,13 @@ class ContactDialog extends StatefulWidget {
     required this.contactList,
     this.onSendSms,
     this.repayInfo,
+    this.period,
   });
   final int collectionOrderId;
-  final List<SGContactData> contactList;
+  final List<CollectionLogOtherContactInfo2Data> contactList;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final CollectionLogOtherRepayInfo? repayInfo;
-
+  final CollectionLogOtherPeriod? period;
   @override
   State<ContactDialog> createState() => _ContactDialogState();
 }
@@ -71,6 +73,7 @@ class _ContactDialogState extends State<ContactDialog> {
               contact: widget.contactList[index],
               collectionOrderId: widget.collectionOrderId,
               repayInfo: widget.repayInfo,
+              period: widget.period,
               selected: _selectedIndex == index,
               onCallOrSms: (int index, int type) {
                 setState(() {
@@ -86,14 +89,14 @@ class _ContactDialogState extends State<ContactDialog> {
   }
 }
 
-class ContactCard extends StatelessWidget {
-  final SGContactData contact;
+class ContactCard extends StatefulWidget {
+  final CollectionLogOtherContactInfo2Data contact;
   final int contactIndex;
   final void Function(int, int) onCallOrSms;
   final CollectionLogOtherRepayInfo? repayInfo;
   final int collectionOrderId;
   final bool selected;
-
+  final CollectionLogOtherPeriod? period;
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
@@ -101,7 +104,81 @@ class ContactCard extends StatelessWidget {
     required this.repayInfo,
     required this.collectionOrderId,
     required this.selected,
+    required this.period,
   });
+
+  @override
+  State<ContactCard> createState() => _ContactCardState();
+}
+
+class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
+  DateTime? _appPausedTime;
+  DateTime? _appResumedTime;
+  bool _isWhatsAppLaunched = false;
+  int? _currentTemplateId; // 存储当前选中的模板ID
+  Timer? _cleanupTimer; // 清理定时器
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cleanupTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        // 应用进入后台（比如打开WhatsApp）
+        _appPausedTime = DateTime.now();
+        print('App paused at: $_appPausedTime');
+        break;
+      case AppLifecycleState.resumed:
+        // 应用回到前台
+        _appResumedTime = DateTime.now();
+        print('App resumed at: $_appResumedTime');
+
+        // 如果之前有暂停时间，计算时间差
+        if (_appPausedTime != null) {
+          final Duration timeSpentOutside =
+              _appResumedTime!.difference(_appPausedTime!);
+          print(
+              'Time spent outside app: ${timeSpentOutside.inSeconds} seconds');
+
+          // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
+          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 5) {
+            _recordWhatsAppClick();
+          }
+          _isWhatsAppLaunched = false;
+          _cleanupTimer?.cancel(); // 清理定时器
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _recordWhatsAppClick() async {
+    // 记录WhatsApp点击事件到缓存
+    print(
+        'WhatsApp click recorded - user spent more than 5 seconds in WhatsApp');
+
+    // 使用保存的模板ID记录点击事件
+    final templateId = _currentTemplateId ?? 0;
+    await Cache().appendToStringList('action_contact',
+        '1:${widget.collectionOrderId}:${widget.contact.id}:$templateId');
+
+    // 重置模板ID
+    _currentTemplateId = null;
+  }
 
   String formatDuration(int totalSeconds) {
     int minutes = totalSeconds ~/ 60; // Get the number of minutes
@@ -124,160 +201,163 @@ class ContactCard extends StatelessWidget {
     return end.difference(start).inDays;
   }
 
-  // 获取WhatsApp状态文本
-  String getWhatsAppStatus() {
-    // 首先检查是否有缓存的WhatsApp状态
-    final String whatsappStatusKey =
-        'whatsapp_status_${contact.id}_$collectionOrderId';
-    final String? cachedStatus = SpUtil.getString(whatsappStatusKey);
-
-    if (cachedStatus != null && cachedStatus.startsWith('result:')) {
-      // 从缓存中获取结果状态
-      final String status = cachedStatus.split(':')[1];
-      switch (status) {
-        case 'registered':
-          return '已注册';
-        case 'not_registered':
-          return '未注册';
-        case 'knows_borrower':
-          return '认识借款人';
-        case 'doesnt_know_borrower':
-          return '不认识借款人';
-        default:
-          break;
+  Widget getIcon(String actionType) {
+    if (actionType == 'call') {
+      if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 10) {
+        //未知
+        return const SizedBox.shrink();
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 20) {
+        //没有价值
+        return const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 30) {
+        //有价值
+        return const Icon(
+          Icons.done,
+          color: Color.fromARGB(255, 10, 238, 14),
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 40) {
+        //十分有价值
+        return const Icon(
+          Icons.done_all_rounded,
+          color: Colors.green,
+          size: 20,
+        );
+      }
+    } else if (actionType == 'sms') {
+      if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 10) {
+        //未知
+        return const SizedBox.shrink();
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 20) {
+        //没有价值
+        return const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 30) {
+        //有价值
+        return const Icon(
+          Icons.done,
+          color: Color.fromARGB(255, 10, 238, 14),
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 40) {
+        return const Icon(
+          Icons.done_all_rounded,
+          color: Colors.green,
+          size: 20,
+        );
+      }
+    } else if (actionType == 'whatsapp') {
+      if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 10) {
+        return const SizedBox.shrink();
+      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 20) {
+        return const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 30) {
+        return const Icon(
+          Icons.done,
+          color: Color.fromARGB(255, 10, 238, 14),
+          size: 16,
+        );
+      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 40) {
+        return const Icon(
+          Icons.done_all_rounded,
+          color: Colors.green,
+          size: 20,
+        );
       }
     }
+    return const SizedBox.shrink();
+  }
 
-    // 如果没有缓存状态，使用默认逻辑
-    if (contact.hReviewResult == 1) {
-      return '认识借款人';
-    } else if (contact.hReviewResult == 2) {
-      return '不认识借款人';
-    } else if (contact.hReviewResult == 3) {
-      return '未注册';
+  // 获取WhatsApp停留时间显示
+  String getWhatsAppStayTime() {
+    if (_appResumedTime == null || _appPausedTime == null) {
+      return '';
     }
-    return '未知';
-  }
 
-  // 调度WhatsApp状态检查
-  void _scheduleWhatsAppStatusCheck(int contactId, int collectionOrderId) {
-    // 延迟5秒后检查状态，给用户时间在WhatsApp中查看状态
-    Future.delayed(const Duration(seconds: 5), () {
-      _checkWhatsAppStatus(contactId, collectionOrderId);
-    });
-  }
-
-  // 检查WhatsApp状态并显示对话框
-  void _checkWhatsAppStatus(int contactId, int collectionOrderId) {
-    final String whatsappStatusKey =
-        'whatsapp_status_${contactId}_$collectionOrderId';
-    final String? cachedStatus = SpUtil.getString(whatsappStatusKey);
-
-    if (cachedStatus != null && cachedStatus.startsWith('pending:')) {
-      // 显示状态选择对话框
-      _showWhatsAppStatusDialog(contactId, collectionOrderId);
+    final Duration timeSpentOutside =
+        _appResumedTime!.difference(_appPausedTime!);
+    if (timeSpentOutside.inSeconds > 5) {
+      return 'Stayed ${timeSpentOutside.inSeconds}s';
     }
-  }
-
-  // 显示WhatsApp状态选择对话框
-  void _showWhatsAppStatusDialog(int contactId, int collectionOrderId) {
-    // 这里我们将在build方法中处理对话框显示
-    // 通过设置一个标志来触发对话框显示
-  }
-
-  // 更新WhatsApp状态
-  void _updateWhatsAppStatus(BuildContext context, int contactId,
-      int collectionOrderId, String status) {
-    final String whatsappStatusKey =
-        'whatsapp_status_${contactId}_$collectionOrderId';
-    final String currentTime = DateTime.now().toIso8601String();
-
-    // 更新缓存状态
-    SpUtil.putString(whatsappStatusKey, 'result:$status:$currentTime');
-
-    // 记录状态更新到缓存列表
-    Cache().appendToStringList('whatsapp_status_updates',
-        '$contactId:$collectionOrderId:$status:$currentTime');
-
-    // 关闭对话框
-    Navigator.of(context).pop();
-  }
-
-  // 显示WhatsApp状态选择对话框
-  void _showWhatsAppStatusSelectionDialog(
-      BuildContext context, int contactId, int collectionOrderId) {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('WhatsApp状态'),
-          content: const Text('请选择此联系人在WhatsApp中的状态：'),
-          actions: [
-            TextButton(
-              onPressed: () => _updateWhatsAppStatus(
-                  dialogContext, contactId, collectionOrderId, 'registered'),
-              child: const Text('已注册'),
-            ),
-            TextButton(
-              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
-                  collectionOrderId, 'not_registered'),
-              child: const Text('未注册'),
-            ),
-            TextButton(
-              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
-                  collectionOrderId, 'knows_borrower'),
-              child: const Text('认识借款人'),
-            ),
-            TextButton(
-              onPressed: () => _updateWhatsAppStatus(dialogContext, contactId,
-                  collectionOrderId, 'doesnt_know_borrower'),
-              child: const Text('不认识借款人'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // 获取电话状态文本
-  String getPhoneStatus() {
-    // 这里可以根据实际业务逻辑返回状态
-    // 示例：无法拨通、不认识借款人、认识借款人
-    if (contact.hReviewResult == 1) {
-      return '认识借款人';
-    } else if (contact.hReviewResult == 2) {
-      return '不认识借款人';
-    } else if (contact.hReviewResult == 3) {
-      return '无法拨通';
-    }
-    return '未知';
+    return '';
   }
 
   // 获取上次点击时间
   String getLastClickTime(String actionType) {
-    // 这里可以从缓存或数据库中获取上次点击时间
-    // 示例实现，实际应该从数据源获取
-    return '2024-01-15 14:30';
+    String? timeString;
+    if (actionType == 'call') {
+      timeString = widget.contact.aAAAAHLContactWeights?.eLastCallTime;
+    } else if (actionType == 'sms') {
+      timeString = widget.contact.aAAAAHLContactWeights?.uSmsLastAt;
+    } else if (actionType == 'whatsapp') {
+      timeString = widget.contact.aAAAAHLContactWeights?.vWaLastAt;
+    }
+
+    if (timeString == null || timeString.isEmpty) {
+      return '';
+    }
+
+    try {
+      final DateTime time = DateTime.parse(timeString);
+      final DateTime now = DateTime.now();
+      final Duration difference = now.difference(time);
+
+      if (difference.inDays > 0) {
+        return '${difference.inDays} Days ago';
+      } else if (difference.inHours > 0) {
+        return '${difference.inHours} Hours ago';
+      } else if (difference.inMinutes > 0) {
+        return '${difference.inMinutes} Minutes ago';
+      } else {
+        return 'Just now';
+      }
+    } catch (e) {
+      return timeString;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final int overdueDays = calculateCalendarDaysDifference(
-        DateTime.parse(repayInfo!.expectRepayTime!), DateTime.now());
+        DateTime.parse(widget.repayInfo!.expectRepayTime!), DateTime.now());
     final List<Map<String, dynamic>> dataList =
         SpUtil.getObjectList('hJSmsTemplates')!.cast<Map<String, dynamic>>();
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList.where((value) {
-      if (contactIndex == 0) {
-        return value['c_type'] == 26 &&
-            (int.parse(value['e_days'] as String) == overdueDays ||
-                int.parse(value['e_days'] as String) == (overdueDays - 1) ||
-                int.parse(value['e_days'] as String) > 900);
+      if (widget.contactIndex == 0) {
+        if (overdueDays < 6) {
+          return value['c_type'] == 26 &&
+              (int.parse(value['e_days'] as String) == overdueDays ||
+                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
+                  int.parse(value['e_days'] as String) < -100);
+        } else {
+          return value['c_type'] == 26 &&
+              (int.parse(value['e_days'] as String) > 2 ||
+                  int.parse(value['e_days'] as String) < -100);
+        }
       } else {
-        return value['c_type'] == 28 &&
-            (overdueDays > 0 || int.parse(value['e_days'] as String) > 900);
+        if (overdueDays < 6) {
+          return value['c_type'] == 28 &&
+              (int.parse(value['e_days'] as String) == overdueDays ||
+                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
+                  int.parse(value['e_days'] as String) < -100);
+        } else {
+          return value['c_type'] == 28 &&
+              (int.parse(value['e_days'] as String) > 2 ||
+                  int.parse(value['e_days'] as String) < -100);
+        }
       }
     }) // 先过滤原始数据
             .map((value) {
@@ -285,52 +365,65 @@ class ContactCard extends StatelessWidget {
       // 替换所有占位符
 
       String processedTemplate = template.dTemplate!
-          .replaceAll('@expect_repay_amount@', repayInfo!.expectRepayAmount!)
+          .replaceAll(
+              '@expect_repay_amount@',
+              Utils.formatPrice2((widget.period!.fExpectRepayTotalAmount ?? 0) -
+                  (widget.period!.qPaidServiceFee ?? 0) -
+                  (widget.period!.pPaidInterest ?? 0) -
+                  (widget.period!.sPaidOverdueAmount ?? 0) -
+                  (widget.period!.oPaidBorrowAmount ?? 0) -
+                  (widget.period!.uDeductionTotalAmount ?? 0)))
           .replaceAll(
               '@expect_repay_time@',
               DateFormat('MMM d, yyyy')
-                  .format(DateTime.parse(repayInfo!.expectRepayTime!)))
-          .replaceAll('@overdue_days@', repayInfo!.overdueDays.toString())
-          .replaceAll('@mobile@', repayInfo!.mobile!)
-          .replaceAll('@phone@', repayInfo!.phone!)
-          .replaceAll('@bvn@', repayInfo!.bvn!)
-          .replaceAll('@name@', repayInfo!.name!)
-          .replaceAll('@borrow_amount@', repayInfo!.borrowAmount!)
-          .replaceAll('@loan_amount@', repayInfo!.loanAmount!)
-          .replaceAll('@borrow_days@', repayInfo!.borrowDays.toString())
-          .replaceAll('@app_name@', repayInfo!.appName!)
-          .replaceAll('@url@', repayInfo!.url!)
-          .replaceAll('@product_name@', repayInfo!.productName!)
-          .replaceAll('@loan_time@', repayInfo!.loanTime!)
-          .replaceAll('@receive_bank@', repayInfo!.receiveBank!)
-          .replaceAll('@receive_bank_no@', repayInfo!.receiveBankNo!)
-          .replaceAll('@account_name@', repayInfo!.accountName!)
-          .replaceAll('@account_no@', repayInfo!.accountNo!)
-          .replaceAll('@account_bank@', repayInfo!.accountBank!)
-          .replaceAll('@before_credit_amount@', repayInfo!.beforeCreditAmount!)
-          .replaceAll('@after_credit_amount@', repayInfo!.afterCreditAmount!)
-          .replaceAll('@change_credit_amount@', repayInfo!.changeCreditAmount!)
+                  .format(DateTime.parse(widget.repayInfo!.expectRepayTime!)))
           .replaceAll(
-              '@before_credit_fraction@', repayInfo!.beforeCreditFraction!)
+              '@overdue_days@', widget.repayInfo!.overdueDays.toString())
+          .replaceAll('@mobile@', widget.repayInfo!.mobile!)
+          .replaceAll('@phone@', widget.repayInfo!.phone!)
+          .replaceAll('@bvn@', widget.repayInfo!.bvn!)
+          .replaceAll('@name@', widget.repayInfo!.name!)
+          .replaceAll('@borrow_amount@',
+              Utils.formatPrice2(widget.period!.oPaidBorrowAmount!))
+          .replaceAll('@loan_amount@',
+              Utils.formatPrice2(widget.period!.oPaidBorrowAmount!))
+          .replaceAll('@borrow_days@', widget.repayInfo!.borrowDays.toString())
+          .replaceAll('@app_name@', widget.repayInfo!.appName!)
+          .replaceAll('@url@', widget.repayInfo!.url!)
+          .replaceAll('@product_name@', widget.repayInfo!.productName!)
+          .replaceAll('@loan_time@', widget.repayInfo!.loanTime!)
+          .replaceAll('@receive_bank@', widget.repayInfo!.receiveBank!)
+          .replaceAll('@receive_bank_no@', widget.repayInfo!.receiveBankNo!)
+          .replaceAll('@account_name@', widget.repayInfo!.accountName!)
+          .replaceAll('@account_no@', widget.repayInfo!.accountNo!)
+          .replaceAll('@account_bank@', widget.repayInfo!.accountBank!)
           .replaceAll(
-              '@after_credit_fraction@', repayInfo!.afterCreditFraction!)
+              '@before_credit_amount@', widget.repayInfo!.beforeCreditAmount!)
           .replaceAll(
-              '@change_credit_fraction@', repayInfo!.changeCreditFraction!)
-          .replaceAll('@var1@', repayInfo!.var1!)
-          .replaceAll('@var2@', repayInfo!.var2!)
-          .replaceAll('@var3@', repayInfo!.var3!)
-          .replaceAll('@var4@', repayInfo!.var4!)
-          .replaceAll('@var5@', repayInfo!.var5!)
-          .replaceAll('@var6@', repayInfo!.var6!)
-          .replaceAll('@var7@', repayInfo!.var7!)
-          .replaceAll('@var8@', repayInfo!.var8!)
-          .replaceAll('@var9@', repayInfo!.var9!)
-          .replaceAll('@var10@', repayInfo!.var10!);
+              '@after_credit_amount@', widget.repayInfo!.afterCreditAmount!)
+          .replaceAll(
+              '@change_credit_amount@', widget.repayInfo!.changeCreditAmount!)
+          .replaceAll('@before_credit_fraction@',
+              widget.repayInfo!.beforeCreditFraction!)
+          .replaceAll(
+              '@after_credit_fraction@', widget.repayInfo!.afterCreditFraction!)
+          .replaceAll('@change_credit_fraction@',
+              widget.repayInfo!.changeCreditFraction!)
+          .replaceAll('@var1@', widget.repayInfo!.var1!)
+          .replaceAll('@var2@', widget.repayInfo!.var2!)
+          .replaceAll('@var3@', widget.repayInfo!.var3!)
+          .replaceAll('@var4@', widget.repayInfo!.var4!)
+          .replaceAll('@var5@', widget.repayInfo!.var5!)
+          .replaceAll('@var6@', widget.repayInfo!.var6!)
+          .replaceAll('@var7@', widget.repayInfo!.var7!)
+          .replaceAll('@var8@', widget.repayInfo!.var8!)
+          .replaceAll('@var9@', widget.repayInfo!.var9!)
+          .replaceAll('@var10@', widget.repayInfo!.var10!);
 
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
     Future<void> launchAction(int type) async {
-      onCallOrSms(contactIndex, 1);
+      widget.onCallOrSms(widget.contactIndex, 1);
       // 显示模板选择对话框
       if (type != 2) {
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
@@ -384,42 +477,58 @@ class ContactCard extends StatelessWidget {
         );
         if (selectedTemplate != null) {
           if (type == 1) {
-            // 记录WhatsApp点击事件到缓存
-            await Cache().appendToStringList('action_contact',
-                '$type:$collectionOrderId:${contact.id}:${selectedTemplate.id}');
-
-            // 记录WhatsApp状态跟踪信息到SharedPreferences
-            final String whatsappStatusKey =
-                'whatsapp_status_${contact.id}_$collectionOrderId';
-            final String currentTime = DateTime.now().toIso8601String();
-            await SpUtil.putString(whatsappStatusKey, 'pending:$currentTime');
-
             // 启动WhatsApp
-            Utils.launchWhatsAppURL('234${contact.gPhone!}',
+            final bool result = await Utils.launchWhatsAppURL(
+                '234${widget.contact.gPhone!}',
                 message: selectedTemplate.dTemplate);
+            if (result) {
+              // 设置WhatsApp启动标志，等待用户返回应用
+              _isWhatsAppLaunched = true;
+              _currentTemplateId = selectedTemplate.id; // 保存模板ID
+              print('WhatsApp launched, waiting for user to return...');
 
-            // 设置一个延迟检查，当用户返回应用时更新状态
-            if (contact.id != null) {
-              _scheduleWhatsAppStatusCheck(contact.id!, collectionOrderId);
+              // 启动清理定时器，30秒后自动清理状态
+              _cleanupTimer?.cancel();
+              _cleanupTimer = Timer(const Duration(seconds: 30), () {
+                if (mounted) {
+                  setState(() {
+                    _isWhatsAppLaunched = false;
+                    _currentTemplateId = null;
+                  });
+                }
+              });
             }
-
-            // 延迟显示WhatsApp状态选择对话框
-            Future.delayed(const Duration(seconds: 2), () {
-              _showWhatsAppStatusSelectionDialog(
-                  context, contact.id!, collectionOrderId);
-            });
           } else if (type == 3) {
-            await Cache().appendToStringList('action_contact',
-                '$type:$collectionOrderId:${contact.id}:${selectedTemplate.id}');
-            launch('sms:${contact.gPhone}?body=${selectedTemplate.dTemplate}');
+            final String currentTime = DateTime.now().toIso8601String();
+            final bool result = await launch(
+                'sms:${widget.contact.gPhone}?body=${selectedTemplate.dTemplate}');
+            if (result) {
+              final String currentTime2 = DateTime.now().toIso8601String();
+              if (DateTime.parse(currentTime2)
+                      .difference(DateTime.parse(currentTime))
+                      .inSeconds >
+                  5) {
+                await Cache().appendToStringList('action_contact',
+                    '$type:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
+              }
+            }
           }
         }
       } else if (type == 2) {
-        await Cache().appendToStringList(
-            'action_contact', '$type:$collectionOrderId:${contact.id}:0');
-        final url = 'tel:${contact.gPhone}';
+        final String currentTime = DateTime.now().toIso8601String();
+        final url = 'tel:${widget.contact.gPhone}';
         if (await canLaunch(url)) {
-          await launch(url);
+          final bool result = await launch(url);
+          if (result) {
+            final String currentTime2 = DateTime.now().toIso8601String();
+            if (DateTime.parse(currentTime2)
+                    .difference(DateTime.parse(currentTime))
+                    .inSeconds >
+                5) {
+              await Cache().appendToStringList('action_contact',
+                  '$type:${widget.collectionOrderId}:${widget.contact.id}:0');
+            }
+          }
         }
       }
     }
@@ -430,7 +539,7 @@ class ContactCard extends StatelessWidget {
       child: Stack(
         children: [
           ColoredBox(
-            color: selected
+            color: widget.selected
                 ? const Color.fromARGB(255, 210, 234, 253)
                 : Colors.transparent,
           ),
@@ -443,29 +552,17 @@ class ContactCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      contactIndex == 0
+                      widget.contactIndex == 0
                           ? Icons.radio_button_on
-                          : contact.hReviewResult == 1
-                              ? Icons.group_outlined
-                              : contact.hReviewResult == 2
-                                  ? Icons.group_off_outlined
-                                  : contact.hReviewResult == 3
-                                      ? Icons.phone_disabled_outlined
-                                      : Icons.perm_contact_cal,
+                          : Icons.group_outlined,
                       size: 20,
-                      color: contactIndex == 0
+                      color: widget.contactIndex == 0
                           ? Colors.redAccent
-                          : contact.hReviewResult == 1
-                              ? Colors.green
-                              : contact.hReviewResult == 2
-                                  ? Colors.orange
-                                  : contact.hReviewResult == 3
-                                      ? Colors.red
-                                      : Colors.grey,
+                          : Colors.grey,
                     ),
                     Gaps.hGap8,
                     Text(
-                      '${contact.cRelation ?? ''} ${contact.fName ?? ''}',
+                      '${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -476,11 +573,11 @@ class ContactCard extends StatelessWidget {
                       child: Gaps.empty,
                     ),
                     Text(
-                      contact.gPhone ?? '',
+                      widget.contact.gPhone ?? '',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.blueAccent,
+                        color: Color.fromARGB(255, 163, 199, 247),
                       ),
                     ),
                   ],
@@ -493,25 +590,53 @@ class ContactCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.message,
-                              size: 24,
-                              color: Colors.blue,
-                            ),
-                            onPressed: () => launchAction(3),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Positioned(
+                                bottom: 2,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                ?.lSmsCount !=
+                                            null
+                                        ? const Color.fromARGB(
+                                            255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    '${widget.contact.aAAAAHLContactWeights?.lSmsCount ?? ""}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.message,
+                                  size: 24,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () => launchAction(3),
+                              ),
+                            ],
                           ),
                           Text(
-                            '短信',
+                            getLastClickTime('sms'),
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               color: Colors.grey,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          Gaps.vGap4,
                           Text(
-                            getLastClickTime('sms'),
+                            '',
                             style: const TextStyle(
                               fontSize: 10,
                               color: Colors.grey,
@@ -526,23 +651,48 @@ class ContactCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.call,
-                              size: 24,
-                              color: Colors.blue,
-                            ),
-                            onPressed: () => launchAction(2),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Positioned(
+                                bottom: 10,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                ?.dCallTimes !=
+                                            null
+                                        ? const Color.fromARGB(
+                                            255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    '${widget.contact.aAAAAHLContactWeights?.dCallTimes ?? ""}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.call,
+                                  size: 20,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () => launchAction(2),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: getIcon('call'),
+                              ),
+                            ],
                           ),
-                          Text(
-                            getPhoneStatus(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Gaps.vGap4,
                           Text(
                             getLastClickTime('call'),
                             style: const TextStyle(
@@ -559,22 +709,47 @@ class ContactCard extends StatelessWidget {
                     Expanded(
                       child: Column(
                         children: [
-                          IconButton(
-                            icon: const FaIcon(
-                              FontAwesomeIcons.whatsapp,
-                              size: 24,
-                              color: Colors.green,
-                            ),
-                            onPressed: () => launchAction(1),
-                          ),
-                          Gaps.vGap4,
-                          Text(
-                            getWhatsAppStatus(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Positioned(
+                                bottom: 2,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                ?.wWaCt !=
+                                            null
+                                        ? const Color.fromARGB(
+                                            255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    '${widget.contact.aAAAAHLContactWeights?.wWaCt ?? ""}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  FontAwesomeIcons.whatsapp,
+                                  size: 20,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: () => launchAction(1),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: getIcon('whatsapp'),
+                              ),
+                            ],
                           ),
                           Text(
                             getLastClickTime('whatsapp'),
@@ -584,95 +759,23 @@ class ContactCard extends StatelessWidget {
                             ),
                             textAlign: TextAlign.center,
                           ),
+                          Text(
+                            getWhatsAppStayTime(),
+                            style: const TextStyle(
+                              fontSize: 8,
+                              color: Colors.orange,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-
-                // 显示通话记录（如果有的话）
-                if (contact.aAAAANIAdminRecordings != null &&
-                    contact.aAAAANIAdminRecordings!.isNotEmpty)
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '通话记录:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Gaps.vGap8,
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 1.0,
-                            mainAxisSpacing: 6.0,
-                            mainAxisExtent: 24,
-                          ),
-                          itemCount: contact.aAAAANIAdminRecordings!.length,
-                          itemBuilder: (context, index) {
-                            final record =
-                                contact.aAAAANIAdminRecordings![index];
-                            final numberIcons = [
-                              Icons.looks_one_outlined,
-                              Icons.looks_two_outlined,
-                              Icons.looks_3_outlined,
-                              Icons.looks_4_outlined,
-                              Icons.looks_5_outlined,
-                            ];
-
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (index < numberIcons.length)
-                                  Icon(
-                                    numberIcons[index],
-                                    size: 10,
-                                    color: Colors.grey,
-                                  )
-                                else
-                                  Text(
-                                    '${index + 1}.',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: Text(
-                                    DateFormat('MMM d, hh:mm', 'en_US').format(
-                                        DateTime.parse(record.kCallAt!)),
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
               ],
             ),
           ),
-          selected ? _buildGoodsMenu(context) : Gaps.empty,
+          widget.selected ? _buildGoodsMenu(context) : Gaps.empty,
         ],
       ),
     );
@@ -698,39 +801,38 @@ class ContactCard extends StatelessWidget {
             Gaps.hGap15,
             MyButton(
               key: Key('goods_edit_item_'),
-              text: '编辑',
-              fontSize: Dimens.font_sp16,
+              text: 'Non-Productive',
+              fontSize: Dimens.font_sp10,
               radius: 24.0,
               minWidth: 56.0,
               minHeight: 56.0,
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               textColor: isDark ? Colours.dark_button_text : Colors.white,
-              backgroundColor:
-                  isDark ? Colours.dark_app_main : Colours.app_main,
+              backgroundColor: Colors.red,
               onPressed: () {},
             ),
             MyButton(
               key: Key('goods_operation_item_'),
-              text: '下架',
-              fontSize: Dimens.font_sp16,
+              text: 'Productive Lead',
+              fontSize: Dimens.font_sp10,
               radius: 24.0,
               minWidth: 56.0,
               minHeight: 56.0,
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              textColor: Colours.text,
-              backgroundColor: buttonColor,
+              textColor: isDark ? Colours.dark_button_text : Colors.white,
+              backgroundColor: Color.fromARGB(255, 161, 232, 162),
               onPressed: () {},
             ),
             MyButton(
               key: Key('goods_delete_item_'),
-              text: '删除',
-              fontSize: Dimens.font_sp16,
+              text: 'High-Value Lead',
+              fontSize: Dimens.font_sp10,
               radius: 24.0,
               minWidth: 56.0,
               minHeight: 56.0,
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              textColor: Colours.text,
-              backgroundColor: buttonColor,
+              textColor: isDark ? Colours.dark_button_text : Colors.white,
+              backgroundColor: const Color.fromARGB(255, 2, 158, 7),
               onPressed: () {},
             ),
             Gaps.hGap15,

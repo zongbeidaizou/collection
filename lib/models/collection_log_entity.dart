@@ -1,7 +1,11 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 import 'dart:convert';
+
+// import 'collection_order_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
+
 
 @JsonSerializable()
 class CollectionLogEntity {
@@ -50,8 +54,10 @@ class CollectionLogData {
 	int? iTarget = 0;
 	@JSONField(name: 'j_content')
 	String? jContent = '';
+	@JSONField(name: 'm_overdue_days')
+	int? mOverdueDays = 0;
 	@JSONField(name: 'k_promise_time')
-	dynamic kPromiseTime;
+	String kPromiseTime = '';
 	@JSONField(name: 'q_sms_template_id')
 	int? qSmsTemplateId = 0;
 	@JSONField(name: 'r_contact_id')
@@ -81,7 +87,7 @@ class CollectionLogOther {
 	@JSONField(name: 'repay_info')
 	CollectionLogOtherRepayInfo? repayInfo;
 	@JSONField(name: 'contact_info')
-	List<dynamic>? contactInfo = [];
+	CollectionLogOtherContactInfo2? contactInfo;
 	@JSONField(name: 'contact_info2')
 	CollectionLogOtherContactInfo2? contactInfo2;
 	@JSONField(name: 'sms_history')
@@ -90,7 +96,7 @@ class CollectionLogOther {
 	String? hJSmsTemplateNewestUpdatedAt = '';
 	@JSONField(name: 'h_j_sms_template')
 	List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate = [];
-	CollectionLogOtherOther? other;
+	CollectionOrderOther? other;
 	@JSONField(name: 'last_contact_fetch_time')
 	String? lastContactFetchTime = '';
 
@@ -316,7 +322,7 @@ class CollectionLogOtherContactInfo2Data {
 	@JSONField(name: 't_wa_weight')
 	int? tWaWeight = 0;
 	@JSONField(name: 'a_a_a_a_a_h_l_contact_weights')
-	List<CollectionLogOtherContactInfo2DataAAAAAHLContactWeights>? aAAAAHLContactWeights = [];
+	CollectionLogOtherContactInfo2DataAAAAAHLContactWeights? aAAAAHLContactWeights;
 
 	CollectionLogOtherContactInfo2Data();
 
@@ -352,13 +358,13 @@ class CollectionLogOtherContactInfo2DataAAAAAHLContactWeights {
 	@JSONField(name: 't_wa_weight')
 	int? tWaWeight = 0;
 	@JSONField(name: 'u_sms_last_at')
-	int? uSmsLastAt = 0;
+	String? uSmsLastAt = '';
 	@JSONField(name: 'v_wa_last_at')
-	int? vWaLastAt = 0;
+	String? vWaLastAt = '';
 	@JSONField(name: 'w_wa_ct')
 	int? wWaCt = 0;
 	@JSONField(name: 'x_comment')
-	int? xComment = 0;
+	String? xComment = '';
 
 	CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
 

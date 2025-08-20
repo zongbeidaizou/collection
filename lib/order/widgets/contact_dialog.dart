@@ -168,10 +168,6 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   }
 
   void _recordWhatsAppClick() async {
-    // 记录WhatsApp点击事件到缓存
-    print(
-        'WhatsApp click recorded - user spent more than 5 seconds in WhatsApp');
-
     // 使用保存的模板ID记录点击事件
     final templateId = _currentTemplateId ?? 0;
     await Cache().appendToStringList('action_contact',
@@ -186,6 +182,19 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     if (widget.contact.aAAAAHLContactWeights == null) {
       widget.contact.aAAAAHLContactWeights =
           CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
+    }
+  }
+
+  // 根据数量返回显示文本
+  String getDisplayText(int count) {
+    if (count < 5) {
+      return '1+';
+    } else if (count < 10) {
+      return '5+';
+    } else {
+      // 对于10及以上的数字，按10的倍数递增
+      int base = ((count - 1) ~/ 10) * 10;
+      return '${base}+';
     }
   }
 
@@ -223,6 +232,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
             contact.aAAAAHLContactWeights!.lSmsCount =
                 contact.aAAAAHLContactWeights!.lSmsCount! + 1;
           }
+          Cache().appendToStringList('contactWeights',
+              '${widget.contact.id}:${fieldName}:${newValue}');
           break;
         }
       }
@@ -264,14 +275,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       showToast(
           'Updated ${widget.contact.gPhone} WhatsApp status to: $newStatus');
     }
-
-    // 记录价值更新到缓存
-    await Cache().appendToStringList('contact_value_updates',
-        '${widget.contact.id}:${widget.collectionOrderId}:$_lastActionSource:$newStatus:${DateTime.now().toIso8601String()}');
-
     // 触发UI更新
     setState(() {});
-
     // 重置操作来源
     _lastActionSource = null;
   }
@@ -728,7 +733,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                 left: 0,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 2),
+                                      horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
                                                 ?.lSmsCount !=
@@ -739,9 +744,14 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    '${widget.contact.aAAAAHLContactWeights?.lSmsCount ?? ""}',
+                                    widget.contact.aAAAAHLContactWeights
+                                                ?.lSmsCount !=
+                                            null
+                                        ? getDisplayText(widget.contact
+                                            .aAAAAHLContactWeights!.lSmsCount!)
+                                        : '',
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 10,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -789,7 +799,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                 left: 0,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 2),
+                                      horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
                                                 ?.dCallTimes !=
@@ -800,9 +810,14 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    '${widget.contact.aAAAAHLContactWeights?.dCallTimes ?? ""}',
+                                    widget.contact.aAAAAHLContactWeights
+                                                ?.dCallTimes !=
+                                            null
+                                        ? getDisplayText(widget.contact
+                                            .aAAAAHLContactWeights!.dCallTimes!)
+                                        : '',
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 10,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -847,7 +862,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                 left: 0,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 2),
+                                      horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
                                                 ?.wWaCt !=
@@ -858,9 +873,14 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    '${widget.contact.aAAAAHLContactWeights?.wWaCt ?? ""}',
+                                    widget.contact.aAAAAHLContactWeights
+                                                ?.wWaCt !=
+                                            null
+                                        ? getDisplayText(widget.contact
+                                            .aAAAAHLContactWeights!.wWaCt!)
+                                        : '',
                                     style: const TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 10,
                                       color: Colors.white,
                                     ),
                                   ),

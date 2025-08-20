@@ -117,6 +117,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   bool _isWhatsAppLaunched = false;
   int? _currentTemplateId; // 存储当前选中的模板ID
   Timer? _cleanupTimer; // 清理定时器
+  String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
 
   @override
   void initState() {
@@ -178,6 +179,39 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
     // 重置模板ID
     _currentTemplateId = null;
+  }
+
+  // 更新联系人价值状态
+  void _updateContactValue(int newStatus) async {
+    if (_lastActionSource == null) {
+      return;
+    }
+
+    print('Updating contact value: $_lastActionSource -> $newStatus');
+
+    // 根据来源更新相应的状态
+    if (_lastActionSource == 'call') {
+      // 更新电话状态
+      widget.contact.aAAAAHLContactWeights?.qPhoneStatus = newStatus;
+      showToast('Updated ${widget.contact.gPhone} phone status to: $newStatus');
+    } else if (_lastActionSource == 'sms') {
+      showToast('Updated ${widget.contact.gPhone} sms status to: $newStatus');
+    } else if (_lastActionSource == 'whatsapp') {
+      // 更新WhatsApp状态
+      widget.contact.aAAAAHLContactWeights?.rWaStatus = newStatus;
+      showToast(
+          'Updated ${widget.contact.gPhone} WhatsApp status to: $newStatus');
+    }
+
+    // 记录价值更新到缓存
+    await Cache().appendToStringList('contact_value_updates',
+        '${widget.contact.id}:${widget.collectionOrderId}:$_lastActionSource:$newStatus:${DateTime.now().toIso8601String()}');
+
+    // 触发UI更新
+    setState(() {});
+
+    // 重置操作来源
+    _lastActionSource = null;
   }
 
   String formatDuration(int totalSeconds) {
@@ -424,6 +458,16 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     })).toList();
     Future<void> launchAction(int type) async {
       widget.onCallOrSms(widget.contactIndex, 1);
+
+      // 记录操作来源
+      if (type == 1) {
+        _lastActionSource = 'whatsapp';
+      } else if (type == 2) {
+        _lastActionSource = 'call';
+      } else if (type == 3) {
+        _lastActionSource = 'sms';
+      }
+
       // 显示模板选择对话框
       if (type != 2) {
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
@@ -784,53 +828,50 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     final Color buttonColor = isDark ? Colours.dark_text : Colors.white;
 
     return InkWell(
-      onTap: () {},
-      child: ColoredBox(
-        color: isDark ? const Color(0xB34D4D4D) : const Color(0x4D000000),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Gaps.hGap15,
-            MyButton(
-              key: Key('goods_edit_item_'),
-              text: 'Non-Productive',
-              fontSize: Dimens.font_sp10,
-              radius: 24.0,
-              minWidth: 56.0,
-              minHeight: 56.0,
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              textColor: isDark ? Colours.dark_button_text : Colors.white,
-              backgroundColor: Colors.red,
-              onPressed: () {},
-            ),
-            MyButton(
-              key: Key('goods_operation_item_'),
-              text: 'Productive Lead',
-              fontSize: Dimens.font_sp10,
-              radius: 24.0,
-              minWidth: 56.0,
-              minHeight: 56.0,
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              textColor: isDark ? Colours.dark_button_text : Colors.white,
-              backgroundColor: Color.fromARGB(255, 161, 232, 162),
-              onPressed: () {},
-            ),
-            MyButton(
-              key: Key('goods_delete_item_'),
-              text: 'High-Value Lead',
-              fontSize: Dimens.font_sp10,
-              radius: 24.0,
-              minWidth: 56.0,
-              minHeight: 56.0,
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              textColor: isDark ? Colours.dark_button_text : Colors.white,
-              backgroundColor: const Color.fromARGB(255, 2, 158, 7),
-              onPressed: () {},
-            ),
-            Gaps.hGap15,
-          ],
-        ),
-      ),
-    );
+        onTap: () {},
+        child: ColoredBox(
+          color: isDark ? const Color(0xB34D4D4D) : const Color(0x4D000000),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              MyButton(
+                key: Key('goods_edit_item_'),
+                text: 'Non-Productive',
+                fontSize: Dimens.font_sp10,
+                radius: 24.0,
+                minWidth: 56.0,
+                minHeight: 56.0,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                backgroundColor: Colors.red,
+                onPressed: () => _updateContactValue(20), // 20 = 没有价值
+              ),
+              MyButton(
+                key: Key('goods_operation_item_'),
+                text: 'Productive Lead',
+                fontSize: Dimens.font_sp10,
+                radius: 24.0,
+                minWidth: 56.0,
+                minHeight: 56.0,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                backgroundColor: Color.fromARGB(255, 161, 232, 162),
+                onPressed: () => _updateContactValue(30), // 30 = 有价值
+              ),
+              MyButton(
+                key: Key('goods_delete_item_'),
+                text: 'High-Value Lead',
+                fontSize: Dimens.font_sp10,
+                radius: 24.0,
+                minWidth: 56.0,
+                minHeight: 56.0,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                backgroundColor: const Color.fromARGB(255, 2, 158, 7),
+                onPressed: () => _updateContactValue(40), // 40 = 十分有价值
+              ),
+            ],
+          ),
+        ));
   }
 }

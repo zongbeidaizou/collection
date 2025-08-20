@@ -35,6 +35,7 @@ import '../order_router.dart';
 import '../presenter/add_note_presenter.dart';
 import 'MyCommentBox.dart';
 import 'order_item.dart';
+import 'repayment_bill_dialog.dart';
 
 void main() {}
 
@@ -302,11 +303,11 @@ class _AddNoteState extends State<AddNote>
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return Dialog(
-                        child: Image.network(
-                          _avatar ?? '',
-                          fit: BoxFit.cover,
-                        ),
+                      return RepaymentBillDialog(
+                        avatar: _avatar,
+                        repayInfo: _repayInfo,
+                        period: _period,
+                        track: _track,
                       );
                     },
                   );

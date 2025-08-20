@@ -758,15 +758,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                               color: Colors.grey,
                             ),
                             textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            getWhatsAppStayTime(),
-                            style: const TextStyle(
-                              fontSize: 8,
-                              color: Colors.orange,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                          )
                         ],
                       ),
                     ),

@@ -43,6 +43,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         FormData.fromMap({"page": page, 'p_collection_order_id': orderId});
     String? hJSmsTemplateNewestUpdatedAt =
         SpUtil.getString("hJSmsTemplateNewestUpdatedAt");
+    String? lastContactFetchTime =
+        SpUtil.getString("lastContactFetchTime:${orderId}");
 
     final List<String>? actionContact = SpUtil.getStringList('action_contact');
     final List<String>? actionSmsHistory =
@@ -75,18 +77,41 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         queryParameters: {
           "page": page,
           'p_collection_order_id': orderId,
-          'h_j_sms_template_newest_updated_at': hJSmsTemplateNewestUpdatedAt
+          'h_j_sms_template_newest_updated_at': hJSmsTemplateNewestUpdatedAt,
+          'last_contact_fetch_time': lastContactFetchTime
         }, onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;
         _data = data;
-        view.getContext().read<UserProvider>().setUserEntity(data.other!.other!);
+        view
+            .getContext()
+            .read<UserProvider>()
+            .setUserEntity(data.other!.other!);
         if (hJSmsTemplateNewestUpdatedAt == null ||
             hJSmsTemplateNewestUpdatedAt !=
                 data.other!.hJSmsTemplateNewestUpdatedAt) {
           SpUtil.putString("hJSmsTemplateNewestUpdatedAt",
               data.other!.hJSmsTemplateNewestUpdatedAt!);
           SpUtil.putObjectList("hJSmsTemplates", data.other!.hJSmsTemplate!);
+        }
+        if (lastContactFetchTime == null ||
+            lastContactFetchTime != data.other!.lastContactFetchTime) {
+          SpUtil.putString("lastContactFetchTime:${orderId}",
+              data.other!.lastContactFetchTime!);
+        }
+        if (data.other!.contactInfo2 != null &&
+            data.other!.contactInfo2!.data!.isNotEmpty) {
+          SpUtil.putObjectList(
+              "contact2List:${orderId}", data.other!.contactInfo2!.data!);
+        }
+        //  else {
+        //   data.other!.contactInfo2!.data = SpUtil.getObjectList("contact2List")
+        //       ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(e as Map<String, dynamic>))
+        //       .toList();
+        // }
+        if (data.other!.contactInfo != null &&
+            data.other!.contactInfo!.data!.isNotEmpty) {
+          SpUtil.putObjectList("contactList", data.other!.contactInfo!.data!);
         }
       }
     }, onError: (_, __) async {
@@ -171,7 +196,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       data = {
         ...data,
         ...imageParams,
-        'imageCount':imageFiles.length,
+        'imageCount': imageFiles.length,
       };
     }
 

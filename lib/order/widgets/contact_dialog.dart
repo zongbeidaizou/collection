@@ -181,6 +181,58 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     _currentTemplateId = null;
   }
 
+  // 确保联系人权重对象存在
+  void _ensureContactWeightsExists() {
+    if (widget.contact.aAAAAHLContactWeights == null) {
+      widget.contact.aAAAAHLContactWeights =
+          CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
+    }
+  }
+
+  // 更新联系人列表中的状态并存储
+  void _updateContactListInStorage(String fieldName, dynamic newValue) {
+    final contactList =
+        SpUtil.getObjectList("contact2List:${widget.collectionOrderId}")
+            ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                e as Map<String, dynamic>))
+            .toList();
+
+    if (contactList != null && contactList.isNotEmpty) {
+      // 更新contactList中id与widget.contact.id相同的对象的状态
+      for (var contact in contactList) {
+        if (contact.id == widget.contact.id) {
+          // 确保 aAAAAHLContactWeights 存在
+          contact.aAAAAHLContactWeights ??=
+              CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
+
+          // 根据字段名更新相应的状态
+          if (fieldName == 'qPhoneStatus') {
+            contact.aAAAAHLContactWeights!.qPhoneStatus = newValue as int;
+          } else if (fieldName == 'rWaStatus') {
+            contact.aAAAAHLContactWeights!.rWaStatus = newValue as int;
+          } else if (fieldName == 'vWaLastAt') {
+            contact.aAAAAHLContactWeights!.vWaLastAt = newValue as String;
+            contact.aAAAAHLContactWeights!.wWaCt =
+                contact.aAAAAHLContactWeights!.wWaCt! + 1;
+          } else if (fieldName == 'eLastCallTime') {
+            contact.aAAAAHLContactWeights!.eLastCallTime = newValue as String;
+            contact.aAAAAHLContactWeights!.dCallTimes =
+                contact.aAAAAHLContactWeights!.dCallTimes! + 1;
+          } else if (fieldName == 'uSmsLastAt') {
+            contact.aAAAAHLContactWeights!.uSmsLastAt = newValue as String;
+            contact.aAAAAHLContactWeights!.lSmsCount =
+                contact.aAAAAHLContactWeights!.lSmsCount! + 1;
+          }
+          break;
+        }
+      }
+
+      // 重新存储contactList
+      SpUtil.putObjectList(
+          "contact2List:${widget.collectionOrderId}", contactList);
+    }
+  }
+
   // 更新联系人价值状态
   void _updateContactValue(int newStatus) async {
     if (_lastActionSource == null) {
@@ -189,16 +241,26 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
     print('Updating contact value: $_lastActionSource -> $newStatus');
 
+    // 确保 aAAAAHLContactWeights 存在
+    _ensureContactWeightsExists();
+    print(
+        'Ensured aAAAAHLContactWeights exists for contact ${widget.contact.id}');
+
     // 根据来源更新相应的状态
     if (_lastActionSource == 'call') {
       // 更新电话状态
-      widget.contact.aAAAAHLContactWeights?.qPhoneStatus = newStatus;
+      widget.contact.aAAAAHLContactWeights!.qPhoneStatus = newStatus;
+      _updateContactListInStorage('qPhoneStatus', newStatus);
       showToast('Updated ${widget.contact.gPhone} phone status to: $newStatus');
     } else if (_lastActionSource == 'sms') {
+      // 短信也更新电话状态（因为使用同一个字段）
+      widget.contact.aAAAAHLContactWeights!.qPhoneStatus = newStatus;
+      _updateContactListInStorage('qPhoneStatus', newStatus);
       showToast('Updated ${widget.contact.gPhone} sms status to: $newStatus');
     } else if (_lastActionSource == 'whatsapp') {
       // 更新WhatsApp状态
-      widget.contact.aAAAAHLContactWeights?.rWaStatus = newStatus;
+      widget.contact.aAAAAHLContactWeights!.rWaStatus = newStatus;
+      _updateContactListInStorage('rWaStatus', newStatus);
       showToast(
           'Updated ${widget.contact.gPhone} WhatsApp status to: $newStatus');
     }
@@ -236,25 +298,30 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   }
 
   Widget getIcon(String actionType) {
+    // 如果 aAAAAHLContactWeights 不存在，返回空组件
+    if (widget.contact.aAAAAHLContactWeights == null) {
+      return const SizedBox.shrink();
+    }
+
     if (actionType == 'call') {
-      if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 10) {
+      if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 10) {
         //未知
         return const SizedBox.shrink();
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 20) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 20) {
         //没有价值
         return const Icon(
           Icons.close,
           color: Colors.red,
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 30) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 30) {
         //有价值
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 40) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 40) {
         //十分有价值
         return const Icon(
           Icons.done_all_rounded,
@@ -263,24 +330,24 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         );
       }
     } else if (actionType == 'sms') {
-      if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 10) {
+      if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 10) {
         //未知
         return const SizedBox.shrink();
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 20) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 20) {
         //没有价值
         return const Icon(
           Icons.close,
           color: Colors.red,
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 30) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 30) {
         //有价值
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.qPhoneStatus == 40) {
+      } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 40) {
         return const Icon(
           Icons.done_all_rounded,
           color: Colors.green,
@@ -288,21 +355,21 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         );
       }
     } else if (actionType == 'whatsapp') {
-      if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 10) {
+      if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 10) {
         return const SizedBox.shrink();
-      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 20) {
+      } else if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 20) {
         return const Icon(
           Icons.close,
           color: Colors.red,
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 30) {
+      } else if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 30) {
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
           size: 16,
         );
-      } else if (widget.contact.aAAAAHLContactWeights?.rWaStatus == 40) {
+      } else if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 40) {
         return const Icon(
           Icons.done_all_rounded,
           color: Colors.green,
@@ -329,13 +396,18 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
   // 获取上次点击时间
   String getLastClickTime(String actionType) {
+    // 如果 aAAAAHLContactWeights 不存在，返回空字符串
+    if (widget.contact.aAAAAHLContactWeights == null) {
+      return '';
+    }
+
     String? timeString;
     if (actionType == 'call') {
-      timeString = widget.contact.aAAAAHLContactWeights?.eLastCallTime;
+      timeString = widget.contact.aAAAAHLContactWeights!.eLastCallTime;
     } else if (actionType == 'sms') {
-      timeString = widget.contact.aAAAAHLContactWeights?.uSmsLastAt;
+      timeString = widget.contact.aAAAAHLContactWeights!.uSmsLastAt;
     } else if (actionType == 'whatsapp') {
-      timeString = widget.contact.aAAAAHLContactWeights?.vWaLastAt;
+      timeString = widget.contact.aAAAAHLContactWeights!.vWaLastAt;
     }
 
     if (timeString == null || timeString.isEmpty) {
@@ -541,20 +613,27 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                   });
                 }
               });
+              // 更新WhatsApp最后访问时间
+              final currentTime = DateTime.now().toIso8601String();
+              _ensureContactWeightsExists();
+              widget.contact.aAAAAHLContactWeights!.vWaLastAt = currentTime;
+              // 同时更新存储中的联系人列表
+              _updateContactListInStorage('vWaLastAt', currentTime);
+              setState(() {});
             }
           } else if (type == 3) {
-            final String currentTime = DateTime.now().toIso8601String();
             final bool result = await launch(
                 'sms:${widget.contact.gPhone}?body=${selectedTemplate.dTemplate}');
             if (result) {
-              final String currentTime2 = DateTime.now().toIso8601String();
-              if (DateTime.parse(currentTime2)
-                      .difference(DateTime.parse(currentTime))
-                      .inSeconds >
-                  5) {
-                await Cache().appendToStringList('action_contact',
-                    '$type:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
-              }
+              // 更新SMS最后访问时间
+              final currentTime = DateTime.now().toIso8601String();
+              _ensureContactWeightsExists();
+              widget.contact.aAAAAHLContactWeights!.uSmsLastAt = currentTime;
+              _updateContactListInStorage('uSmsLastAt', currentTime);
+              setState(() {});
+
+              await Cache().appendToStringList('action_contact',
+                  '$type:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
             }
           }
         }
@@ -569,6 +648,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     .difference(DateTime.parse(currentTime))
                     .inSeconds >
                 5) {
+              // 更新Call最后访问时间
+              _ensureContactWeightsExists();
+              widget.contact.aAAAAHLContactWeights!.eLastCallTime =
+                  currentTime2;
+              _updateContactListInStorage('eLastCallTime', currentTime2);
+              setState(() {});
+
               await Cache().appendToStringList('action_contact',
                   '$type:${widget.collectionOrderId}:${widget.contact.id}:0');
             }

@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sp_util/sp_util.dart';
 import 'package:timelines/timelines.dart';
 
 import '../../models/admin_entity.dart';
@@ -141,14 +142,22 @@ class _AddNoteState extends State<AddNote>
   Future<void> _onRefresh() async {
     _data = await _addNotePresenter.index(1, widget.orderId, true);
     _list = _data!.data!;
-    _contactList = _data!.other!.contactInfo!.data ?? [];
+    _contactList = SpUtil.getObjectList("contactList:${widget.orderId}")
+            ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                e as Map<String, dynamic>))
+            .toList() ??
+        [];
     _smsHistory = _data!.other!.smsHistory!;
     _repayInfo = _data!.other!.repayInfo;
     _track = _data!.other!.track;
     _period = _data!.other!.period;
     _avatar = _data!.other!.avatar;
 
-    _contact2List = _data!.other!.contactInfo2!.data ?? [];
+    _contact2List = SpUtil.getObjectList("contact2List:${widget.orderId}")
+            ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                e as Map<String, dynamic>))
+            .toList() ??
+        [];
     setState(() {});
     _scrollToBottom();
   }

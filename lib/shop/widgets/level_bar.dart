@@ -16,7 +16,6 @@ class LevelBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     void _launchWebURL(String title, String url) {
       if (Device.isMobile) {
         NavigatorUtils.goWebViewPage(context, title, url);
@@ -26,18 +25,25 @@ class LevelBar extends StatelessWidget {
     }
 
     final bool isDark = context.isDark;
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       var _widgetSize = constraints.biggest;
 
       return Container(
         padding: EdgeInsets.only(top: 10, bottom: 1),
-        height: 136,
+        height: 166,
         decoration: BoxDecoration(
           color: isDark ? Colors.blueGrey : Colors.indigoAccent,
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8.0), bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+              topLeft: Radius.circular(8.0),
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
+              topRight: Radius.circular(8.0)),
           boxShadow: <BoxShadow>[
-            BoxShadow(color: Colors.white.withOpacity(0.4), offset: const Offset(0.1, 4.1), blurRadius: 10.0),
+            BoxShadow(
+                color: Colors.white.withOpacity(0.4),
+                offset: const Offset(0.1, 4.1),
+                blurRadius: 10.0),
           ],
         ),
         child: Center(
@@ -45,7 +51,9 @@ class LevelBar extends StatelessWidget {
             children: [
               Gaps.vGap10,
               Container(
-                padding: EdgeInsets.only(left: _widgetSize.width / 11 / 2, right: _widgetSize.width / 11 / 2),
+                padding: EdgeInsets.only(
+                    left: _widgetSize.width / 11 / 2,
+                    right: _widgetSize.width / 11 / 2),
                 margin: EdgeInsets.only(bottom: 2),
                 child: Progressoo(
                     progress: data.currentPoint!,
@@ -64,7 +72,6 @@ class LevelBar extends StatelessWidget {
                     pointColor: Colors.deepOrange[700]!,
                     pointInnerColor: Colors.white),
               ),
-
               Gaps.vGap10,
               Gaps.line,
               Gaps.vGap8,
@@ -78,12 +85,21 @@ class LevelBar extends StatelessWidget {
                           text: TextSpan(
                             style: TextStyle(color: Colors.white, fontSize: 8),
                             children: [
-                              const TextSpan(text: 'Your recovery count for today is currently '),
+                              TextSpan(
+                                  text:
+                                      'Today, there are initially ${profile.tTodayLv1Commission} cases, with ${profile.uTodayLv2Commission} transferred out and ${profile.vTodayLv3Commission} transferred in.\n ',
+                                  style: TextStyle(fontSize: 9)),
+                              const TextSpan(
+                                  text:
+                                      'Your recovery count for today is currently '),
                               TextSpan(
                                 text: '${profile.pTodayCurrentRepayCount}',
-                                style: const TextStyle(fontSize: 10), // 2 points larger than base
+                                style: const TextStyle(
+                                    fontSize: 10), // 2 points larger than base
                               ),
-                              const TextSpan(text: ' cases so far, \nplacing you at Level '),
+                              const TextSpan(
+                                  text:
+                                      ' cases so far, \nplacing you at Level '),
                               TextSpan(
                                 text: '${data.currentGrade}',
                                 style: const TextStyle(fontSize: 10),
@@ -93,62 +109,82 @@ class LevelBar extends StatelessWidget {
                                 text: '${data.currentRate}',
                                 style: const TextStyle(fontSize: 10),
                               ),
-                              const TextSpan(text: ' bonus. \nTo reach the next level (Level '),
+                              const TextSpan(
+                                  text:
+                                      ' bonus. \nTo reach the next level (Level '),
                               TextSpan(
                                 text: '${data.nextGrade}',
-                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600),
                               ),
                               const TextSpan(text: ') and earn a '),
                               TextSpan(
                                 text: '${data.nextRate}',
-                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600),
                               ),
-                              const TextSpan(text: ' bonus plus an additional bonus of '),
+                              const TextSpan(
+                                  text: ' bonus plus an additional bonus of '),
                               TextSpan(
-                                text: '${Utils.formatPrice2(data.nextAdditionBonus!)}',
-                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
+                                text:
+                                    '${Utils.formatPrice2(data.nextAdditionBonus!)}',
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600),
                               ),
                               const TextSpan(text: ', \nyou need '),
                               TextSpan(
                                 text: '${data.more}',
-                                style: const TextStyle(fontSize: 13, color:Colors.red,fontWeight:FontWeight.w600),
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w600),
                               ),
-                              const TextSpan(text: ' more successful recoveries today.'),
+                              const TextSpan(
+                                  text: ' more successful recoveries today.'),
                             ],
                           ),
                         ),
                         Positioned(
-                          top:0,
-                            right:10,
+                            top: 0,
+                            right: 10,
                             child: InkWell(
-                              onTap: (){
-                                _launchWebURL('Bonus Rules for Collection', 'https://api.dasewan.cn/collection_h5/index.html?foo=${profile.id!}');
+                              onTap: () {
+                                _launchWebURL('Bonus Rules for Collection',
+                                    'https://api.dasewan.cn/collection_h5/index.html?foo=${profile.id!}');
                               },
                               child: Container(
-                                                        padding: EdgeInsets.only(left: 10, right: 10),
-                                                        height: 18,
-                                                        decoration: BoxDecoration(
-                              color: isDark ? Colors.blueGrey.shade100 : Colors.indigoAccent.shade100,
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(16.0),
-                              ),
-                              // boxShadow: <BoxShadow>[
-                              //   BoxShadow(color: Colors.white.withOpacity(0.5), offset: const Offset(1.1, 1.1), blurRadius: 10.0),
-                              // ],
-                                                        ),
-                                                        child: const Center(
-                              child: Text(
-                                'Detail',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                  letterSpacing: 0.0,
-                                  color: Color(0xFFFFFFFF),
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  color: isDark
+                                      ? Colors.blueGrey.shade100
+                                      : Colors.indigoAccent.shade100,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(16.0),
+                                  ),
+                                  // boxShadow: <BoxShadow>[
+                                  //   BoxShadow(color: Colors.white.withOpacity(0.5), offset: const Offset(1.1, 1.1), blurRadius: 10.0),
+                                  // ],
+                                ),
+                                child: const Center(
+                                  child: Text(
+                                    'Detail',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                      letterSpacing: 0.0,
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
                                 ),
                               ),
-                                                        ),
-                                                      ),
                             ))
                       ],
                     ),

@@ -29,28 +29,12 @@ class RepaymentBillDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.95,
+        width: MediaQuery.of(context).size.width * 1,
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.85,
+          maxHeight: MediaQuery.of(context).size.height * 1,
         ),
         child: Stack(
           children: [
-            // 水印背景
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: Colors.white,
-                ),
-                child: CustomPaint(
-                  painter: WatermarkPainter(
-                    text: 'NIGERIA LOAN BILL',
-                    color: Colors.grey.withOpacity(0.1),
-                  ),
-                ),
-              ),
-            ),
-            
             // 主要内容
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -109,7 +93,8 @@ class RepaymentBillDialog extends StatelessWidget {
                                 color: Colors.grey[600],
                               ),
                             ),
-                            if (repayInfo?.bvn != null && repayInfo!.bvn!.isNotEmpty)
+                            if (repayInfo?.bvn != null &&
+                                repayInfo!.bvn!.isNotEmpty)
                               Text(
                                 'BVN: ${repayInfo!.bvn}',
                                 style: TextStyle(
@@ -123,7 +108,7 @@ class RepaymentBillDialog extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 // 还款账单内容
                 Flexible(
                   child: SingleChildScrollView(
@@ -131,184 +116,224 @@ class RepaymentBillDialog extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // 账单标题
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: Colours.app_main.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(color: Colours.app_main.withOpacity(0.3)),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              'NIGERIA LOAN REPAYMENT BILL',
-                              style: TextStyle(
-                                fontSize: Dimens.font_sp18,
-                                fontWeight: FontWeight.bold,
-                                color: Colours.app_main,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Gaps.vGap16,
-                        
                         // 基本信息
                         _buildInfoSection(
                           'Basic Information',
                           [
-                            _buildInfoRow('Product Name', repayInfo?.productName ?? 'N/A'),
-                            _buildInfoRow('Application Name', repayInfo?.appName ?? 'N/A'),
-                            _buildInfoRow('Loan Application Time', _formatDateTime(repayInfo?.loanTime)),
-                            _buildInfoRow('Loan Duration', '${repayInfo?.borrowDays ?? 0} days'),
+                            _buildInfoRow('Product Name',
+                                repayInfo?.productName ?? 'N/A'),
+                            _buildInfoRow('Application Name',
+                                repayInfo?.appName ?? 'N/A'),
+                            _buildInfoRow('Loan Application Time',
+                                _formatDateTime(repayInfo?.loanTime)),
+                            _buildInfoRow('Loan Duration',
+                                '${repayInfo?.borrowDays ?? 0} days'),
                           ],
                         ),
-                        
+
                         Gaps.vGap16,
-                        
+
                         // 借款信息
                         _buildInfoSection(
                           'Loan Details',
                           [
-                            _buildInfoRow('Requested Amount', Utils.formatPrice2(repayInfo?.borrowAmount ?? 0)),
-                            _buildInfoRow('Disbursed Amount', Utils.formatPrice2(repayInfo?.loanAmount ?? 0)),
-                            if (track != null) _buildInfoRow('Disbursement Bank', track!.loanBank ?? 'N/A'),
-                            if (track != null) _buildInfoRow('Disbursement Time', _formatDateTime(track!.loanTime)),
+                            _buildInfoRow(
+                                'Requested Amount',
+                                Utils.formatPrice2(
+                                    repayInfo?.borrowAmount ?? 0)),
+                            _buildInfoRow('Disbursed Amount',
+                                Utils.formatPrice2(repayInfo?.loanAmount ?? 0)),
+                            if (track != null)
+                              _buildInfoRow('Disbursement Bank',
+                                  track!.loanBank ?? 'N/A'),
+                            if (track != null)
+                              _buildInfoRow('Disbursement Time',
+                                  _formatDateTime(track!.loanTime)),
                           ],
                         ),
-                        
+
                         Gaps.vGap16,
-                        
+
                         // 还款信息
-                        if (period != null) _buildInfoSection(
-                          'Repayment Schedule',
-                          [
-                            _buildInfoRow('Expected Repayment Date', _formatDateTime(period!.aPExpectRepayTime)),
-                            _buildInfoRow('Total Amount Due', Utils.formatPrice2(period!.fExpectRepayTotalAmount ?? 0)),
-                            _buildInfoRow('Principal Amount', Utils.formatPrice2(period!.gExpectBorrowAmount ?? 0)),
-                            _buildInfoRow('Interest Amount', Utils.formatPrice2(period!.hExpectInterest ?? 0)),
-                            _buildInfoRow('Service Fee', Utils.formatPrice2(period!.iExpectServiceFee ?? 0)),
-                            _buildInfoRow('Penalty Fee', Utils.formatPrice2(period!.jExpectViolateFee ?? 0)),
-                            _buildInfoRow('Late Payment Fee', Utils.formatPrice2(period!.kExpectOverdueAmount ?? 0)),
-                          ],
-                        ),
-                        
+                        if (period != null)
+                          _buildInfoSection(
+                            'Repayment Schedule',
+                            [
+                              _buildInfoRow('Expected Repayment Date',
+                                  _formatDateTime(period!.aPExpectRepayTime)),
+                              _buildInfoRow(
+                                  'Total Amount Due',
+                                  Utils.formatPrice2(
+                                      period!.fExpectRepayTotalAmount ?? 0)),
+                              _buildInfoRow(
+                                  'Principal Amount',
+                                  Utils.formatPrice2(
+                                      period!.gExpectBorrowAmount ?? 0)),
+                              _buildInfoRow(
+                                  'Interest Amount',
+                                  Utils.formatPrice2(
+                                      period!.hExpectInterest ?? 0)),
+                              _buildInfoRow(
+                                  'Service Fee',
+                                  Utils.formatPrice2(
+                                      period!.iExpectServiceFee ?? 0)),
+                              _buildInfoRow(
+                                  'Penalty Fee',
+                                  Utils.formatPrice2(
+                                      period!.jExpectViolateFee ?? 0)),
+                              _buildInfoRow(
+                                  'Late Payment Fee',
+                                  Utils.formatPrice2(
+                                      period!.kExpectOverdueAmount ?? 0)),
+                            ],
+                          ),
+
                         Gaps.vGap16,
-                        
+
                         // 已还信息
-                        if (period != null) _buildInfoSection(
-                          'Payment History',
-                          [
-                            _buildInfoRow('Total Amount Paid', Utils.formatPrice2(period!.nPaidAmount ?? 0)),
-                            _buildInfoRow('Principal Paid', Utils.formatPrice2(period!.oPaidBorrowAmount ?? 0)),
-                            _buildInfoRow('Interest Paid', Utils.formatPrice2(period!.pPaidInterest ?? 0)),
-                            _buildInfoRow('Service Fee Paid', Utils.formatPrice2(period!.qPaidServiceFee ?? 0)),
-                            _buildInfoRow('Late Fee Paid', Utils.formatPrice2(period!.sPaidOverdueAmount ?? 0)),
-                          ],
-                        ),
-                        
+                        if (period != null)
+                          _buildInfoSection(
+                            'Payment History',
+                            [
+                              _buildInfoRow('Total Amount Paid',
+                                  Utils.formatPrice2(period!.nPaidAmount ?? 0)),
+                              _buildInfoRow(
+                                  'Principal Paid',
+                                  Utils.formatPrice2(
+                                      period!.oPaidBorrowAmount ?? 0)),
+                              _buildInfoRow(
+                                  'Interest Paid',
+                                  Utils.formatPrice2(
+                                      period!.pPaidInterest ?? 0)),
+                              _buildInfoRow(
+                                  'Service Fee Paid',
+                                  Utils.formatPrice2(
+                                      period!.qPaidServiceFee ?? 0)),
+                              _buildInfoRow(
+                                  'Late Fee Paid',
+                                  Utils.formatPrice2(
+                                      period!.sPaidOverdueAmount ?? 0)),
+                            ],
+                          ),
+
                         Gaps.vGap16,
-                        
+
                         // 逾期信息
-                        if (period != null) _buildInfoSection(
-                          'Overdue Information',
-                          [
-                            _buildInfoRow('Days Overdue', '${period!.lOverdueDays ?? 0} days'),
-                            _buildInfoRow('Fee Waiver Count', '${period!.tDeductionTimes ?? 0} times'),
-                            _buildInfoRow('Total Fee Waived', Utils.formatPrice2(period!.uDeductionTotalAmount ?? 0)),
-                          ],
-                        ),
-                        
+                        if (period != null)
+                          _buildInfoSection(
+                            'Overdue Information',
+                            [
+                              _buildInfoRow('Days Overdue',
+                                  '${period!.lOverdueDays ?? 0} days'),
+                              _buildInfoRow('Fee Waiver Count',
+                                  '${period!.tDeductionTimes ?? 0} times'),
+                              _buildInfoRow(
+                                  'Total Fee Waived',
+                                  Utils.formatPrice2(
+                                      period!.uDeductionTotalAmount ?? 0)),
+                            ],
+                          ),
+
                         Gaps.vGap16,
-                        
+
                         // 账户信息
                         _buildInfoSection(
                           'Bank Account Details',
                           [
-                            _buildInfoRow('Account Holder Name', repayInfo?.accountName ?? 'N/A'),
-                            _buildInfoRow('Account Number', repayInfo?.accountNo ?? 'N/A'),
-                            _buildInfoRow('Bank Name', repayInfo?.accountBank ?? 'N/A'),
-                            _buildInfoRow('Receiving Bank', repayInfo?.receiveBank ?? 'N/A'),
-                            _buildInfoRow('Receiving Account', repayInfo?.receiveBankNo ?? 'N/A'),
+                            _buildInfoRow('Account Holder Name',
+                                repayInfo?.accountName ?? 'N/A'),
+                            _buildInfoRow('Account Number',
+                                repayInfo?.accountNo ?? 'N/A'),
+                            _buildInfoRow(
+                                'Bank Name', repayInfo?.accountBank ?? 'N/A'),
+                            _buildInfoRow('Receiving Bank',
+                                repayInfo?.receiveBank ?? 'N/A'),
+                            _buildInfoRow('Receiving Account',
+                                repayInfo?.receiveBankNo ?? 'N/A'),
                           ],
                         ),
-                        
+
                         Gaps.vGap16,
-                        
+
                         // 剩余还款金额 - 突出显示
-                        if (period != null) Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.red.withOpacity(0.1),
-                                Colors.orange.withOpacity(0.1),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(color: Colors.red.withOpacity(0.5)),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Outstanding Balance:',
-                                    style: TextStyle(
-                                      fontSize: Dimens.font_sp16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  Text(
-                                    Utils.formatPrice2(
-                                      (period!.fExpectRepayTotalAmount ?? 0) -
-                                      (period!.qPaidServiceFee ?? 0) -
-                                      (period!.pPaidInterest ?? 0) -
-                                      (period!.sPaidOverdueAmount ?? 0) -
-                                      (period!.oPaidBorrowAmount ?? 0) -
-                                      (period!.uDeductionTotalAmount ?? 0)
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: Dimens.font_sp18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
+                        if (period != null)
+                          Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.red.withOpacity(0.1),
+                                  Colors.orange.withOpacity(0.1),
                                 ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
-                              Gaps.vGap8,
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(4.0),
-                                ),
-                                child: Row(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(
+                                  color: Colors.red.withOpacity(0.5)),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(Icons.warning_amber, color: Colors.orange, size: 16),
-                                    Gaps.hGap8,
-                                    Expanded(
-                                      child: Text(
-                                        'Please ensure timely payment to avoid additional charges',
-                                        style: TextStyle(
-                                          fontSize: Dimens.font_sp12,
-                                          color: Colors.orange[800],
-                                          fontStyle: FontStyle.italic,
-                                        ),
+                                    const Text(
+                                      'Outstanding Balance:',
+                                      style: TextStyle(
+                                        fontSize: Dimens.font_sp16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Text(
+                                      Utils.formatPrice2((period!
+                                                  .fExpectRepayTotalAmount ??
+                                              0) -
+                                          (period!.qPaidServiceFee ?? 0) -
+                                          (period!.pPaidInterest ?? 0) -
+                                          (period!.sPaidOverdueAmount ?? 0) -
+                                          (period!.oPaidBorrowAmount ?? 0) -
+                                          (period!.uDeductionTotalAmount ?? 0)),
+                                      style: const TextStyle(
+                                        fontSize: Dimens.font_sp18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                                Gaps.vGap8,
+                                Container(
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.amber.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.warning_amber,
+                                          color: Colors.orange, size: 16),
+                                      Gaps.hGap8,
+                                      Expanded(
+                                        child: Text(
+                                          'Please ensure timely payment to avoid additional charges',
+                                          style: TextStyle(
+                                            fontSize: Dimens.font_sp12,
+                                            color: Colors.orange[800],
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        
+
                         Gaps.vGap16,
-                        
+
                         // 账单底部信息
                         Container(
                           padding: const EdgeInsets.all(12.0),
@@ -341,7 +366,7 @@ class RepaymentBillDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 // 底部按钮
                 Container(
                   padding: const EdgeInsets.all(20.0),
@@ -469,7 +494,6 @@ class WatermarkPainter extends CustomPainter {
           color: color,
         ),
       ),
-      textDirection: TextDirection.ltr,
     );
 
     textPainter.layout();

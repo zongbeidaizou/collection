@@ -119,16 +119,69 @@ class RepaymentBillDialog extends StatelessWidget {
     );
   }
 
+  // 获取应用主题颜色
+  Color _getAppPrimaryColor() {
+    final appName = repayInfo?.appName?.toLowerCase() ?? '';
+    if (appName.contains('kaka')) {
+      return Colors.blue.shade700;
+    } else if (appName.contains('leading')) {
+      return Colors.green.shade700;
+    } else if (appName.contains('moimoi')) {
+      return Colors.orange.shade700;
+    }
+    // 默认颜色
+    return Colors.green.shade700;
+  }
+
+  // 获取应用主题渐变色
+  List<Color> _getAppGradientColors() {
+    final appName = repayInfo?.appName?.toLowerCase() ?? '';
+    if (appName.contains('kaka')) {
+      return [Colors.blue.shade700, Colors.blue.shade500];
+    } else if (appName.contains('leading')) {
+      return [Colors.green.shade700, Colors.green.shade500];
+    } else if (appName.contains('moimoi')) {
+      return [Colors.orange.shade700, Colors.orange.shade500];
+    }
+    // 默认颜色
+    return [Colors.green.shade700, Colors.green.shade500];
+  }
+
+  // 获取应用主题浅色
+  Color _getAppLightColor() {
+    final appName = repayInfo?.appName?.toLowerCase() ?? '';
+    if (appName.contains('kaka')) {
+      return Colors.blue.shade50;
+    } else if (appName.contains('leading')) {
+      return Colors.green.shade50;
+    } else if (appName.contains('moimoi')) {
+      return Colors.orange.shade50;
+    }
+    // 默认颜色
+    return Colors.green.shade50;
+  }
+
+  // 获取应用主题边框色
+  Color _getAppBorderColor() {
+    final appName = repayInfo?.appName?.toLowerCase() ?? '';
+    if (appName.contains('kaka')) {
+      return Colors.blue.shade200;
+    } else if (appName.contains('leading')) {
+      return Colors.green.shade200;
+    } else if (appName.contains('moimoi')) {
+      return Colors.orange.shade200;
+    }
+    // 默认颜色
+    return Colors.green.shade200;
+  }
+
   // 头部设计
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.green.shade700,
-            Colors.green.shade500,
-          ],
+          colors: _getAppGradientColors(),
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -246,14 +299,14 @@ class RepaymentBillDialog extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
             decoration: BoxDecoration(
-              color: Colors.green.shade50,
+              color: _getAppLightColor(),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12.0),
                 topRight: Radius.circular(12.0),
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.green.shade200,
+                  color: _getAppBorderColor(),
                   width: 1,
                 ),
               ),
@@ -262,7 +315,7 @@ class RepaymentBillDialog extends StatelessWidget {
               children: [
                 Icon(
                   Icons.receipt_long,
-                  color: Colors.green.shade700,
+                  color: _getAppPrimaryColor(),
                   size: 20,
                 ),
                 Gaps.hGap8,
@@ -271,7 +324,7 @@ class RepaymentBillDialog extends StatelessWidget {
                   style: TextStyle(
                     fontSize: Dimens.font_sp14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.shade700,
+                    color: _getAppPrimaryColor(),
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -329,7 +382,7 @@ class RepaymentBillDialog extends StatelessWidget {
               value,
               style: TextStyle(
                 fontSize: Dimens.font_sp12,
-                color: isAmount ? Colors.green.shade700 : Colors.grey.shade800,
+                color: isAmount ? _getAppPrimaryColor() : Colors.grey.shade800,
                 fontWeight: isAmount ? FontWeight.bold : FontWeight.w500,
               ),
               textAlign: TextAlign.end,

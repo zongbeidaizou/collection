@@ -225,7 +225,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             if (item.eCollectionAdminId != item.aVTmpCollectionAdminId)
-              const Row(
+              Row(
                 children: [
                   Icon(
                     Icons.transfer_within_a_station,
@@ -233,7 +233,8 @@ class OrderItem extends StatelessWidget {
                     size: 12,
                   ),
                   Gaps.hGap2,
-                  Text('+5%',
+                  Text(
+                      "${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 ? '+20' : ''}% ",
                       style: TextStyle(color: Colors.red, fontSize: 12)),
                 ],
               )
@@ -525,9 +526,10 @@ class OrderItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              '${((provider.userEntity.profile!.aETodayCommissionRate! + (item.eCollectionAdminId! != item.aVTmpCollectionAdminId! ? 5 : 0)) * (period?.fExpectRepayTotalAmount != null ? period!.fExpectRepayTotalAmount! - period!.pPaidInterest! - period!.qPaidServiceFee! - period!.sPaidOverdueAmount! - period!.oPaidBorrowAmount! - period!.uDeductionTotalAmount! : 0) / 100).toInt()} bonus'),
+                              // ignore: unnecessary_parenthesis
+                              '${_calculateBonus(provider, item, period)} bonus'),
                           Text(
-                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! ? '+5' : ''}% of amount",
+                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 ? '+20' : ''}% of amount",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
@@ -655,6 +657,51 @@ class OrderItem extends StatelessWidget {
           )
       ],
     );
+  }
+
+  /// 计算奖金金额
+  ///
+  /// [provider] 用户提供者
+  /// [item] 订单数据
+  /// [period] 期间数据
+  ///
+  /// 返回计算出的奖金金额
+  int _calculateBonus(UserProvider provider, CollectionOrderData item,
+      CollectionLogOtherPeriod? period) {
+    // 基础佣金率
+    final double baseCommissionRate =
+        provider.userEntity.profile!.aETodayCommissionRate!;
+
+    // 计算额外佣金率
+    final int overdueDays = period?.lOverdueDays ?? 0;
+    final bool isDifferentAdmin =
+        item.eCollectionAdminId! != item.aVTmpCollectionAdminId!;
+
+    double additionalRate = 0.0;
+    if (isDifferentAdmin) {
+      if (overdueDays < 9) {
+        additionalRate = 5.0;
+      } else if (overdueDays > 8) {
+        additionalRate = 20.0;
+      }
+    }
+
+    // 总佣金率
+    final double totalCommissionRate = baseCommissionRate + additionalRate;
+
+    // 计算可收取金额
+    int collectableAmount = 0;
+    if (period?.fExpectRepayTotalAmount != null) {
+      collectableAmount = period!.fExpectRepayTotalAmount! -
+          period!.pPaidInterest! -
+          period!.qPaidServiceFee! -
+          period!.sPaidOverdueAmount! -
+          period!.oPaidBorrowAmount! -
+          period!.uDeductionTotalAmount!;
+    }
+
+    // 计算最终奖金
+    return (totalCommissionRate * collectableAmount / 100).toInt();
   }
 }
 

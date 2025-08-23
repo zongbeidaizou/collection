@@ -149,6 +149,7 @@ class _OrderListPageState extends State<OrderListPage>
                                     key: Key('order_item_$index'),
                                     index: index,
                                     tabIndex: _index,
+                                    showContactDays: 0,
                                     item: provider2.list
                                         .where((element) =>
                                             indexMap[widget.index]
@@ -165,6 +166,7 @@ class _OrderListPageState extends State<OrderListPage>
                                         .toList()[index]
                                         .aAAAAQBPeriods,
                                     contactList: [],
+                                    allContactList: [],
                                     smsHistory: [],
                                   )
                                 : MoreWidget(

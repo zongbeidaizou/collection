@@ -35,6 +35,7 @@ class OrderItem extends StatelessWidget {
     super.key,
     required this.tabIndex,
     required this.index,
+    required this.showContactDays,
     required this.item,
     required this.products,
     required this.admins,
@@ -45,15 +46,18 @@ class OrderItem extends StatelessWidget {
     required this.period,
     this.onSendSms,
     this.inList = true,
+    required this.allContactList,
   });
 
   final int tabIndex;
   final int index;
+  final int showContactDays;
   final bool inList;
   final CollectionOrderData item;
   final List<ProductData> products;
   final List<AdminData> admins;
   final List<CollectionLogOtherContactInfo2Data> contactList;
+  final List<CollectionLogOtherContactInfo2Data> allContactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherTrack? track;
@@ -116,7 +120,7 @@ class OrderItem extends StatelessWidget {
       // );
     }
 
-    Future<int?> _showContactListModal() {
+    Future<int?> _showContactListModal({bool allContacts = false}) {
       return showModalBottomSheet<int>(
         context: context,
         isScrollControlled: true,
@@ -127,10 +131,11 @@ class OrderItem extends StatelessWidget {
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               body: ContactDialog(
-                contactList: contactList,
+                contactList: allContacts ? allContactList : contactList,
                 repayInfo: repayInfo,
                 collectionOrderId: item.id!,
                 period: period!,
+                showContactDays: showContactDays,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
                   onSendSms?.call(templateId, smsContent,
@@ -636,7 +641,17 @@ class OrderItem extends StatelessWidget {
               //   },
               // ),
               Gaps.hGap4,
-
+              OrderItemButton(
+                key: Key('order_button_22_$index'),
+                text: "All Conts",
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                icon: Icon(Icons.group_add, size: 15, color: Colors.white),
+                onTap: () async {
+                  _showContactListModal(allContacts: true);
+                },
+              ),
+              Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_2_$index'),
                 text: "Contacts",
@@ -645,11 +660,6 @@ class OrderItem extends StatelessWidget {
                 icon: Icon(Icons.people_alt_outlined,
                     size: 15, color: Colors.white),
                 onTap: () async {
-                  var now = DateTime.now();
-                  int from =
-                      now.subtract(Duration(days: 60)).millisecondsSinceEpoch;
-                  int to =
-                      now.subtract(Duration(days: 30)).millisecondsSinceEpoch;
                   _showContactListModal();
                 },
               ),
@@ -726,7 +736,7 @@ class OrderItemButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 22.0),
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4.0),

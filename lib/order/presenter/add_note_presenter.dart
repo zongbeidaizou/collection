@@ -107,6 +107,11 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
           SpUtil.putObjectList(
               "contact2List:${orderId}", data.other!.contactInfo2!.data!);
         }
+        if (data.other!.contactInfo != null &&
+            data.other!.contactInfo!.data!.isNotEmpty) {
+          SpUtil.putObjectList(
+              "allContactList:${orderId}", data.other!.contactInfo!.data!);
+        }
         //  else {
         //   data.other!.contactInfo2!.data = SpUtil.getObjectList("contact2List")
         //       ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(e as Map<String, dynamic>))

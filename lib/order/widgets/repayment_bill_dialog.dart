@@ -51,9 +51,9 @@ class RepaymentBillDialog extends StatelessWidget {
                       'Application Details',
                       [
                         _buildNigerianStyleRow('Application Date',
-                            _formatDateTime(repayInfo?.loanTime)),
+                            _formatDateTime(track?.applyTime)),
                         _buildNigerianStyleRow('Disbursement Date',
-                            _formatDateTime(track?.loanTime)),
+                            _formatDateTime(repayInfo?.loanTime)),
                         _buildNigerianStyleRow('Disbursement Bank',
                             repayInfo?.receiveBank ?? 'N/A'),
                         _buildNigerianStyleRow(

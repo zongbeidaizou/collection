@@ -101,6 +101,8 @@ class _AddNoteState extends State<AddNote>
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
   List<CollectionLogOtherContactInfo2Data> _contact2List = [];
+  List<CollectionLogOtherContactInfo2Data> _allContactList = [];
+  int _showContactDays = 0;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -153,8 +155,14 @@ class _AddNoteState extends State<AddNote>
     _track = _data!.other!.track;
     _period = _data!.other!.period;
     _avatar = _data!.other!.avatar;
+    _showContactDays = _data!.other!.showContactDays!;
 
     _contact2List = SpUtil.getObjectList("contact2List:${widget.orderId}")
+            ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    _allContactList = SpUtil.getObjectList("allContactList:${widget.orderId}")
             ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
                 e as Map<String, dynamic>))
             .toList() ??
@@ -350,9 +358,11 @@ class _AddNoteState extends State<AddNote>
                 OrderItem(
                   key: Key('order_item_'),
                   index: 1, tabIndex: 1, inList: false, admins: _admins,
+                  showContactDays: _showContactDays,
                   products: _product, item: item,
                   smsHistory: _smsHistory, repayInfo: _repayInfo,
                   contactList: _contact2List,
+                  allContactList: _contact2List,
                   track: _track, period: _period,
                   onSendSms: (smsTemplateId, smsContent,
                       {String? phone, int? contactId}) {

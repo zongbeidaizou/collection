@@ -82,6 +82,8 @@ class CollectionLogData {
 @JsonSerializable()
 class CollectionLogOther {
 	String? avatar = '';
+	@JSONField(name: 'show_contact_days')
+	int? showContactDays = 0;
 	CollectionLogOtherTrack? track;
 	CollectionLogOtherPeriod? period;
 	@JSONField(name: 'repay_info')

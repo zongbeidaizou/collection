@@ -25,12 +25,14 @@ class ContactDialog extends StatefulWidget {
     this.onSendSms,
     this.repayInfo,
     this.period,
+    required this.showContactDays,
   });
   final int collectionOrderId;
   final List<CollectionLogOtherContactInfo2Data> contactList;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherPeriod? period;
+  final int showContactDays;
   @override
   State<ContactDialog> createState() => _ContactDialogState();
 }
@@ -66,23 +68,39 @@ class _ContactDialogState extends State<ContactDialog> {
             topRight: Radius.circular(8.0),
           ),
         ),
-        child: ListView.builder(
-          itemCount: widget.contactList.length,
-          itemBuilder: (context, index) {
-            return ContactCard(
-              contact: widget.contactList[index],
-              collectionOrderId: widget.collectionOrderId,
-              repayInfo: widget.repayInfo,
-              period: widget.period,
-              selected: _selectedIndex == index,
-              onCallOrSms: (int index, int type) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              contactIndex: index,
-            );
-          },
+        child: Column(
+          children: [
+            if (widget.period != null &&
+                widget.period!.lOverdueDays! < widget.showContactDays)
+              Container(
+                color: Colors.red,
+                child: Text(
+                    'Will show contact overdue days: ${widget.showContactDays}'),
+              )
+            else
+              Gaps.empty,
+            Gaps.vGap8,
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.contactList.length,
+                itemBuilder: (context, index) {
+                  return ContactCard(
+                    contact: widget.contactList[index],
+                    collectionOrderId: widget.collectionOrderId,
+                    repayInfo: widget.repayInfo,
+                    period: widget.period,
+                    selected: _selectedIndex == index,
+                    onCallOrSms: (int index, int type) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    contactIndex: index,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

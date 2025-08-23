@@ -15,10 +15,16 @@ import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
 import '../iview/order_list_page_iview.dart';
-const List<List<int>> indexMap = [[0], [1], [2], [3], [4,5]];
+
+const List<List<int>> indexMap = [
+  [0],
+  [1],
+  [2],
+  [3],
+  [4, 5]
+];
 
 class OrderSearchResultPage extends StatefulWidget {
-
   const OrderSearchResultPage({
     super.key,
     required this.index,
@@ -32,11 +38,15 @@ class OrderSearchResultPage extends StatefulWidget {
   _OrderSearchResultPageState createState() => _OrderSearchResultPageState();
 }
 
-class _OrderSearchResultPageState extends State<OrderSearchResultPage> with AutomaticKeepAliveClientMixin<OrderSearchResultPage>, ChangeNotifierMixin<OrderSearchResultPage>, BasePageMixin<OrderSearchResultPage, OrderListPagePresenter>
+class _OrderSearchResultPageState extends State<OrderSearchResultPage>
+    with
+        AutomaticKeepAliveClientMixin<OrderSearchResultPage>,
+        ChangeNotifierMixin<OrderSearchResultPage>,
+        BasePageMixin<OrderSearchResultPage, OrderListPagePresenter>
     implements OrderListPageIMvpView {
-
   final ScrollController _controller = ScrollController();
   final StateType _stateType = StateType.loading;
+
   /// 是否正在加载数据
   bool _isLoading = false;
   final int _maxPage = 3;
@@ -49,7 +59,7 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
   late OrderListPagePresenter _orderListPagePresenter;
   OrderListProvider provider2 = OrderListProvider();
   final ScrollController _scrollController = ScrollController();
-  
+
   @override
   void initState() {
     super.initState();
@@ -61,16 +71,16 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
   Map<ChangeNotifier, List<VoidCallback>?>? changeNotifier() {
     return {_controller: null};
   }
+
   @override
   bool get wantKeepAlive => true;
-
 
   @override
   OrderListPagePresenter createPresenter() {
     _orderListPagePresenter = OrderListPagePresenter();
     return _orderListPagePresenter;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -83,15 +93,18 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
       },
       child: RefreshIndicator(
         onRefresh: _onRefresh,
-        displacement: 120.0, /// 默认40， 多添加的80为Header高度
+        displacement: 120.0,
+
+        /// 默认40， 多添加的80为Header高度
         child: ListView.builder(
-          itemCount: _list.length ,
+          itemCount: _list.length,
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
           itemBuilder: (_, index) => OrderItem(
             key: Key('order_item_$index'),
             index: index,
+            showContactDays: 0,
             tabIndex: _index,
             item: _list[index],
             products: _product,
@@ -101,17 +114,20 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
             period: CollectionLogOtherPeriod(),
             contactList: [],
             smsHistory: [],
+            allContactList: [],
           ),
         ),
       ),
     );
   }
+
   @override
   void setProduct(List<ProductData> product) {
     setState(() {
       _product = product;
     });
   }
+
   @override
   void setAdmin(List<AdminData> admin) {
     setState(() {
@@ -126,7 +142,8 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
 
   Future<void> _onRefresh() async {
     String keyword = widget.keyword.isNotEmpty ? widget.keyword : 'JJJJJJJJJJJ';
-    _list = await _orderListPagePresenter.index(1, widget.index, true, keyword: keyword);
+    _list = await _orderListPagePresenter.index(1, widget.index, true,
+        keyword: keyword);
     setState(() {
       _page = 1;
     });
@@ -138,16 +155,4 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage> with Auto
       _list = list;
     });
   }
-
-
-
-
-
-
-
-
-
-
-  
-
 }

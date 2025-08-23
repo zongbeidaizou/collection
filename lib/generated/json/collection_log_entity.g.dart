@@ -236,6 +236,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (avatar != null) {
     collectionLogOther.avatar = avatar;
   }
+  final int? showContactDays = jsonConvert.convert<int>(
+      json['show_contact_days']);
+  if (showContactDays != null) {
+    collectionLogOther.showContactDays = showContactDays;
+  }
   final CollectionLogOtherTrack? track = jsonConvert.convert<
       CollectionLogOtherTrack>(json['track']);
   if (track != null) {
@@ -301,6 +306,7 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['avatar'] = entity.avatar;
+  data['show_contact_days'] = entity.showContactDays;
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
@@ -319,6 +325,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
 extension CollectionLogOtherExtension on CollectionLogOther {
   CollectionLogOther copyWith({
     String? avatar,
+    int? showContactDays,
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
@@ -332,6 +339,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
   }) {
     return CollectionLogOther()
       ..avatar = avatar ?? this.avatar
+      ..showContactDays = showContactDays ?? this.showContactDays
       ..track = track ?? this.track
       ..period = period ?? this.period
       ..repayInfo = repayInfo ?? this.repayInfo

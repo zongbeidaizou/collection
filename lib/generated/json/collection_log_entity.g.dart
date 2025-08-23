@@ -1343,6 +1343,10 @@ CollectionLogOtherHJSmsTemplate $CollectionLogOtherHJSmsTemplateFromJson(
   if (sName != null) {
     collectionLogOtherHJSmsTemplate.sName = sName;
   }
+  final int? cType = jsonConvert.convert<int>(json['c_type']);
+  if (cType != null) {
+    collectionLogOtherHJSmsTemplate.cType = cType;
+  }
   final String? eDays = jsonConvert.convert<String>(json['e_days']);
   if (eDays != null) {
     collectionLogOtherHJSmsTemplate.eDays = eDays;
@@ -1356,6 +1360,7 @@ Map<String, dynamic> $CollectionLogOtherHJSmsTemplateToJson(
   data['id'] = entity.id;
   data['d_template'] = entity.dTemplate;
   data['s_name'] = entity.sName;
+  data['c_type'] = entity.cType;
   data['e_days'] = entity.eDays;
   return data;
 }
@@ -1365,12 +1370,14 @@ extension CollectionLogOtherHJSmsTemplateExtension on CollectionLogOtherHJSmsTem
     int? id,
     String? dTemplate,
     String? sName,
+    int? cType,
     String? eDays,
   }) {
     return CollectionLogOtherHJSmsTemplate()
       ..id = id ?? this.id
       ..dTemplate = dTemplate ?? this.dTemplate
       ..sName = sName ?? this.sName
+      ..cType = cType ?? this.cType
       ..eDays = eDays ?? this.eDays;
   }
 }

@@ -131,7 +131,8 @@ class OrderItem extends StatelessWidget {
             child: Scaffold(
               resizeToAvoidBottomInset: true,
               body: ContactDialog(
-                contactList: allContacts ? allContactList : contactList,
+                contactList: _sortContactList(
+                    allContacts ? allContactList : contactList),
                 repayInfo: repayInfo,
                 collectionOrderId: item.id!,
                 period: period!,
@@ -717,6 +718,66 @@ class OrderItem extends StatelessWidget {
 
     // 计算最终奖金
     return (totalCommissionRate * collectableAmount / 100).toInt();
+  }
+
+  /// 对联系人列表进行排序
+  ///
+  /// 排序规则：
+  /// 1. 首先按照 aAAAAHLContactWeights 中的 t_wa_weight desc, r_wa_status desc, q_phone_status desc 排序
+  /// 2. 然后按照 CollectionLogOtherContactInfo2Data 的属性 t_wa_weight desc, r_wa_status desc 排序
+  ///
+  /// [contactList] 需要排序的联系人列表
+  /// 返回排序后的联系人列表
+  List<CollectionLogOtherContactInfo2Data> _sortContactList(
+      List<CollectionLogOtherContactInfo2Data> contactList) {
+    final List<CollectionLogOtherContactInfo2Data> sortedList =
+        List.from(contactList);
+
+    sortedList.sort((a, b) {
+      // 第一级排序：按照 aAAAAHLContactWeights 中的属性排序
+      final aWeights = a.aAAAAHLContactWeights;
+      final bWeights = b.aAAAAHLContactWeights;
+
+      if (aWeights != null && bWeights != null) {
+        // 比较 t_wa_weight (降序)
+        if (aWeights.tWaWeight != bWeights.tWaWeight) {
+          return (bWeights.tWaWeight ?? 0).compareTo(aWeights.tWaWeight ?? 0);
+        }
+
+        // 比较 r_wa_status (降序)
+        if (aWeights.rWaStatus != bWeights.rWaStatus) {
+          return (bWeights.rWaStatus ?? 0).compareTo(aWeights.rWaStatus ?? 0);
+        }
+
+        // 比较 q_phone_status (降序)
+        if (aWeights.qPhoneStatus != bWeights.qPhoneStatus) {
+          return (bWeights.qPhoneStatus ?? 0)
+              .compareTo(aWeights.qPhoneStatus ?? 0);
+        }
+      } else if (aWeights != null) {
+        // a有权重，b没有权重，a排在前面
+        return -1;
+      } else if (bWeights != null) {
+        // b有权重，a没有权重，b排在前面
+        return 1;
+      }
+
+      // 第二级排序：按照 CollectionLogOtherContactInfo2Data 的属性排序
+      // 比较 t_wa_weight (降序)
+      if (a.tWaWeight != b.tWaWeight) {
+        return (b.tWaWeight ?? 0).compareTo(a.tWaWeight ?? 0);
+      }
+
+      // 比较 r_wa_status (降序)
+      if (a.rWaStatus != b.rWaStatus) {
+        return (b.rWaStatus ?? 0).compareTo(a.rWaStatus ?? 0);
+      }
+
+      // 如果所有属性都相等，保持原有顺序
+      return 0;
+    });
+
+    return sortedList;
   }
 }
 

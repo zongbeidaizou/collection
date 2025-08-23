@@ -280,18 +280,14 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       // 更新电话状态
       widget.contact.aAAAAHLContactWeights!.qPhoneStatus = newStatus;
       _updateContactListInStorage('qPhoneStatus', newStatus);
-      showToast('Updated ${widget.contact.gPhone} phone status to: $newStatus');
     } else if (_lastActionSource == 'sms') {
       // 短信也更新电话状态（因为使用同一个字段）
       widget.contact.aAAAAHLContactWeights!.qPhoneStatus = newStatus;
       _updateContactListInStorage('qPhoneStatus', newStatus);
-      showToast('Updated ${widget.contact.gPhone} sms status to: $newStatus');
     } else if (_lastActionSource == 'whatsapp') {
       // 更新WhatsApp状态
       widget.contact.aAAAAHLContactWeights!.rWaStatus = newStatus;
       _updateContactListInStorage('rWaStatus', newStatus);
-      showToast(
-          'Updated ${widget.contact.gPhone} WhatsApp status to: $newStatus');
     }
     // 触发UI更新
     setState(() {});
@@ -552,6 +548,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
     Future<void> launchAction(int type) async {
+      //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);
 
       // 记录操作来源
@@ -754,8 +751,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                       horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
-                                                ?.lSmsCount !=
-                                            null
+                                                    ?.lSmsCount !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .lSmsCount! >
+                                                0
                                         ? const Color.fromARGB(
                                             255, 236, 182, 180)
                                         : Colors.transparent,
@@ -763,8 +765,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                   ),
                                   child: Text(
                                     widget.contact.aAAAAHLContactWeights
-                                                ?.lSmsCount !=
-                                            null
+                                                    ?.lSmsCount !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .lSmsCount! >
+                                                0
                                         ? getDisplayText(widget.contact
                                             .aAAAAHLContactWeights!.lSmsCount!)
                                         : '',
@@ -820,8 +827,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                       horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
-                                                ?.dCallTimes !=
-                                            null
+                                                    ?.dCallTimes !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .dCallTimes! >
+                                                0
                                         ? const Color.fromARGB(
                                             255, 236, 182, 180)
                                         : Colors.transparent,
@@ -829,8 +841,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                   ),
                                   child: Text(
                                     widget.contact.aAAAAHLContactWeights
-                                                ?.dCallTimes !=
-                                            null
+                                                    ?.dCallTimes !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .dCallTimes! >
+                                                0
                                         ? getDisplayText(widget.contact
                                             .aAAAAHLContactWeights!.dCallTimes!)
                                         : '',
@@ -883,8 +900,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                       horizontal: 3, vertical: 1),
                                   decoration: BoxDecoration(
                                     color: widget.contact.aAAAAHLContactWeights
-                                                ?.wWaCt !=
-                                            null
+                                                    ?.wWaCt !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .wWaCt! >
+                                                0
                                         ? const Color.fromARGB(
                                             255, 236, 182, 180)
                                         : Colors.transparent,
@@ -892,8 +914,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                   ),
                                   child: Text(
                                     widget.contact.aAAAAHLContactWeights
-                                                ?.wWaCt !=
-                                            null
+                                                    ?.wWaCt !=
+                                                null &&
+                                            widget
+                                                    .contact
+                                                    .aAAAAHLContactWeights!
+                                                    .wWaCt! >
+                                                0
                                         ? getDisplayText(widget.contact
                                             .aAAAAHLContactWeights!.wWaCt!)
                                         : '',

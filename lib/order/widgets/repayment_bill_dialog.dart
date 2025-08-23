@@ -37,7 +37,7 @@ class RepaymentBillDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // 头部 - 账单标题和用户信息
-            _buildHeader(),
+            _buildHeader(context),
 
             // 账单内容
             Flexible(
@@ -73,8 +73,10 @@ class RepaymentBillDialog extends StatelessWidget {
                       _buildNigerianStyleSection(
                         'Repayment Details',
                         [
-                          _buildNigerianStyleRow('Due Date',
-                              _formatDateTime(period?.aPExpectRepayTime)),
+                          _buildNigerianStyleRow(
+                              'Due Date',
+                              _formatDateTime(period?.aPExpectRepayTime,
+                                  withTime: false)),
                           _buildNigerianStyleRow(
                               'Total Amount Due',
                               Utils.formatPrice2(
@@ -176,7 +178,7 @@ class RepaymentBillDialog extends StatelessWidget {
   }
 
   // 头部设计
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -196,22 +198,25 @@ class RepaymentBillDialog extends StatelessWidget {
           Row(
             children: [
               // 头像
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: Colors.white,
-                child: ClipOval(
-                  child: CachedNetworkImage(
-                    imageUrl: avatar ?? '',
-                    fit: BoxFit.cover,
-                    width: 50,
-                    height: 50,
-                    placeholder: (context, url) => Image.asset(
-                      'assets/images/order/icon_avatar.png',
+              GestureDetector(
+                onTap: () => _showAvatarDialog(context, avatar),
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.white,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: avatar ?? '',
                       fit: BoxFit.cover,
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/order/icon_avatar.png',
-                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                      placeholder: (context, url) => Image.asset(
+                        'assets/images/order/icon_avatar.png',
+                        fit: BoxFit.cover,
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/order/icon_avatar.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -422,16 +427,79 @@ class RepaymentBillDialog extends StatelessWidget {
   }
 
   // 格式化日期时间
-  String _formatDateTime(String? dateTimeString) {
+  String _formatDateTime(String? dateTimeString, {bool withTime = true}) {
     if (dateTimeString == null || dateTimeString.isEmpty) {
       return 'N/A';
     }
 
     try {
       final DateTime dateTime = DateTime.parse(dateTimeString);
-      return DateFormat('MMMM dd, yyyy HH:mm', 'en_US').format(dateTime);
+      return DateFormat('MMMM dd, yyyy ${withTime ? 'HH:mm' : ''}', 'en_US')
+          .format(dateTime);
     } catch (e) {
       return dateTimeString;
     }
+  }
+
+  /// 显示头像放大对话框
+  void _showAvatarDialog(BuildContext context, String? avatarUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.black54,
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {}, // 防止点击图片时关闭对话框
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.8,
+                      maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: CachedNetworkImage(
+                        imageUrl: avatarUrl ?? '',
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.white,
+                          child: Image.asset(
+                            'assets/images/order/icon_avatar.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

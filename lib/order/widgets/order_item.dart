@@ -261,8 +261,8 @@ class OrderItem extends StatelessWidget {
                                         '2000-07-10T18:58:39.000000Z'))
                                 .inHours >=
                             24)
-                        ? 'last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
-                        : 'last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+                        ? 'The last time CX used the app: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : 'The last time CX used the app: last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,
@@ -427,7 +427,12 @@ class OrderItem extends StatelessWidget {
                       children: <TextSpan>[
                         // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                         TextSpan(
-                            text: Utils.formatPrice2(period?.nPaidAmount ?? 0)),
+                          text: Utils.formatPrice2(period?.nPaidAmount ?? 0),
+                          style: period?.nPaidAmount == 0
+                              ? textTextStyle
+                              : TextStyle(
+                                  fontSize: 12, color: Colors.greenAccent),
+                        ),
                       ],
                     ),
                   ),

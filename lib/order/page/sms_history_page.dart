@@ -85,31 +85,60 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
       final template = $CollectionLogOtherHJSmsTemplateFromJson(value);
       // 替换所有占位符
       String processedTemplate = template.dTemplate!
-          .replaceAll('@name@', widget.repayInfo!.name!)
-          .replaceAll('@phone@', widget.repayInfo!.phone!)
-          .replaceAll('@bvn@', widget.repayInfo!.bvn!)
+          .replaceAll(
+              '@expect_repay_amount@',
+              Utils.formatPrice2((widget.period!.fExpectRepayTotalAmount ?? 0) -
+                  (widget.period!.qPaidServiceFee ?? 0) -
+                  (widget.period!.pPaidInterest ?? 0) -
+                  (widget.period!.sPaidOverdueAmount ?? 0) -
+                  (widget.period!.oPaidBorrowAmount ?? 0) -
+                  (widget.period!.uDeductionTotalAmount ?? 0)))
           .replaceAll(
               '@expect_repay_time@',
               DateFormat('MMM d, yyyy')
                   .format(DateTime.parse(widget.repayInfo!.expectRepayTime!)))
           .replaceAll(
-              '@expect_repay_amount@',
-              Utils.formatPrice2((widget.period.fExpectRepayTotalAmount ?? 0) -
-                  (widget.period.qPaidServiceFee ?? 0) -
-                  (widget.period.pPaidInterest ?? 0) -
-                  (widget.period.sPaidOverdueAmount ?? 0) -
-                  (widget.period.oPaidBorrowAmount ?? 0) -
-                  (widget.period.uDeductionTotalAmount ?? 0)))
-          .replaceAll(
               '@overdue_days@', widget.repayInfo!.overdueDays.toString())
           .replaceAll('@mobile@', widget.repayInfo!.mobile!)
+          .replaceAll('@phone@', widget.repayInfo!.phone!)
+          .replaceAll('@bvn@', widget.repayInfo!.bvn!)
+          .replaceAll('@name@', widget.repayInfo!.name!)
           .replaceAll('@borrow_amount@',
-              Utils.formatPrice2(widget.period.oPaidBorrowAmount!))
+              Utils.formatPrice2(widget.period!.oPaidBorrowAmount!))
           .replaceAll('@loan_amount@',
-              Utils.formatPrice2(widget.period.oPaidBorrowAmount!))
+              Utils.formatPrice2(widget.period!.oPaidBorrowAmount!))
           .replaceAll('@borrow_days@', widget.repayInfo!.borrowDays.toString())
+          .replaceAll('@app_name@', widget.repayInfo!.appName!)
+          .replaceAll('@url@', widget.repayInfo!.url!)
+          .replaceAll('@product_name@', widget.repayInfo!.productName!)
+          .replaceAll('@loan_time@', widget.repayInfo!.loanTime!)
+          .replaceAll('@receive_bank@', widget.repayInfo!.receiveBank!)
+          .replaceAll('@receive_bank_no@', widget.repayInfo!.receiveBankNo!)
+          .replaceAll('@account_name@', widget.repayInfo!.accountName!)
           .replaceAll('@account_no@', widget.repayInfo!.accountNo!)
-          .replaceAll('@account_bank@', widget.repayInfo!.accountBank!);
+          .replaceAll('@account_bank@', widget.repayInfo!.accountBank!)
+          .replaceAll(
+              '@before_credit_amount@', widget.repayInfo!.beforeCreditAmount!)
+          .replaceAll(
+              '@after_credit_amount@', widget.repayInfo!.afterCreditAmount!)
+          .replaceAll(
+              '@change_credit_amount@', widget.repayInfo!.changeCreditAmount!)
+          .replaceAll('@before_credit_fraction@',
+              widget.repayInfo!.beforeCreditFraction!)
+          .replaceAll(
+              '@after_credit_fraction@', widget.repayInfo!.afterCreditFraction!)
+          .replaceAll('@change_credit_fraction@',
+              widget.repayInfo!.changeCreditFraction!)
+          .replaceAll('@var1@', widget.repayInfo!.var1!)
+          .replaceAll('@var2@', widget.repayInfo!.var2!)
+          .replaceAll('@var3@', widget.repayInfo!.var3!)
+          .replaceAll('@var4@', widget.repayInfo!.var4!)
+          .replaceAll('@var5@', widget.repayInfo!.var5!)
+          .replaceAll('@var6@', widget.repayInfo!.var6!)
+          .replaceAll('@var7@', widget.repayInfo!.var7!)
+          .replaceAll('@var8@', widget.repayInfo!.var8!)
+          .replaceAll('@var9@', widget.repayInfo!.var9!)
+          .replaceAll('@var10@', widget.repayInfo!.var10!);
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
 

@@ -251,7 +251,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                 contact.aAAAAHLContactWeights!.lSmsCount! + 1;
           }
           Cache().appendToStringList('contactWeights',
-              '${widget.contact.id}:${fieldName}:${newValue}');
+              '${widget.contact.id}#${fieldName}#${newValue}');
           break;
         }
       }
@@ -307,6 +307,24 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     } else {
       return '$minutes min $seconds sec';
     }
+  }
+
+  // 手机号码脱敏函数：隐藏第3、4、5位数字
+  String maskPhoneNumber(String phone) {
+    if (phone.isEmpty || phone.length < 6) {
+      return phone;
+    }
+
+    // 将手机号码转换为字符数组
+    List<String> phoneChars = phone.split('');
+
+    // 隐藏第3、4、5位数字（索引为2、3、4）
+    // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+    if (phoneChars.length > 2) phoneChars[2] = '*';
+    if (phoneChars.length > 3) phoneChars[3] = '*';
+    if (phoneChars.length > 4) phoneChars[4] = '*';
+
+    return phoneChars.join();
   }
 
   int calculateCalendarDaysDifference(DateTime start, DateTime end) {
@@ -723,7 +741,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                       child: Gaps.empty,
                     ),
                     Text(
-                      widget.contact.gPhone ?? '',
+                      maskPhoneNumber(widget.contact.gPhone ?? ''),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

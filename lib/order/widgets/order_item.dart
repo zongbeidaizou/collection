@@ -262,8 +262,8 @@ class OrderItem extends StatelessWidget {
                                         '2000-07-10T18:58:39.000000Z'))
                                 .inHours >=
                             24)
-                        ? 'The last time CX used the app: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
-                        : 'The last time CX used the app: last active ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+                        ? 'Last used: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : 'Last used: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,
@@ -723,8 +723,9 @@ class OrderItem extends StatelessWidget {
   /// 对联系人列表进行排序
   ///
   /// 排序规则：
-  /// 1. 首先按照 aAAAAHLContactWeights 中的 t_wa_weight desc, r_wa_status desc, q_phone_status desc 排序
-  /// 2. 然后按照 CollectionLogOtherContactInfo2Data 的属性 t_wa_weight desc, r_wa_status desc 排序
+  /// 0. 最高优先级：l_sms_count = 999 的记录始终排在第一位
+  /// 1. 然后按照 aAAAAHLContactWeights 中的 t_wa_weight desc, r_wa_status desc, q_phone_status desc 排序
+  /// 2. 最后按照 CollectionLogOtherContactInfo2Data 的属性 t_wa_weight desc, r_wa_status desc 排序
   ///
   /// [contactList] 需要排序的联系人列表
   /// 返回排序后的联系人列表
@@ -734,6 +735,20 @@ class OrderItem extends StatelessWidget {
         List.from(contactList);
 
     sortedList.sort((a, b) {
+      // 最高优先级：l_sms_count = 999 的记录始终排在第一位
+      final aIsPriority = a.lSmsCount == 999;
+      final bIsPriority = b.lSmsCount == 999;
+
+      if (aIsPriority && !bIsPriority) {
+        return -1; // a是优先级记录，b不是，a排在前面
+      } else if (!aIsPriority && bIsPriority) {
+        return 1; // b是优先级记录，a不是，b排在前面
+      } else if (aIsPriority && bIsPriority) {
+        // 两个都是优先级记录，保持原有顺序
+        return 0;
+      }
+
+      // 非优先级记录的排序逻辑
       // 第一级排序：按照 aAAAAHLContactWeights 中的属性排序
       final aWeights = a.aAAAAHLContactWeights;
       final bWeights = b.aAAAAHLContactWeights;

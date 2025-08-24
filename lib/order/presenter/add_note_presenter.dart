@@ -53,7 +53,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
 
     // 检查是否有需要提交的数据
     bool hasDataToSubmit = (actionContact?.isNotEmpty ?? false) ||
-        (actionSmsHistory?.isNotEmpty ?? false);
+        (actionSmsHistory?.isNotEmpty ?? false) ||
+        (contactWeights?.isNotEmpty ?? false);
     if (hasDataToSubmit) {
       // 将列表用逗号拼接成字符串
       String? actionContactStr = actionContact?.join(',');
@@ -63,7 +64,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         if (actionContactStr != null) 'action_contact': actionContactStr,
         if (actionSmsHistoryStr != null)
           'action_sms_history': actionSmsHistoryStr,
-        if (contactWeights != null) 'contactWeights': contactWeightsStr,
+        if (contactWeights != null) 'contact_weights': contactWeightsStr,
       });
       requestNetwork<CollectionOrderEntity>(Method.post,
           url: HttpApi.qCCollectionNewsAction,

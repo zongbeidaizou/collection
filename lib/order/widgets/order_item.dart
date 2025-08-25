@@ -69,6 +69,8 @@ class OrderItem extends StatelessWidget {
     final bool isDark = context.isDark;
     Color shadowColor = Colors.transparent;
     Color buttonColor = isDark ? Colours.dark_app_main : Colours.app_main;
+    Color backgroundColor = Colors.white;
+
     if (inList) {
       if (item.aNCurrentDayLogCount! == 0) {
         shadowColor = isDark ? Colors.white : Colors.redAccent.withOpacity(0.2);
@@ -79,6 +81,10 @@ class OrderItem extends StatelessWidget {
         buttonColor = Color(0xFF3BA28D);
       }
     }
+
+    // 根据报名状态设置不同的背景颜色
+    backgroundColor = _getBackgroundColorByStatus(item, isDark);
+
     if (item.tBorrowSn == 'QRSOSEDpZn') {
       print('');
     }
@@ -87,11 +93,28 @@ class OrderItem extends StatelessWidget {
         child: MyCard(
           shadowColor: shadowColor,
           onlyBottom: !inList,
+          color: backgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: _buildContent(context, buttonColor),
           ),
         ));
+  }
+
+  // 根据报名状态返回对应的背景颜色
+  Color _getBackgroundColorByStatus(CollectionOrderData item, bool isDark) {
+    final appName = item?.aZPackage?.toLowerCase() ?? '';
+    if (appName.contains('kaka')) {
+      return Colors.blue.shade50;
+    } else if (appName.contains('leading')) {
+      return Colors.green.shade50;
+    } else if (appName.contains('moimoi')) {
+      return Colors.orange.shade50;
+    }
+    // 默认颜色
+    return Colors.green.shade50;
+
+    // 默认背景颜色
   }
 
   Widget _buildContent(BuildContext context, Color buttonColor) {

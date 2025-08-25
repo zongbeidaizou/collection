@@ -103,6 +103,11 @@ class RepaymentBillDialog extends StatelessWidget {
                           _buildNigerianStyleRow('Amount Paid',
                               Utils.formatPrice2(period?.nPaidAmount ?? 0),
                               isAmount: true),
+                          _buildNigerianStyleRow(
+                              'Amount Waived',
+                              Utils.formatPrice2(
+                                  period?.uDeductionTotalAmount ?? 0),
+                              isAmount: true),
                         ],
                       ),
                     ],

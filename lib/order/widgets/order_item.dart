@@ -709,11 +709,11 @@ class OrderItem extends StatelessWidget {
     int collectableAmount = 0;
     if (period?.fExpectRepayTotalAmount != null) {
       collectableAmount = period!.fExpectRepayTotalAmount! -
-          period!.pPaidInterest! -
-          period!.qPaidServiceFee! -
-          period!.sPaidOverdueAmount! -
-          period!.oPaidBorrowAmount! -
-          period!.uDeductionTotalAmount!;
+          period.pPaidInterest! -
+          period.qPaidServiceFee! -
+          period.sPaidOverdueAmount! -
+          period.oPaidBorrowAmount! -
+          period.uDeductionTotalAmount!;
     }
 
     // 计算最终奖金

@@ -492,6 +492,11 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         }
       } else {
         if (overdueDays < 6) {
+          bool isMatch = value['c_type'] == 28 &&
+              (int.parse(value['e_days'] as String) == overdueDays ||
+                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
+                  int.parse(value['e_days'] as String) < -100);
+          print('isMatch: $isMatch');
           return value['c_type'] == 28 &&
               (int.parse(value['e_days'] as String) == overdueDays ||
                   int.parse(value['e_days'] as String) == (overdueDays - 1) ||
@@ -565,6 +570,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
+    templates2.sort((a, b) => a.eDays!.compareTo(b.eDays!));
     Future<void> launchAction(int type) async {
       //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);

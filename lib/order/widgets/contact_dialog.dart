@@ -709,7 +709,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
     return Card(
       shadowColor: Colors.blue,
-      margin: const EdgeInsets.all(4.0),
+      margin: const EdgeInsets.all(2.0),
       child: Stack(
         children: [
           ColoredBox(
@@ -718,7 +718,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                 : Colors.transparent,
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(4.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -729,18 +729,21 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                       widget.contactIndex == 0
                           ? Icons.radio_button_on
                           : Icons.group_outlined,
-                      size: 20,
+                      size: 16,
                       color: widget.contactIndex == 0
                           ? Colors.redAccent
                           : Colors.grey,
                     ),
                     Gaps.hGap8,
-                    Text(
-                      '${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Expanded(
+                      flex: 6,
+                      child: Text(
+                          '${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis),
                     ),
                     Gaps.hGap4,
                     Expanded(
@@ -749,7 +752,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     Text(
                       maskPhoneNumber(widget.contact.gPhone ?? ''),
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: Color.fromARGB(255, 163, 199, 247),
                       ),
@@ -759,73 +762,65 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
                 // 下面显示三列
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // 第一列：短信
                     Expanded(
                       child: Column(
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Positioned(
-                                bottom: 2,
-                                left: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: widget.contact.aAAAAHLContactWeights
-                                                    ?.lSmsCount !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .lSmsCount! >
-                                                0
-                                        ? const Color.fromARGB(
-                                            255, 236, 182, 180)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    widget.contact.aAAAAHLContactWeights
-                                                    ?.lSmsCount !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .lSmsCount! >
-                                                0
-                                        ? getDisplayText(widget.contact
-                                            .aAAAAHLContactWeights!.lSmsCount!)
-                                        : '',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 3, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: widget.contact.aAAAAHLContactWeights
+                                                  ?.lSmsCount !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .lSmsCount! >
+                                              0
+                                      ? const Color.fromARGB(255, 236, 182, 180)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  widget.contact.aAAAAHLContactWeights
+                                                  ?.lSmsCount !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .lSmsCount! >
+                                              0
+                                      ? getDisplayText(widget.contact
+                                          .aAAAAHLContactWeights!.lSmsCount!)
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.message,
-                                  size: 24,
-                                  color: Colors.blue,
+                              Gaps.hGap8,
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: const Icon(
+                                    Icons.message,
+                                    size: 18,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => launchAction(3),
                                 ),
-                                onPressed: () => launchAction(3),
                               ),
+                              Gaps.hGap8,
+                              getIcon('call'),
                             ],
                           ),
                           Text(
                             getLastClickTime('sms'),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            '',
                             style: const TextStyle(
                               fontSize: 10,
                               color: Colors.grey,
@@ -840,61 +835,55 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     Expanded(
                       child: Column(
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Positioned(
-                                bottom: 10,
-                                left: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: widget.contact.aAAAAHLContactWeights
-                                                    ?.dCallTimes !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .dCallTimes! >
-                                                0
-                                        ? const Color.fromARGB(
-                                            255, 236, 182, 180)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    widget.contact.aAAAAHLContactWeights
-                                                    ?.dCallTimes !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .dCallTimes! >
-                                                0
-                                        ? getDisplayText(widget.contact
-                                            .aAAAAHLContactWeights!.dCallTimes!)
-                                        : '',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 3, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: widget.contact.aAAAAHLContactWeights
+                                                  ?.dCallTimes !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .dCallTimes! >
+                                              0
+                                      ? const Color.fromARGB(255, 236, 182, 180)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  widget.contact.aAAAAHLContactWeights
+                                                  ?.dCallTimes !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .dCallTimes! >
+                                              0
+                                      ? getDisplayText(widget.contact
+                                          .aAAAAHLContactWeights!.dCallTimes!)
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.call,
-                                  size: 20,
-                                  color: Colors.blue,
+                              Gaps.hGap8,
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: const Icon(
+                                    Icons.call,
+                                    size: 18,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => launchAction(2),
                                 ),
-                                onPressed: () => launchAction(2),
                               ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: getIcon('call'),
-                              ),
+                              Gaps.hGap8,
+                              getIcon('call'),
                             ],
                           ),
                           Text(
@@ -913,61 +902,54 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     Expanded(
                       child: Column(
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Positioned(
-                                bottom: 2,
-                                left: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: widget.contact.aAAAAHLContactWeights
-                                                    ?.wWaCt !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .wWaCt! >
-                                                0
-                                        ? const Color.fromARGB(
-                                            255, 236, 182, 180)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    widget.contact.aAAAAHLContactWeights
-                                                    ?.wWaCt !=
-                                                null &&
-                                            widget
-                                                    .contact
-                                                    .aAAAAHLContactWeights!
-                                                    .wWaCt! >
-                                                0
-                                        ? getDisplayText(widget.contact
-                                            .aAAAAHLContactWeights!.wWaCt!)
-                                        : '',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 3, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: widget.contact.aAAAAHLContactWeights
+                                                  ?.wWaCt !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .wWaCt! >
+                                              0
+                                      ? const Color.fromARGB(255, 236, 182, 180)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  widget.contact.aAAAAHLContactWeights?.wWaCt !=
+                                              null &&
+                                          widget.contact.aAAAAHLContactWeights!
+                                                  .wWaCt! >
+                                              0
+                                      ? getDisplayText(widget.contact
+                                          .aAAAAHLContactWeights!.wWaCt!)
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                icon: const Icon(
-                                  FontAwesomeIcons.whatsapp,
-                                  size: 20,
-                                  color: Colors.blue,
+                              Gaps.hGap8,
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: IconButton(
+                                  padding: EdgeInsets.zero,
+                                  icon: const Icon(
+                                    FontAwesomeIcons.whatsapp,
+                                    size: 18,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () => launchAction(1),
                                 ),
-                                onPressed: () => launchAction(1),
                               ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: getIcon('whatsapp'),
-                              ),
+                              Gaps.hGap8,
+                              getIcon('whatsapp'),
                             ],
                           ),
                           Text(

@@ -206,14 +206,14 @@ class RepaymentBillDialog extends StatelessWidget {
               GestureDetector(
                 onTap: () => _showAvatarDialog(context, avatar),
                 child: CircleAvatar(
-                  radius: 25,
+                  radius: 50,
                   backgroundColor: Colors.white,
                   child: ClipOval(
                     child: CachedNetworkImage(
                       imageUrl: avatar ?? '',
                       fit: BoxFit.cover,
-                      width: 50,
-                      height: 50,
+                      width: 100,
+                      height: 100,
                       placeholder: (context, url) => Image.asset(
                         'assets/images/order/icon_avatar.png',
                         fit: BoxFit.cover,
@@ -235,7 +235,7 @@ class RepaymentBillDialog extends StatelessWidget {
                     Text(
                       repayInfo?.name ?? 'Unknown Borrower',
                       style: const TextStyle(
-                        fontSize: Dimens.font_sp18,
+                        fontSize: Dimens.font_sp14,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -271,7 +271,7 @@ class RepaymentBillDialog extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Text(
-              (repayInfo?.appName ?? '') + ' LOAN REPAYMENT BILL',
+              (repayInfo?.appName ?? '').toUpperCase() + ' LOAN REPAYMENT BILL',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: Dimens.font_sp16,

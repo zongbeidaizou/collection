@@ -43,79 +43,146 @@ class RepaymentBillDialog extends StatelessWidget {
             Flexible(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
                   children: [
-                    // 申请信息
-                    _buildNigerianStyleSection(
-                      'Application Details',
-                      [
-                        _buildNigerianStyleRow('Application Date',
-                            _formatDateTime(track?.applyTime)),
-                        _buildNigerianStyleRow('Disbursement Date',
-                            _formatDateTime(repayInfo?.loanTime)),
-                        _buildNigerianStyleRow('Disbursement Bank',
-                            repayInfo?.receiveBank ?? 'N/A'),
-                        _buildNigerianStyleRow(
-                            'Account Number', repayInfo?.accountNo ?? 'N/A'),
-                        _buildNigerianStyleRow('Disbursement Amt.',
-                            Utils.formatPrice2(repayInfo?.loanAmount ?? 0),
-                            isAmount: true),
-                        _buildNigerianStyleRow(
-                            'Transaction ID', repayInfo?.var10 ?? 'N/A'),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 申请信息
+                        _buildNigerianStyleSection(
+                          'Application Details',
+                          [
+                            _buildNigerianStyleRow('Application Date',
+                                _formatDateTime(track?.applyTime)),
+                            _buildNigerianStyleRow('Disbursement Date',
+                                _formatDateTime(repayInfo?.loanTime)),
+                            _buildNigerianStyleRow('Disbursement Bank',
+                                repayInfo?.receiveBank ?? 'N/A'),
+                            _buildNigerianStyleRow('Account Number',
+                                repayInfo?.accountNo ?? 'N/A'),
+                            _buildNigerianStyleRow('Disbursement Amt.',
+                                Utils.formatPrice2(repayInfo?.loanAmount ?? 0),
+                                isAmount: true),
+                            _buildNigerianStyleRow(
+                                'Transaction ID', repayInfo?.var10 ?? 'N/A'),
+                          ],
+                        ),
+
+                        Gaps.vGap16,
+
+                        // 还款信息
+                        if (period != null) ...[
+                          _buildNigerianStyleSection(
+                            'Repayment Details',
+                            [
+                              _buildNigerianStyleRow(
+                                  'Due Date',
+                                  _formatDateTime(period?.aPExpectRepayTime,
+                                      withTime: false)),
+                              _buildNigerianStyleRow(
+                                  'Total Amount Due',
+                                  Utils.formatPrice2(
+                                      period?.fExpectRepayTotalAmount != null
+                                          ? period!.fExpectRepayTotalAmount! -
+                                              period!.pPaidInterest! -
+                                              period!.qPaidServiceFee! -
+                                              period!.sPaidOverdueAmount! -
+                                              period!.oPaidBorrowAmount! -
+                                              period!.uDeductionTotalAmount!
+                                          : 0),
+                                  isAmount: true),
+                              _buildNigerianStyleRow(
+                                  'Interest Amount',
+                                  Utils.formatPrice2(
+                                      (period!.hExpectInterest ?? 0) -
+                                          (period!.pPaidInterest ?? 0)),
+                                  isAmount: true),
+                              _buildNigerianStyleRow(
+                                  'Penalty Amount',
+                                  Utils.formatPrice2(
+                                      period!.kExpectOverdueAmount ?? 0),
+                                  isAmount: true),
+                              _buildNigerianStyleRow('Amount Paid',
+                                  Utils.formatPrice2(period?.nPaidAmount ?? 0),
+                                  isAmount: true),
+                              _buildNigerianStyleRow(
+                                  'Amount Waived',
+                                  Utils.formatPrice2(
+                                      period?.uDeductionTotalAmount ?? 0),
+                                  isAmount: true),
+                            ],
+                          ),
+                        ],
+
+                        Gaps.vGap16,
+
+                        // 账单底部信息
+                        _buildFooter(),
                       ],
                     ),
-
-                    Gaps.vGap16,
-
-                    // 还款信息
-                    if (period != null) ...[
-                      _buildNigerianStyleSection(
-                        'Repayment Details',
-                        [
-                          _buildNigerianStyleRow(
-                              'Due Date',
-                              _formatDateTime(period?.aPExpectRepayTime,
-                                  withTime: false)),
-                          _buildNigerianStyleRow(
-                              'Total Amount Due',
-                              Utils.formatPrice2(
-                                  period?.fExpectRepayTotalAmount != null
-                                      ? period!.fExpectRepayTotalAmount! -
-                                          period!.pPaidInterest! -
-                                          period!.qPaidServiceFee! -
-                                          period!.sPaidOverdueAmount! -
-                                          period!.oPaidBorrowAmount! -
-                                          period!.uDeductionTotalAmount!
-                                      : 0),
-                              isAmount: true),
-                          _buildNigerianStyleRow(
-                              'Interest Amount',
-                              Utils.formatPrice2(
-                                  (period!.hExpectInterest ?? 0) -
-                                      (period!.pPaidInterest ?? 0)),
-                              isAmount: true),
-                          _buildNigerianStyleRow(
-                              'Penalty Amount',
-                              Utils.formatPrice2(
-                                  period!.kExpectOverdueAmount ?? 0),
-                              isAmount: true),
-                          _buildNigerianStyleRow('Amount Paid',
-                              Utils.formatPrice2(period?.nPaidAmount ?? 0),
-                              isAmount: true),
-                          _buildNigerianStyleRow(
-                              'Amount Waived',
-                              Utils.formatPrice2(
-                                  period?.uDeductionTotalAmount ?? 0),
-                              isAmount: true),
-                        ],
+                    // 实现斜着的多行水印 - 使用WatermarkPainter + 备用Text组件
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: IgnorePointer(
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 50,
+                              left: -5,
+                              child: Transform.rotate(
+                                angle: -35 * 3.14159 / 180,
+                                child: Text(
+                                  (repayInfo?.appName ?? '').toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    color:
+                                        _getAppPrimaryColor().withOpacity(0.2),
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 180,
+                              left: 1,
+                              child: Transform.rotate(
+                                angle: -35 * 3.14159 / 180,
+                                child: Text(
+                                  (repayInfo?.appName ?? '').toUpperCase() +
+                                      "   " +
+                                      (repayInfo?.appName ?? '').toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    color:
+                                        _getAppPrimaryColor().withOpacity(0.2),
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 400,
+                              left: 100,
+                              child: Transform.rotate(
+                                angle: -35 * 3.14159 / 180,
+                                child: Text(
+                                  (repayInfo?.appName ?? '').toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    color:
+                                        _getAppPrimaryColor().withOpacity(0.2),
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-
-                    Gaps.vGap16,
-
-                    // 账单底部信息
-                    _buildFooter(),
+                    ),
                   ],
                 ),
               ),

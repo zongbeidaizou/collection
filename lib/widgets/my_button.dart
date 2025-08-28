@@ -4,10 +4,11 @@ import 'package:bounty_hunter/util/theme_utils.dart';
 
 /// 默认字号18，白字蓝底，高度48
 class MyButton extends StatelessWidget {
-
   const MyButton({
     super.key,
     this.text = '',
+    this.icon,
+    this.iconSize = 18,
     this.fontSize = Dimens.font_sp18,
     this.textColor,
     this.disabledTextColor,
@@ -22,6 +23,8 @@ class MyButton extends StatelessWidget {
   });
 
   final String text;
+  final IconData? icon;
+  final double iconSize;
   final double fontSize;
   final Color? textColor;
   final Color? disabledTextColor;
@@ -38,38 +41,62 @@ class MyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     return TextButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        // 文字颜色
-        foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return disabledTextColor ?? (isDark ? Colours.dark_text_disabled : Colours.text_disabled);
-            }
-            return textColor ?? (isDark ? Colours.dark_button_text : Colors.white);
-          },
-        ),
-        // 背景颜色
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return disabledBackgroundColor ?? (isDark ? Colours.dark_button_disabled : Colours.button_disabled);
-          }
-          return backgroundColor ?? (isDark ? Colours.dark_app_main : Colours.app_main);
-        }),
-        // 水波纹
-        overlayColor: MaterialStateProperty.resolveWith((states) {
-          return (textColor ?? (isDark ? Colours.dark_button_text : Colors.white)).withOpacity(0.12);
-        }),
-        // 按钮最小大小
-        minimumSize: (minWidth == null || minHeight == null) ? null : MaterialStateProperty.all<Size>(Size(minWidth!, minHeight!)),
-        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(padding),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
+        onPressed: onPressed,
+        style: ButtonStyle(
+          // 文字颜色
+          foregroundColor: MaterialStateProperty.resolveWith(
+            (states) {
+              if (states.contains(MaterialState.disabled)) {
+                return disabledTextColor ??
+                    (isDark
+                        ? Colours.dark_text_disabled
+                        : Colours.text_disabled);
+              }
+              return textColor ??
+                  (isDark ? Colours.dark_button_text : Colors.white);
+            },
           ),
+          // 背景颜色
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.disabled)) {
+              return disabledBackgroundColor ??
+                  (isDark
+                      ? Colours.dark_button_disabled
+                      : Colours.button_disabled);
+            }
+            return backgroundColor ??
+                (isDark ? Colours.dark_app_main : Colours.app_main);
+          }),
+          // 水波纹
+          overlayColor: MaterialStateProperty.resolveWith((states) {
+            return (textColor ??
+                    (isDark ? Colours.dark_button_text : Colors.white))
+                .withOpacity(0.12);
+          }),
+          // 按钮最小大小
+          minimumSize: (minWidth == null || minHeight == null)
+              ? null
+              : MaterialStateProperty.all<Size>(Size(minWidth!, minHeight!)),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(padding),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius),
+            ),
+          ),
+          side: MaterialStateProperty.all<BorderSide>(side),
         ),
-        side: MaterialStateProperty.all<BorderSide>(side),
-      ),
-      child: Text(text, style: TextStyle(fontSize: fontSize),)
-    );
+        child: Row(
+          children: [
+            if (icon != null)
+              Icon(
+                icon!,
+                size: iconSize,
+              ),
+            Text(
+              text,
+              style: TextStyle(fontSize: fontSize),
+            )
+          ],
+        ));
   }
 }

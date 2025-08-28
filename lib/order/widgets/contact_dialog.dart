@@ -113,7 +113,7 @@ class ContactCard extends StatefulWidget {
   final void Function(int, int) onCallOrSms;
   final CollectionLogOtherRepayInfo? repayInfo;
   final int collectionOrderId;
-  final bool selected;
+  bool selected;
   final CollectionLogOtherPeriod? period;
   ContactCard({
     required this.contact,
@@ -985,7 +985,10 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     final Color buttonColor = isDark ? Colours.dark_text : Colors.white;
 
     return InkWell(
-        onTap: () {},
+        onTap: () {
+          widget.selected = false;
+          setState(() {});
+        },
         child: ColoredBox(
           color: isDark ? const Color(0xB34D4D4D) : const Color(0x4D000000),
           child: Padding(
@@ -995,7 +998,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               children: <Widget>[
                 MyButton(
                   key: Key('goods_edit_item_'),
-                  text: 'Non-Productive',
+                  icon: Icons.close,
+                  text: 'Invalid Contact',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
                   minWidth: 56.0,
@@ -1003,23 +1007,18 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: Colors.red,
-                  onPressed: () => _updateContactValue(20), // 20 = 没有价值
-                ),
-                MyButton(
-                  key: Key('goods_operation_item_'),
-                  text: 'Productive Lead',
-                  fontSize: Dimens.font_sp10,
-                  radius: 24.0,
-                  minWidth: 56.0,
-                  minHeight: 56.0,
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  backgroundColor: Color.fromARGB(255, 161, 232, 162),
-                  onPressed: () => _updateContactValue(30), // 30 = 有价值
+                  onPressed: () {
+                    _updateContactValue(20); // 20 = 没有价值
+                    widget.selected = false;
+                    setState(() {});
+                    showToast(
+                        '${widget.contact.fName} has been set to Invalid Contact');
+                  },
                 ),
                 MyButton(
                   key: Key('goods_delete_item_'),
-                  text: 'High-Value Lead',
+                  icon: Icons.done_all_rounded,
+                  text: 'Confirms Knowing Borrower',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
                   minWidth: 56.0,
@@ -1027,7 +1026,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: const Color.fromARGB(255, 2, 158, 7),
-                  onPressed: () => _updateContactValue(40), // 40 = 十分有价值
+                  onPressed: () {
+                    _updateContactValue(40); // 40 = 十分有价值
+                    widget.selected = false;
+                    setState(() {});
+                    showToast(
+                        '${widget.contact.fName} has been set to Confirms Knowing Borrower');
+                  },
                 ),
               ],
             ),

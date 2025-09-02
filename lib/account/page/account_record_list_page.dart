@@ -372,7 +372,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
 
   Widget _buildItem(CommissionData log, int i) {
     String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
-    if (log.oType == 1 && log.oType == 6) {
+    if (log.oType == 1 || log.oType == 6) {
       txt =
           'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
     } else if (log.oType == 2) {

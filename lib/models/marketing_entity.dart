@@ -1,0 +1,98 @@
+import 'package:bounty_hunter/generated/json/base/json_field.dart';
+import 'package:bounty_hunter/generated/json/marketing_entity.g.dart';
+import 'dart:convert';
+export 'package:bounty_hunter/generated/json/marketing_entity.g.dart';
+
+@JsonSerializable()
+class MarketingEntity {
+	bool? success = false;
+	String? errorMessage = '';
+	String? message = '';
+	List<MarketingData>? data = [];
+	List<dynamic>? other = [];
+	int? total = 0;
+	int? currentPage = 0;
+	int? perPage = 0;
+	bool? hasMorePages = false;
+
+	MarketingEntity();
+
+	factory MarketingEntity.fromJson(Map<String, dynamic> json) => $MarketingEntityFromJson(json);
+
+	Map<String, dynamic> toJson() => $MarketingEntityToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class MarketingData {
+	int? id = 0;
+	@JSONField(name: 'a_phone')
+	String? aPhone = '';
+	@JSONField(name: 'd_admin_id')
+	int? dAdminId = 0;
+	@JSONField(name: 'e_status')
+	int? eStatus = 0;
+	@JSONField(name: 'q_end_at')
+	String? qEndAt = '';
+	@JSONField(name: 'u_status')
+	int? uStatus = 0;
+	@JSONField(name: 'a_a_a_a_a_s_l_telemarketing_detail_logs')
+	List<MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = [];
+
+	MarketingData();
+
+	factory MarketingData.fromJson(Map<String, dynamic> json) => $MarketingDataFromJson(json);
+
+	Map<String, dynamic> toJson() => $MarketingDataToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class MarketingDataAAAAASLTelemarketingDetailLogs {
+	int? id = 0;
+	@JSONField(name: 'a_telemarketing_detail_id')
+	int? aTelemarketingDetailId = 0;
+	@JSONField(name: 'd_admin_id')
+	int? dAdminId = 0;
+	@JSONField(name: 'e_status')
+	int? eStatus = 0;
+	@JSONField(name: 'h_download_time')
+	dynamic hDownloadTime;
+	@JSONField(name: 'i_register_time')
+	dynamic iRegisterTime;
+	@JSONField(name: 'j_sms_cnt')
+	int? jSmsCnt = 0;
+	@JSONField(name: 'k_wa_cnt')
+	int? kWaCnt = 0;
+	@JSONField(name: 'l_phone_cnt')
+	int? lPhoneCnt = 0;
+	@JSONField(name: 'q_end_at')
+	String? qEndAt = '';
+	@JSONField(name: 'r_last_phone_at')
+	String? rLastPhoneAt = '';
+	@JSONField(name: 's_last_sms_at')
+	String? sLastSmsAt = '';
+	@JSONField(name: 't_last_wa_at')
+	String? tLastWaAt = '';
+	@JSONField(name: 'u_status')
+	int? uStatus = 0;
+
+	MarketingDataAAAAASLTelemarketingDetailLogs();
+
+	factory MarketingDataAAAAASLTelemarketingDetailLogs.fromJson(Map<String, dynamic> json) => $MarketingDataAAAAASLTelemarketingDetailLogsFromJson(json);
+
+	Map<String, dynamic> toJson() => $MarketingDataAAAAASLTelemarketingDetailLogsToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}

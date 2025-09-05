@@ -242,213 +242,280 @@ class _Item extends StatefulWidget {
 
 class _ItemState extends State<_Item> {
   String method = '';
+
+  Widget getIcon(String actionType) {
+    // 如果 aAAAAHLContactWeights 不存在，返回空组件
+    if (widget.item.aAAAASLTelemarketingDetailLogs == null ||
+        widget.item.aAAAASLTelemarketingDetailLogs!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    if (actionType == 'call') {
+      if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus == 10) {
+        //未知
+        return const SizedBox.shrink();
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
+          20) {
+        //没有价值
+        return const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 12,
+        );
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
+          30) {
+        //有价值
+        return const Icon(
+          Icons.question_mark,
+          color: Color.fromARGB(255, 10, 238, 14),
+          size: 12,
+        );
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
+          40) {
+        //十分有价值
+        return const Icon(
+          Icons.done,
+          color: Colors.green,
+          size: 12,
+        );
+      }
+    } else if (actionType == 'whatsapp') {
+      if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus == 10) {
+        return const SizedBox.shrink();
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
+          20) {
+        return const Icon(
+          Icons.close,
+          color: Colors.red,
+          size: 12,
+        );
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
+          30) {
+        return const Icon(
+          Icons.question_mark,
+          color: Colors.blueAccent,
+          size: 12,
+        );
+      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
+          40) {
+        return const Icon(
+          Icons.done,
+          color: Colors.green,
+          size: 12,
+        );
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
-          children: <Widget>[
-            MyCard(
-              shadowColor: Colors.blueAccent,
-              color: widget.color,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding:
+          const EdgeInsets.only(left: 0.2, right: 0.2, top: 8.0, bottom: 2.0),
+      child: Stack(
+        children: [
+          Column(
+            children: <Widget>[
+              MyCard(
+                shadowColor: Colors.blueAccent,
+                color: widget.color,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Phone Number',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              widget.item.aPhone!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'Phone Number',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w500,
+                          InkWell(
+                            onTap: () {
+                              showToast('Sms');
+                              setState(() {
+                                method = 'sms';
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  child: const Icon(
+                                    Icons.message,
+                                    size: 16,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -1,
+                                  right: -1,
+                                  child: getIcon('sms'),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            widget.item.aPhone!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                            '1 min ago',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            showToast('Sms');
-                            setState(() {
-                              method = 'sms';
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                child: const Icon(
-                                  Icons.message,
-                                  size: 16,
-                                  color: Colors.blueAccent,
+                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              widget.onTap(widget.index);
+                              showToast('Call');
+                              setState(() {
+                                method = 'call';
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  child: const Icon(
+                                    Icons.call,
+                                    size: 16,
+                                    color: Colors.blueAccent,
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                top: -1,
-                                right: -1,
-                                child: Icon(Icons.close,
-                                    size: 12, color: Colors.transparent),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '1 min ago',
-                          style: TextStyle(
-                            fontSize: 8,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    const SizedBox(width: 12),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            widget.onTap(widget.index);
-                            showToast('Call');
-                            setState(() {
-                              method = 'call';
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                child: const Icon(
-                                  Icons.call,
-                                  size: 16,
-                                  color: Colors.blueAccent,
+                                Positioned(
+                                  top: -1,
+                                  right: -1,
+                                  child: getIcon('call'),
                                 ),
-                              ),
-                              Positioned(
-                                top: -1,
-                                right: -1,
-                                child: Icon(Icons.close,
-                                    size: 12, color: Colors.red),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '1 min ago',
-                          style: TextStyle(
-                            fontSize: 8,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    const SizedBox(width: 12),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            widget.onTap(widget.index);
-                            showToast('whatsapp');
-                            setState(() {
-                              method = 'whatsapp';
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(6),
-                                child: const Icon(
-                                  FontAwesomeIcons.whatsapp,
-                                  size: 16,
-                                  color: Colors.green,
-                                ),
-                              ),
-                              Positioned(
-                                top: -1,
-                                right: -1,
-                                child: Icon(Icons.check,
-                                    size: 12, color: Colors.green),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '1 min ago',
-                          style: TextStyle(
-                            fontSize: 8,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
-                    const SizedBox(width: 12),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            showToast('edit');
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            child: Icon(
-                              Icons.edit,
-                              size: 16,
-                              color: Colors.blue,
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'edit',
-                          style: TextStyle(
-                            fontSize: 8,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
+                          const SizedBox(height: 2),
+                          Text(
+                            '1 min ago',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              widget.onTap(widget.index);
+                              showToast('whatsapp');
+                              setState(() {
+                                method = 'whatsapp';
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  child: const Icon(
+                                    FontAwesomeIcons.whatsapp,
+                                    size: 16,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -1,
+                                  right: -1,
+                                  child: getIcon('whatsapp'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '1 min ago',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 8),
+                      const SizedBox(width: 12),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              showToast('edit');
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              child: Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '',
+                            style: TextStyle(
+                              fontSize: 8,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
-        if (widget.selected) _buildGoodsMenu(context, method) else Gaps.empty,
-      ],
+              )
+            ],
+          ),
+          if (widget.selected) _buildGoodsMenu(context, method) else Gaps.empty,
+        ],
+      ),
     );
   }
 

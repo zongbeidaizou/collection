@@ -371,21 +371,21 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         return const Icon(
           Icons.close,
           color: Colors.red,
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 30) {
         //有价值
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 40) {
         //十分有价值
         return const Icon(
           Icons.done_all_rounded,
           color: Colors.green,
-          size: 20,
+          size: 13,
         );
       }
     } else if (actionType == 'sms') {
@@ -397,20 +397,20 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         return const Icon(
           Icons.close,
           color: Colors.red,
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 30) {
         //有价值
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.qPhoneStatus == 40) {
         return const Icon(
           Icons.done_all_rounded,
           color: Colors.green,
-          size: 20,
+          size: 13,
         );
       }
     } else if (actionType == 'whatsapp') {
@@ -420,19 +420,19 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
         return const Icon(
           Icons.close,
           color: Colors.red,
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 30) {
         return const Icon(
           Icons.done,
           color: Color.fromARGB(255, 10, 238, 14),
-          size: 16,
+          size: 13,
         );
       } else if (widget.contact.aAAAAHLContactWeights!.rWaStatus == 40) {
         return const Icon(
           Icons.done_all_rounded,
           color: Colors.green,
-          size: 20,
+          size: 13,
         );
       }
     }
@@ -817,7 +817,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                         .aAAAAHLContactWeights!.lSmsCount!)
                                     : '',
                                 style: const TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 19,
                                   color: Colors.white,
                                 ),
                               ),
@@ -825,10 +825,10 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           ),
                           Container(
                             padding: const EdgeInsets.only(
-                                top: 2, bottom: 2, left: 17, right: 17),
+                                top: 7, bottom: 0, left: 14, right: 13),
                             child: const Icon(
                               Icons.message,
-                              size: 18,
+                              size: 16,
                               color: Colors.blue,
                             ),
                           ),
@@ -888,7 +888,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                         .aAAAAHLContactWeights!.dCallTimes!)
                                     : '',
                                 style: const TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 9,
                                   color: Colors.white,
                                 ),
                               ),
@@ -896,10 +896,10 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           ),
                           Container(
                             padding: const EdgeInsets.only(
-                                top: 2, bottom: 2, left: 17, right: 17),
+                                top: 7, bottom: 0, left: 14, right: 13),
                             child: const Icon(
                               Icons.call,
-                              size: 18,
+                              size: 16,
                               color: Colors.blue,
                             ),
                           ),
@@ -957,7 +957,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                         .contact.aAAAAHLContactWeights!.wWaCt!)
                                     : '',
                                 style: const TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 9,
                                   color: Colors.white,
                                 ),
                               ),
@@ -965,10 +965,10 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           ),
                           Container(
                             padding: const EdgeInsets.only(
-                                top: 2, bottom: 2, left: 17, right: 17),
+                                top: 7, bottom: 0, left: 14, right: 13),
                             child: const Icon(
                               FontAwesomeIcons.whatsapp,
-                              size: 18,
+                              size: 16,
                               color: Colors.blue,
                             ),
                           ),

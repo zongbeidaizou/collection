@@ -279,7 +279,7 @@ class OrderItem extends StatelessWidget {
                   ),
                   Gaps.hGap2,
                   Text(
-                      "${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 ? '+20' : ''}% ",
+                      "${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% ",
                       style: TextStyle(color: Colors.red, fontSize: 12)),
                 ],
               )
@@ -323,7 +323,7 @@ class OrderItem extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(right: 4.0),
+                      margin: const EdgeInsets.only(right: 1.4),
                       height: 8.0,
                       width: 8.0,
                       decoration: BoxDecoration(
@@ -357,7 +357,7 @@ class OrderItem extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(right: 4.0),
+                      margin: const EdgeInsets.only(right: 1.4),
                       height: 8.0,
                       width: 8.0,
                       decoration: BoxDecoration(
@@ -383,7 +383,7 @@ class OrderItem extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 4.0),
+                    margin: const EdgeInsets.only(right: 1.4),
                     height: 8.0,
                     width: 8.0,
                     decoration: BoxDecoration(
@@ -415,7 +415,7 @@ class OrderItem extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(right: 4.0),
+                      margin: const EdgeInsets.only(right: 1.4),
                       height: 8.0,
                       width: 8.0,
                       decoration: BoxDecoration(
@@ -455,7 +455,7 @@ class OrderItem extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 4.0),
+                    margin: const EdgeInsets.only(right: 1.4),
                     height: 8.0,
                     width: 8.0,
                     decoration: BoxDecoration(
@@ -491,7 +491,7 @@ class OrderItem extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 4.0),
+                    margin: const EdgeInsets.only(right: 1.4),
                     height: 8.0,
                     width: 8.0,
                     decoration: BoxDecoration(
@@ -503,11 +503,17 @@ class OrderItem extends StatelessWidget {
                     text: TextSpan(
                       style: textTextStyle,
                       children: <TextSpan>[
-                        // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                        // TextSpan(text: 'overdue ${DateTime.parse(item.pExpectRepayTime!).difference(DateTime.now()).inDays} days'),
                         TextSpan(
-                            text:
-                                'overdue ${calculateCalendarDaysDifference(DateTime.parse(item.pExpectRepayTime!), DateTime.now())} days'),
+                            text: 'overdue days: ',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(fontSize: Dimens.font_sp10)),
+                        TextSpan(
+                            text: calculateCalendarDaysDifference(
+                                    DateTime.parse(item.pExpectRepayTime!),
+                                    DateTime.now())
+                                .toString()),
                       ],
                     ),
                   ),
@@ -585,7 +591,7 @@ class OrderItem extends StatelessWidget {
                               // ignore: unnecessary_parenthesis
                               '${_calculateBonus(provider, item, period)} bonus'),
                           Text(
-                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 ? '+20' : ''}% of amount",
+                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
@@ -756,6 +762,8 @@ class OrderItem extends StatelessWidget {
       if (overdueDays < 9) {
         additionalRate = 5.0;
       } else if (overdueDays > 8) {
+        additionalRate = 10.0;
+      } else if (overdueDays > 20) {
         additionalRate = 20.0;
       }
     }

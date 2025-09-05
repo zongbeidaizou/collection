@@ -223,6 +223,14 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
   if (uStatus != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.uStatus = uStatus;
   }
+  final int? vWaStatus = jsonConvert.convert<int>(json['v_wa_status']);
+  if (vWaStatus != null) {
+    marketingDataAAAAASLTelemarketingDetailLogs.vWaStatus = vWaStatus;
+  }
+  final int? wPhoneStatus = jsonConvert.convert<int>(json['w_phone_status']);
+  if (wPhoneStatus != null) {
+    marketingDataAAAAASLTelemarketingDetailLogs.wPhoneStatus = wPhoneStatus;
+  }
   return marketingDataAAAAASLTelemarketingDetailLogs;
 }
 
@@ -243,6 +251,8 @@ Map<String, dynamic> $MarketingDataAAAAASLTelemarketingDetailLogsToJson(
   data['s_last_sms_at'] = entity.sLastSmsAt;
   data['t_last_wa_at'] = entity.tLastWaAt;
   data['u_status'] = entity.uStatus;
+  data['v_wa_status'] = entity.vWaStatus;
+  data['w_phone_status'] = entity.wPhoneStatus;
   return data;
 }
 
@@ -262,6 +272,8 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
     String? sLastSmsAt,
     String? tLastWaAt,
     int? uStatus,
+    int? vWaStatus,
+    int? wPhoneStatus,
   }) {
     return MarketingDataAAAAASLTelemarketingDetailLogs()
       ..id = id ?? this.id
@@ -278,6 +290,8 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
       ..rLastPhoneAt = rLastPhoneAt ?? this.rLastPhoneAt
       ..sLastSmsAt = sLastSmsAt ?? this.sLastSmsAt
       ..tLastWaAt = tLastWaAt ?? this.tLastWaAt
-      ..uStatus = uStatus ?? this.uStatus;
+      ..uStatus = uStatus ?? this.uStatus
+      ..vWaStatus = vWaStatus ?? this.vWaStatus
+      ..wPhoneStatus = wPhoneStatus ?? this.wPhoneStatus;
   }
 }

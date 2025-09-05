@@ -84,6 +84,10 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	String? tLastWaAt = '';
 	@JSONField(name: 'u_status')
 	int? uStatus = 0;
+	@JSONField(name: 'v_wa_status')
+	int? vWaStatus = 0;
+	@JSONField(name: 'w_phone_status')
+	int? wPhoneStatus = 0;
 
 	MarketingDataAAAAASLTelemarketingDetailLogs();
 

@@ -1,6 +1,7 @@
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/page/sms_history_page.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
+import 'package:bounty_hunter/shop/widgets/send_type_dialog.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
@@ -185,6 +187,20 @@ class OrderItem extends StatelessWidget {
               // Toast.show('收款类型：$templateId');
               onSendSms?.call(templateId, smsContent);
               // Toast.show('收款类型：$type');
+            },
+          );
+        },
+      );
+    }
+
+    void _showSendTypeDialog() {
+      showElasticDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SendTypeDialog(
+            onPressed: (i, value) {
+              showToast(i.toString());
             },
           );
         },
@@ -624,7 +640,7 @@ class OrderItem extends StatelessWidget {
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('sms_recording'),
-                text: "Sms Record",
+                text: "SmsRecord",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
@@ -672,7 +688,7 @@ class OrderItem extends StatelessWidget {
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_22_$index'),
-                text: "All Conts",
+                text: "AllConts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 icon: Icon(Icons.group_add, size: 15, color: Colors.white),
@@ -692,6 +708,19 @@ class OrderItem extends StatelessWidget {
                   _showContactListModal();
                 },
               ),
+              Gaps.hGap4,
+              InkWell(
+                  onTap: () {
+                    _showSendTypeDialog();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(top: 7, bottom: 7),
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Icon(Icons.more_vert, size: 15, color: Colors.white),
+                  )),
             ],
           )
       ],
@@ -784,7 +813,7 @@ class OrderItem extends StatelessWidget {
 
         // 比较 r_wa_status (降序)
         if (aWeights.rWaStatus != bWeights.rWaStatus) {
-          return (bWeights.rWaStatus ?? 0).compareTo(aWeights.rWaStatus ?? 0);
+          return (bWeights.rWaStatus ?? 25).compareTo(aWeights.rWaStatus ?? 25);
         }
 
         // 比较 q_phone_status (降序)
@@ -814,6 +843,18 @@ class OrderItem extends StatelessWidget {
       // 如果所有属性都相等，保持原有顺序
       return 0;
     });
+    //把sortedList中存在aAAAAHLContactWeights的并且aAAAAHLContactWeights.rWaStatus == 20的取出来，并且放到最后面
+    final List<CollectionLogOtherContactInfo2Data> waStatus20List = [];
+    for (var item in sortedList) {
+      if (item.aAAAAHLContactWeights != null &&
+          item.aAAAAHLContactWeights!.rWaStatus == 20) {
+        waStatus20List.add(item);
+      }
+    }
+    sortedList.removeWhere((element) =>
+        element.aAAAAHLContactWeights != null &&
+        element.aAAAAHLContactWeights!.rWaStatus == 20);
+    sortedList.addAll(waStatus20List);
 
     return sortedList;
   }
@@ -856,7 +897,7 @@ class OrderItemButton extends StatelessWidget {
                   Text(text,
                       style: TextStyle(
                           fontSize: Dimens.font_sp14, color: textColor)),
-                  Gaps.hGap4,
+                  Gaps.hGap2,
                   icon!,
                 ],
               )

@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
+import 'package:oktoast/oktoast.dart';
 
 class RepaymentBillDialog extends StatelessWidget {
   const RepaymentBillDialog({
@@ -29,10 +31,8 @@ class RepaymentBillDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.95,
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.9,
-        ),
+        width: double.infinity,
+        height: double.infinity,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -42,7 +42,7 @@ class RepaymentBillDialog extends StatelessWidget {
             // 账单内容
             Flexible(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Stack(
                   children: [
                     Column(
@@ -68,7 +68,7 @@ class RepaymentBillDialog extends StatelessWidget {
                           ],
                         ),
 
-                        Gaps.vGap16,
+                        Gaps.vGap4,
 
                         // 还款信息
                         if (period != null) ...[
@@ -114,8 +114,7 @@ class RepaymentBillDialog extends StatelessWidget {
                           ),
                         ],
 
-                        Gaps.vGap16,
-
+                        Gaps.vGap4,
                         // 账单底部信息
                         _buildFooter(),
                       ],
@@ -252,7 +251,7 @@ class RepaymentBillDialog extends StatelessWidget {
   // 头部设计
   Widget _buildHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: _getAppGradientColors(),
@@ -328,7 +327,7 @@ class RepaymentBillDialog extends StatelessWidget {
               ),
             ],
           ),
-          Gaps.vGap16,
+          Gaps.vGap4,
           // 账单标题
           Container(
             width: double.infinity,
@@ -472,28 +471,38 @@ class RepaymentBillDialog extends StatelessWidget {
 
   // 底部信息
   Widget _buildFooter() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: Colors.grey.shade200,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Generated on ${DateFormat('EEEE, MMMM dd, yyyy \'at\' HH:mm', 'en_US').format(DateTime.now())}',
-            style: TextStyle(
-              fontSize: Dimens.font_sp12,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
-            ),
+    return GestureDetector(
+      onTap: () {
+        showToast('The information has been uploaded.');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(8.0),
+          //添加背景图片
+
+          border: Border.all(
+            color: Colors.grey.shade200,
+            width: 1,
           ),
-          Gaps.vGap8,
-        ],
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Upload the customer\'s adverse credit information to FirstCentral.',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Image.asset(
+              'assets/images/order/FirstCentral.png',
+              fit: BoxFit.cover,
+            )
+          ],
+        ),
       ),
     );
   }

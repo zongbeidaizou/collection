@@ -16,6 +16,7 @@ import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
+import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
@@ -361,6 +362,21 @@ class JsonConvert {
       return data.map<HKContactSmsData>((Map<String, dynamic> e) =>
           HKContactSmsData.fromJson(e)).toList() as M;
     }
+    if (<MarketingEntity>[] is M) {
+      return data.map<MarketingEntity>((Map<String, dynamic> e) =>
+          MarketingEntity.fromJson(e)).toList() as M;
+    }
+    if (<MarketingData>[] is M) {
+      return data.map<MarketingData>((Map<String, dynamic> e) =>
+          MarketingData.fromJson(e)).toList() as M;
+    }
+    if (<MarketingDataAAAAASLTelemarketingDetailLogs>[] is M) {
+      return data
+          .map<MarketingDataAAAAASLTelemarketingDetailLogs>((
+          Map<String, dynamic> e) =>
+          MarketingDataAAAAASLTelemarketingDetailLogs.fromJson(e))
+          .toList() as M;
+    }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
           ProductEntity.fromJson(e)).toList() as M;
@@ -548,6 +564,10 @@ class JsonConvertClassCollection {
     (CommissionData).toString(): CommissionData.fromJson,
     (HKContactSmsEntity).toString(): HKContactSmsEntity.fromJson,
     (HKContactSmsData).toString(): HKContactSmsData.fromJson,
+    (MarketingEntity).toString(): MarketingEntity.fromJson,
+    (MarketingData).toString(): MarketingData.fromJson,
+    (MarketingDataAAAAASLTelemarketingDetailLogs)
+        .toString(): MarketingDataAAAAASLTelemarketingDetailLogs.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SGContactEntity).toString(): SGContactEntity.fromJson,

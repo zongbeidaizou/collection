@@ -318,7 +318,7 @@ class OrderItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 2,
+              flex: 5,
               child: InkWell(
                 child: Row(
                   children: [
@@ -341,11 +341,6 @@ class OrderItem extends StatelessWidget {
                       ),
                     ),
                     Gaps.hGap2,
-                    Icon(
-                      Icons.content_copy,
-                      size: 14,
-                      color: Colours.app_main.withOpacity(0.6),
-                    ),
                   ],
                 ),
                 onTap: () {
@@ -353,35 +348,38 @@ class OrderItem extends StatelessWidget {
                 },
               ),
             ),
-            Gaps.hGap4,
             Expanded(
-              flex: 3,
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 4.0),
-                    height: 8.0,
-                    width: 8.0,
-                    decoration: BoxDecoration(
-                      color: Colours.app_main.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(4.0),
+              flex: 8,
+              child: InkWell(
+                onTap: () {
+                  FlutterClipboard.copy(item.vName ?? '');
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 4.0),
+                      height: 8.0,
+                      width: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colours.app_main.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
                     ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: textTextStyle,
-                      children: <TextSpan>[
-                        // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                        TextSpan(text: item.vName),
-                      ],
+                    RichText(
+                      text: TextSpan(
+                        style: textTextStyle,
+                        children: <TextSpan>[
+                          // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                          TextSpan(text: item.vName),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            Gaps.hGap4,
             Expanded(
-              flex: 2,
+              flex: 5,
               child: Row(
                 children: [
                   Container(
@@ -412,7 +410,7 @@ class OrderItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 2,
+              flex: 5,
               child: InkWell(
                 child: Row(
                   children: [
@@ -429,7 +427,12 @@ class OrderItem extends StatelessWidget {
                       text: TextSpan(
                         style: textTextStyle,
                         children: <TextSpan>[
-                          // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                          TextSpan(
+                              text: 'Left:',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
                               text: Utils.formatPrice2(
                                   (period?.fExpectRepayTotalAmount ?? 0) -
@@ -447,9 +450,8 @@ class OrderItem extends StatelessWidget {
                 onTap: () {},
               ),
             ),
-            Gaps.hGap4,
             Expanded(
-              flex: 3,
+              flex: 8,
               child: Row(
                 children: [
                   Container(
@@ -465,12 +467,17 @@ class OrderItem extends StatelessWidget {
                     text: TextSpan(
                       style: textTextStyle,
                       children: <TextSpan>[
-                        // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                        TextSpan(
+                            text: 'Paid:',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(fontSize: Dimens.font_sp10)),
                         TextSpan(
                           text: Utils.formatPrice2(period?.nPaidAmount ?? 0),
                           style: period?.nPaidAmount == 0
                               ? textTextStyle
-                              : TextStyle(
+                              : const TextStyle(
                                   fontSize: 12, color: Colors.greenAccent),
                         ),
                       ],
@@ -479,9 +486,8 @@ class OrderItem extends StatelessWidget {
                 ],
               ),
             ),
-            Gaps.hGap4,
             Expanded(
-              flex: 2,
+              flex: 5,
               child: Row(
                 children: [
                   Container(

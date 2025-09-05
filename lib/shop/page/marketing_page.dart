@@ -241,6 +241,7 @@ class _Item extends StatefulWidget {
 }
 
 class _ItemState extends State<_Item> {
+  String method = '';
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -286,8 +287,10 @@ class _ItemState extends State<_Item> {
                       children: [
                         InkWell(
                           onTap: () {
-                            widget.onTap(widget.index);
                             showToast('Sms');
+                            setState(() {
+                              method = 'sms';
+                            });
                           },
                           borderRadius: BorderRadius.circular(8),
                           child: Stack(
@@ -329,6 +332,9 @@ class _ItemState extends State<_Item> {
                           onTap: () {
                             widget.onTap(widget.index);
                             showToast('Call');
+                            setState(() {
+                              method = 'call';
+                            });
                           },
                           borderRadius: BorderRadius.circular(8),
                           child: Stack(
@@ -370,6 +376,9 @@ class _ItemState extends State<_Item> {
                           onTap: () {
                             widget.onTap(widget.index);
                             showToast('whatsapp');
+                            setState(() {
+                              method = 'whatsapp';
+                            });
                           },
                           borderRadius: BorderRadius.circular(8),
                           child: Stack(
@@ -438,18 +447,18 @@ class _ItemState extends State<_Item> {
             )
           ],
         ),
-        if (widget.selected) _buildGoodsMenu2(context) else Gaps.empty,
+        if (widget.selected) _buildGoodsMenu(context, method) else Gaps.empty,
       ],
     );
   }
 
-  Widget _buildGoodsMenu(BuildContext context) {
+  Widget _buildGoodsMenu(BuildContext context, String method) {
     return Positioned.fill(
-      child: _buildGoodsMenuContent(context),
+      child: _buildGoodsMenuContent(context, method),
     );
   }
 
-  Widget _buildGoodsMenuContent(BuildContext context) {
+  Widget _buildGoodsMenuContent(BuildContext context, String method) {
     final bool isDark = true;
     final Color buttonColor = isDark ? Colours.dark_text : Colors.white;
 
@@ -468,7 +477,7 @@ class _ItemState extends State<_Item> {
                 MyButton(
                   key: Key('goods_edit_item_'),
                   icon: Icons.close,
-                  text: 'Unreachable or Unacquainted',
+                  text: method == 'call' ? 'Disconnected' : 'Not registered',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
                   minWidth: 56.0,
@@ -485,16 +494,16 @@ class _ItemState extends State<_Item> {
                   },
                 ),
                 MyButton(
-                  key: Key('Uninterested'),
-                  icon: Icons.remove_done,
-                  text: 'Uninterested',
+                  key: Key('No answer'),
+                  icon: Icons.question_mark,
+                  text: method == 'call' ? 'No answer' : 'No reply',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
                   minWidth: 56.0,
                   minHeight: 56.0,
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  backgroundColor: Colors.orange[700],
+                  backgroundColor: Colors.blueAccent,
                   onPressed: () {
                     // _updateContactValue(40); // 40 = 十分有价值
                     widget.selected = false;
@@ -504,9 +513,9 @@ class _ItemState extends State<_Item> {
                   },
                 ),
                 MyButton(
-                  key: Key('Interested'),
-                  icon: Icons.done_all_rounded,
-                  text: 'Interested',
+                  key: Key('Answered'),
+                  icon: Icons.check,
+                  text: 'Answered',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
                   minWidth: 56.0,

@@ -157,6 +157,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   int? _currentTemplateId; // 存储当前选中的模板ID
   Timer? _cleanupTimer; // 清理定时器
   String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
+  int method = 0;
 
   @override
   void initState() {
@@ -595,6 +596,9 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     Future<void> launchAction(int type) async {
       //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);
+      setState(() {
+        method = type;
+      });
 
       // 记录操作来源
       if (type == 1) {
@@ -831,7 +835,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           Positioned(
                             top: -1,
                             right: -1,
-                            child: getIcon('call'),
+                            child: getIcon(''),
                           ),
                         ],
                       ),
@@ -991,7 +995,9 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               ],
             ),
           ),
-          widget.selected ? _buildGoodsMenu(context) : Gaps.empty,
+          widget.selected && method != 3
+              ? _buildGoodsMenu(context)
+              : Gaps.empty,
         ],
       ),
     );

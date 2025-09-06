@@ -65,11 +65,11 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	@JSONField(name: 'e_status')
 	int? eStatus = 0;
 	@JSONField(name: 'h_download_time')
-	dynamic hDownloadTime;
+	String? hDownloadTime;
 	@JSONField(name: 'i_register_time')
-	dynamic iRegisterTime;
+	String? iRegisterTime;
 	@JSONField(name: 'g_viewed_time')
-	dynamic gViewedTime;
+	String? gViewedTime;
 	@JSONField(name: 'j_sms_cnt')
 	int? jSmsCnt = 0;
 	@JSONField(name: 'k_wa_cnt')

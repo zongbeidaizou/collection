@@ -182,15 +182,18 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
   if (eStatus != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.eStatus = eStatus;
   }
-  final dynamic hDownloadTime = json['h_download_time'];
+  final String? hDownloadTime = jsonConvert.convert<String>(
+      json['h_download_time']);
   if (hDownloadTime != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.hDownloadTime = hDownloadTime;
   }
-  final dynamic iRegisterTime = json['i_register_time'];
+  final String? iRegisterTime = jsonConvert.convert<String>(
+      json['i_register_time']);
   if (iRegisterTime != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.iRegisterTime = iRegisterTime;
   }
-  final dynamic gViewedTime = json['g_viewed_time'];
+  final String? gViewedTime = jsonConvert.convert<String>(
+      json['g_viewed_time']);
   if (gViewedTime != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.gViewedTime = gViewedTime;
   }
@@ -267,9 +270,9 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
     int? aTelemarketingDetailId,
     int? dAdminId,
     int? eStatus,
-    dynamic hDownloadTime,
-    dynamic iRegisterTime,
-    dynamic gViewedTime,
+    String? hDownloadTime,
+    String? iRegisterTime,
+    String? gViewedTime,
     int? jSmsCnt,
     int? kWaCnt,
     int? lPhoneCnt,

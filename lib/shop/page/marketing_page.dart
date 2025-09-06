@@ -242,8 +242,20 @@ class _Item extends StatefulWidget {
 
 class _ItemState extends State<_Item> {
   String method = '';
-  int wPhoneStatus = 0;
-  int vWaStatus = 0;
+  late int wPhoneStatus;
+  late int vWaStatus;
+  int goodsMenuType = 1;
+  late int interested;
+
+  @override
+  void initState() {
+    super.initState();
+    final logs = widget.item.aAAAASLTelemarketingDetailLogs;
+    wPhoneStatus =
+        (logs != null && logs.isNotEmpty) ? logs[0].wPhoneStatus ?? 0 : 0;
+    vWaStatus = (logs != null && logs.isNotEmpty) ? logs[0].vWaStatus ?? 0 : 0;
+    interested = (logs != null && logs.isNotEmpty) ? logs[0].eStatus ?? 0 : 0;
+  }
 
   Widget getIcon(String actionType) {
     // 如果 aAAAAHLContactWeights 不存在，返回空组件
@@ -253,27 +265,24 @@ class _ItemState extends State<_Item> {
     }
 
     if (actionType == 'call') {
-      if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus == 10) {
+      if (wPhoneStatus == 10) {
         //未知
         return const SizedBox.shrink();
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
-          20) {
+      } else if (wPhoneStatus == 20) {
         //没有价值
         return const Icon(
           Icons.close,
           color: Colors.red,
           size: 12,
         );
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
-          30) {
+      } else if (wPhoneStatus == 30) {
         //有价值
         return const Icon(
           Icons.question_mark,
           color: Color.fromARGB(255, 10, 238, 14),
           size: 12,
         );
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].wPhoneStatus ==
-          40) {
+      } else if (wPhoneStatus == 40) {
         //十分有价值
         return const Icon(
           Icons.done,
@@ -282,24 +291,21 @@ class _ItemState extends State<_Item> {
         );
       }
     } else if (actionType == 'whatsapp') {
-      if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus == 10) {
+      if (vWaStatus == 10) {
         return const SizedBox.shrink();
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
-          20) {
+      } else if (vWaStatus == 20) {
         return const Icon(
           Icons.close,
           color: Colors.red,
           size: 12,
         );
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
-          30) {
+      } else if (vWaStatus == 30) {
         return const Icon(
           Icons.question_mark,
           color: Colors.blueAccent,
           size: 12,
         );
-      } else if (widget.item.aAAAASLTelemarketingDetailLogs![0].vWaStatus ==
-          40) {
+      } else if (vWaStatus == 40) {
         return const Icon(
           Icons.done,
           color: Colors.green,
@@ -327,8 +333,22 @@ class _ItemState extends State<_Item> {
                       left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.sentiment_dissatisfied_outlined,
-                          size: 28, color: Colors.blueAccent),
+                      Icon(
+                          interested == 20
+                              ? Icons.sentiment_dissatisfied_outlined
+                              : interested == 30
+                                  ? Icons.sentiment_neutral_rounded
+                                  : interested == 40
+                                      ? Icons.sentiment_satisfied_sharp
+                                      : Icons.face_outlined,
+                          size: 28,
+                          color: interested == 20
+                              ? Colors.red
+                              : interested == 30
+                                  ? Colors.orange[700]
+                                  : interested == 40
+                                      ? Colors.green
+                                      : Colors.grey[100]),
                       Gaps.hGap4,
                       Expanded(
                         flex: 2,
@@ -372,7 +392,6 @@ class _ItemState extends State<_Item> {
                         children: [
                           InkWell(
                             onTap: () {
-                              showToast('Sms');
                               setState(() {
                                 method = 'sms';
                               });
@@ -415,9 +434,9 @@ class _ItemState extends State<_Item> {
                           InkWell(
                             onTap: () {
                               widget.onTap(widget.index);
-                              showToast('Call');
                               setState(() {
                                 method = 'call';
+                                goodsMenuType = 1;
                               });
                             },
                             borderRadius: BorderRadius.circular(8),
@@ -458,9 +477,9 @@ class _ItemState extends State<_Item> {
                           InkWell(
                             onTap: () {
                               widget.onTap(widget.index);
-                              showToast('whatsapp');
                               setState(() {
                                 method = 'whatsapp';
+                                goodsMenuType = 1;
                               });
                             },
                             borderRadius: BorderRadius.circular(8),
@@ -500,7 +519,10 @@ class _ItemState extends State<_Item> {
                         children: [
                           InkWell(
                             onTap: () {
-                              showToast('edit');
+                              widget.onTap(widget.index);
+                              setState(() {
+                                goodsMenuType = 2;
+                              });
                             },
                             borderRadius: BorderRadius.circular(8),
                             child: Container(
@@ -529,7 +551,14 @@ class _ItemState extends State<_Item> {
               )
             ],
           ),
-          if (widget.selected) _buildGoodsMenu(context, method) else Gaps.empty,
+          if (widget.selected && goodsMenuType == 1)
+            _buildGoodsMenu(context, method)
+          else
+            Gaps.empty,
+          if (widget.selected && goodsMenuType == 2)
+            _buildGoodsMenu2(context)
+          else
+            Gaps.empty,
         ],
       ),
     );
@@ -569,11 +598,15 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: Colors.red,
                   onPressed: () {
-                    // _updateContactValue(20); // 20 = 没有价值
                     widget.selected = false;
+                    if (method == 'call') {
+                      wPhoneStatus = 20;
+                    } else if (method == 'whatsapp') {
+                      vWaStatus = 20;
+                    }
                     setState(() {});
                     showToast(
-                        '${widget.item.aPhone} has been set to Invalid Contact');
+                        '${widget.item.aPhone} has been set to ${method == 'call' ? 'Disconnected' : 'Not registered'}');
                   },
                 ),
                 MyButton(
@@ -588,11 +621,15 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: Colors.blueAccent,
                   onPressed: () {
-                    // _updateContactValue(40); // 40 = 十分有价值
+                    if (method == 'call') {
+                      wPhoneStatus = 30;
+                    } else if (method == 'whatsapp') {
+                      vWaStatus = 30;
+                    }
                     widget.selected = false;
                     setState(() {});
                     showToast(
-                        '${widget.item.aPhone} has been set to Confirms Knowing Borrower');
+                        '${widget.item.aPhone} has been set to no reply, please re-contact it');
                   },
                 ),
                 MyButton(
@@ -607,11 +644,15 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: const Color.fromARGB(255, 2, 158, 7),
                   onPressed: () {
-                    // _updateContactValue(40); // 40 = 十分有价值
+                    if (method == 'call') {
+                      wPhoneStatus = 40;
+                    } else if (method == 'whatsapp') {
+                      vWaStatus = 40;
+                    }
                     widget.selected = false;
                     setState(() {});
                     showToast(
-                        '${widget.item.aPhone} has been set to Confirms Knowing Borrower');
+                        '${widget.item.aPhone} has been set to answered, please track it');
                   },
                 ),
               ],
@@ -654,11 +695,11 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: Colors.red,
                   onPressed: () {
-                    // _updateContactValue(40); // 40 = 十分有价值
+                    interested = 20;
                     widget.selected = false;
                     setState(() {});
                     showToast(
-                        '${widget.item.aPhone} has been set to Confirms Knowing Borrower');
+                        '${widget.item.aPhone} has been set to Uninterested');
                   },
                 ),
                 MyButton(
@@ -673,11 +714,10 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: Colors.orange[700],
                   onPressed: () {
-                    // _updateContactValue(20); // 20 = 没有价值
+                    interested = 30;
                     widget.selected = false;
                     setState(() {});
-                    showToast(
-                        '${widget.item.aPhone} has been set to Invalid Contact');
+                    showToast('${widget.item.aPhone} has been set to Unknown');
                   },
                 ),
                 MyButton(
@@ -692,11 +732,11 @@ class _ItemState extends State<_Item> {
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   backgroundColor: const Color.fromARGB(255, 2, 158, 7),
                   onPressed: () {
-                    // _updateContactValue(40); // 40 = 十分有价值
+                    interested = 40;
                     widget.selected = false;
                     setState(() {});
                     showToast(
-                        '${widget.item.aPhone} has been set to Confirms Knowing Borrower');
+                        '${widget.item.aPhone} has been set to Interested');
                   },
                 ),
               ],

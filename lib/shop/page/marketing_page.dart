@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -6,11 +8,15 @@ import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:bounty_hunter/shop/iview/marketing_page_iview.dart';
 import 'package:bounty_hunter/shop/presenter/marketing_presenter.dart';
+import 'package:bounty_hunter/util/cache.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../mvp/base_page.dart';
 import '../../widgets/load_image.dart';
@@ -138,6 +144,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
     _accountRecordListPresenter.index(_currentPage, true);
   }
 
+  List<String> templates = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
   @override
   bool get wantKeepAlive => true;
   @override
@@ -207,6 +215,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
                     return _Item(
                         item: _list[index],
                         color: Colors.white,
+                        templates: templates,
                         index: index,
                         selected: _selectedIndex == index,
                         onTap: (int itemIndex) {
@@ -227,12 +236,14 @@ class _Item extends StatefulWidget {
   _Item({
     required this.item,
     required this.color,
+    required this.templates,
     required this.index,
     required this.selected,
     required this.onTap,
   });
   final MarketingData item;
   final Color color;
+  final List<String> templates;
   final int index;
   bool selected;
   final void Function(int) onTap;
@@ -240,12 +251,16 @@ class _Item extends StatefulWidget {
   State<_Item> createState() => _ItemState();
 }
 
-class _ItemState extends State<_Item> {
+class _ItemState extends State<_Item> with WidgetsBindingObserver {
   String method = '';
   late int wPhoneStatus;
   late int vWaStatus;
   int goodsMenuType = 1;
   late int interested;
+  DateTime? _appPausedTime;
+  DateTime? _appResumedTime;
+  bool _isWhatsAppLaunched = false;
+  Timer? _cleanupTimer; // 清理定时器
 
   @override
   void initState() {
@@ -255,6 +270,56 @@ class _ItemState extends State<_Item> {
         (logs != null && logs.isNotEmpty) ? logs[0].wPhoneStatus ?? 0 : 0;
     vWaStatus = (logs != null && logs.isNotEmpty) ? logs[0].vWaStatus ?? 0 : 0;
     interested = (logs != null && logs.isNotEmpty) ? logs[0].eStatus ?? 0 : 0;
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cleanupTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        // 应用进入后台（比如打开WhatsApp）
+        _appPausedTime = DateTime.now();
+        print('App paused at: $_appPausedTime');
+        break;
+      case AppLifecycleState.resumed:
+        // 应用回到前台
+        _appResumedTime = DateTime.now();
+        print('App resumed at: $_appResumedTime');
+
+        // 如果之前有暂停时间，计算时间差
+        if (_appPausedTime != null) {
+          final Duration timeSpentOutside =
+              _appResumedTime!.difference(_appPausedTime!);
+          print(
+              'Time spent outside app: ${timeSpentOutside.inSeconds} seconds');
+
+          // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
+          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 3) {
+            _recordWhatsAppClick();
+          }
+          _isWhatsAppLaunched = false;
+          _cleanupTimer?.cancel(); // 清理定时器
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _recordWhatsAppClick() async {
+    // 使用保存的模板ID记录点击事件
+    await Cache().appendToStringList('action_marketing', '1:${widget.item.id}');
+
+    // 重置模板ID
   }
 
   Widget getIcon(String actionType) {
@@ -316,6 +381,122 @@ class _ItemState extends State<_Item> {
     return const SizedBox.shrink();
   }
 
+  Future<void> launchAction(int type) async {
+    //type 1:whatsapp 2:call 3:sms
+
+    // 显示模板选择对话框
+    if (type != 2) {
+      final String? selectedTemplate = await showModalBottomSheet<String>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        builder: (BuildContext context) {
+          return Container(
+            padding: EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: widget.templates.map((template) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context, template),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          template != '' ? template : 'Custom message.',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.4,
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          );
+        },
+      );
+      if (selectedTemplate != null) {
+        if (type == 1) {
+          // 启动WhatsApp
+          final bool result = await Utils.launchWhatsAppURL(
+              '234${widget.item.aPhone!}',
+              message: selectedTemplate);
+          if (result) {
+            // 设置WhatsApp启动标志，等待用户返回应用
+            _isWhatsAppLaunched = true;
+
+            // 启动清理定时器，30秒后自动清理状态
+            _cleanupTimer?.cancel();
+            _cleanupTimer = Timer(const Duration(seconds: 30), () {
+              if (mounted) {
+                setState(() {
+                  _isWhatsAppLaunched = false;
+                });
+              }
+            });
+            // 更新WhatsApp最后访问时间
+            final currentTime = DateTime.now().toIso8601String();
+            widget.item.aAAAASLTelemarketingDetailLogs![0].tLastWaAt =
+                currentTime;
+            // 同时更新存储中的联系人列表
+            setState(() {});
+          }
+        } else if (type == 3) {
+          final bool result = await launch(
+              'sms:${widget.item.aPhone}?body=${selectedTemplate}');
+          if (result) {
+            // 更新SMS最后访问时间
+            final currentTime = DateTime.now().toIso8601String();
+            widget.item.aAAAASLTelemarketingDetailLogs![0].sLastSmsAt =
+                currentTime;
+            setState(() {});
+
+            await Cache().appendToStringList(
+                'action_marketing', '$type:${widget.item.id}');
+          }
+        }
+      }
+    } else if (type == 2) {
+      final String currentTime = DateTime.now().toIso8601String();
+      final url = 'tel:${widget.item.aPhone}';
+      if (await canLaunch(url)) {
+        final bool result = await launch(url);
+        if (result) {
+          final String currentTime2 = DateTime.now().toIso8601String();
+          if (DateTime.parse(currentTime2)
+                  .difference(DateTime.parse(currentTime))
+                  .inSeconds >
+              5) {
+            // 更新Call最后访问时间
+            widget.item.aAAAASLTelemarketingDetailLogs![0].rLastPhoneAt =
+                currentTime2;
+            setState(() {});
+
+            await Cache().appendToStringList(
+                'action_marketing', '$type:${widget.item.id}');
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -364,26 +545,72 @@ class _ItemState extends State<_Item> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            RichText(
-                              text: TextSpan(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontSize: Dimens.font_sp12),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'cx last seen: ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(fontSize: 8)),
-                                  TextSpan(
-                                      text: 'Sep 5, 10:00 AM',
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.black)),
-                                ],
-                              ),
-                            ),
+                            if (widget.item.aAAAASLTelemarketingDetailLogs !=
+                                    null &&
+                                widget.item.aAAAASLTelemarketingDetailLogs!
+                                    .isNotEmpty &&
+                                widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                        .iRegisterTime !=
+                                    null)
+                              RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontSize: Dimens.font_sp12),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: 'cx registered at: ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(fontSize: 8)),
+                                    TextSpan(
+                                        text: DateFormat('MMM d, hh:mm a')
+                                            .format(DateTime.parse(widget
+                                                .item
+                                                .aAAAASLTelemarketingDetailLogs![
+                                                    0]
+                                                .iRegisterTime!)),
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.black)),
+                                  ],
+                                ),
+                              )
+                            else if (widget.item.aAAAASLTelemarketingDetailLogs !=
+                                    null &&
+                                widget.item.aAAAASLTelemarketingDetailLogs!
+                                    .isNotEmpty &&
+                                widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                        .gViewedTime !=
+                                    null)
+                              RichText(
+                                text: TextSpan(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontSize: Dimens.font_sp12),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: 'cx seen at: ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(fontSize: 8)),
+                                    TextSpan(
+                                        text: DateFormat('MMM d, hh:mm a')
+                                            .format(DateTime.parse(widget
+                                                .item
+                                                .aAAAASLTelemarketingDetailLogs![
+                                                    0]
+                                                .gViewedTime!)),
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.black)),
+                                  ],
+                                ),
+                              )
+                            else
+                              Gaps.empty,
                           ],
                         ),
                       ),
@@ -395,6 +622,7 @@ class _ItemState extends State<_Item> {
                               setState(() {
                                 method = 'sms';
                               });
+                              launchAction(3);
                             },
                             borderRadius: BorderRadius.circular(8),
                             child: Stack(
@@ -438,6 +666,7 @@ class _ItemState extends State<_Item> {
                                 method = 'call';
                                 goodsMenuType = 1;
                               });
+                              launchAction(2);
                             },
                             borderRadius: BorderRadius.circular(8),
                             child: Stack(
@@ -481,6 +710,7 @@ class _ItemState extends State<_Item> {
                                 method = 'whatsapp';
                                 goodsMenuType = 1;
                               });
+                              launchAction(1);
                             },
                             borderRadius: BorderRadius.circular(8),
                             child: Stack(
@@ -601,8 +831,12 @@ class _ItemState extends State<_Item> {
                     widget.selected = false;
                     if (method == 'call') {
                       wPhoneStatus = 20;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 20;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#vWaStatus#$vWaStatus');
                     }
                     setState(() {});
                     showToast(
@@ -623,8 +857,12 @@ class _ItemState extends State<_Item> {
                   onPressed: () {
                     if (method == 'call') {
                       wPhoneStatus = 30;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 30;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#vWaStatus#$vWaStatus');
                     }
                     widget.selected = false;
                     setState(() {});
@@ -646,8 +884,12 @@ class _ItemState extends State<_Item> {
                   onPressed: () {
                     if (method == 'call') {
                       wPhoneStatus = 40;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 40;
+                      Cache().appendToStringList('marketing_detail_logs',
+                          '${widget.item.id}#vWaStatus#$vWaStatus');
                     }
                     widget.selected = false;
                     setState(() {});
@@ -697,6 +939,8 @@ class _ItemState extends State<_Item> {
                   onPressed: () {
                     interested = 20;
                     widget.selected = false;
+                    Cache().appendToStringList('marketing_detail_logs',
+                        '${widget.item.id}#eStatus#$interested');
                     setState(() {});
                     showToast(
                         '${widget.item.aPhone} has been set to Uninterested');
@@ -716,6 +960,8 @@ class _ItemState extends State<_Item> {
                   onPressed: () {
                     interested = 30;
                     widget.selected = false;
+                    Cache().appendToStringList('marketing_detail_logs',
+                        '${widget.item.id}#eStatus#$interested');
                     setState(() {});
                     showToast('${widget.item.aPhone} has been set to Unknown');
                   },
@@ -734,6 +980,8 @@ class _ItemState extends State<_Item> {
                   onPressed: () {
                     interested = 40;
                     widget.selected = false;
+                    Cache().appendToStringList('marketing_detail_logs',
+                        '${widget.item.id}#eStatus#$interested');
                     setState(() {});
                     showToast(
                         '${widget.item.aPhone} has been set to Interested');

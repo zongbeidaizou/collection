@@ -195,7 +195,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               'Time spent outside app: ${timeSpentOutside.inSeconds} seconds');
 
           // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
-          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 5) {
+          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 3) {
             _recordWhatsAppClick();
           }
           _isWhatsAppLaunched = false;

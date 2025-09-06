@@ -242,6 +242,8 @@ class _Item extends StatefulWidget {
 
 class _ItemState extends State<_Item> {
   String method = '';
+  int wPhoneStatus = 0;
+  int vWaStatus = 0;
 
   Widget getIcon(String actionType) {
     // 如果 aAAAAHLContactWeights 不存在，返回空组件
@@ -325,20 +327,14 @@ class _ItemState extends State<_Item> {
                       left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
                   child: Row(
                     children: <Widget>[
+                      Icon(Icons.sentiment_dissatisfied_outlined,
+                          size: 28, color: Colors.blueAccent),
+                      Gaps.hGap4,
                       Expanded(
                         flex: 2,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Phone Number',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
                             Text(
                               widget.item.aPhone!,
                               style: const TextStyle(
@@ -347,10 +343,30 @@ class _ItemState extends State<_Item> {
                                 color: Colors.black87,
                               ),
                             ),
+                            const SizedBox(height: 4),
+                            RichText(
+                              text: TextSpan(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontSize: Dimens.font_sp12),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: 'cx last seen: ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(fontSize: 8)),
+                                  TextSpan(
+                                      text: 'Sep 5, 10:00 AM',
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.black)),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 12),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [

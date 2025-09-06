@@ -190,6 +190,10 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
   if (iRegisterTime != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.iRegisterTime = iRegisterTime;
   }
+  final dynamic gViewedTime = json['g_viewed_time'];
+  if (gViewedTime != null) {
+    marketingDataAAAAASLTelemarketingDetailLogs.gViewedTime = gViewedTime;
+  }
   final int? jSmsCnt = jsonConvert.convert<int>(json['j_sms_cnt']);
   if (jSmsCnt != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.jSmsCnt = jSmsCnt;
@@ -243,6 +247,7 @@ Map<String, dynamic> $MarketingDataAAAAASLTelemarketingDetailLogsToJson(
   data['e_status'] = entity.eStatus;
   data['h_download_time'] = entity.hDownloadTime;
   data['i_register_time'] = entity.iRegisterTime;
+  data['g_viewed_time'] = entity.gViewedTime;
   data['j_sms_cnt'] = entity.jSmsCnt;
   data['k_wa_cnt'] = entity.kWaCnt;
   data['l_phone_cnt'] = entity.lPhoneCnt;
@@ -264,6 +269,7 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
     int? eStatus,
     dynamic hDownloadTime,
     dynamic iRegisterTime,
+    dynamic gViewedTime,
     int? jSmsCnt,
     int? kWaCnt,
     int? lPhoneCnt,
@@ -283,6 +289,7 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
       ..eStatus = eStatus ?? this.eStatus
       ..hDownloadTime = hDownloadTime ?? this.hDownloadTime
       ..iRegisterTime = iRegisterTime ?? this.iRegisterTime
+      ..gViewedTime = gViewedTime ?? this.gViewedTime
       ..jSmsCnt = jSmsCnt ?? this.jSmsCnt
       ..kWaCnt = kWaCnt ?? this.kWaCnt
       ..lPhoneCnt = lPhoneCnt ?? this.lPhoneCnt

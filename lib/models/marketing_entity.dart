@@ -68,6 +68,8 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	dynamic hDownloadTime;
 	@JSONField(name: 'i_register_time')
 	dynamic iRegisterTime;
+	@JSONField(name: 'g_viewed_time')
+	dynamic gViewedTime;
 	@JSONField(name: 'j_sms_cnt')
 	int? jSmsCnt = 0;
 	@JSONField(name: 'k_wa_cnt')

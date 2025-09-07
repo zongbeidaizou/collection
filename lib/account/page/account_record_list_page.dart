@@ -154,85 +154,74 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
-    return VisibilityDetector(
-      key: Key('my-widget-key'),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if (visiblePercentage > 10 &&
-            context.read<RefreshProvider>().bonusRefresh) {
-          _onRefresh();
-          context.read<RefreshProvider>().setBonusRefresh(false);
-        }
-      },
-      child: Scaffold(
-        appBar: widget.searchKeyword == ''
-            ? AppBar(
-                automaticallyImplyLeading: false,
-                centerTitle: true,
-                backgroundColor: Colours.app_main,
-                flexibleSpace: isDark
-                    ? Container(
-                        height: 115.0,
-                        color: Colours.dark_bg_color,
-                      )
-                    : LoadAssetImage(
-                        'statistic/statistic_bg',
-                        width: context.width,
-                        height: 115.0,
-                        fit: BoxFit.fill,
-                      ),
-                // toolbarHeight: 30,
-                title: Text("Bonus Record",
-                    style: TextStyle(color: ThemeUtils.getIconColor(context))),
-                actions: <Widget>[
-                  // IconButton(
-                  //   tooltip: 'mark all as read',
-                  //   onPressed: () {
-                  //     _accountRecordListPresenter.markAsRead(true);
-                  //   },
-                  //   icon: Icon(
-                  //     Icons.auto_awesome_outlined,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
-                  IconButton(
-                    tooltip: 'Search',
-                    onPressed: () {
-                      NavigatorUtils.push(context, AccountRouter.search);
-                    },
-                    icon: Icon(
-                      Icons.content_paste_search_outlined,
-                      color: Colors.white,
+    return Scaffold(
+      appBar: widget.searchKeyword == ''
+          ? AppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              backgroundColor: Colours.app_main,
+              flexibleSpace: isDark
+                  ? Container(
+                      height: 115.0,
+                      color: Colours.dark_bg_color,
+                    )
+                  : LoadAssetImage(
+                      'statistic/statistic_bg',
+                      width: context.width,
+                      height: 115.0,
+                      fit: BoxFit.fill,
                     ),
+              // toolbarHeight: 30,
+              title: Text("Bonus Record",
+                  style: TextStyle(color: ThemeUtils.getIconColor(context))),
+              actions: <Widget>[
+                // IconButton(
+                //   tooltip: 'mark all as read',
+                //   onPressed: () {
+                //     _accountRecordListPresenter.markAsRead(true);
+                //   },
+                //   icon: Icon(
+                //     Icons.auto_awesome_outlined,
+                //     color: Colors.white,
+                //   ),
+                // ),
+                IconButton(
+                  tooltip: 'Search',
+                  onPressed: () {
+                    NavigatorUtils.push(context, AccountRouter.search);
+                  },
+                  icon: Icon(
+                    Icons.content_paste_search_outlined,
+                    color: Colors.white,
                   ),
-                ],
-              )
-            : null,
-        body: NotificationListener(
-          onNotification: (ScrollNotification note) {
-            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-              _loadMore();
-            }
-            return true;
-          },
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 20.0,
-            child: CustomScrollView(
-              slivers: _list.isNotEmpty
-                  ? _buildGroups()
-                  : [
-                      const SliverFillRemaining(
-                          child: Center(
-                              child: Text('no data, search by phone or sn')))
-                    ],
-            ),
+                ),
+              ],
+            )
+          : null,
+      body: NotificationListener(
+        onNotification: (ScrollNotification note) {
+          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+            _loadMore();
+          }
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          displacement: 20.0,
+          child: CustomScrollView(
+            slivers: _list.isNotEmpty
+                ? _buildGroups()
+                : [
+                    const SliverFillRemaining(
+                        child: Center(
+                            child: Text('no data, search by phone or sn')))
+                  ],
           ),
         ),
       ),

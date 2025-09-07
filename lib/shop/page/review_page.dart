@@ -151,67 +151,57 @@ class _AccountRecordListPageState extends State<ReviewPage>
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
-    return VisibilityDetector(
-      key: Key('news-visibility-key'),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if (visiblePercentage > 10 ) {
-          _onRefresh();
-          // context.read<RefreshProvider>().setNewsRefresh(false);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colours.app_main,
-          flexibleSpace: isDark
-              ? Container(
-                  height: 115.0,
-                  color: Colours.dark_bg_color,
-                )
-              : LoadAssetImage(
-                  'statistic/statistic_bg',
-                  width: context.width,
-                  height: 115.0,
-                  fit: BoxFit.fill,
-                ),
-          // toolbarHeight: 30,
-          title: Text("Verify",
-              style: TextStyle(color: ThemeUtils.getIconColor(context))),
-          actions: <Widget>[
-            InkWell(
-              onTap: () {
-                _accountRecordListPresenter.markAsRead(true);
-              },
-              child: Container(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  child: Center(child: Text('Mark All as Read'))),
-            )
-          ],
-        ),
-        body: NotificationListener(
-          onNotification: (ScrollNotification note) {
-            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-              _loadMore();
-            }
-            return true;
-          },
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 120.0,
-            child: Scrollbar(
-              // 加个滚动条
-              controller: _scrollController,
-              child: ListView.builder(
-                itemCount: _list.length,
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 28.0),
-                itemBuilder: (_, index) =>
-                    _BorrowerList(item: _list[index], color: Colors.white),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colours.app_main,
+        flexibleSpace: isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                width: context.width,
+                height: 115.0,
+                fit: BoxFit.fill,
               ),
+        // toolbarHeight: 30,
+        title: Text("Verify",
+            style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        actions: <Widget>[
+          InkWell(
+            onTap: () {
+              _accountRecordListPresenter.markAsRead(true);
+            },
+            child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Center(child: Text('Mark All as Read'))),
+          )
+        ],
+      ),
+      body: NotificationListener(
+        onNotification: (ScrollNotification note) {
+          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+            _loadMore();
+          }
+          return true;
+        },
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          displacement: 120.0,
+          child: Scrollbar(
+            // 加个滚动条
+            controller: _scrollController,
+            child: ListView.builder(
+              itemCount: _list.length,
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
+              itemBuilder: (_, index) =>
+                  _BorrowerList(item: _list[index], color: Colors.white),
             ),
           ),
         ),
@@ -254,7 +244,10 @@ class _BorrowerList extends StatelessWidget {
                       style: TextStyle(fontSize: 12),
                     ),
                   ),
-                  Text(DateFormat('MMM d, hh:mm a').format(DateTime.parse(item.createdAt!)), style: TextStyles.textSize12),
+                  Text(
+                      DateFormat('MMM d, hh:mm a')
+                          .format(DateTime.parse(item.createdAt!)),
+                      style: TextStyles.textSize12),
                   Gaps.hGap10,
                   const Icon(Icons.edit, size: 16, color: Colors.blueAccent)
                 ],

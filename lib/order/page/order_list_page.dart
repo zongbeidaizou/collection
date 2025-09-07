@@ -83,111 +83,92 @@ class _OrderListPageState extends State<OrderListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return VisibilityDetector(
-      key: Key('order_page${widget.index}'),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        // if(visiblePercentage >10 ){
-        //   final updateAt = DateTime.parse(context.read<UserProvider>().userEntity.profile!.updatedAt!);
-        //   final now = DateTime.now().toUtc().add(const Duration(hours: 1));
-        //   final difference = now.difference(updateAt);
-        //   if(difference.inHours > 2){
-        //     _onRefresh();
-        //   }
-        // }
+    return NotificationListener(
+      onNotification: (ScrollNotification note) {
+        if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+          // _loadMore();
+        }
+        return true;
       },
-      child: NotificationListener(
-        onNotification: (ScrollNotification note) {
-          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-            // _loadMore();
-          }
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          displacement: 120.0,
+      child: RefreshIndicator(
+        onRefresh: _onRefresh,
+        displacement: 120.0,
 
-          /// 默认40， 多添加的80为Header高度
-          child: Consumer<OrderPageProvider>(
-            builder: (_, provider, child) {
-              return CustomScrollView(
-                /// 这里指定controller可以与外层NestedScrollView的滚动分离，避免一处滑动，5个Tab中的列表同步滑动。
-                /// 这种方法的缺点是会重新layout列表
-                controller: _index != provider.index ? _controller : null,
-                key: PageStorageKey<String>('$_index'),
-                slivers: <Widget>[
-                  SliverOverlapInjector(
-                    ///SliverAppBar的expandedHeight高度,避免重叠
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
-                  ),
-                  child!,
-                ],
-              );
-            },
-            child: Consumer<OrderListProvider>(builder: (_, provider2, child) {
-              return SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  sliver: provider2.list
-                          .where((element) =>
-                              indexMap[widget.index].contains(element.kStatus))
-                          .toList()
-                          .isEmpty
-                      ? SliverFillRemaining(
-                          child: Center(child: Text("no data")))
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return index <
-                                    provider2.list
-                                        .where((element) =>
-                                            indexMap[widget.index]
-                                                .contains(element.kStatus))
-                                        .toList()
-                                        .length
-                                ? OrderItem(
-                                    key: Key('order_item_$index'),
-                                    index: index,
-                                    tabIndex: _index,
-                                    showContactDays: 0,
-                                    item: provider2.list
-                                        .where((element) =>
-                                            indexMap[widget.index]
-                                                .contains(element.kStatus))
-                                        .toList()[index],
-                                    products: _product,
-                                    admins: _admins,
-                                    repayInfo: CollectionLogOtherRepayInfo(),
-                                    track: CollectionLogOtherTrack(),
-                                    period: provider2.list
-                                        .where((element) =>
-                                            indexMap[widget.index]
-                                                .contains(element.kStatus))
-                                        .toList()[index]
-                                        .aAAAAQBPeriods,
-                                    contactList: [],
-                                    allContactList: [],
-                                    smsHistory: [],
-                                  )
-                                : MoreWidget(
-                                    provider2.list
-                                        .where((element) =>
-                                            indexMap[widget.index]
-                                                .contains(element.kStatus))
-                                        .toList()
-                                        .length,
-                                    _hasMore(),
-                                    10);
-                          },
-                              childCount: provider2.list
+        /// 默认40， 多添加的80为Header高度
+        child: Consumer<OrderPageProvider>(
+          builder: (_, provider, child) {
+            return CustomScrollView(
+              /// 这里指定controller可以与外层NestedScrollView的滚动分离，避免一处滑动，5个Tab中的列表同步滑动。
+              /// 这种方法的缺点是会重新layout列表
+              controller: _index != provider.index ? _controller : null,
+              key: PageStorageKey<String>('$_index'),
+              slivers: <Widget>[
+                SliverOverlapInjector(
+                  ///SliverAppBar的expandedHeight高度,避免重叠
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                child!,
+              ],
+            );
+          },
+          child: Consumer<OrderListProvider>(builder: (_, provider2, child) {
+            return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                sliver: provider2.list
+                        .where((element) =>
+                            indexMap[widget.index].contains(element.kStatus))
+                        .toList()
+                        .isEmpty
+                    ? SliverFillRemaining(child: Center(child: Text("no data")))
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                          return index <
+                                  provider2.list
                                       .where((element) => indexMap[widget.index]
                                           .contains(element.kStatus))
                                       .toList()
-                                      .length +
-                                  1),
-                        ));
-            }),
-          ),
+                                      .length
+                              ? OrderItem(
+                                  key: Key('order_item_$index'),
+                                  index: index,
+                                  tabIndex: _index,
+                                  showContactDays: 0,
+                                  item: provider2.list
+                                      .where((element) => indexMap[widget.index]
+                                          .contains(element.kStatus))
+                                      .toList()[index],
+                                  products: _product,
+                                  admins: _admins,
+                                  repayInfo: CollectionLogOtherRepayInfo(),
+                                  track: CollectionLogOtherTrack(),
+                                  period: provider2.list
+                                      .where((element) => indexMap[widget.index]
+                                          .contains(element.kStatus))
+                                      .toList()[index]
+                                      .aAAAAQBPeriods,
+                                  contactList: [],
+                                  allContactList: [],
+                                  smsHistory: [],
+                                )
+                              : MoreWidget(
+                                  provider2.list
+                                      .where((element) => indexMap[widget.index]
+                                          .contains(element.kStatus))
+                                      .toList()
+                                      .length,
+                                  _hasMore(),
+                                  10);
+                        },
+                            childCount: provider2.list
+                                    .where((element) => indexMap[widget.index]
+                                        .contains(element.kStatus))
+                                    .toList()
+                                    .length +
+                                1),
+                      ));
+          }),
         ),
       ),
     );

@@ -227,6 +227,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
             ),
           ),
         ),
+        ],
       ),
     );
   }

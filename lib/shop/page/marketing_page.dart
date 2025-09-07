@@ -59,9 +59,15 @@ class _AccountRecordListPageState extends State<MarketingPage>
   final ScrollController _scrollController = ScrollController();
   late int _currentPage = 1;
   final List<MarketingData> _list = [];
+  final List<MarketingData> _filteredList = [];
   bool _isLoading = false;
   late int _maxPage;
   late int _selectedIndex = 100000;
+
+  // 搜索相关状态
+  bool _isSearchVisible = false;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchKeyword = '';
   @override
   MarketingPresenter createPresenter() {
     _accountRecordListPresenter = MarketingPresenter();
@@ -71,8 +77,49 @@ class _AccountRecordListPageState extends State<MarketingPage>
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // _accountRecordListPresenter.index(1, true);
+      _accountRecordListPresenter.index(1, true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // 搜索相关方法
+  void _onSearchChanged() {
+    setState(() {
+      _searchKeyword = _searchController.text;
+      _filterList();
+    });
+  }
+
+  void _filterList() {
+    _filteredList.clear();
+    if (_searchKeyword.isEmpty) {
+      _filteredList.addAll(_list);
+    } else {
+      for (var item in _list) {
+        if (item.aPhone != null &&
+            item.aPhone!.toLowerCase().contains(_searchKeyword.toLowerCase())) {
+          _filteredList.add(item);
+        }
+      }
+    }
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      _isSearchVisible = !_isSearchVisible;
+      if (!_isSearchVisible) {
+        _searchController.clear();
+        _searchKeyword = '';
+        _filteredList.clear();
+        _filteredList.addAll(_list);
+      }
     });
   }
 
@@ -100,7 +147,9 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
   Future<void> _onRefresh() async {
     setState(() {
+      _selectedIndex = 100000;
       _list.clear();
+      _filteredList.clear();
       _currentPage = 1;
     });
     _accountRecordListPresenter.index(1, true);
@@ -113,6 +162,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
     }
     setState(() {
       _list.addAll(logs);
+      _filterList(); // 更新数据时重新过滤
       _isLoading = false;
     });
   }
@@ -153,80 +203,111 @@ class _AccountRecordListPageState extends State<MarketingPage>
     super.build(context);
     final bool isDark = context.isDark;
 
-    return VisibilityDetector(
-      key: Key('news-visibility-key'),
-      onVisibilityChanged: (visibilityInfo) {
-        var visiblePercentage = visibilityInfo.visibleFraction * 100;
-        if (visiblePercentage > 10) {
-          _onRefresh();
-          // context.read<RefreshProvider>().setNewsRefresh(false);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          backgroundColor: Colours.app_main,
-          flexibleSpace: isDark
-              ? Container(
-                  height: 115.0,
-                  color: Colours.dark_bg_color,
-                )
-              : LoadAssetImage(
-                  'statistic/statistic_bg',
-                  width: context.width,
-                  height: 115.0,
-                  fit: BoxFit.fill,
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colours.app_main,
+        flexibleSpace: isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                width: context.width,
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
+        // toolbarHeight: 30,
+        title: Text("Marketing",
+            style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        actions: <Widget>[
+          InkWell(
+            onTap: _toggleSearch,
+            child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Center(child: Text('Search'))),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          // 搜索框
+          if (_isSearchVisible)
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              color: isDark ? Colours.dark_bg_color : Colors.white,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Enter phone number...',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchKeyword.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                          },
+                        )
+                      : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  filled: true,
+                  fillColor:
+                      isDark ? Colours.dark_button_disabled : Colors.grey[100],
                 ),
-          // toolbarHeight: 30,
-          title: Text("Verify",
-              style: TextStyle(color: ThemeUtils.getIconColor(context))),
-          actions: <Widget>[
-            InkWell(
-              onTap: () {
-                _accountRecordListPresenter.markAsRead(true);
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          // 列表内容
+          Expanded(
+            child: NotificationListener(
+              onNotification: (ScrollNotification note) {
+                if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+                  _loadMore();
+                }
+                return true;
               },
-              child: Container(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  child: Center(child: Text('Mark All as Read'))),
-            )
-          ],
-        ),
-        body: NotificationListener(
-          onNotification: (ScrollNotification note) {
-            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-              _loadMore();
-            }
-            return true;
-          },
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 120.0,
-            child: Scrollbar(
-              // 加个滚动条
-              controller: _scrollController,
-              child: ListView.builder(
-                  itemCount: _list.length,
+              child: RefreshIndicator(
+                onRefresh: _onRefresh,
+                displacement: 120.0,
+                child: Scrollbar(
+                  // 加个滚动条
                   controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.only(
-                      left: 6.0, right: 6.0, bottom: 12.0),
-                  itemBuilder: (_, index) {
-                    return _Item(
-                        item: _list[index],
-                        color: Colors.white,
-                        templates: templates,
-                        index: index,
-                        selected: _selectedIndex == index,
-                        onTap: (int itemIndex) {
-                          setState(() {
-                            _selectedIndex = itemIndex;
-                          });
-                        });
-                  }),
+                  child: ListView.builder(
+                      itemCount: _filteredList.length,
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          left: 6.0, right: 6.0, bottom: 12.0),
+                      itemBuilder: (_, index) {
+                        final item = _filteredList[index];
+                        final isMatched = _searchKeyword.isNotEmpty &&
+                            item.aPhone != null &&
+                            item.aPhone!
+                                .toLowerCase()
+                                .contains(_searchKeyword.toLowerCase());
+
+                        return _Item(
+                            item: item,
+                            color: isMatched ? Colors.green[50]! : Colors.white,
+                            templates: templates,
+                            index: index,
+                            selected: _selectedIndex == index,
+                            onTap: (int itemIndex) {
+                              setState(() {
+                                _selectedIndex = itemIndex;
+                              });
+                            });
+                      }),
+                ),
+              ),
             ),
           ),
-        ),
         ],
       ),
     );

@@ -13,11 +13,11 @@ import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import '../../mvp/base_page.dart';
 import '../../widgets/load_image.dart';
 import '../../widgets/my_card.dart';
@@ -39,6 +39,27 @@ const List<String> catText = [
   'Promise-to-Pay Reminders ',
   'Others ',
 ];
+
+// 自定义输入格式化器，只允许数字、+号和空格
+class PhoneNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // 只允许数字、+号和空格
+    final RegExp allowedChars = RegExp(r'[0-9+\s]');
+    final String filtered = newValue.text
+        .split('')
+        .where((char) => allowedChars.hasMatch(char))
+        .join('');
+
+    return TextEditingValue(
+      text: filtered,
+      selection: TextSelection.collapsed(offset: filtered.length),
+    );
+  }
+}
 
 /// design/6店铺-账户/index.html#artboard1
 class MarketingPage extends StatefulWidget {
@@ -92,9 +113,24 @@ class _AccountRecordListPageState extends State<MarketingPage>
   // 搜索相关方法
   void _onSearchChanged() {
     setState(() {
-      _searchKeyword = _searchController.text;
+      _searchKeyword = _processSearchKeyword(_searchController.text);
       _filterList();
     });
+  }
+
+  // 处理搜索关键词：去除+号和空格，只保留最后10位数字
+  String _processSearchKeyword(String input) {
+    if (input.isEmpty) return '';
+
+    // 去除+号和空格，只保留数字
+    String digitsOnly = input.replaceAll(RegExp(r'[+\s]'), '');
+
+    // 只保留最后10位数字
+    if (digitsOnly.length > 10) {
+      digitsOnly = digitsOnly.substring(digitsOnly.length - 10);
+    }
+
+    return digitsOnly;
   }
 
   void _filterList() {
@@ -103,9 +139,14 @@ class _AccountRecordListPageState extends State<MarketingPage>
       _filteredList.addAll(_list);
     } else {
       for (var item in _list) {
-        if (item.aPhone != null &&
-            item.aPhone!.toLowerCase().contains(_searchKeyword.toLowerCase())) {
-          _filteredList.add(item);
+        if (item.aPhone != null) {
+          // 处理手机号码：去除+号和空格，只保留数字
+          String phoneDigits = item.aPhone!.replaceAll(RegExp(r'[+\s-]'), '');
+
+          // 检查是否包含搜索关键词
+          if (phoneDigits.contains(_searchKeyword)) {
+            _filteredList.add(item);
+          }
         }
       }
     }
@@ -240,8 +281,10 @@ class _AccountRecordListPageState extends State<MarketingPage>
               color: isDark ? Colours.dark_bg_color : Colors.white,
               child: TextField(
                 controller: _searchController,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [PhoneNumberInputFormatter()],
                 decoration: InputDecoration(
-                  hintText: 'Enter phone number...',
+                  hintText: 'Enter phone number (digits, +, space only)...',
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: _searchKeyword.isNotEmpty
                       ? IconButton(
@@ -289,8 +332,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
                         final isMatched = _searchKeyword.isNotEmpty &&
                             item.aPhone != null &&
                             item.aPhone!
-                                .toLowerCase()
-                                .contains(_searchKeyword.toLowerCase());
+                                .replaceAll(RegExp(r'[+\s-]'), '')
+                                .contains(_searchKeyword);
 
                         return _Item(
                             item: item,

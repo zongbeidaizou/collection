@@ -260,6 +260,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
   DateTime? _appPausedTime;
   DateTime? _appResumedTime;
   bool _isWhatsAppLaunched = false;
+  bool _isCallLaunched = false;
   Timer? _cleanupTimer; // 清理定时器
 
   @override
@@ -307,6 +308,10 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
             _recordWhatsAppClick();
           }
           _isWhatsAppLaunched = false;
+          if (_isCallLaunched && timeSpentOutside.inSeconds > 3) {
+            _recordCallClick();
+          }
+          _isCallLaunched = false;
           _cleanupTimer?.cancel(); // 清理定时器
         }
         break;
@@ -317,7 +322,16 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
 
   void _recordWhatsAppClick() async {
     // 使用保存的模板ID记录点击事件
-    await Cache().appendToStringList('action_marketing', '1:${widget.item.id}');
+    await Cache().appendToStringList('marketing_detail_logs',
+        '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#k_wa_cnt#1');
+
+    // 重置模板ID
+  }
+
+  void _recordCallClick() async {
+    // 使用保存的模板ID记录点击事件
+    await Cache().appendToStringList('marketing_detail_logs',
+        '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#l_phone_cnt#1');
 
     // 重置模板ID
   }
@@ -343,14 +357,14 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
       } else if (wPhoneStatus == 30) {
         //有价值
         return const Icon(
-          Icons.question_mark,
-          color: Color.fromARGB(255, 10, 238, 14),
+          Icons.access_time_outlined,
+          color: Colors.grey,
           size: 12,
         );
       } else if (wPhoneStatus == 40) {
         //十分有价值
         return const Icon(
-          Icons.done,
+          Icons.done_all,
           color: Colors.green,
           size: 12,
         );
@@ -366,13 +380,13 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
         );
       } else if (vWaStatus == 30) {
         return const Icon(
-          Icons.question_mark,
-          color: Colors.blueAccent,
+          Icons.access_time_outlined,
+          color: Colors.grey,
           size: 12,
         );
       } else if (vWaStatus == 40) {
         return const Icon(
-          Icons.done,
+          Icons.done_all,
           color: Colors.green,
           size: 12,
         );
@@ -468,8 +482,8 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                 currentTime;
             setState(() {});
 
-            await Cache().appendToStringList(
-                'action_marketing', '$type:${widget.item.id}');
+            await Cache().appendToStringList('marketing_detail_logs',
+                '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#j_sms_cnt#1');
           }
         }
       }
@@ -478,22 +492,66 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
       final url = 'tel:${widget.item.aPhone}';
       if (await canLaunch(url)) {
         final bool result = await launch(url);
+        print('拨打电话: $result');
         if (result) {
+          _isCallLaunched = true;
+          // 启动清理定时器，30秒后自动清理状态
+          _cleanupTimer?.cancel();
+          _cleanupTimer = Timer(const Duration(seconds: 30), () {
+            if (mounted) {
+              setState(() {
+                _isCallLaunched = false;
+              });
+            }
+          });
           final String currentTime2 = DateTime.now().toIso8601String();
-          if (DateTime.parse(currentTime2)
-                  .difference(DateTime.parse(currentTime))
-                  .inSeconds >
-              5) {
-            // 更新Call最后访问时间
-            widget.item.aAAAASLTelemarketingDetailLogs![0].rLastPhoneAt =
-                currentTime2;
-            setState(() {});
 
-            await Cache().appendToStringList(
-                'action_marketing', '$type:${widget.item.id}');
-          }
+          widget.item.aAAAASLTelemarketingDetailLogs![0].rLastPhoneAt =
+              currentTime2;
+          setState(() {});
+          await Cache().appendToStringList('marketing_detail_logs',
+              '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#l_phone_cnt#1');
         }
       }
+    }
+  }
+
+  String getLastClickTime(String actionType) {
+    // 如果 aAAAAHLContactWeights 不存在，返回空字符串
+    if (widget.item.aAAAASLTelemarketingDetailLogs == null ||
+        widget.item.aAAAASLTelemarketingDetailLogs!.isEmpty) {
+      return '';
+    }
+
+    String? timeString;
+    if (actionType == 'call') {
+      timeString = widget.item.aAAAASLTelemarketingDetailLogs![0].rLastPhoneAt;
+    } else if (actionType == 'sms') {
+      timeString = widget.item.aAAAASLTelemarketingDetailLogs![0].sLastSmsAt;
+    } else if (actionType == 'whatsapp') {
+      timeString = widget.item.aAAAASLTelemarketingDetailLogs![0].tLastWaAt;
+    }
+
+    if (timeString == null || timeString.isEmpty) {
+      return '               ';
+    }
+
+    try {
+      final DateTime time = DateTime.parse(timeString);
+      final DateTime now = DateTime.now();
+      final Duration difference = now.difference(time);
+
+      if (difference.inDays > 0) {
+        return '${difference.inDays} D ago';
+      } else if (difference.inHours > 0) {
+        return '${difference.inHours} H ago';
+      } else if (difference.inMinutes > 0) {
+        return '${difference.inMinutes} M ago';
+      } else {
+        return 'Just now';
+      }
+    } catch (e) {
+      return timeString;
     }
   }
 
@@ -645,7 +703,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '1 min ago',
+                            getLastClickTime('sms'),
                             style: TextStyle(
                               fontSize: 8,
                               color: Colors.grey[600],
@@ -689,7 +747,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '1 min ago',
+                            getLastClickTime('call'),
                             style: TextStyle(
                               fontSize: 8,
                               color: Colors.grey[600],
@@ -733,7 +791,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '1 min ago',
+                            getLastClickTime('whatsapp'),
                             style: TextStyle(
                               fontSize: 8,
                               color: Colors.grey[600],
@@ -766,7 +824,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '',
+                            '${DateTime.parse(widget.item.aAAAASLTelemarketingDetailLogs![0].qEndAt ?? '2000-07-10T18:58:39.000000Z').difference(DateTime.now()).inHours} H left',
                             style: TextStyle(
                               fontSize: 8,
                               color: Colors.grey[600],
@@ -832,11 +890,11 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                     if (method == 'call') {
                       wPhoneStatus = 20;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#w_phone_status#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 20;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#vWaStatus#$vWaStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#v_wa_status#$vWaStatus');
                     }
                     setState(() {});
                     showToast(
@@ -845,7 +903,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                 ),
                 MyButton(
                   key: Key('No answer'),
-                  icon: Icons.question_mark,
+                  icon: Icons.access_time_outlined,
                   text: method == 'call' ? 'No answer' : 'No reply',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
@@ -853,16 +911,16 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                   minHeight: 56.0,
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.grey,
                   onPressed: () {
                     if (method == 'call') {
                       wPhoneStatus = 30;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#w_phone_status#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 30;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#vWaStatus#$vWaStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#v_wa_status#$vWaStatus');
                     }
                     widget.selected = false;
                     setState(() {});
@@ -872,7 +930,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                 ),
                 MyButton(
                   key: Key('Answered'),
-                  icon: Icons.check,
+                  icon: Icons.done_all,
                   text: 'Answered',
                   fontSize: Dimens.font_sp10,
                   radius: 24.0,
@@ -885,11 +943,11 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                     if (method == 'call') {
                       wPhoneStatus = 40;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#wPhoneStatus#$wPhoneStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#w_phone_status#$wPhoneStatus');
                     } else if (method == 'whatsapp') {
                       vWaStatus = 40;
                       Cache().appendToStringList('marketing_detail_logs',
-                          '${widget.item.id}#vWaStatus#$vWaStatus');
+                          '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#v_wa_status#$vWaStatus');
                     }
                     widget.selected = false;
                     setState(() {});
@@ -940,7 +998,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                     interested = 20;
                     widget.selected = false;
                     Cache().appendToStringList('marketing_detail_logs',
-                        '${widget.item.id}#eStatus#$interested');
+                        '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#e_status#$interested');
                     setState(() {});
                     showToast(
                         '${widget.item.aPhone} has been set to Uninterested');
@@ -961,7 +1019,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                     interested = 30;
                     widget.selected = false;
                     Cache().appendToStringList('marketing_detail_logs',
-                        '${widget.item.id}#eStatus#$interested');
+                        '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#e_status#$interested');
                     setState(() {});
                     showToast('${widget.item.aPhone} has been set to Unknown');
                   },
@@ -981,7 +1039,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                     interested = 40;
                     widget.selected = false;
                     Cache().appendToStringList('marketing_detail_logs',
-                        '${widget.item.id}#eStatus#$interested');
+                        '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#e_status#$interested');
                     setState(() {});
                     showToast(
                         '${widget.item.aPhone} has been set to Interested');

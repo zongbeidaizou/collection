@@ -13,6 +13,7 @@ import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:sp_util/sp_util.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/authoriz_store_entity.dart';
@@ -34,9 +35,27 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
 
   Future<void> index(int currentPage, bool isShowDialog,
       {String keyword = ''}) async {
+    final List<String>? marketingDetailLogs =
+        SpUtil.getStringList('marketing_detail_logs');
+
+    // 检查是否有需要提交的数据
+    bool hasDataToSubmit = (marketingDetailLogs?.isNotEmpty ?? false);
+    if (hasDataToSubmit) {
+      // 将列表用逗号拼接成字符串
+      String? marketingDetailLogsStr = marketingDetailLogs?.join(',');
+      final formData2 = FormData.fromMap({
+        if (marketingDetailLogsStr != null)
+          'action_str': marketingDetailLogsStr,
+      });
+      requestNetwork<CollectionOrderEntity>(Method.post,
+          url: HttpApi.marketingStore,
+          params: formData2, onSuccess: (data) async {
+        SpUtil.remove('marketing_detail_logs');
+      }, onError: (_, __) async {});
+    }
+
     List<MarketingData> _list = <MarketingData>[];
     MarketingEntity _data = MarketingEntity();
-    //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
     await requestNetwork<MarketingEntity>(Method.get,
         url: HttpApi.marketing,
         queryParameters: {"page": currentPage, 'keyword': keyword},

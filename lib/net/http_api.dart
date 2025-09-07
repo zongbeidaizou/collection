@@ -16,6 +16,7 @@ class HttpApi {
   static const String notification = '/collection/e-collection-notifications';
   static const String review = '/collection/b-f-review-borrows';
   static const String marketing = '/collection/s-k-telemarketing-details';
+  static const String marketingStore = '/collection/s-k-telemarketing-details';
   static const String contactlist = '/collection/s-g-contacts';
   static const String product = '/collection/products-enum';
   static const String admins = '/collection/g-m-collection-admins-enum';

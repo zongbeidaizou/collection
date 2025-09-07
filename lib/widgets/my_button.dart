@@ -86,6 +86,7 @@ class MyButton extends StatelessWidget {
           side: MaterialStateProperty.all<BorderSide>(side),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null)
               Icon(

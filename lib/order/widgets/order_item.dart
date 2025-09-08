@@ -549,8 +549,8 @@ class OrderItem extends StatelessWidget {
                                     .difference(DateTime.now())
                                     .inHours >=
                                 24)
-                            ? '${DateTime.now().difference(DateTime.parse(item.sFlowOutTime!)).inDays} days left'
-                            : '${DateTime.now().difference(DateTime.parse(item.sFlowOutTime!)).inHours} hours left'),
+                            ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
+                            : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
                         Text(
                             item.aDLastLogTime != null &&
                                     item.aDLastLogTime!.isNotEmpty

@@ -21,33 +21,31 @@ import 'order_search_result_page.dart';
 
 /// design/3订单/index.html#artboard8
 class OrderSearchPage extends StatefulWidget {
-
   const OrderSearchPage({super.key});
 
   @override
   _OrderSearchPageState createState() => _OrderSearchPageState();
 }
 
-class _OrderSearchPageState extends State<OrderSearchPage>  {
-
+class _OrderSearchPageState extends State<OrderSearchPage> {
   @override
   BaseListProvider<SearchItems> provider = BaseListProvider<SearchItems>();
-  
+
   String _keyword = '';
   int _page = 1;
-  
+
   @override
   void initState() {
     /// 默认为加载中状态，本页面场景默认为空
     provider.stateType = StateType.empty;
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: 'Search by phone or sn',
+        hintText: 'phone or contact phone',
         onPressed: (text) {
           if (text.isEmpty) {
             showToast('Search keyword cannot be empty！');
@@ -61,7 +59,11 @@ class _OrderSearchPageState extends State<OrderSearchPage>  {
           // _orderSearchPresenter.search(_keyword, _page, true);
         },
       ),
-      body: OrderSearchResultPage(key: ValueKey(_keyword),index: 1, keyword: _keyword,),
+      body: OrderSearchResultPage(
+        key: ValueKey(_keyword),
+        index: 1,
+        keyword: _keyword,
+      ),
     );
   }
 
@@ -77,8 +79,4 @@ class _OrderSearchPageState extends State<OrderSearchPage>  {
 
   late OrderSearchPresenter _orderSearchPresenter;
   late ShopPagePresenter _shopPagePresenter;
-
-
-
-
 }

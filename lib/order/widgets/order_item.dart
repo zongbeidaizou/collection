@@ -645,8 +645,14 @@ class OrderItem extends StatelessWidget {
                 icon: Icon(Icons.next_plan_outlined,
                     size: 15, color: Colors.white),
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                bgColor: (period?.lOverdueDays ?? 0) <= 0
+                    ? Colors.grey
+                    : Colours.dark_app_main,
                 onTap: () {
+                  if ((period?.lOverdueDays ?? 0) <= 0) {
+                    showToast('Case is not overdue, cannot be waived.');
+                    return;
+                  }
                   NavigatorUtils.push(context,
                       '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
                 },
@@ -656,9 +662,16 @@ class OrderItem extends StatelessWidget {
                 key: Key('sms_recording'),
                 text: "SmsRecord",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                bgColor: showContactDays >= (period?.lOverdueDays ?? 0)
+                    ? Colors.grey
+                    : Colours.dark_app_main,
                 icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
                 onTap: () async {
+                  if (showContactDays >= (period?.lOverdueDays ?? 0)) {
+                    showToast(
+                        'Will show sms record overdue days: $showContactDays');
+                    return;
+                  }
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -677,36 +690,21 @@ class OrderItem extends StatelessWidget {
                 },
               ),
               // Gaps.hGap4,
-              // OrderItemButton(
-              //   key: Key('whatsapp'),
-              //   text: "WA",
-              //   textColor: isDark ? Colours.dark_button_text : Colors.white,
-              //   bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              //   icon: FaIcon(FontAwesomeIcons.whatsapp, size: 16, color: Colors.white),
-              //   onTap: () async {
-              //     Utils.launchWhatsAppURL("234" + item.uPhone!);
-              //   },
-              // ),
-              // Gaps.hGap4,
-              // OrderItemButton(
-              //   key: Key('order_button_2_send'),
-              //   text: "VA",
-              //   icon: Icon(Icons.credit_card, size: 15, color: Colors.white),
-              //   textColor: isDark ? Colours.dark_button_text : Colors.white,
-              //   bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-              //   onTap: () {
-              //     _showSmsDialog(context, repayInfo!);
-
-              //   },
-              // ),
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_22_$index'),
                 text: "AllConts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                bgColor: showContactDays >= (period?.lOverdueDays ?? 0)
+                    ? Colors.grey
+                    : Colours.dark_app_main,
                 icon: Icon(Icons.group_add, size: 15, color: Colors.white),
                 onTap: () async {
+                  if (showContactDays >= (period?.lOverdueDays ?? 0)) {
+                    showToast(
+                        'Will show all contact overdue days: $showContactDays');
+                    return;
+                  }
                   _showContactListModal(allContacts: true);
                 },
               ),

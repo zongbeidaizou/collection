@@ -245,47 +245,92 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
   // 更新联系人列表中的状态并存储
   void _updateContactListInStorage(String fieldName, dynamic newValue) {
-    final contactList =
-        SpUtil.getObjectList("contact2List:${widget.collectionOrderId}")
-            ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
-                e as Map<String, dynamic>))
-            .toList();
+    if (!widget.isAllContacts) {
+      final contactList =
+          SpUtil.getObjectList("contact2List:${widget.collectionOrderId}")
+              ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                  e as Map<String, dynamic>))
+              .toList();
 
-    if (contactList != null && contactList.isNotEmpty) {
-      // 更新contactList中id与widget.contact.id相同的对象的状态
-      for (var contact in contactList) {
-        if (contact.id == widget.contact.id) {
-          // 确保 aAAAAHLContactWeights 存在
-          contact.aAAAAHLContactWeights ??=
-              CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
+      if (contactList != null && contactList.isNotEmpty) {
+        // 更新contactList中id与widget.contact.id相同的对象的状态
+        for (var contact in contactList) {
+          if (contact.id == widget.contact.id) {
+            // 确保 aAAAAHLContactWeights 存在
+            contact.aAAAAHLContactWeights ??=
+                CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
 
-          // 根据字段名更新相应的状态
-          if (fieldName == 'qPhoneStatus') {
-            contact.aAAAAHLContactWeights!.qPhoneStatus = newValue as int;
-          } else if (fieldName == 'rWaStatus') {
-            contact.aAAAAHLContactWeights!.rWaStatus = newValue as int;
-          } else if (fieldName == 'vWaLastAt') {
-            contact.aAAAAHLContactWeights!.vWaLastAt = newValue as String;
-            contact.aAAAAHLContactWeights!.wWaCt =
-                contact.aAAAAHLContactWeights!.wWaCt! + 1;
-          } else if (fieldName == 'eLastCallTime') {
-            contact.aAAAAHLContactWeights!.eLastCallTime = newValue as String;
-            contact.aAAAAHLContactWeights!.dCallTimes =
-                contact.aAAAAHLContactWeights!.dCallTimes! + 1;
-          } else if (fieldName == 'uSmsLastAt') {
-            contact.aAAAAHLContactWeights!.uSmsLastAt = newValue as String;
-            contact.aAAAAHLContactWeights!.lSmsCount =
-                contact.aAAAAHLContactWeights!.lSmsCount! + 1;
+            // 根据字段名更新相应的状态
+            if (fieldName == 'qPhoneStatus') {
+              contact.aAAAAHLContactWeights!.qPhoneStatus = newValue as int;
+            } else if (fieldName == 'rWaStatus') {
+              contact.aAAAAHLContactWeights!.rWaStatus = newValue as int;
+            } else if (fieldName == 'vWaLastAt') {
+              contact.aAAAAHLContactWeights!.vWaLastAt = newValue as String;
+              contact.aAAAAHLContactWeights!.wWaCt =
+                  contact.aAAAAHLContactWeights!.wWaCt! + 1;
+            } else if (fieldName == 'eLastCallTime') {
+              contact.aAAAAHLContactWeights!.eLastCallTime = newValue as String;
+              contact.aAAAAHLContactWeights!.dCallTimes =
+                  contact.aAAAAHLContactWeights!.dCallTimes! + 1;
+            } else if (fieldName == 'uSmsLastAt') {
+              contact.aAAAAHLContactWeights!.uSmsLastAt = newValue as String;
+              contact.aAAAAHLContactWeights!.lSmsCount =
+                  contact.aAAAAHLContactWeights!.lSmsCount! + 1;
+            }
+            Cache().appendToStringList('contactWeights',
+                '${widget.contact.id}#${fieldName}#${newValue}');
+            break;
           }
-          Cache().appendToStringList('contactWeights',
-              '${widget.contact.id}#${fieldName}#${newValue}');
-          break;
         }
-      }
 
-      // 重新存储contactList
-      SpUtil.putObjectList(
-          "contact2List:${widget.collectionOrderId}", contactList);
+        // 重新存储contactList
+        SpUtil.putObjectList(
+            "contact2List:${widget.collectionOrderId}", contactList);
+      }
+    } else {
+      final contactList =
+          SpUtil.getObjectList("allContactList:${widget.collectionOrderId}")
+              ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                  e as Map<String, dynamic>))
+              .toList();
+
+      if (contactList != null && contactList.isNotEmpty) {
+        // 更新contactList中id与widget.contact.id相同的对象的状态
+        for (var contact in contactList) {
+          if (contact.id == widget.contact.id) {
+            // 确保 aAAAAHLContactWeights 存在
+            contact.aAAAAHLContactWeights ??=
+                CollectionLogOtherContactInfo2DataAAAAAHLContactWeights();
+
+            // 根据字段名更新相应的状态
+            if (fieldName == 'qPhoneStatus') {
+              contact.aAAAAHLContactWeights!.qPhoneStatus = newValue as int;
+            } else if (fieldName == 'rWaStatus') {
+              contact.aAAAAHLContactWeights!.rWaStatus = newValue as int;
+            } else if (fieldName == 'vWaLastAt') {
+              contact.aAAAAHLContactWeights!.vWaLastAt = newValue as String;
+              contact.aAAAAHLContactWeights!.wWaCt =
+                  contact.aAAAAHLContactWeights!.wWaCt! + 1;
+            } else if (fieldName == 'eLastCallTime') {
+              contact.aAAAAHLContactWeights!.eLastCallTime = newValue as String;
+              contact.aAAAAHLContactWeights!.dCallTimes =
+                  contact.aAAAAHLContactWeights!.dCallTimes! + 1;
+            } else if (fieldName == 'uSmsLastAt') {
+              contact.aAAAAHLContactWeights!.uSmsLastAt = newValue as String;
+              contact.aAAAAHLContactWeights!.lSmsCount =
+                  contact.aAAAAHLContactWeights!.lSmsCount! + 1;
+            }
+            Cache().appendToStringList('contactWeights2',
+                '${widget.collectionOrderId}-${widget.contact.id}#${fieldName}#${newValue}');
+            break;
+          }
+        }
+
+        // 重新存储contactList
+        SpUtil.putObjectList(
+            "allContactList:${widget.collectionOrderId}", contactList);
+      }
     }
   }
 
@@ -506,7 +551,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     // 先过滤e_days为1的元素，再进行后续处理
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList.where((value) {
-      if (widget.contactIndex == 0) {
+      if (widget.contactIndex == 0 && !widget.isAllContacts) {
         if (overdueDays < 6) {
           return value['c_type'] == 26 &&
               (int.parse(value['e_days'] as String) == overdueDays ||

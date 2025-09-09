@@ -51,21 +51,25 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     final List<String>? actionSmsHistory =
         SpUtil.getStringList('action_sms_history');
     final List<String>? contactWeights = SpUtil.getStringList('contactWeights');
-
+    final List<String>? contactWeights2 =
+        SpUtil.getStringList('contactWeights2');
     // 检查是否有需要提交的数据
     bool hasDataToSubmit = (actionContact?.isNotEmpty ?? false) ||
         (actionSmsHistory?.isNotEmpty ?? false) ||
-        (contactWeights?.isNotEmpty ?? false);
+        (contactWeights?.isNotEmpty ?? false) ||
+        (contactWeights2?.isNotEmpty ?? false);
     if (hasDataToSubmit) {
       // 将列表用逗号拼接成字符串
       String? actionContactStr = actionContact?.join(',');
       String? actionSmsHistoryStr = actionSmsHistory?.join(',');
       String? contactWeightsStr = contactWeights?.join(',');
+      String? contactWeights2Str = contactWeights2?.join(',');
       final formData2 = FormData.fromMap({
         if (actionContactStr != null) 'action_contact': actionContactStr,
         if (actionSmsHistoryStr != null)
           'action_sms_history': actionSmsHistoryStr,
         if (contactWeights != null) 'contact_weights': contactWeightsStr,
+        if (contactWeights2 != null) 'contact_weights2': contactWeights2Str,
       });
       requestNetwork<CollectionOrderEntity>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
@@ -73,6 +77,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         SpUtil.remove('action_contact');
         SpUtil.remove('action_sms_history');
         SpUtil.remove('contactWeights');
+        SpUtil.remove('contactWeights2');
       }, onError: (_, __) async {});
     }
 

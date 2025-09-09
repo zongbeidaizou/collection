@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/order/iview/order_search_iview.dart';
@@ -75,6 +76,13 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       }, onError: (_, __) async {});
     }
 
+    int _contact2ListCount = (SpUtil.getObjectList('contact2List:$orderId')
+                ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
+                    e as Map<String, dynamic>))
+                .toList() ??
+            [])
+        .length;
+
     // String? hJSmsTemplateNewestUpdatedAt = "0";
     await requestNetwork<CollectionLogEntity>(Method.get,
         url: HttpApi.collectionLogs,
@@ -82,7 +90,8 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
           "page": page,
           'p_collection_order_id': orderId,
           'h_j_sms_template_newest_updated_at': hJSmsTemplateNewestUpdatedAt,
-          'last_contact_fetch_time': lastContactFetchTime
+          'last_contact_fetch_time': lastContactFetchTime,
+          'contact2_list_count': _contact2ListCount
         }, onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;
@@ -109,19 +118,19 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
               "contact2List:${orderId}", data.other!.contactInfo2!.data!);
         }
         if (data.other!.contactInfo != null &&
-            data.other!.contactInfo!.data!.isNotEmpty) {
+            data.other!.contactInfo!.isNotEmpty) {
           SpUtil.putObjectList(
-              "allContactList:${orderId}", data.other!.contactInfo!.data!);
+              "allContactList:${orderId}", data.other!.contactInfo!);
         }
         //  else {
         //   data.other!.contactInfo2!.data = SpUtil.getObjectList("contact2List")
         //       ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(e as Map<String, dynamic>))
         //       .toList();
         // }
-        if (data.other!.contactInfo != null &&
-            data.other!.contactInfo!.data!.isNotEmpty) {
-          SpUtil.putObjectList("contactList", data.other!.contactInfo!.data!);
-        }
+        // if (data.other!.contactInfo != null &&
+        //     data.other!.contactInfo!.isNotEmpty) {
+        //   SpUtil.putObjectList("contactList", data.other!.contactInfo!);
+        // }
       }
     }, onError: (_, __) async {
       if (_ == 200006) {

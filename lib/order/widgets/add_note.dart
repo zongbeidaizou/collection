@@ -167,6 +167,9 @@ class _AddNoteState extends State<AddNote>
                 e as Map<String, dynamic>))
             .toList() ??
         [];
+    print("contact2List:${widget.orderId}");
+    print(_contact2List.length);
+    print(_allContactList.length);
     setState(() {});
     _scrollToBottom();
   }
@@ -362,7 +365,7 @@ class _AddNoteState extends State<AddNote>
                   products: _product, item: item,
                   smsHistory: _smsHistory, repayInfo: _repayInfo,
                   contactList: _contact2List,
-                  allContactList: _contact2List,
+                  allContactList: _allContactList,
                   track: _track, period: _period,
                   onSendSms: (smsTemplateId, smsContent,
                       {String? phone, int? contactId}) {

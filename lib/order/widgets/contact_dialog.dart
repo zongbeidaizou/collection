@@ -26,6 +26,7 @@ class ContactDialog extends StatefulWidget {
     this.repayInfo,
     this.period,
     required this.showContactDays,
+    required this.isAllContacts,
   });
   final int collectionOrderId;
   final List<CollectionLogOtherContactInfo2Data> contactList;
@@ -33,6 +34,7 @@ class ContactDialog extends StatefulWidget {
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherPeriod? period;
   final int showContactDays;
+  final bool isAllContacts;
   @override
   State<ContactDialog> createState() => _ContactDialogState();
 }
@@ -117,6 +119,7 @@ class _ContactDialogState extends State<ContactDialog> {
                       });
                     },
                     contactIndex: index,
+                    isAllContacts: widget.isAllContacts,
                   );
                 },
               ),
@@ -136,6 +139,7 @@ class ContactCard extends StatefulWidget {
   final int collectionOrderId;
   bool selected;
   final CollectionLogOtherPeriod? period;
+  final bool isAllContacts;
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
@@ -144,6 +148,7 @@ class ContactCard extends StatefulWidget {
     required this.collectionOrderId,
     required this.selected,
     required this.period,
+    required this.isAllContacts,
   });
 
   @override
@@ -761,11 +766,12 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                       Row(
                         children: [
                           Icon(
-                            widget.contactIndex == 0
+                            widget.contactIndex == 0 && !widget.isAllContacts
                                 ? Icons.radio_button_on
                                 : Icons.group_outlined,
                             size: 16,
-                            color: widget.contactIndex == 0
+                            color: widget.contactIndex == 0 &&
+                                    !widget.isAllContacts
                                 ? Colors.redAccent
                                 : Colors.grey,
                           ),

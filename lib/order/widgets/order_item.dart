@@ -159,6 +159,7 @@ class OrderItem extends StatelessWidget {
                 contactList: _sortContactList(
                     allContacts ? allContactList : contactList),
                 repayInfo: repayInfo,
+                isAllContacts: allContacts,
                 collectionOrderId: item.id!,
                 period: period!,
                 showContactDays: showContactDays,

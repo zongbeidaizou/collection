@@ -1,7 +1,5 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
-import 'package:bounty_hunter/models/s_g_contact_entity.dart';
-
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 
 
@@ -256,8 +254,12 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (repayInfo != null) {
     collectionLogOther.repayInfo = repayInfo;
   }
-  final CollectionLogOtherContactInfo2? contactInfo = jsonConvert.convert<
-      CollectionLogOtherContactInfo2>(json['contact_info']);
+  final List<
+      CollectionLogOtherContactInfo2Data>? contactInfo = (json['contact_info'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherContactInfo2Data>(
+          e) as CollectionLogOtherContactInfo2Data).toList();
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
@@ -310,7 +312,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
-  data['contact_info'] = entity.contactInfo?.toJson();
+  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
   data['h_j_sms_template_newest_updated_at'] =
@@ -329,7 +331,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    CollectionLogOtherContactInfo2? contactInfo,
+    List<CollectionLogOtherContactInfo2Data>? contactInfo,
     CollectionLogOtherContactInfo2? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     String? hJSmsTemplateNewestUpdatedAt,

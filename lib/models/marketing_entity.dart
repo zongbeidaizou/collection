@@ -9,7 +9,7 @@ class MarketingEntity {
 	String? errorMessage = '';
 	String? message = '';
 	List<MarketingData>? data = [];
-	List<dynamic>? other = [];
+	MarketingOther? other;
 	int? total = 0;
 	int? currentPage = 0;
 	int? perPage = 0;
@@ -64,12 +64,12 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	int? dAdminId = 0;
 	@JSONField(name: 'e_status')
 	int? eStatus = 0;
-	@JSONField(name: 'h_download_time')
-	String? hDownloadTime;
-	@JSONField(name: 'i_register_time')
-	String? iRegisterTime;
 	@JSONField(name: 'g_viewed_time')
-	String? gViewedTime;
+	String? gViewedTime = '';
+	@JSONField(name: 'h_download_time')
+	String? hDownloadTime = '';
+	@JSONField(name: 'i_register_time')
+	String? iRegisterTime = '';
 	@JSONField(name: 'j_sms_cnt')
 	int? jSmsCnt = 0;
 	@JSONField(name: 'k_wa_cnt')
@@ -96,6 +96,23 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	factory MarketingDataAAAAASLTelemarketingDetailLogs.fromJson(Map<String, dynamic> json) => $MarketingDataAAAAASLTelemarketingDetailLogsFromJson(json);
 
 	Map<String, dynamic> toJson() => $MarketingDataAAAAASLTelemarketingDetailLogsToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class MarketingOther {
+	String? url = '';
+	List<String>? templates = [];
+
+	MarketingOther();
+
+	factory MarketingOther.fromJson(Map<String, dynamic> json) => $MarketingOtherFromJson(json);
+
+	Map<String, dynamic> toJson() => $MarketingOtherToJson(this);
 
 	@override
 	String toString() {

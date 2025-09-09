@@ -23,8 +23,8 @@ MarketingEntity $MarketingEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     marketingEntity.data = data;
   }
-  final List<dynamic>? other = (json['other'] as List<dynamic>?)?.map(
-          (e) => e).toList();
+  final MarketingOther? other = jsonConvert.convert<MarketingOther>(
+      json['other']);
   if (other != null) {
     marketingEntity.other = other;
   }
@@ -53,7 +53,7 @@ Map<String, dynamic> $MarketingEntityToJson(MarketingEntity entity) {
   data['errorMessage'] = entity.errorMessage;
   data['message'] = entity.message;
   data['data'] = entity.data?.map((v) => v.toJson()).toList();
-  data['other'] = entity.other;
+  data['other'] = entity.other?.toJson();
   data['total'] = entity.total;
   data['currentPage'] = entity.currentPage;
   data['perPage'] = entity.perPage;
@@ -67,7 +67,7 @@ extension MarketingEntityExtension on MarketingEntity {
     String? errorMessage,
     String? message,
     List<MarketingData>? data,
-    List<dynamic>? other,
+    MarketingOther? other,
     int? total,
     int? currentPage,
     int? perPage,
@@ -182,6 +182,11 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
   if (eStatus != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.eStatus = eStatus;
   }
+  final String? gViewedTime = jsonConvert.convert<String>(
+      json['g_viewed_time']);
+  if (gViewedTime != null) {
+    marketingDataAAAAASLTelemarketingDetailLogs.gViewedTime = gViewedTime;
+  }
   final String? hDownloadTime = jsonConvert.convert<String>(
       json['h_download_time']);
   if (hDownloadTime != null) {
@@ -191,11 +196,6 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
       json['i_register_time']);
   if (iRegisterTime != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.iRegisterTime = iRegisterTime;
-  }
-  final String? gViewedTime = jsonConvert.convert<String>(
-      json['g_viewed_time']);
-  if (gViewedTime != null) {
-    marketingDataAAAAASLTelemarketingDetailLogs.gViewedTime = gViewedTime;
   }
   final int? jSmsCnt = jsonConvert.convert<int>(json['j_sms_cnt']);
   if (jSmsCnt != null) {
@@ -248,9 +248,9 @@ Map<String, dynamic> $MarketingDataAAAAASLTelemarketingDetailLogsToJson(
   data['a_telemarketing_detail_id'] = entity.aTelemarketingDetailId;
   data['d_admin_id'] = entity.dAdminId;
   data['e_status'] = entity.eStatus;
+  data['g_viewed_time'] = entity.gViewedTime;
   data['h_download_time'] = entity.hDownloadTime;
   data['i_register_time'] = entity.iRegisterTime;
-  data['g_viewed_time'] = entity.gViewedTime;
   data['j_sms_cnt'] = entity.jSmsCnt;
   data['k_wa_cnt'] = entity.kWaCnt;
   data['l_phone_cnt'] = entity.lPhoneCnt;
@@ -270,9 +270,9 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
     int? aTelemarketingDetailId,
     int? dAdminId,
     int? eStatus,
+    String? gViewedTime,
     String? hDownloadTime,
     String? iRegisterTime,
-    String? gViewedTime,
     int? jSmsCnt,
     int? kWaCnt,
     int? lPhoneCnt,
@@ -290,9 +290,9 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
           this.aTelemarketingDetailId
       ..dAdminId = dAdminId ?? this.dAdminId
       ..eStatus = eStatus ?? this.eStatus
+      ..gViewedTime = gViewedTime ?? this.gViewedTime
       ..hDownloadTime = hDownloadTime ?? this.hDownloadTime
       ..iRegisterTime = iRegisterTime ?? this.iRegisterTime
-      ..gViewedTime = gViewedTime ?? this.gViewedTime
       ..jSmsCnt = jSmsCnt ?? this.jSmsCnt
       ..kWaCnt = kWaCnt ?? this.kWaCnt
       ..lPhoneCnt = lPhoneCnt ?? this.lPhoneCnt
@@ -303,5 +303,37 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
       ..uStatus = uStatus ?? this.uStatus
       ..vWaStatus = vWaStatus ?? this.vWaStatus
       ..wPhoneStatus = wPhoneStatus ?? this.wPhoneStatus;
+  }
+}
+
+MarketingOther $MarketingOtherFromJson(Map<String, dynamic> json) {
+  final MarketingOther marketingOther = MarketingOther();
+  final String? url = jsonConvert.convert<String>(json['url']);
+  if (url != null) {
+    marketingOther.url = url;
+  }
+  final List<String>? templates = (json['templates'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<String>(e) as String).toList();
+  if (templates != null) {
+    marketingOther.templates = templates;
+  }
+  return marketingOther;
+}
+
+Map<String, dynamic> $MarketingOtherToJson(MarketingOther entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['url'] = entity.url;
+  data['templates'] = entity.templates;
+  return data;
+}
+
+extension MarketingOtherExtension on MarketingOther {
+  MarketingOther copyWith({
+    String? url,
+    List<String>? templates,
+  }) {
+    return MarketingOther()
+      ..url = url ?? this.url
+      ..templates = templates ?? this.templates;
   }
 }

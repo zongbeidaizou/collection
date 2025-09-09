@@ -84,6 +84,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
   bool _isLoading = false;
   late int _maxPage;
   late int _selectedIndex = 100000;
+  late List<String> templates = [];
 
   // 搜索相关状态
   bool _isSearchVisible = false;
@@ -209,6 +210,16 @@ class _AccountRecordListPageState extends State<MarketingPage>
   }
 
   @override
+  void setTemplates(List<String> templates, String url) {
+    //把模板中@url@ 替换成url
+    templates =
+        templates.map((template) => template.replaceAll('@url@', url)).toList();
+    setState(() {
+      this.templates = templates;
+    });
+  }
+
+  @override
   void setPageSize(int pageSize) {
     _maxPage = pageSize;
   }
@@ -234,8 +245,6 @@ class _AccountRecordListPageState extends State<MarketingPage>
     });
     _accountRecordListPresenter.index(_currentPage, true);
   }
-
-  List<String> templates = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   @override
   bool get wantKeepAlive => true;
@@ -520,6 +529,28 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     return const SizedBox.shrink();
   }
 
+  String encodeBase62(int id) {
+    // 使用标准的 Base62 字符集：0-9, a-z, A-Z
+    const characters =
+        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const base = 62;
+    const minLength = 11;
+    String encoded = '';
+
+    // 处理 0 的特殊情况
+    if (id == 0) {
+      return '0'.padLeft(minLength, '0');
+    }
+
+    while (id > 0) {
+      int remainder = id % base;
+      encoded = characters[remainder] + encoded;
+      id = id ~/ base; // 使用整数除法
+    }
+
+    return encoded;
+  }
+
   Future<void> launchAction(int type) async {
     //type 1:whatsapp 2:call 3:sms
 
@@ -555,7 +586,9 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          template != '' ? template : 'Custom message.',
+                          template != ''
+                              ? '$template/${encodeBase62(widget.item.id!)}'
+                              : 'Custom message.',
                           style: const TextStyle(
                             fontSize: 15,
                             height: 1.4,
@@ -734,7 +767,10 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                     .isNotEmpty &&
                                 widget.item.aAAAASLTelemarketingDetailLogs![0]
                                         .iRegisterTime !=
-                                    null)
+                                    null &&
+                                widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                        .iRegisterTime !=
+                                    '')
                               RichText(
                                 text: TextSpan(
                                   style: Theme.of(context)
@@ -760,13 +796,15 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                   ],
                                 ),
                               )
-                            else if (widget.item.aAAAASLTelemarketingDetailLogs !=
-                                    null &&
+                            else if (widget.item.aAAAASLTelemarketingDetailLogs != null &&
                                 widget.item.aAAAASLTelemarketingDetailLogs!
                                     .isNotEmpty &&
                                 widget.item.aAAAASLTelemarketingDetailLogs![0]
                                         .gViewedTime !=
-                                    null)
+                                    null &&
+                                widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                        .gViewedTime !=
+                                    '')
                               RichText(
                                 text: TextSpan(
                                   style: Theme.of(context)

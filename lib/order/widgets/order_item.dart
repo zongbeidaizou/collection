@@ -662,12 +662,12 @@ class OrderItem extends StatelessWidget {
                 key: Key('sms_recording'),
                 text: "SmsRecord",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: showContactDays >= (period?.lOverdueDays ?? 0)
+                bgColor: showContactDays > (period?.lOverdueDays ?? 0)
                     ? Colors.grey
                     : Colours.dark_app_main,
                 icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
                 onTap: () async {
-                  if (showContactDays >= (period?.lOverdueDays ?? 0)) {
+                  if (showContactDays > (period?.lOverdueDays ?? 0)) {
                     showToast(
                         'Will show sms record overdue days: $showContactDays');
                     return;
@@ -695,12 +695,12 @@ class OrderItem extends StatelessWidget {
                 key: Key('order_button_22_$index'),
                 text: "AllConts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: showContactDays >= (period?.lOverdueDays ?? 0)
+                bgColor: showContactDays > (period?.lOverdueDays ?? 0)
                     ? Colors.grey
                     : Colours.dark_app_main,
                 icon: Icon(Icons.group_add, size: 15, color: Colors.white),
                 onTap: () async {
-                  if (showContactDays >= (period?.lOverdueDays ?? 0)) {
+                  if (showContactDays > (period?.lOverdueDays ?? 0)) {
                     showToast(
                         'Will show all contact overdue days: $showContactDays');
                     return;

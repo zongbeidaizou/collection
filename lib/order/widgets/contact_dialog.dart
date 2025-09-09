@@ -855,7 +855,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                             0
                                     ? const Color.fromARGB(255, 236, 182, 180)
                                     : Colors.transparent,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 widget.contact.aAAAAHLContactWeights
@@ -868,7 +868,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                         .aAAAAHLContactWeights!.lSmsCount!)
                                     : '',
                                 style: const TextStyle(
-                                  fontSize: 19,
+                                  fontSize: 9,
                                   color: Colors.white,
                                 ),
                               ),

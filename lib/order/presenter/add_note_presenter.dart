@@ -295,4 +295,20 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
           .data!);
     }
   }
+
+  Future<void> moreAction(int type, int orderId) async {
+    final formData = FormData.fromMap({
+      // 包含原始 data 中的所有字段
+      'type': type,
+      'collection_order_id': orderId,
+    });
+    await requestNetwork<CollectionOrderEntity>(Method.post,
+        url: HttpApi.collectionOrders,
+        params: formData,
+        isShow: true,
+        onSuccess: (data) async {}, onError: (_, __) async {
+      if (_ == 200006) {
+      } else {}
+    });
+  }
 }

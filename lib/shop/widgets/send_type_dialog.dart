@@ -3,6 +3,7 @@ import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/widgets/base_dialog.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:oktoast/oktoast.dart';
 
 /// design/7店铺-店铺配置/index.html#artboard9
 class SendTypeDialog extends StatefulWidget {
@@ -69,6 +70,10 @@ class _SendTypeDialog extends State<SendTypeDialog> {
           mainAxisSize: MainAxisSize.min,
           children: List.generate(_list.length, (i) => _buildItem(i))),
       onPressed: () {
+        if (_value == -1) {
+          showToast('Please select a type');
+          return;
+        }
         NavigatorUtils.goBack(context);
         widget.onPressed(_value, _list[_value]);
       },

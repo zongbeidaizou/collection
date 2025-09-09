@@ -47,6 +47,7 @@ class OrderItem extends StatelessWidget {
     required this.track,
     required this.period,
     this.onSendSms,
+    this.moreAction,
     this.inList = true,
     required this.allContactList,
   });
@@ -65,7 +66,7 @@ class OrderItem extends StatelessWidget {
   final CollectionLogOtherTrack? track;
   final CollectionLogOtherPeriod? period;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
-
+  final void Function(int)? moreAction;
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
@@ -201,7 +202,7 @@ class OrderItem extends StatelessWidget {
         builder: (BuildContext context) {
           return SendTypeDialog(
             onPressed: (i, value) {
-              showToast(i.toString());
+              moreAction?.call(i);
             },
           );
         },

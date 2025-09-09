@@ -367,6 +367,9 @@ class _AddNoteState extends State<AddNote>
                   contactList: _contact2List,
                   allContactList: _allContactList,
                   track: _track, period: _period,
+                  moreAction: (i) {
+                    _addNotePresenter.moreAction(i, item.id!);
+                  },
                   onSendSms: (smsTemplateId, smsContent,
                       {String? phone, int? contactId}) {
                     logData = {

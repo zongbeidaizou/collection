@@ -30,7 +30,10 @@ const List<Color> bgColors = [
   Colors.white,
   Colors.white,
   Color(0xFFD4E2FA),
-  Colors.white
+  Colors.white,
+  Colors.white,
+  Colors.white,
+  Colors.white,
 ];
 const List<String> groupNames = [
   '',
@@ -365,13 +368,19 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       txt =
           'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
     } else if (log.oType == 2) {
-      txt = 'Tiered Achievement Bonus (lv.${groupNames[log.kLevel!]})';
+      txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
     } else if (log.oType == 3) {
-      txt = 'Manually Calculated Bonus';
+      txt = 'Manually Calculated';
     } else if (log.oType == 5) {
       txt = log.aAComment!;
     } else if (log.oType == 4) {
       txt = log.aAComment!;
+    } else if (log.oType == 8) {
+      txt =
+          'Registered at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
+    } else if (log.oType == 9) {
+      txt =
+          'Borrowed at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
     }
 
     return Container(
@@ -408,7 +417,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 Gaps.hGap4,
                 InkWell(
                   onTap: () {
-                    FlutterClipboard.copy('${log.pPhone!} - ${log.nBorrowSn!}');
+                    FlutterClipboard.copy(
+                        '${log.pPhone ?? ''} - ${log.nBorrowSn ?? ''}');
                   },
                   child: Icon(
                     Icons.content_copy,
@@ -419,7 +429,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 Gaps.hGap4,
                 InkWell(
                   onTap: () {
-                    FlutterClipboard.copy('${log.pPhone!} - ${log.nBorrowSn!}');
+                    FlutterClipboard.copy(
+                        '${log.pPhone ?? ''} - ${log.nBorrowSn ?? ''}');
                   },
                   child: Row(
                     children: <Widget>[
@@ -451,6 +462,18 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         offstage: !(log.wReaded == 0),
                         child: _buildGoodsTag(Colors.green, 'New'),
                       ),
+                      Offstage(
+                        offstage: !(log.oType == 8),
+                        child: _buildGoodsTag(
+                            const Color.fromARGB(255, 180, 177, 180),
+                            'Register Bonus'),
+                      ),
+                      Offstage(
+                        offstage: !(log.oType == 9),
+                        child: _buildGoodsTag(
+                            const Color.fromARGB(255, 95, 92, 95),
+                            'Borrow Bonus'),
+                      ),
                     ],
                   ),
                 ),
@@ -460,7 +483,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               top: 0.0,
               right: 0.0,
               child: Text(
-                "+₦${log.hCommissionAmount}",
+                "+${log.hCommissionAmount}",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,

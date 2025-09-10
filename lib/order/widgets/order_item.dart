@@ -593,7 +593,7 @@ class OrderItem extends StatelessWidget {
                               // ignore: unnecessary_parenthesis
                               '${_calculateBonus(provider, item, period)} bonus'),
                           Text(
-                              "lv.${provider.userEntity.profile!.iTodayCurrentKpiLevel!} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
+                              "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
@@ -784,6 +784,21 @@ class OrderItem extends StatelessWidget {
 
     // 计算最终奖金
     return (totalCommissionRate * collectableAmount / 100).toInt();
+  }
+
+  String _getKpiLevelDisplay(int level) {
+    switch (level) {
+      case 1:
+        return 'Lv. BB';
+      case 2:
+        return 'Lv. B';
+      case 3:
+        return 'Lv. A';
+      case 4:
+        return 'Lv. AA';
+      default:
+        return 'lv.$level';
+    }
   }
 
   /// 对联系人列表进行排序

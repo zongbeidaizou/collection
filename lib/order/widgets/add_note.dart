@@ -339,10 +339,12 @@ class _AddNoteState extends State<AddNote>
                         'assets/images/order/icon_avatar.png', // 加载中的占位图
                         fit: BoxFit.cover,
                       ),
-                      errorWidget: (context, url, error) => Image.asset(
-                        'assets/images/order/icon_avatar.png', // 加载失败显示默认头像
-                        fit: BoxFit.cover,
-                      ),
+                      errorWidget: (context, url, error) {
+                        return Image.asset(
+                          'assets/images/order/order_delete.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
                     ),
                   ),
                 ),

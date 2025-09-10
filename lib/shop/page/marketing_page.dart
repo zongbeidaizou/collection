@@ -582,7 +582,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.grey[50],
+                          color: Colors.blue[50],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -713,6 +713,23 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     }
   }
 
+  String maskPhoneNumber(String phone) {
+    if (phone.isEmpty || phone.length < 6) {
+      return phone;
+    }
+
+    // 将手机号码转换为字符数组
+    List<String> phoneChars = phone.split('');
+
+    // 隐藏第3、4、5位数字（索引为2、3、4）
+    // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+    if (phoneChars.length > 2) phoneChars[2] = '*';
+    if (phoneChars.length > 3) phoneChars[3] = '*';
+    if (phoneChars.length > 4) phoneChars[4] = '*';
+
+    return phoneChars.join();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -753,7 +770,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.item.aPhone!,
+                              maskPhoneNumber(widget.item.aPhone ?? ''),
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,

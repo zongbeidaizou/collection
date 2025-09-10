@@ -688,7 +688,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           width: double.infinity,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.grey[50],
+                            color: Colors.blue[50],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -752,7 +752,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               setState(() {});
 
               await Cache().appendToStringList('action_contact',
-                  '$type:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
+                  '3:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
             }
           }
         }
@@ -775,7 +775,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               setState(() {});
 
               await Cache().appendToStringList('action_contact',
-                  '$type:${widget.collectionOrderId}:${widget.contact.id}:0');
+                  '2:${widget.collectionOrderId}:${widget.contact.id}:0');
             }
           }
         }

@@ -161,6 +161,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
         _searchKeyword = '';
         _filteredList.clear();
         _filteredList.addAll(_list);
+      } else {
+        _selectedIndex = 100000;
       }
     });
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:bounty_hunter/demo/demo_page.dart';
 import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
@@ -7,8 +6,6 @@ import 'package:bounty_hunter/setting/provider/locale_provider.dart';
 import 'package:bounty_hunter/setting/provider/theme_provider.dart';
 import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
 import 'package:bounty_hunter/setting/widgets/update_dialog.dart';
-import 'package:bounty_hunter/util/app_navigator.dart';
-import 'package:bounty_hunter/util/device_utils.dart';
 import 'package:bounty_hunter/widgets/click_item.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +13,8 @@ import 'package:sp_util/sp_util.dart';
 
 import '../setting_router.dart';
 
-
 /// design/8设置/index.html
 class SettingPage extends StatefulWidget {
-
   const SettingPage({super.key});
 
   @override
@@ -34,16 +29,22 @@ class _SettingPageState extends State<SettingPage> {
         centerTitle: 'Setting',
       ),
       body: Consumer2<ThemeProvider, LocaleProvider>(
-        builder: (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
+        builder:
+            (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
           return Column(
             children: <Widget>[
               Gaps.vGap5,
               ClickItem(
+                title: 'Message Template',
+                onTap: () {
+                  NavigatorUtils.push(
+                      context, SettingRouter.messageTemplatePage);
+                },
+              ),
+              ClickItem(
                 title: 'Sign out',
                 onTap: _showExitDialog,
               ),
-
-
             ],
           );
         },
@@ -54,7 +55,7 @@ class _SettingPageState extends State<SettingPage> {
   String _getCurrentTheme() {
     final String? theme = SpUtil.getString(Constant.theme);
     String themeMode;
-    switch(theme) {
+    switch (theme) {
       case 'Dark':
         themeMode = '开启';
         break;
@@ -71,7 +72,7 @@ class _SettingPageState extends State<SettingPage> {
   String _getCurrentLocale() {
     final String? locale = SpUtil.getString(Constant.locale);
     String localeMode;
-    switch(locale) {
+    switch (locale) {
       case 'zh':
         localeMode = '中文';
         break;
@@ -86,17 +87,13 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void _showExitDialog() {
-    showDialog<void>(
-      context: context,
-      builder: (_) => const ExitDialog()
-    );
+    showDialog<void>(context: context, builder: (_) => const ExitDialog());
   }
 
   void _showUpdateDialog() {
     showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => const UpdateDialog()
-    );
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const UpdateDialog());
   }
 }

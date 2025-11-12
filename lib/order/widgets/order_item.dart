@@ -526,88 +526,89 @@ class OrderItem extends StatelessWidget {
         ),
         Gaps.vGap8,
         // Gaps.line,
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
-                height: 52,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFA113).withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      width: 48,
-                      height: 48,
-                      "assets/images/clock-svgrepo-com.svg",
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text((DateTime.parse(item.sFlowOutTime!)
-                                    .difference(DateTime.now())
-                                    .inHours >=
-                                24)
-                            ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
-                            : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
-                        Text(
-                            item.aDLastLogTime != null &&
-                                    item.aDLastLogTime!.isNotEmpty
-                                ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(item.aDLastLogTime!))}'
-                                : '',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(fontSize: 8)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Gaps.hGap4,
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
-                height: 52,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFFA113).withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      width: 48,
-                      height: 48,
-                      "assets/images/money-earn-svgrepo-com.svg",
-                    ),
-                    Consumer<UserProvider>(builder: (_, provider, __) {
-                      return Column(
+        if (inList)
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFA113).withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        width: 48,
+                        height: 48,
+                        "assets/images/clock-svgrepo-com.svg",
+                      ),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text((DateTime.parse(item.sFlowOutTime!)
+                                      .difference(DateTime.now())
+                                      .inHours >=
+                                  24)
+                              ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
+                              : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
                           Text(
-                              // ignore: unnecessary_parenthesis
-                              '${_calculateBonus(provider, item, period)} bonus'),
-                          Text(
-                              "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
+                              item.aDLastLogTime != null &&
+                                      item.aDLastLogTime!.isNotEmpty
+                                  ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(item.aDLastLogTime!))}'
+                                  : '',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
-                                  ?.copyWith(fontSize: 8))
+                                  ?.copyWith(fontSize: 8)),
                         ],
-                      );
-                    }),
-                    // Text(" (level 1 with 4% amount)", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 6)),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+              Gaps.hGap4,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFFA113).withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        width: 48,
+                        height: 48,
+                        "assets/images/money-earn-svgrepo-com.svg",
+                      ),
+                      Consumer<UserProvider>(builder: (_, provider, __) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                // ignore: unnecessary_parenthesis
+                                '${_calculateBonus(provider, item, period)} bonus'),
+                            Text(
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(fontSize: 8))
+                          ],
+                        );
+                      }),
+                      // Text(" (level 1 with 4% amount)", style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 6)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
 
         Gaps.vGap8,
         Gaps.line,

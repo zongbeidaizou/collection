@@ -53,6 +53,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
   final TextEditingController _daysController = TextEditingController();
   final FocusNode _contentFocusNode = FocusNode();
   late MessageTemplate? _template;
+  MessageTemplateCategory _selectedCategory = MessageTemplateCategory.marketing;
 
   @override
   void initState() {
@@ -64,6 +65,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
       _titleController.text = _template!.title;
       _contentController.text = _template!.message;
       _daysController.text = _template!.availableDays.toString();
+      _selectedCategory = _template!.category;
     }
     // 监听内容变化，更新预览
     _contentController.addListener(() {
@@ -122,7 +124,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
                 '选择占位符',
                 style: TextStyles.textBold18,
               ),
-              Gaps.vGap16,
+              Gaps.vGap8,
               Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -219,6 +221,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
       title: title,
       message: content,
       availableDays: days,
+      category: _selectedCategory,
     );
 
     // 返回结果
@@ -244,6 +247,38 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
     );
   }
 
+  /// 显示分类选择对话框
+  void _showCategoryDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('选择分类'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children:
+                MessageTemplateCategoryUtil.getAllCategories().map((category) {
+              return RadioListTile<MessageTemplateCategory>(
+                title:
+                    Text(MessageTemplateCategoryUtil.getCategoryName(category)),
+                value: category,
+                groupValue: _selectedCategory,
+                onChanged: (MessageTemplateCategory? value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                    Navigator.pop(context);
+                  }
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -251,14 +286,60 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
         centerTitle: _template == null ? 'Add Template' : 'Edit Template',
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // 分类选择
+            MyCard(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '分类',
+                      style: TextStyles.textBold14,
+                    ),
+                    Gaps.vGap8,
+                    InkWell(
+                      onTap: _showCategoryDialog,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 16.0,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Theme.of(context).dividerColor,
+                          ),
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              MessageTemplateCategoryUtil.getCategoryName(
+                                  _selectedCategory),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Gaps.vGap8,
             // 标题输入
             MyCard(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -282,12 +363,43 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
                 ),
               ),
             ),
-            Gaps.vGap16,
+            Gaps.vGap8,
+
+            // 可用天数输入
+            MyCard(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '可用天数',
+                      style: TextStyles.textBold14,
+                    ),
+                    Gaps.vGap8,
+                    TextField(
+                      controller: _daysController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: const InputDecoration(
+                        hintText: '请输入可用天数',
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 8.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Gaps.vGap8,
 
             // 内容输入
             MyCard(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -349,45 +461,14 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
                 ),
               ),
             ),
-            Gaps.vGap16,
-
-            // 可用天数输入
-            MyCard(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '可用天数',
-                      style: TextStyles.textBold14,
-                    ),
-                    Gaps.vGap8,
-                    TextField(
-                      controller: _daysController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: const InputDecoration(
-                        hintText: '请输入可用天数',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 8.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Gaps.vGap32,
+            Gaps.vGap8,
 
             // 保存按钮
             MyButton(
               text: '保存',
               onPressed: _saveTemplate,
             ),
-            Gaps.vGap16,
+            Gaps.vGap8,
           ],
         ),
       ),

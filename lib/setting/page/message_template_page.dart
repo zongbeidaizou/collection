@@ -34,30 +34,35 @@ class _MessageTemplatePageState extends State<MessageTemplatePage> {
           title: '逾期提醒',
           message: '您好，@name@，您的订单已逾期，请及时处理。',
           availableDays: 30,
+          category: MessageTemplateCategory.collection,
         ),
         MessageTemplate(
           id: 2,
           title: '还款提醒',
           message: '提醒：@name@，您的还款日期即将到来，请提前准备。',
           availableDays: 15,
+          category: MessageTemplateCategory.collection,
         ),
         MessageTemplate(
           id: 3,
           title: '感谢消息',
           message: '感谢@name@的配合，如有疑问请联系客服。',
           availableDays: 7,
+          category: MessageTemplateCategory.marketing,
         ),
         MessageTemplate(
           id: 4,
           title: '账户异常',
           message: '@name@，您的账户有异常，请及时查看并处理。',
           availableDays: 60,
+          category: MessageTemplateCategory.review,
         ),
         MessageTemplate(
           id: 5,
           title: '还款完成',
           message: '恭喜@name@完成还款，期待下次合作。',
           availableDays: 90,
+          category: MessageTemplateCategory.marketing,
         ),
       ]);
     });
@@ -204,9 +209,31 @@ class _MessageTemplateItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
-                    child: Text(
-                      template.title,
-                      style: TextStyles.textBold16,
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          template.title,
+                          style: TextStyles.textBold16,
+                        ),
+                        Gaps.hGap8,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 4.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colours.app_main.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            MessageTemplateCategoryUtil.getCategoryName(
+                                template.category),
+                            style: TextStyles.textSize12.copyWith(
+                              color: Colours.app_main,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   PopupMenuButton<String>(

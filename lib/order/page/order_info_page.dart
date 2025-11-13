@@ -86,8 +86,8 @@ class _OrderInfoPageState extends State<OrderInfoPage>
 
   Future<void> _verify() async {
     final price = _controller.text;
-    if (price.isEmpty || double.parse(price) < 100) {
-      Toast.show('The minimum amount is 100.');
+    if (price.isEmpty || double.parse(price) < 10) {
+      Toast.show('The minimum amount is 10.');
       return;
     }
     if (_period.kExpectOverdueAmount! <= 0) {

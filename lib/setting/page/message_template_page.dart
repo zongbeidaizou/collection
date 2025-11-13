@@ -1,3 +1,7 @@
+import 'package:bounty_hunter/models/marketing_entity.dart';
+import 'package:bounty_hunter/mvp/base_page.dart';
+import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
+import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/res/resources.dart';
@@ -14,13 +18,22 @@ class MessageTemplatePage extends StatefulWidget {
   State<MessageTemplatePage> createState() => _MessageTemplatePageState();
 }
 
-class _MessageTemplatePageState extends State<MessageTemplatePage> {
+class _MessageTemplatePageState extends State<MessageTemplatePage>
+    with
+        AutomaticKeepAliveClientMixin<MessageTemplatePage>,
+        SingleTickerProviderStateMixin,
+        BasePageMixin<MessageTemplatePage, MessageTemplatePresenter>
+    implements MessageTemplatePageMvpView {
   final List<MessageTemplate> _templates = [];
+  late MessageTemplatePresenter _messageTemplatePresenter;
 
   @override
   void initState() {
     super.initState();
     _loadTemplates();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _messageTemplatePresenter.index(1, true);
+    });
   }
 
   /// 加载消息模板列表
@@ -181,6 +194,42 @@ class _MessageTemplatePageState extends State<MessageTemplatePage> {
             ),
     );
   }
+
+  @override
+  MessageTemplatePresenter createPresenter() {
+    // TODO: implement createPresenter
+    _messageTemplatePresenter = MessageTemplatePresenter();
+    return _messageTemplatePresenter;
+  }
+
+  @override
+  void onRefresh() {
+    // TODO: implement onRefresh
+  }
+
+  @override
+  void setCurrentPage(int currentPage) {
+    // TODO: implement setCurrentPage
+  }
+
+  @override
+  void setData(List<MarketingData> logs, {bool clear = false}) {
+    // TODO: implement setLogs
+  }
+
+  @override
+  void setPageSize(int pageSize) {
+    // TODO: implement setPageSize
+  }
+
+  @override
+  void setTemplates(List<String> templates, String url) {
+    // TODO: implement setTemplates
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 /// 消息模板列表项

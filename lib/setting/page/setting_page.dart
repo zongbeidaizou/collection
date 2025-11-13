@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
--import 'package:bounty_hunter/res/constant.dart';
+import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/setting/provider/locale_provider.dart';

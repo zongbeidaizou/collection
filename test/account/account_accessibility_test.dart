@@ -14,10 +14,8 @@ import 'package:bounty_hunter/setting/provider/theme_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  
   final Map<String, Widget> map = <String, Widget>{};
   map['account_page'] = const AccountPage();
-  map['account_record_list_page'] = const AccountRecordListPage();
   map['add_withdrawal_account_page'] = const AddWithdrawalAccountPage();
   map['bank_select_page'] = const BankSelectPage();
   map['city_select_page'] = const CitySelectPage();
@@ -27,7 +25,7 @@ void main() {
   map['withdrawal_password_page'] = const WithdrawalPasswordPage();
   map['withdrawal_record_list_page'] = const WithdrawalRecordListPage();
   map['withdrawal_result_page'] = const WithdrawalResultPage();
-  
+
   group('account => 检测页面可点击目标大小是否大于44 * 44', () {
     map.forEach((name, page) {
       testWidgets(name, (WidgetTester tester) async {
@@ -73,11 +71,11 @@ void main() {
           await tester.pumpWidget(MaterialApp(theme: theme, home: page));
           await expectLater(tester, meetsGuideline(textContrastGuideline));
           handle.dispose();
-        }, skip:
-            name == 'add_withdrawal_account_page' ||
-            name == 'withdrawal_page' ||
-            name == 'withdrawal_result_page'
-        ); // https://github.com/flutter/flutter/issues/21647
+        },
+            skip: name == 'add_withdrawal_account_page' ||
+                name == 'withdrawal_page' ||
+                name ==
+                    'withdrawal_result_page'); // https://github.com/flutter/flutter/issues/21647
       });
     }
   });

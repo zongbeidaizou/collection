@@ -382,6 +382,22 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       txt =
           'Borrowed at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
     }
+    String maskPhoneNumber(String phone) {
+      if (phone.isEmpty || phone.length < 6) {
+        return phone;
+      }
+
+      // 将手机号码转换为字符数组
+      List<String> phoneChars = phone.split('');
+
+      // 隐藏第3、4、5位数字（索引为2、3、4）
+      // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+      if (phoneChars.length > 2) phoneChars[2] = '*';
+      if (phoneChars.length > 3) phoneChars[3] = '*';
+      if (phoneChars.length > 4) phoneChars[4] = '*';
+
+      return phoneChars.join();
+    }
 
     return Container(
       height: 72.0,
@@ -404,7 +420,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: log.pPhone,
+                        text: maskPhoneNumber(log.pPhone!),
                         style: const TextStyle(color: Colors.black),
                       ),
                       TextSpan(

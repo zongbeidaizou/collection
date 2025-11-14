@@ -340,6 +340,23 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
     }
   }
 
+  String maskPhoneNumber(String phone) {
+    if (phone.isEmpty || phone.length < 6) {
+      return phone;
+    }
+
+    // 将手机号码转换为字符数组
+    List<String> phoneChars = phone.split('');
+
+    // 隐藏第3、4、5位数字（索引为2、3、4）
+    // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+    if (phoneChars.length > 2) phoneChars[2] = '*';
+    if (phoneChars.length > 3) phoneChars[3] = '*';
+    if (phoneChars.length > 4) phoneChars[4] = '*';
+
+    return phoneChars.join();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
@@ -458,10 +475,10 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                               ),
                             ),
                             Text(
-                                item.gPhone ?? '',
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.blueAccent),
-                              ),
+                              maskPhoneNumber(item.gPhone ?? ''),
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.blueAccent),
+                            ),
                             if (item.lSmsCount != null &&
                                 item.lSmsCount! > 0 &&
                                 item.lSmsCount! != 999)
@@ -506,13 +523,14 @@ class _AccountRecordListPageState extends State<ReviewDetailPage>
                             Gaps.hGap8,
                             IconButton(
                               icon: const FaIcon(FontAwesomeIcons.whatsapp,
-                        size: 20, color: Colors.greenAccent),
+                                  size: 20, color: Colors.greenAccent),
                               onPressed: () {
                                 setState(() {
                                   _selectedIndex = index;
                                 });
-                                 Utils.launchWhatsAppURL('234${item.gPhone!}',
-                message: "Hello ! Hope you're doing well. I'm trying to reach someone named ${widget.name}. Do you happen to know anyone by that name? Thanks for your help! 🙏");
+                                Utils.launchWhatsAppURL('234${item.gPhone!}',
+                                    message:
+                                        "Hello ! Hope you're doing well. I'm trying to reach someone named ${widget.name}. Do you happen to know anyone by that name? Thanks for your help! 🙏");
                               },
                             ),
                           ],

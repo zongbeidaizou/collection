@@ -44,6 +44,7 @@ class RepaymentBillDialog extends StatelessWidget {
   // ==================== Leading Bill (原有尼日利亚风格) ====================
   Widget _buildLeadingBill(BuildContext context) {
     return Dialog(
+      insetPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
@@ -155,6 +156,17 @@ class RepaymentBillDialog extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // 关闭按钮
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+                tooltip: 'Close',
+              ),
+            ],
+          ),
           Row(
             children: [
               GestureDetector(
@@ -528,7 +540,7 @@ class RepaymentBillDialog extends StatelessWidget {
   // ==================== Kaka Bill (横向卡片式布局) ====================
   Widget _buildKakaBill(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.fromLTRB(5, 30, 5, 30),
+      insetPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0),
       ),
@@ -553,6 +565,24 @@ class RepaymentBillDialog extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
+                    // 关闭按钮
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Kaka Loan Repayment Statement',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () => Navigator.of(context).pop(),
+                          tooltip: 'Close',
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         GestureDetector(
@@ -824,6 +854,17 @@ class RepaymentBillDialog extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // 关闭按钮
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+                tooltip: 'Close',
+              ),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

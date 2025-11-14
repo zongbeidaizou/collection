@@ -243,6 +243,23 @@ class OrderItem extends StatelessWidget {
       );
     }
 
+    String maskPhoneNumber(String phone) {
+      if (phone.isEmpty || phone.length < 6) {
+        return phone;
+      }
+
+      // 将手机号码转换为字符数组
+      List<String> phoneChars = phone.split('');
+
+      // 隐藏第3、4、5位数字（索引为2、3、4）
+      // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+      if (phoneChars.length > 2) phoneChars[2] = '*';
+      if (phoneChars.length > 3) phoneChars[3] = '*';
+      if (phoneChars.length > 4) phoneChars[4] = '*';
+
+      return phoneChars.join();
+    }
+
     int calculateCalendarDaysDifference(DateTime start, DateTime end) {
       // 将两个日期都设置为午夜时间，只比较日期部分
       start = DateTime(start.year, start.month, start.day);
@@ -398,7 +415,10 @@ class OrderItem extends StatelessWidget {
                       style: textTextStyle,
                       children: <TextSpan>[
                         // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                        TextSpan(text: item.uPhone),
+                        TextSpan(
+                            text: inList
+                                ? maskPhoneNumber(item.uPhone!)
+                                : item.uPhone!),
                       ],
                     ),
                   ),

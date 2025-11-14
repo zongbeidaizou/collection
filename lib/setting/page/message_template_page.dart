@@ -68,21 +68,23 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('确认删除'),
-          content: Text('确定要删除模板"${template.title}"吗？'),
+          title: const Text('Confirm Delete'),
+          content: Text(
+              'Are you sure you want to delete template "${template.title}"?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('取消'),
+              child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await _messageTemplatePresenter.delete(template.id!);
                 setState(() {
                   _templates.removeWhere((t) => t.id == template.id);
                 });
                 Navigator.pop(context);
               },
-              child: const Text('删除'),
+              child: const Text('Delete'),
             ),
           ],
         );
@@ -95,7 +97,7 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
     return Scaffold(
       appBar: MyAppBar(
         centerTitle: 'Message Template',
-        actionName: '新增',
+        actionName: 'Add',
         onPressed: _addTemplate,
       ),
       body: _templates.isEmpty
@@ -237,11 +239,11 @@ class _MessageTemplateItem extends StatelessWidget {
                         <PopupMenuEntry<String>>[
                       const PopupMenuItem<String>(
                         value: 'edit',
-                        child: Text('编辑'),
+                        child: Text('Edit'),
                       ),
                       const PopupMenuItem<String>(
                         value: 'delete',
-                        child: Text('删除'),
+                        child: Text('Delete'),
                       ),
                     ],
                   ),

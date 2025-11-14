@@ -63,16 +63,26 @@ class MessageTemplatePresenter
   Future<void> update(
       int id, String title, String content, int days, int category) async {
     final formData2 = FormData.fromMap({
+      'id': id,
       'title': title,
       'message': content,
       'available_days': days,
       'category': category,
     });
-    await requestNetwork<Map<String, dynamic>>(Method.put,
-        url: '${HttpApi.messageTemplate}/$id',
+    await requestNetwork<Map<String, dynamic>>(Method.post,
+        url: HttpApi.messageTemplate,
         params: formData2, onSuccess: (data) async {
       if (data != null) {
         view.showToast('更新成功');
+      }
+    });
+  }
+
+  Future<void> delete(int id) async {
+    await requestNetwork<Map<String, dynamic>>(Method.delete,
+        url: '${HttpApi.messageTemplate}/$id', onSuccess: (data) async {
+      if (data != null) {
+        view.showToast('删除成功');
       }
     });
   }

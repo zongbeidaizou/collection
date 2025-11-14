@@ -2,6 +2,7 @@ import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
 import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
+import 'package:bounty_hunter/setting/setting_router.dart';
 import 'package:bounty_hunter/shop/iview/message_page_iview.dart';
 import 'package:bounty_hunter/shop/presenter/message_presenter.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +29,17 @@ class Placeholder {
 
 /// 预定义的占位符列表
 final List<Placeholder> availablePlaceholders = [
-  const Placeholder(key: '@name@', label: '姓名', exampleValue: '张三'),
-  const Placeholder(key: '@age@', label: '年龄', exampleValue: '25'),
-  const Placeholder(key: '@gender@', label: '性别', exampleValue: '男'),
-  const Placeholder(key: '@phone@', label: '电话', exampleValue: '13800138000'),
+  const Placeholder(key: '@name@', label: 'Name', exampleValue: 'John Doe'),
+  const Placeholder(key: '@age@', label: 'Age', exampleValue: '25'),
+  const Placeholder(key: '@gender@', label: 'Gender', exampleValue: 'Male'),
   const Placeholder(
-      key: '@email@', label: '邮箱', exampleValue: 'example@email.com'),
-  const Placeholder(key: '@amount@', label: '金额', exampleValue: '1000'),
-  const Placeholder(key: '@date@', label: '日期', exampleValue: '2024-01-01'),
-  const Placeholder(key: '@orderId@', label: '订单号', exampleValue: 'ORD123456'),
+      key: '@phone@', label: 'Phone', exampleValue: '13800138000'),
+  const Placeholder(
+      key: '@email@', label: 'Email', exampleValue: 'example@email.com'),
+  const Placeholder(key: '@amount@', label: 'Amount', exampleValue: '1000'),
+  const Placeholder(key: '@date@', label: 'Date', exampleValue: '2024-01-01'),
+  const Placeholder(
+      key: '@orderId@', label: 'Order ID', exampleValue: 'ORD123456'),
 ];
 
 /// 新增/编辑消息模板页面
@@ -138,7 +141,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '选择占位符',
+                'Select Placeholder',
                 style: TextStyles.textBold18,
               ),
               Gaps.vGap8,
@@ -169,7 +172,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                                   ),
                                   Gaps.vGap4,
                                   Text(
-                                    '${placeholder.key} (示例: ${placeholder.exampleValue})',
+                                    '${placeholder.key} (Example: ${placeholder.exampleValue})',
                                     style: TextStyles.textGray12,
                                   ),
                                 ],
@@ -213,31 +216,35 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
     final String daysText = _daysController.text.trim();
 
     if (title.isEmpty) {
-      _showErrorDialog('请输入标题');
+      _showErrorDialog('Please enter title');
       return;
     }
 
     if (content.isEmpty) {
-      _showErrorDialog('请输入内容');
+      _showErrorDialog('Please enter content');
       return;
     }
 
     if (daysText.isEmpty) {
-      _showErrorDialog('请输入可用天数');
+      _showErrorDialog('Please enter available days');
       return;
     }
 
     final int? days = int.tryParse(daysText);
     if (days == null || days <= 0) {
-      _showErrorDialog('可用天数必须是大于0的数字');
+      _showErrorDialog('Available days must be a number greater than 0');
       return;
     }
     if (widget.template != null) {
       await _messageTemplatePresenter.update(
           widget.template!.id!, title, content, days, _selectedCategory);
+      NavigatorUtils.push(context, SettingRouter.messageTemplatePage,
+          replace: true);
     } else {
       await _messageTemplatePresenter.store(
           title, content, days, _selectedCategory);
+      NavigatorUtils.push(context, SettingRouter.messageTemplatePage,
+          replace: true);
     }
   }
 
@@ -247,12 +254,12 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('提示'),
+          title: const Text('Notice'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('确定'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -266,7 +273,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('选择分类'),
+          title: const Text('Select Category'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: _categoryMap.entries.map((entry) {
@@ -309,7 +316,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '分类',
+                      'Category',
                       style: TextStyles.textBold14,
                     ),
                     Gaps.vGap8,
@@ -354,14 +361,14 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '标题',
+                      'Title',
                       style: TextStyles.textBold14,
                     ),
                     Gaps.vGap8,
                     TextField(
                       controller: _titleController,
                       decoration: const InputDecoration(
-                        hintText: '请输入标题',
+                        hintText: 'Please enter title',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 12.0,
@@ -383,7 +390,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '可用天数',
+                      'Available Days',
                       style: TextStyles.textBold14,
                     ),
                     Gaps.vGap8,
@@ -392,7 +399,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: const InputDecoration(
-                        hintText: '请输入可用天数',
+                        hintText: 'Please enter available days',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 12.0,
@@ -417,13 +424,13 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          '内容',
+                          'Content',
                           style: TextStyles.textBold14,
                         ),
                         TextButton.icon(
                           onPressed: _showPlaceholderDialog,
                           icon: const Icon(Icons.tag, size: 18),
-                          label: const Text('选择占位符'),
+                          label: const Text('Select Placeholder'),
                         ),
                       ],
                     ),
@@ -433,7 +440,8 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                       focusNode: _contentFocusNode,
                       maxLines: 5,
                       decoration: const InputDecoration(
-                        hintText: '请输入内容，可以使用占位符',
+                        hintText:
+                            'Please enter content, you can use placeholders',
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.all(12.0),
                       ),
@@ -454,13 +462,13 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '预览效果:',
+                            'Preview:',
                             style: TextStyles.textGray14,
                           ),
                           Gaps.vGap8,
                           Text(
                             _contentController.text.isEmpty
-                                ? '（暂无内容）'
+                                ? '(No content)'
                                 : _getPreviewText(),
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
@@ -475,7 +483,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
 
             // 保存按钮
             MyButton(
-              text: '保存',
+              text: 'Save',
               onPressed: _saveTemplate,
             ),
             Gaps.vGap8,

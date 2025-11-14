@@ -297,7 +297,11 @@ class _AddNoteState extends State<AddNote>
           backgroundColor: Colours.app_main,
           flexibleSpace: Container(
             height: 115.0,
-            color: Colours.dark_bg_color,
+            color: _repayInfo?.appName == 'kaka'
+                ? Colors.blue
+                : _repayInfo?.appName == 'leading'
+                    ? Colors.green
+                    : Colors.orange,
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,

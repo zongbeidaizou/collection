@@ -24,105 +24,46 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
         SingleTickerProviderStateMixin,
         BasePageMixin<MessageTemplatePage, MessageTemplatePresenter>
     implements MessageTemplatePageMvpView {
-  final List<MessageTemplate> _templates = [];
+  final List<MessageTemplateData> _templates = [];
   late MessageTemplatePresenter _messageTemplatePresenter;
+  final Map<int, String> _categoryMap = {
+    0: 'Collection message',
+    1: 'Marketing message',
+    2: 'Review message',
+  };
 
   @override
   void initState() {
     super.initState();
-    _loadTemplates();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _messageTemplatePresenter.index(1, true);
     });
   }
 
-  /// 加载消息模板列表
-  void _loadTemplates() {
-    // TODO: 这里可以从本地存储或服务器加载数据
-    // 目前使用示例数据
-    setState(() {
-      _templates.addAll([
-        MessageTemplate(
-          id: 1,
-          title: '逾期提醒',
-          message: '您好，@name@，您的订单已逾期，请及时处理。',
-          availableDays: 30,
-          category: MessageTemplateCategory.collection,
-        ),
-        MessageTemplate(
-          id: 2,
-          title: '还款提醒',
-          message: '提醒：@name@，您的还款日期即将到来，请提前准备。',
-          availableDays: 15,
-          category: MessageTemplateCategory.collection,
-        ),
-        MessageTemplate(
-          id: 3,
-          title: '感谢消息',
-          message: '感谢@name@的配合，如有疑问请联系客服。',
-          availableDays: 7,
-          category: MessageTemplateCategory.marketing,
-        ),
-        MessageTemplate(
-          id: 4,
-          title: '账户异常',
-          message: '@name@，您的账户有异常，请及时查看并处理。',
-          availableDays: 60,
-          category: MessageTemplateCategory.review,
-        ),
-        MessageTemplate(
-          id: 5,
-          title: '还款完成',
-          message: '恭喜@name@完成还款，期待下次合作。',
-          availableDays: 90,
-          category: MessageTemplateCategory.marketing,
-        ),
-      ]);
-    });
-  }
-
   /// 新增模板
   void _addTemplate() async {
-    final MessageTemplate? result = await Navigator.push<MessageTemplate>(
+    final MessageTemplateData? result =
+        await Navigator.push<MessageTemplateData>(
       context,
       MaterialPageRoute(
         builder: (context) => const AddMessageTemplatePage(),
       ),
     );
-    if (result != null && mounted) {
-      setState(() {
-        // 生成新的ID
-        final int newId = _templates.isEmpty
-            ? 1
-            : (_templates
-                    .map((t) => t.id ?? 0)
-                    .reduce((a, b) => a > b ? a : b) +
-                1);
-        _templates.add(result.copyWith(id: newId));
-      });
-    }
   }
 
   /// 编辑模板
-  void _editTemplate(MessageTemplate template) async {
-    final MessageTemplate? result = await Navigator.push<MessageTemplate>(
+  void _editTemplate(MessageTemplateData template) async {
+    final MessageTemplateData? result =
+        await Navigator.push<MessageTemplateData>(
       context,
       MaterialPageRoute(
         builder: (context) => AddMessageTemplatePage(template: template),
       ),
     );
-    if (result != null && mounted) {
-      setState(() {
-        final int index = _templates.indexWhere((t) => t.id == template.id);
-        if (index != -1) {
-          _templates[index] = result;
-        }
-      });
-    }
   }
 
   /// 删除模板
-  void _deleteTemplate(MessageTemplate template) {
+  void _deleteTemplate(MessageTemplateData template) {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -166,12 +107,6 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
                     'No message templates',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  Gaps.vGap16,
-                  MyButton(
-                    text: '新增模板',
-                    onPressed: _addTemplate,
-                    minWidth: 120,
-                  ),
                 ],
               ),
             )
@@ -187,6 +122,7 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
                       template: _templates[index],
                       onEdit: () => _editTemplate(_templates[index]),
                       onDelete: () => _deleteTemplate(_templates[index]),
+                      categoryMap: _categoryMap,
                     ),
                   ],
                 );
@@ -213,8 +149,11 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   }
 
   @override
-  void setData(List<MarketingData> logs, {bool clear = false}) {
+  void setData(List<MessageTemplateData> logs, {bool clear = false}) {
     // TODO: implement setLogs
+    _templates.clear();
+    _templates.addAll(logs);
+    setState(() {});
   }
 
   @override
@@ -238,11 +177,13 @@ class _MessageTemplateItem extends StatelessWidget {
     required this.template,
     this.onEdit,
     this.onDelete,
+    required this.categoryMap,
   });
 
-  final MessageTemplate template;
+  final MessageTemplateData template;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final Map<int, String> categoryMap;
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +202,7 @@ class _MessageTemplateItem extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          template.title,
+                          template.title ?? '',
                           style: TextStyles.textBold16,
                         ),
                         Gaps.hGap8,
@@ -275,8 +216,7 @@ class _MessageTemplateItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                           child: Text(
-                            MessageTemplateCategoryUtil.getCategoryName(
-                                template.category),
+                            categoryMap[template.category ?? 0] ?? '',
                             style: TextStyles.textSize12.copyWith(
                               color: Colours.app_main,
                             ),
@@ -309,7 +249,7 @@ class _MessageTemplateItem extends StatelessWidget {
               ),
               Gaps.vGap8,
               Text(
-                template.message,
+                template.message ?? '',
                 style: Theme.of(context).textTheme.bodyMedium,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
@@ -325,7 +265,7 @@ class _MessageTemplateItem extends StatelessWidget {
                     style: TextStyles.textGray14,
                   ),
                   Text(
-                    '${template.availableDays} days',
+                    '${template.availableDays ?? 0} days',
                     style: TextStyles.textBold14.copyWith(
                       color: Colours.app_main,
                     ),

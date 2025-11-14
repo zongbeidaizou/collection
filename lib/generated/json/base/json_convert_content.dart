@@ -17,6 +17,7 @@ import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
 import 'package:bounty_hunter/models/marketing_entity.dart';
+import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
@@ -381,6 +382,14 @@ class JsonConvert {
       return data.map<MarketingOther>((Map<String, dynamic> e) =>
           MarketingOther.fromJson(e)).toList() as M;
     }
+    if (<MessageTemplateEntity>[] is M) {
+      return data.map<MessageTemplateEntity>((Map<String, dynamic> e) =>
+          MessageTemplateEntity.fromJson(e)).toList() as M;
+    }
+    if (<MessageTemplateData>[] is M) {
+      return data.map<MessageTemplateData>((Map<String, dynamic> e) =>
+          MessageTemplateData.fromJson(e)).toList() as M;
+    }
     if (<ProductEntity>[] is M) {
       return data.map<ProductEntity>((Map<String, dynamic> e) =>
           ProductEntity.fromJson(e)).toList() as M;
@@ -573,6 +582,8 @@ class JsonConvertClassCollection {
     (MarketingDataAAAAASLTelemarketingDetailLogs)
         .toString(): MarketingDataAAAAASLTelemarketingDetailLogs.fromJson,
     (MarketingOther).toString(): MarketingOther.fromJson,
+    (MessageTemplateEntity).toString(): MessageTemplateEntity.fromJson,
+    (MessageTemplateData).toString(): MessageTemplateData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,
     (ProductData).toString(): ProductData.fromJson,
     (SGContactEntity).toString(): SGContactEntity.fromJson,

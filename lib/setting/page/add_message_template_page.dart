@@ -1,3 +1,9 @@
+import 'package:bounty_hunter/models/collection_notification_entity.dart';
+import 'package:bounty_hunter/mvp/base_page.dart';
+import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
+import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
+import 'package:bounty_hunter/shop/iview/message_page_iview.dart';
+import 'package:bounty_hunter/shop/presenter/message_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
@@ -41,19 +47,30 @@ class AddMessageTemplatePage extends StatefulWidget {
   });
 
   /// 如果提供template，则为编辑模式；否则为新增模式
-  final MessageTemplate? template;
+  final MessageTemplateData? template;
 
   @override
   State<AddMessageTemplatePage> createState() => _AddMessageTemplatePageState();
 }
 
-class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
+class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
+    with
+        AutomaticKeepAliveClientMixin<AddMessageTemplatePage>,
+        SingleTickerProviderStateMixin,
+        BasePageMixin<AddMessageTemplatePage, MessageTemplatePresenter>
+    implements MessageTemplatePageMvpView {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final TextEditingController _daysController = TextEditingController();
   final FocusNode _contentFocusNode = FocusNode();
-  late MessageTemplate? _template;
-  MessageTemplateCategory _selectedCategory = MessageTemplateCategory.marketing;
+  late MessageTemplateData? _template;
+  int _selectedCategory = 0;
+  final Map<int, String> _categoryMap = {
+    0: 'Collection message',
+    1: 'Marketing message',
+    2: 'Review message',
+  };
+  late MessageTemplatePresenter _messageTemplatePresenter;
 
   @override
   void initState() {
@@ -62,10 +79,10 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
     _template = widget.template;
     // 如果是编辑模式，填充现有数据
     if (_template != null) {
-      _titleController.text = _template!.title;
-      _contentController.text = _template!.message;
+      _titleController.text = _template!.title ?? '';
+      _contentController.text = _template!.message ?? '';
       _daysController.text = _template!.availableDays.toString();
-      _selectedCategory = _template!.category;
+      _selectedCategory = _template!.category ?? 0;
     }
     // 监听内容变化，更新预览
     _contentController.addListener(() {
@@ -190,7 +207,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
   }
 
   /// 保存模板
-  void _saveTemplate() {
+  void _saveTemplate() async {
     final String title = _titleController.text.trim();
     final String content = _contentController.text.trim();
     final String daysText = _daysController.text.trim();
@@ -215,17 +232,13 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
       _showErrorDialog('可用天数必须是大于0的数字');
       return;
     }
-
-    final MessageTemplate template = MessageTemplate(
-      id: _template?.id,
-      title: title,
-      message: content,
-      availableDays: days,
-      category: _selectedCategory,
-    );
-
-    // 返回结果
-    NavigatorUtils.goBackWithParams(context, template);
+    if (widget.template != null) {
+      await _messageTemplatePresenter.update(
+          widget.template!.id!, title, content, days, _selectedCategory);
+    } else {
+      await _messageTemplatePresenter.store(
+          title, content, days, _selectedCategory);
+    }
   }
 
   /// 显示错误对话框
@@ -256,14 +269,12 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
           title: const Text('选择分类'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children:
-                MessageTemplateCategoryUtil.getAllCategories().map((category) {
-              return RadioListTile<MessageTemplateCategory>(
-                title:
-                    Text(MessageTemplateCategoryUtil.getCategoryName(category)),
-                value: category,
+            children: _categoryMap.entries.map((entry) {
+              return RadioListTile<int>(
+                title: Text(entry.value),
+                value: entry.key,
                 groupValue: _selectedCategory,
-                onChanged: (MessageTemplateCategory? value) {
+                onChanged: (int? value) {
                   if (value != null) {
                     setState(() {
                       _selectedCategory = value;
@@ -319,8 +330,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              MessageTemplateCategoryUtil.getCategoryName(
-                                  _selectedCategory),
+                              _categoryMap[_selectedCategory] ?? '',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Icon(
@@ -474,4 +484,28 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage> {
       ),
     );
   }
+
+  @override
+  MessageTemplatePresenter createPresenter() {
+    _messageTemplatePresenter = MessageTemplatePresenter();
+    return _messageTemplatePresenter;
+  }
+
+  @override
+  void onRefresh() {}
+
+  @override
+  void setCurrentPage(int currentPage) {}
+
+  @override
+  void setPageSize(int pageSize) {}
+
+  @override
+  bool get wantKeepAlive => false;
+
+  @override
+  void setData(List<MessageTemplateData> logs, {bool clear = false}) {}
+
+  @override
+  void setTemplates(List<String> templates, String url) {}
 }

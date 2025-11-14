@@ -754,6 +754,7 @@ class RepaymentBillDialog extends StatelessWidget {
   // ==================== Moimoi Bill (正式表格式布局) ====================
   Widget _buildMoimoiBill(BuildContext context) {
     return Dialog(
+      insetPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
@@ -770,13 +771,11 @@ class RepaymentBillDialog extends StatelessWidget {
             _buildMoimoiHeader(context),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(3, 10, 3, 10),
                 child: Column(
                   children: [
                     // 正式的表格布局
                     _buildMoimoiFormalTable('APPLICATION INFORMATION', [
-                      _buildMoimoiFormalRow('Application Date',
-                          _formatDateTime(track?.applyTime)),
                       _buildMoimoiFormalRow('Disbursement Date',
                           _formatDateTime(repayInfo?.loanTime)),
                       _buildMoimoiFormalRow(
@@ -844,7 +843,7 @@ class RepaymentBillDialog extends StatelessWidget {
 
   Widget _buildMoimoiHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 6.0),
       decoration: BoxDecoration(
         color: Colors.orange.shade800,
         borderRadius: const BorderRadius.only(
@@ -949,7 +948,7 @@ class RepaymentBillDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildMoimoiHeaderInfo('BORROWER', repayInfo?.name ?? 'N/A'),
-              _buildMoimoiHeaderInfo('PHONE', repayInfo?.phone ?? 'N/A'),
+              // _buildMoimoiHeaderInfo('PHONE', repayInfo?.phone ?? 'N/A'),
               if (repayInfo?.bvn != null && repayInfo!.bvn!.isNotEmpty)
                 _buildMoimoiHeaderInfo('BVN', repayInfo!.bvn!),
             ],
@@ -1025,7 +1024,7 @@ class RepaymentBillDialog extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(6.0),
             child: Column(
               children: rows,
             ),
@@ -1038,7 +1037,7 @@ class RepaymentBillDialog extends StatelessWidget {
   Widget _buildMoimoiFormalRow(String label, String value,
       {bool isAmount = false, bool isHighlight = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200, width: 1),
@@ -1048,11 +1047,11 @@ class RepaymentBillDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 180,
+            width: 133,
             child: Text(
               label,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.3,
@@ -1099,10 +1098,10 @@ class RepaymentBillDialog extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Upload customer\'s adverse credit information to FirstCentral.',
+              "Upload customer's adverse credit information to FirstCentral.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 10,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.3,

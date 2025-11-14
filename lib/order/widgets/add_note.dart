@@ -295,17 +295,10 @@ class _AddNoteState extends State<AddNote>
           ),
           centerTitle: true,
           backgroundColor: Colours.app_main,
-          flexibleSpace: isDark
-              ? Container(
-                  height: 115.0,
-                  color: Colours.dark_bg_color,
-                )
-              : LoadAssetImage(
-                  'statistic/statistic_bg',
-                  width: context.width,
-                  height: 115.0,
-                  fit: BoxFit.fill,
-                ),
+          flexibleSpace: Container(
+            height: 115.0,
+            color: Colours.dark_bg_color,
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -349,9 +342,9 @@ class _AddNoteState extends State<AddNote>
                   ),
                 ),
               ),
-              SizedBox(width: 8),
               Text(item.vName ?? '',
-                  style: TextStyle(color: ThemeUtils.getIconColor(context))),
+                  style: TextStyle(
+                      color: ThemeUtils.getIconColor(context), fontSize: 18)),
             ],
           ),
         ),

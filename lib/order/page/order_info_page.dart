@@ -324,7 +324,7 @@ class _OrderInfoPageState extends State<OrderInfoPage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                        'The maximum penalty waived is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.lOverdueDays! < 6 ? _period.kExpectOverdueAmount! - _period.uDeductionTotalAmount! : ((_period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount! - (_track.loanAmount! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount!)) > 0 ? min(_period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount! - (_track.loanAmount! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount!), _period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount!) : 0)))}.',
+                        'The maximum penalty waived is ${Utils.formatPrice2(calculateAndRoundToThousand(_period.lOverdueDays! < 6 ? (_period.gExpectBorrowAmount! <= _period.nPaidAmount! ? _period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount! : 0) : ((_period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount! - (_track.loanAmount! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount!)) > 0 ? min(_period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount! - (_track.loanAmount! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount!), _period.fExpectRepayTotalAmount! - _period.pPaidInterest! - _period.qPaidServiceFee! - _period.sPaidOverdueAmount! - _period.oPaidBorrowAmount! - _period.uDeductionTotalAmount!) : 0)))}.',
                         style: TextStyle(
                             fontSize: Dimens.font_sp12,
                             color: Colors.redAccent.shade200)),
@@ -333,8 +333,15 @@ class _OrderInfoPageState extends State<OrderInfoPage>
                           _controller.text = calculateAndRoundToThousand(_period
                                           .lOverdueDays! <
                                       6
-                                  ? _period.kExpectOverdueAmount! -
-                                      _period.uDeductionTotalAmount!
+                                  ? (_period.gExpectBorrowAmount! <=
+                                          _period.nPaidAmount!
+                                      ? _period.fExpectRepayTotalAmount! -
+                                          _period.pPaidInterest! -
+                                          _period.qPaidServiceFee! -
+                                          _period.sPaidOverdueAmount! -
+                                          _period.oPaidBorrowAmount! -
+                                          _period.uDeductionTotalAmount!
+                                      : 0)
                                   : ((_period.fExpectRepayTotalAmount! -
                                               _period.pPaidInterest! -
                                               _period.qPaidServiceFee! -

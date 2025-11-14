@@ -206,7 +206,8 @@ class _OrderPageState extends State<OrderPage>
               // 'The golden 48 hours—miss them, lose the payment!',
               // 'More calls today, bigger paychecks tomorrow!',
               // 'Average collectors earn flat rates. Elite collectors earn exponential rewards!',
-              messages[Random().nextInt(messages.length)],
+              // messages[Random().nextInt(messages.length)],
+              '',
               style: TextStyle(color: ThemeUtils.getIconColor(context)),
             ),
           ),
@@ -379,7 +380,8 @@ class _TabViewState extends State<_TabView> {
                 ),
               );
             } else if (widget.index == 1 &&
-                ((provider.userEntity.profile?.lCurrentNegotiatingCount ?? 0) != 0)) {
+                ((provider.userEntity.profile?.lCurrentNegotiatingCount ?? 0) !=
+                    0)) {
               return DecoratedBox(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.error,
@@ -398,7 +400,8 @@ class _TabViewState extends State<_TabView> {
                 ),
               );
             } else if (widget.index == 2 &&
-                ((provider.userEntity.profile?.mCurrrentPromisedCount ?? 0) != 0)) {
+                ((provider.userEntity.profile?.mCurrrentPromisedCount ?? 0) !=
+                    0)) {
               return DecoratedBox(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.error,
@@ -417,7 +420,8 @@ class _TabViewState extends State<_TabView> {
                 ),
               );
             } else if (widget.index == 3 &&
-                ((provider.userEntity.profile?.nCurrentBrokenCount ?? 0) != 0)) {
+                ((provider.userEntity.profile?.nCurrentBrokenCount ?? 0) !=
+                    0)) {
               return DecoratedBox(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.error,
@@ -436,7 +440,8 @@ class _TabViewState extends State<_TabView> {
                 ),
               );
             } else if (widget.index == 4 &&
-                ((provider.userEntity.profile?.oCurrentRefusedCount ?? 0) != 0)) {
+                ((provider.userEntity.profile?.oCurrentRefusedCount ?? 0) !=
+                    0)) {
               return DecoratedBox(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.error,
@@ -454,10 +459,9 @@ class _TabViewState extends State<_TabView> {
                   ),
                 ),
               );
-            }else{
+            } else {
               return Gaps.empty;
             }
-
           }),
         )
       ],

@@ -235,8 +235,6 @@ class _MyCommentBoxState extends State<MyCommentBox> {
               width: 50.0,
               child: DropdownButton<IconData>(
                 value: _value,
-                // icon: const Icon(Icons.arrow_downward),
-                // elevation: 16,
                 style: const TextStyle(color: Colors.blueAccent),
                 underline: Container(
                   height: 1,
@@ -247,24 +245,8 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                       typeList2[typeList.indexOf(value!)].toString();
                   if (value == Icons.more_time) {
                     _showDialog();
-                    /*                var results = await showCalendarDatePicker2Dialog(
-                  context: context,
-
-                  config: CalendarDatePicker2WithActionButtonsConfig(),
-                  dialogSize: const Size(325, 400),
-                  // value: _dates,
-                  borderRadius: BorderRadius.circular(15),
-                  );*/
                   } else if (value == Icons.phone_disabled) {
                     widget.commentController?.text = 'cx is not reachable.';
-                    /*                var results = await showCalendarDatePicker2Dialog(
-                  context: context,
-
-                  config: CalendarDatePicker2WithActionButtonsConfig(),
-                  dialogSize: const Size(325, 400),
-                  // value: _dates,
-                  borderRadius: BorderRadius.circular(15),
-                  );*/
                   } else if (value == Icons.transfer_within_a_station) {
                     widget.commentController?.text =
                         'Temporarily assign to someone else.';

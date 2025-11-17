@@ -221,6 +221,13 @@ class RepaymentBillDialog extends StatelessWidget {
                           color: Colors.white70,
                         ),
                       ),
+                    Text(
+                      'Please repay to ${repayInfo?.accountBank ?? 'N/A'}, ${repayInfo?.accountNo ?? 'N/A'}',
+                      style: const TextStyle(
+                        fontSize: Dimens.font_sp14,
+                        color: Colors.white,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -648,6 +655,31 @@ class RepaymentBillDialog extends StatelessWidget {
                 ),
               ),
               const Divider(color: Colors.white24, height: 1),
+              const SizedBox(height: 6),
+              const Text(
+                'Transfer to the following Bank Account',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              _buildKakaQuickInfo(
+                  'Account',
+                  Icons.account_balance_wallet_rounded,
+                  repayInfo?.accountNo ?? 'N/A'),
+              _buildKakaQuickInfo('Bank', Icons.account_balance_outlined,
+                  repayInfo?.accountBank ?? 'N/A'),
+              const SizedBox(height: 6),
+              const Divider(color: Colors.white24, height: 1),
+              const Text(
+                'Disbursement Detail',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.all(6.0),
@@ -683,6 +715,50 @@ class RepaymentBillDialog extends StatelessWidget {
   }
 
   Widget _buildKakaQuickInfo(String label, IconData icon, String value) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 6.0),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Icon(icon, size: 16, color: Colors.white.withOpacity(0.9)),
+                const SizedBox(width: 8.0),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white.withOpacity(0.7),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 2.0),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKakaQuickInfo2(String label, IconData icon, String value) {
     return Container(
       margin: const EdgeInsets.only(bottom: 6.0),
       padding: const EdgeInsets.all(8.0),
@@ -774,6 +850,15 @@ class RepaymentBillDialog extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(3, 10, 3, 10),
                 child: Column(
                   children: [
+                    _buildMoimoiFormalTable('Account Information', [
+                      _buildMoimoiFormalRow(
+                        'Account',
+                        repayInfo?.accountNo ?? 'N/A',
+                      ),
+                      _buildMoimoiFormalRow(
+                          'Bank', repayInfo?.accountBank ?? 'N/A'),
+                    ]),
+                    const SizedBox(height: 6.0),
                     // 正式的表格布局
                     _buildMoimoiFormalTable('APPLICATION INFORMATION', [
                       _buildMoimoiFormalRow('Disbursement Date',
@@ -788,7 +873,7 @@ class RepaymentBillDialog extends StatelessWidget {
                       _buildMoimoiFormalRow(
                           'Transaction ID', repayInfo?.var10 ?? 'N/A'),
                     ]),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 6.0),
                     if (period != null)
                       _buildMoimoiFormalTable('REPAYMENT INFORMATION', [
                         _buildMoimoiFormalRow(
@@ -829,7 +914,7 @@ class RepaymentBillDialog extends StatelessWidget {
                                 period?.uDeductionTotalAmount ?? 0),
                             isAmount: true),
                       ]),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 6.0),
                     _buildMoimoiFooter(),
                   ],
                 ),
@@ -995,7 +1080,7 @@ class RepaymentBillDialog extends StatelessWidget {
           Container(
             width: double.infinity,
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
             decoration: BoxDecoration(
               color: Colors.orange.shade800,
               borderRadius: const BorderRadius.only(
@@ -1059,7 +1144,7 @@ class RepaymentBillDialog extends StatelessWidget {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20.0),
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
             width: 1,
             height: 20,
             color: Colors.grey.shade300,

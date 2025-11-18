@@ -215,7 +215,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
     if (value == Icons.more_time) {
       _showDialog();
     } else if (value == Icons.phone_disabled) {
-      widget.commentController?.text = 'Cx is not cx not responding.';
+      widget.commentController?.text = 'Cx is not reachable or not responding.';
     } else if (value == Icons.sync) {
       widget.commentController?.text = 'Negotiating with cx.';
     } else if (value == Icons.pest_control) {

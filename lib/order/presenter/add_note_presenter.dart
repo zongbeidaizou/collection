@@ -147,7 +147,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   }
 
   Future<void> store(Map<String, dynamic> data, List<XFile>? pickedFiles,
-      bool isShowDialog) async {
+      bool isShowDialog, CollectionOrderData? item) async {
     const targetPath = '/storage/emulated/0/Documents/CubeCallRecorder/All/';
     final targetDir = Directory(targetPath);
     final filteredFiles = <File>[];
@@ -240,10 +240,16 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
     });
 
     await requestNetwork<CollectionOrderEntity>(Method.post,
-        url: HttpApi.collectionLogs, params: formData, onSuccess: (data) async {
-      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
-      view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
-      view.getContext().read<OrderListProvider>().changeList(data.data!.first);
+        url: HttpApi.collectionLogs,
+        params: formData, onSuccess: (data2) async {
+      view.getContext().read<UserProvider>().setUserEntity(data2!.other!);
+      view.getContext().read<RefreshProvider>().setUserEntity(data2.other!);
+      if (item != null) {
+        item.kStatus = int.parse(data['g_type'] as String);
+        item.aDLastLogTime = DateTime.now().toIso8601String();
+        item.aLLastLog = data['j_content'] as String;
+        view.getContext().read<OrderListProvider>().changeList(item);
+      }
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {}

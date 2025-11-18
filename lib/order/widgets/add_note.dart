@@ -382,7 +382,7 @@ class _AddNoteState extends State<AddNote>
                       'o_contact_id': contactId ?? 0,
                       'p_collection_order_id': widget.orderId,
                     };
-                    _addNotePresenter.store(logData, null, true);
+                    _addNotePresenter.store(logData, null, true, null);
                   },
                   // track: ,
                 ),
@@ -418,7 +418,7 @@ class _AddNoteState extends State<AddNote>
                             await _addNotePresenter.store({
                               'p_collection_order_id': widget.orderId,
                               ...value
-                            }, pickedFiles, true);
+                            }, pickedFiles, true, item);
                             commentController.clear();
                             // dateController.clear();
                             // typeController.clear();

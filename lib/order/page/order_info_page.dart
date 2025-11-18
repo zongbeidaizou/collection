@@ -239,11 +239,8 @@ class _OrderInfoPageState extends State<OrderInfoPage>
                 // _buildGoodsInfoItem('Should Repay Amount', Utils.formatPrice2(_period.fExpectRepayTotalAmount!)),
                 _buildGoodsInfoItem(
                     'Overdue Days', _period.lOverdueDays.toString()),
-                _buildGoodsInfoItem(
-                    'Overdue Fee',
-                    Utils.formatPrice2(_period.kExpectOverdueAmount!) +
-                        ' - ' +
-                        Utils.formatPrice2(_period.uDeductionTotalAmount!)),
+                _buildGoodsInfoItem('Overdue Fee',
+                    Utils.formatPrice2(_period.kExpectOverdueAmount!)),
                 _buildGoodsInfoItem(
                     'Paid', Utils.formatPrice2(_period.nPaidAmount!)),
                 _buildGoodsInfoItem(

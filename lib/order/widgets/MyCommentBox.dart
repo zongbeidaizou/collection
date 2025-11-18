@@ -1,4 +1,3 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 
 import '../../routers/fluro_navigator.dart';
-import '../../util/toast_utils.dart';
 
 // ignore: must_be_immutable
 class MyCommentBox extends StatefulWidget {
@@ -51,7 +49,11 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   DateTime? _savedDateTime;
   List<XFile>? _pickedFiles;
 
-  bool _showCustomTime = false;
+  void initState() {
+    super.initState();
+    widget.commentController?.text = 'Negotiating with cx.';
+    widget.typeController?.text = '1';
+  }
 
   void _selectPresetTime(int hour) {
     final now = DateTime.now();
@@ -193,7 +195,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
                     },
                   ),
                 ),
-                onTap: () => setState(() => _showCustomTime = true),
+                onTap: () {},
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               ),
             ],
@@ -203,22 +205,56 @@ class _MyCommentBoxState extends State<MyCommentBox> {
     );
   }
 
+  Future<void> _handleIconSelection(
+      IconData? value, List<IconData> typeList, List<int> typeList2) async {
+    if (value == null) return;
+    final int selectedIndex = typeList.indexOf(value);
+    if (selectedIndex != -1 && selectedIndex < typeList2.length) {
+      widget.typeController?.text = typeList2[selectedIndex].toString();
+    }
+    if (value == Icons.more_time) {
+      _showDialog();
+    } else if (value == Icons.phone_disabled) {
+      widget.commentController?.text = 'Cx is not cx not responding.';
+    } else if (value == Icons.sync) {
+      widget.commentController?.text = 'Negotiating with cx.';
+    } else if (value == Icons.pest_control) {
+      widget.commentController?.text = 'Cx is suspected of fraud.';
+    } else if (value == Icons.hourglass_disabled) {
+      widget.commentController?.text = 'Temporarily assign to someone else.';
+      final ImagePicker picker = ImagePicker();
+      List<XFile>? pickedFiles = await picker.pickMultiImage();
+      setState(() {
+        _pickedFiles = pickedFiles;
+      });
+    } else {
+      _focusNode.requestFocus();
+    }
+    setState(() {
+      _value = value;
+    });
+  }
+
+  Color _getIconColor(IconData icon) {
+    if (icon == Icons.phone_disabled) {
+      return Colors.purpleAccent;
+    } else if (icon == Icons.more_time) {
+      return Colors.green;
+    } else if (icon == Icons.pest_control) {
+      return Colors.red;
+    }
+    return Colors.grey;
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<IconData> typeList = [
       Icons.sync,
       Icons.more_time,
       Icons.phone_disabled,
-      Icons.transfer_within_a_station,
+      // Icons.pest_control,
     ];
     final List<int> typeList2 = [1, 2, 4, 5];
-    final List<String> typeToastList = [
-      "Under negotiation selected",
-      "Promise to repay selected",
-      "Refusal to repay selected",
-      "Unable to dial selected",
-    ];
-
     return Column(
       children: [
         Expanded(child: widget.child!),
@@ -230,64 +266,42 @@ class _MyCommentBoxState extends State<MyCommentBox> {
           color: Colors.blueAccent.withOpacity(0.3),
           child: ListTile(
             tileColor: widget.backgroundColor,
-            leading: Container(
-              height: 40.0,
-              width: 50.0,
-              child: DropdownButton<IconData>(
-                value: _value,
-                style: const TextStyle(color: Colors.blueAccent),
-                underline: Container(
-                  height: 1,
-                  color: Colors.transparent,
-                ),
-                onChanged: (IconData? value) async {
-                  widget.typeController?.text =
-                      typeList2[typeList.indexOf(value!)].toString();
-                  if (value == Icons.more_time) {
-                    _showDialog();
-                  } else if (value == Icons.phone_disabled) {
-                    widget.commentController?.text = 'cx is not reachable.';
-                  } else if (value == Icons.transfer_within_a_station) {
-                    widget.commentController?.text =
-                        'Temporarily assign to someone else.';
-                    final ImagePicker _picker = ImagePicker();
-                    List<XFile>? pickedFiles = await _picker.pickMultiImage();
-                    setState(() {
-                      _pickedFiles = pickedFiles;
-                    });
-                  } else {
-                    _focusNode.requestFocus();
-                  }
-                  setState(() {
-                    _value = value;
-                  });
-                },
-                items:
-                    typeList.map<DropdownMenuItem<IconData>>((IconData icon) {
-                  Color iconColor = Colors.grey;
-                  if (icon == Icons.sync) {
-                    iconColor = Colors.grey;
-                  } else if (icon == Icons.phone_disabled) {
-                    iconColor = Colors.purpleAccent;
-                  } else if (icon == Icons.more_time) {
-                    iconColor = Colors.green;
-                  } else if (icon == Icons.transfer_within_a_station) {
-                    iconColor = Colors.red;
-                  }
-                  return DropdownMenuItem<IconData>(
-                    value: icon,
-                    child: Icon(
-                      icon,
-                      color: iconColor,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
             title: Form(
               key: widget.formKey,
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      spacing: 8,
+                      children: typeList.map((icon) {
+                        final bool isSelected = _value == icon;
+                        return GestureDetector(
+                          onTap: () =>
+                              _handleIconSelection(icon, typeList, typeList2),
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isSelected
+                                    ? Colors.blueAccent
+                                    : Colors.transparent,
+                              ),
+                            ),
+                            child: Icon(
+                              icon,
+                              color: _getIconColor(icon),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     maxLines: 4,
                     minLines: 1,

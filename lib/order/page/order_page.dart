@@ -21,9 +21,9 @@ final List<IconData> _iconList = [
   Icons.play_for_work_sharp,
   Icons.sync,
   Icons.more_time,
-  Icons.hourglass_disabled,
+  Icons.timer_off_outlined,
   Icons.phone_disabled,
-  Icons.phone_disabled,
+  // Icons.pest_control,
   Icons.hourglass_disabled,
   Icons.payment,
   Icons.check_circle,
@@ -248,8 +248,9 @@ class _OrderPageState extends State<OrderPage>
                       _TabView(0, 'New', 10),
                       _TabView(1, 'Negotiating', 10),
                       _TabView(2, 'PTP', 10),
-                      _TabView(3, 'Broken PTP', 10),
-                      _TabView(4, 'Refused', 10),
+                      _TabView(3, 'BP', 10),
+                      _TabView(4, 'No Answer', 10),
+                      // _TabView(5, 'Fraud', 10),
                     ],
                     onTap: (index) {
                       if (!mounted) {

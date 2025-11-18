@@ -407,7 +407,8 @@ class _AddNoteState extends State<AddNote>
                               'e_collection_admin_id': 0,
                               'k_promise_time': dateController.text,
                             };
-                            showToast(typeController.text);
+                            showToast(
+                                'Cx.${item.uPhone!} ${commentController.text}');
                             setState(() {
                               // 修改为在列表最前面追加元素
                               _list.insert(
@@ -426,6 +427,7 @@ class _AddNoteState extends State<AddNote>
                           } else {
                             print('Not validated');
                           }
+                          NavigatorUtils.goBack(context);
                         },
                         formKey: formKey,
                         commentController: commentController,

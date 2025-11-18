@@ -88,7 +88,7 @@ class _AddNoteState extends State<AddNote>
   final List<Color> _colorList = [
     Colors.brown,
     Colors.grey,
-    Colors.blue,
+    Colors.green,
     Colors.orange,
     Colors.purpleAccent,
     Colors.red,
@@ -669,10 +669,21 @@ class _InnerTimeline extends StatelessWidget {
                       const Expanded(child: Gaps.empty),
 
                       if (messages[index].status == 2)
-                        Text(
-                            'Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index].promiseTime))}',
-                            style: TextStyle(
-                                fontSize: 10, color: messages[index].iconColor))
+                        Row(
+                          children: [
+                            Text(
+                                'Promise to Pay by ${DateFormat("MMM dd 'at' HH:mm").format(DateTime.parse(messages[index].promiseTime))}',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: messages[index].iconColor)),
+                            Gaps.hGap10,
+                            Icon(
+                              messages[index].icon,
+                              color: messages[index].iconColor,
+                              size: 16.0,
+                            ),
+                          ],
+                        )
                       else
                         Icon(
                           messages[index].icon,

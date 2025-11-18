@@ -303,54 +303,54 @@ class _AddNoteState extends State<AddNote>
                     ? Colors.green
                     : Colors.orange,
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return RepaymentBillDialog(
-                        avatar: _avatar,
-                        repayInfo: _repayInfo,
-                        period: _period,
-                        track: _track,
-                      );
-                    },
-                  );
-                },
-                child: CircleAvatar(
-                  // backgroundImage: NetworkImage(_avatar?? '',),
-                  // backgroundImage:
-                  //     ImageUtils.getAssetImage('order/icon_avatar'),
-                  radius: 24,
-                  backgroundColor: Colors.transparent,
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: _avatar ?? '',
-                      fit: BoxFit.cover,
-                      width: 48,
-                      height: 48,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/images/order/icon_avatar.png', // 加载中的占位图
+          title: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return RepaymentBillDialog(
+                      avatar: _avatar,
+                      repayInfo: _repayInfo,
+                      period: _period,
+                      track: _track,
+                    );
+                  },
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    // backgroundImage: NetworkImage(_avatar?? '',),
+                    // backgroundImage:
+                    //     ImageUtils.getAssetImage('order/icon_avatar'),
+                    radius: 24,
+                    backgroundColor: Colors.transparent,
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: _avatar ?? '',
                         fit: BoxFit.cover,
-                      ),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(
-                          'assets/images/order/order_delete.png',
+                        width: 48,
+                        height: 48,
+                        placeholder: (context, url) => Image.asset(
+                          'assets/images/order/icon_avatar.png', // 加载中的占位图
                           fit: BoxFit.cover,
-                        );
-                      },
+                        ),
+                        errorWidget: (context, url, error) {
+                          return Image.asset(
+                            'assets/images/order/order_delete.png',
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Text(item.vName ?? '',
-                  style: TextStyle(
-                      color: ThemeUtils.getIconColor(context), fontSize: 18)),
-            ],
-          ),
+                  Text(item.vName ?? '',
+                      style: TextStyle(
+                          color: ThemeUtils.getIconColor(context),
+                          fontSize: 18)),
+                ],
+              )),
         ),
         body: SafeArea(
           child: Container(

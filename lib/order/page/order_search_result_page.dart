@@ -96,27 +96,32 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
         displacement: 120.0,
 
         /// 默认40， 多添加的80为Header高度
-        child: ListView.builder(
-          itemCount: _list.length,
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
-          itemBuilder: (_, index) => OrderItem(
-            key: Key('order_item_$index'),
-            index: index,
-            showContactDays: 0,
-            tabIndex: _index,
-            item: _list[index],
-            products: _product,
-            admins: _admins,
-            repayInfo: CollectionLogOtherRepayInfo(),
-            track: CollectionLogOtherTrack(),
-            period: CollectionLogOtherPeriod(),
-            contactList: [],
-            smsHistory: [],
-            allContactList: [],
-          ),
-        ),
+        child: _list.isNotEmpty
+            ? ListView.builder(
+                itemCount: _list.length,
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 28.0),
+                itemBuilder: (_, index) => OrderItem(
+                  key: Key('order_item_$index'),
+                  index: index,
+                  showContactDays: 0,
+                  tabIndex: _index,
+                  item: _list[index],
+                  products: _product,
+                  admins: _admins,
+                  repayInfo: CollectionLogOtherRepayInfo(),
+                  track: CollectionLogOtherTrack(),
+                  period: CollectionLogOtherPeriod(),
+                  contactList: [],
+                  smsHistory: [],
+                  allContactList: [],
+                ),
+              )
+            : Center(
+                child:
+                    Text('Search by phone or contact phone or borrower name ')),
       ),
     );
   }

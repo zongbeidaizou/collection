@@ -29,7 +29,6 @@ import '../widgets/line.dart';
 import '../widgets/pie.dart';
 import '../widgets/resources/bar_chart_sample6.dart';
 
-
 /// design/6店铺-账户/index.html#artboard0
 class ShopPage extends StatefulWidget {
   const ShopPage({
@@ -43,10 +42,40 @@ class ShopPage extends StatefulWidget {
   _ShopPageState createState() => _ShopPageState();
 }
 
-class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPagePresenter>, AutomaticKeepAliveClientMixin<ShopPage>, SingleTickerProviderStateMixin implements ShopIMvpView {
+class _ShopPageState extends State<ShopPage>
+    with
+        BasePageMixin<ShopPage, ShopPagePresenter>,
+        AutomaticKeepAliveClientMixin<ShopPage>,
+        SingleTickerProviderStateMixin
+    implements ShopIMvpView {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
-  ShopData _data = ShopData.fromJson({"web_url":"","other":{"progress":{"points":[0,1],"levelProgress":[],"amountProgress":[],"amountProgress2":[0,0,0,0,0],"currentLevel":1,"nextAmount":0,"nextLevel":1,"currentKey":0},"profile":{}},"show_month_data":false,"month_data":[],"show_week_case_data":false,"week_case_data":[],"show_week_bonus_data":false,"week_bonus_data":[],"show_month_case_data":false,"month_case_data":[],"show_month_bonus_data":false,"month_bonus_data":[]});
+  ShopData _data = ShopData.fromJson({
+    "web_url": "",
+    "other": {
+      "progress": {
+        "points": [0, 1],
+        "levelProgress": [],
+        "amountProgress": [],
+        "amountProgress2": [0, 0, 0, 0, 0],
+        "currentLevel": 1,
+        "nextAmount": 0,
+        "nextLevel": 1,
+        "currentKey": 0
+      },
+      "profile": {}
+    },
+    "show_month_data": false,
+    "month_data": [],
+    "show_week_case_data": false,
+    "week_case_data": [],
+    "show_week_bonus_data": false,
+    "week_bonus_data": [],
+    "show_month_case_data": false,
+    "month_case_data": [],
+    "show_month_bonus_data": false,
+    "month_bonus_data": []
+  });
   late ShopPagePresenter _shopPagePresenter;
 
   @override
@@ -63,12 +92,12 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
       end: Colors.blueAccent,
     ).animate(_controller);
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
 
   @override
   void setUser(UserEntity? user) {
@@ -77,12 +106,11 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   @override
   bool get isAccessibilityTest => widget.isAccessibilityTest;
-  void setData(ShopData data){
+  void setData(ShopData data) {
     _data = data;
-    setState(() {
-
-    });
+    setState(() {});
   }
+
   String formatNumberToK(int number) {
     if (number < 1000) {
       return number.toString(); // 小于1000直接返回原数字
@@ -99,7 +127,6 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
 
   Future<void> _onRefresh() async {
     _shopPagePresenter.show(true);
-
   }
 
   @override
@@ -122,7 +149,8 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
         color: Colors.blueAccent.withOpacity(0.1),
       ),
       child: SizedBox.shrink(),
-    ).animate(onPlay: (controller) => controller.repeat())
+    )
+        .animate(onPlay: (controller) => controller.repeat())
         .shimmer(duration: 2600.ms, color: Colors.yellow[900])
         .animate() // this wraps the previous Animate in another Animate
         .fadeIn(duration: 2600.ms, curve: Curves.easeOutCirc);
@@ -145,8 +173,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
           padding: const EdgeInsets.only(left: 16.0),
           child: Align(
             alignment: Alignment.centerLeft, // 水平居左，垂直居中
-            child:
-            Consumer<UserProvider>(builder: (_, provider, __) {
+            child: Consumer<UserProvider>(builder: (_, provider, __) {
               return Text(
                 'Hi ${provider.userEntity.profile!.aName!}',
                 style: const TextStyle(fontSize: 24),
@@ -176,7 +203,12 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
           gradient: LinearGradient(
             colors: isDark
                 ? [Colors.black, Colors.grey]
-                : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.52), Colors.indigoAccent.withOpacity(0.44), Colors.indigoAccent.withOpacity(0.3)],
+                : [
+                    Colors.indigoAccent,
+                    Colors.indigoAccent.withOpacity(0.52),
+                    Colors.indigoAccent.withOpacity(0.44),
+                    Colors.indigoAccent.withOpacity(0.3)
+                  ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -189,11 +221,14 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
               children: <Widget>[
                 // level your current hunt level is lv.1 with 4% of amount, collection more 5000 can touch lv2 with 6% of amount
                 Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child:Consumer<UserProvider>(builder: (_, provider, __) {
-                      return LevelBar(data: provider.userEntity.progress!, profile: provider.userEntity.profile!,);
-                    }),
-                    ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: Consumer<UserProvider>(builder: (_, provider, __) {
+                    return LevelBar(
+                      data: provider.userEntity.progress!,
+                      profile: provider.userEntity.profile!,
+                    );
+                  }),
+                ),
                 Gaps.vGap8,
                 // 名人堂
                 MergeSemantics(
@@ -224,168 +259,229 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
                       } else if (index == 2) {
                         iconColor = Color(0xFFB87333).withOpacity(0.8);
                       }
-                      return index < 3 ? AnimatedBuilder(
-                      animation: _controller,
-                      builder: (context, child) {
-
-                        return Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            children: <Widget>[
-                              Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: <Widget>[
-            /*                                Animate(
+                      return index < 3
+                          ? AnimatedBuilder(
+                              animation: _controller,
+                              builder: (context, child) {
+                                return Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Stack(
+                                        alignment: AlignmentDirectional.center,
+                                        children: <Widget>[
+                                          /*                                Animate(
                                     effects: [MoveEffect(), ScaleEffect()],
                                     child: flashingBorder,
                                   ),*/
-                                  Animate(
-                                    effects: [FadeEffect(), ScaleEffect()],
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Colors.transparent
-                                          /*color: _colorAnimation.value!,
+                                          Animate(
+                                            effects: [
+                                              FadeEffect(),
+                                              ScaleEffect()
+                                            ],
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                    color: Colors.transparent
+                                                    /*color: _colorAnimation.value!,
                                           width: 4.0,*/
+                                                    ),
+                                              ),
+                                              child: CircleAvatar(
+                                                radius: 28.0,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                                backgroundImage:
+                                                    ImageUtils.getImageProvider(
+                                                        _data.monthData![index]
+                                                            .avatar,
+                                                        holderImg:
+                                                            'store/icon_zj'),
+                                                // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
+                                              ),
+                                            )
+                                                .animate(
+                                                    onPlay: (controller) =>
+                                                        controller.repeat())
+                                                .shimmer(
+                                                    duration: 2200.ms,
+                                                    color: Colors.white
+                                                        .withOpacity(0.5))
+                                                .animate() // this wraps the previous Animate in another Animate
+                                                .fadeIn(
+                                                    duration: 2200.ms,
+                                                    curve: Curves.easeOutQuad)
+                                                .slide(),
+                                          ),
+                                          Positioned(
+                                            top: 0,
+                                            left: 0,
+                                            child: Icon(
+                                              Icons.emoji_events_rounded,
+                                              color: iconColor,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8.0),
+                                      Text(formatNumberToK(
+                                          _data.monthData![index].value!)),
+                                    ],
+                                  ),
+                                );
+                              })
+                          : Container(
+                              padding: EdgeInsets.all(8.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Stack(
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.transparent!,
+                                            width: 4.0,
+                                          ),
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 28.0,
+                                          backgroundColor: Colors.transparent,
+                                          backgroundImage:
+                                              ImageUtils.getImageProvider(
+                                                  _data
+                                                      .monthData![index].avatar,
+                                                  holderImg: 'store/icon_zj'),
                                         ),
                                       ),
-                                      child: CircleAvatar(
-                                        radius: 28.0,
-                                        backgroundColor: Colors.transparent,
-                                        // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
-                                        backgroundImage: ImageUtils.getImageProvider(_data.monthData![index].avatar, holderImg: 'store/icon_zj'),
-                                        // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
+                                      Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        child: Icon(
+                                          Icons.emoji_events_rounded,
+                                          color: iconColor,
+                                          size: 20,
+                                        ),
                                       ),
-                                    ).animate(onPlay: (controller) => controller.repeat())
-                                        .shimmer(duration: 2200.ms, color: Colors.white.withOpacity(0.5))
-                                        .animate() // this wraps the previous Animate in another Animate
-                                        .fadeIn(duration: 2200.ms, curve: Curves.easeOutQuad)
-                                        .slide(),
+                                    ],
                                   ),
-                                  Positioned(
-                                    top: 0,
-                                    left: 0,
-                                    child: Icon(
-                                      Icons.emoji_events_rounded,
-                                      color: iconColor,
-                                      size: 20,
-                                    ),
-                                  ),
+                                  SizedBox(height: 8.0),
+                                  Text(formatNumberToK(
+                                      _data.monthData![index].value!)),
                                 ],
                               ),
-                              SizedBox(height: 8.0),
-                              Text(formatNumberToK(_data.monthData![index].value!)),
-                            ],
-                          ),
-                        );
-                      }) :
-                      Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.transparent!,
-                                      width: 4.0,
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 28.0,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: ImageUtils.getImageProvider(_data.monthData![index].avatar, holderImg: 'store/icon_zj'),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Icon(
-                                    Icons.emoji_events_rounded,
-                                    color: iconColor,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8.0),
-                            Text(formatNumberToK(_data.monthData![index].value!)),
-                          ],
-                        ),
-                      );
-
+                            );
                     },
                   ),
                 ),
 
-                if (_data.showWeekBonusData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: true) else Gaps.empty,
-                if (_data.showWeekCaseData!) Bar2(weekBonusData: _data.weekBonusData!,weekCaseData: _data.weekCaseData!, isShowingMainData: false) else Gaps.empty,
-                if (_data.showMonthBonusData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: true) else Gaps.empty,
-                if (_data.showMonthCaseData!) LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!, isShowingMainData: false) else Gaps.empty,
-                if (_data.showMonthAdditionData!) Column(
-                  children: [
-                    Text(
-                      'My Monthly Bonus',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 1,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white70), // 外层边框
+                if (_data.showWeekBonusData!)
+                  Bar2(
+                      weekBonusData: _data.weekBonusData!,
+                      weekCaseData: _data.weekCaseData!,
+                      isShowingMainData: true)
+                else
+                  Gaps.empty,
+                if (_data.showWeekCaseData!)
+                  Bar2(
+                      weekBonusData: _data.weekBonusData!,
+                      weekCaseData: _data.weekCaseData!,
+                      isShowingMainData: false)
+                else
+                  Gaps.empty,
+                if (_data.showMonthAdditionData!)
+                  Column(
+                    children: [
+                      Text(
+                        'My Monthly Bonus',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 1,
                         ),
-                        child: Column(
-                          children: [
-
-                            // 表头 - 带背景色
-                            Container(
-                              color: Color(0xFF50E4FF), // 表头背景色
-                              child: Row(
-                                children: [
-                                  _buildHeaderCell('Performance Target', flex: 3),
-                                  _buildHeaderCell('Bonus'),
-                                  _buildHeaderCell('Progress Status', flex: 3),
-                                ],
+                        textAlign: TextAlign.center,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white70), // 外层边框
+                          ),
+                          child: Column(
+                            children: [
+                              // 表头 - 带背景色
+                              Container(
+                                color: Color(0xFF50E4FF), // 表头背景色
+                                child: Row(
+                                  children: [
+                                    _buildHeaderCell('Performance Target',
+                                        flex: 3),
+                                    _buildHeaderCell('Bonus'),
+                                    _buildHeaderCell('Progress Status',
+                                        flex: 3),
+                                  ],
+                                ),
                               ),
-                            ),
-                            // 表格内容
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(), // 禁止单独滚动
-                              itemCount: _data.monthAdditionData!.length,
-                              itemBuilder: (context, index) {
-                                ShopDataMonthAdditionData item = _data.monthAdditionData![index];
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(color: Colors.white70), // 行底部边框
+                              // 表格内容
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics:
+                                    NeverScrollableScrollPhysics(), // 禁止单独滚动
+                                itemCount: _data.monthAdditionData!.length,
+                                itemBuilder: (context, index) {
+                                  ShopDataMonthAdditionData item =
+                                      _data.monthAdditionData![index];
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.white70), // 行底部边框
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      _buildDataCell('Reach ${item.days} days at Grade ${item.level}', flex: 3),
-                                      _buildDataCell(Utils.formatPrice2(item.bonus!)),
-                                      if (item.completeDays! >= item.days!) _buildDataCell('Achieved! ✅', flex: 3) else _buildDataCell('${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})', flex: 3),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                                    child: Row(
+                                      children: [
+                                        _buildDataCell(
+                                            'Reach ${item.days} days at Grade ${item.level}',
+                                            flex: 3),
+                                        _buildDataCell(
+                                            Utils.formatPrice2(item.bonus!)),
+                                        if (item.completeDays! >= item.days!)
+                                          _buildDataCell('Achieved! ✅', flex: 3)
+                                        else
+                                          _buildDataCell(
+                                              '${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})',
+                                              flex: 3),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ) else Gaps.empty,
+                    ],
+                  )
+                else
+                  Gaps.empty,
+                if (_data.showMonthBonusData!)
+                  LineChartSample1(
+                      monthBonusData: _data.monthBonusData!,
+                      monthCaseData: _data.monthCaseData!,
+                      isShowingMainData: true)
+                else
+                  Gaps.empty,
+                if (_data.showMonthCaseData!)
+                  LineChartSample1(
+                      monthBonusData: _data.monthBonusData!,
+                      monthCaseData: _data.monthCaseData!,
+                      isShowingMainData: false)
+                else
+                  Gaps.empty,
 
                 // 统计
                 // LineChartSample1(monthBonusData: _data.monthBonusData!,monthCaseData: _data.monthCaseData!,),
@@ -601,6 +697,7 @@ class _ShopPageState extends State<ShopPage> with BasePageMixin<ShopPage, ShopPa
     _shopPagePresenter = ShopPagePresenter();
     return _shopPagePresenter;
   }
+
   // 构建表头单元格
   Widget _buildHeaderCell(String text, {int flex = 1}) {
     return Expanded(
@@ -667,7 +764,11 @@ class _ShopFunctionModule extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              LoadAssetImage(context.isDark ? 'shop/${darkImage[index]}' : 'shop/${image[index]}', width: 32.0),
+              LoadAssetImage(
+                  context.isDark
+                      ? 'shop/${darkImage[index]}'
+                      : 'shop/${image[index]}',
+                  width: 32.0),
               Gaps.vGap4,
               Text(
                 data[index],
@@ -688,7 +789,9 @@ class BorderClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     // 可以调整Path来定义边框形状
-    Path path = Path()..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(12)));
+    Path path = Path()
+      ..addRRect(RRect.fromRectAndRadius(
+          Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(12)));
     return path;
   }
 

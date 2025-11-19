@@ -18,35 +18,35 @@ class _BarChart extends StatelessWidget {
         barGroups: barGroups,
         gridData: const FlGridData(show: false),
         alignment: BarChartAlignment.spaceAround,
-        maxY: 200,
+        maxY: 100,
       ),
     );
   }
 
   BarTouchData get barTouchData => BarTouchData(
-    enabled: false,
-    handleBuiltInTouches: false,
-    touchTooltipData: BarTouchTooltipData(
-      tooltipBgColor: Colors.transparent,
-      tooltipPadding: EdgeInsets.zero,
-      tooltipMargin: 8,
-      getTooltipItem: (
-          BarChartGroupData group,
-          int groupIndex,
-          BarChartRodData rod,
-          int rodIndex,
+        enabled: false,
+        handleBuiltInTouches: false,
+        touchTooltipData: BarTouchTooltipData(
+          tooltipBgColor: Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 8,
+          getTooltipItem: (
+            BarChartGroupData group,
+            int groupIndex,
+            BarChartRodData rod,
+            int rodIndex,
           ) {
-        return BarTooltipItem(
-          rod.toY.round().toString(),
-          const TextStyle(
-            color: AppColors.contentColorBlue,
-            // color: Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
-        );
-      },
-    ),
-  );
+            return BarTooltipItem(
+              rod.toY.round().toString(),
+              const TextStyle(
+                color: AppColors.contentColorBlue,
+                // color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+        ),
+      );
 
   Widget getTitles(double value, TitleMeta meta) {
     final style = TextStyle(
@@ -64,38 +64,37 @@ class _BarChart extends StatelessWidget {
   }
 
   FlTitlesData get titlesData => FlTitlesData(
-    show: true,
-    bottomTitles: AxisTitles(
-      sideTitles: SideTitles(
-        showTitles: true,
-        reservedSize: 30,
-        getTitlesWidget: getTitles,
-      ),
-    ),
-    leftTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    topTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-    rightTitles: const AxisTitles(
-      sideTitles: SideTitles(showTitles: false),
-    ),
-  );
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            getTitlesWidget: getTitles,
+          ),
+        ),
+        leftTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
 
   FlBorderData get borderData => FlBorderData(
-    show: false,
-  );
+        show: false,
+      );
 
   LinearGradient get _barsGradient => LinearGradient(
-    colors: [
-      AppColors.contentColorCyan,
-      AppColors.contentColorBlue,
-
-    ],
-    begin: Alignment.bottomCenter,
-    end: Alignment.topCenter,
-  );
+        colors: [
+          AppColors.contentColorCyan,
+          AppColors.contentColorBlue,
+        ],
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+      );
   List<BarChartGroupData> get barGroups {
     return data.asMap().entries.map((entry) {
       final index = entry.key;
@@ -105,7 +104,8 @@ class _BarChart extends StatelessWidget {
         x: index, // Use the index as x value for positioning
         barRods: [
           BarChartRodData(
-            toY: (data.value as int).toDouble(), // Convert value to double for toY
+            toY: (data.value as int)
+                .toDouble(), // Convert value to double for toY
             gradient: _barsGradient,
           )
         ],
@@ -113,7 +113,6 @@ class _BarChart extends StatelessWidget {
       );
     }).toList();
   }
-
 }
 
 class BarChartSample3 extends StatefulWidget {

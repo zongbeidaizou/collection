@@ -17,12 +17,12 @@ class BarChartSample6 extends StatelessWidget {
   final betweenSpace = 0;
 
   BarChartGroupData generateGroupData(
-      int x,
-      double b,
-      double a,
-      double aa,
-      double aaa,
-      ) {
+    int x,
+    double b,
+    double a,
+    double aa,
+    double aaa,
+  ) {
     return BarChartGroupData(
       x: x,
       groupVertically: true,
@@ -48,7 +48,7 @@ class BarChartSample6 extends StatelessWidget {
         ),
         BarChartRodData(
           fromY: b + betweenSpace + a + betweenSpace + aa + betweenSpace,
-          toY: b + betweenSpace + a + betweenSpace + aa+ betweenSpace + aaa,
+          toY: b + betweenSpace + a + betweenSpace + aa + betweenSpace + aaa,
           color: Colors.blue[600],
           // width: 5,
         ),
@@ -67,13 +67,12 @@ class BarChartSample6 extends StatelessWidget {
       space: 4,
       child: Text(data[value.toInt()].name!, style: style),
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right:20),
+      padding: const EdgeInsets.only(right: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,11 +109,11 @@ class BarChartSample6 extends StatelessWidget {
                     tooltipPadding: EdgeInsets.zero,
                     tooltipMargin: 18,
                     getTooltipItem: (
-                        BarChartGroupData group,
-                        int groupIndex,
-                        BarChartRodData rod,
-                        int rodIndex,
-                        ) {
+                      BarChartGroupData group,
+                      int groupIndex,
+                      BarChartRodData rod,
+                      int rodIndex,
+                    ) {
                       return BarTooltipItem(
                         rod.toY.round().toString(),
                         const TextStyle(
@@ -147,7 +146,7 @@ class BarChartSample6 extends StatelessWidget {
                     value4.toDouble(),
                   );
                 }).toList(),
-                maxY: 20000,
+                maxY: 40000,
                 extraLinesData: ExtraLinesData(
                   horizontalLines: [
                     // HorizontalLine(

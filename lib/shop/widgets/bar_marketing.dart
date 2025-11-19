@@ -16,51 +16,40 @@ final cyclingColor = Colors.lightBlue;
 final cyclingColor2 = Colors.lightGreen;
 
 class _LineChart extends StatelessWidget {
-  const _LineChart(
-      {required this.isShowingMainData,
-      required this.weekCaseData,
-      required this.weekBonusData});
+  const _LineChart({required this.weekCaseData});
 
-  final bool isShowingMainData;
   final List<ShopDataWeekCaseData> weekCaseData;
-  final List<ShopDataWeekBonusData> weekBonusData;
 
   @override
   Widget build(BuildContext context) {
-    return isShowingMainData
-        ? BarChartSample6(data: weekBonusData)
-        : BarChartSample3(data: weekCaseData);
-    // return isShowingMainData ? BarChartSample7(data: weekBonusData) : BarChartSample3(data: weekCaseData) ;
+    return BarChartSample3(data: weekCaseData);
+    // return isRegister ? BarChartSample7(data: weekBonusData) : BarChartSample3(data: weekCaseData) ;
   }
 }
 
-class Bar2 extends StatefulWidget {
-  const Bar2(
-      {super.key,
-      required this.weekCaseData,
-      required this.weekBonusData,
-      required this.isShowingMainData});
+class BarMarketing extends StatefulWidget {
+  const BarMarketing(
+      {super.key, required this.weekCaseData, required this.isRegister});
   final List<ShopDataWeekCaseData> weekCaseData;
-  final List<ShopDataWeekBonusData> weekBonusData;
-  final bool isShowingMainData;
+  final bool isRegister;
 
   @override
-  State<StatefulWidget> createState() => Bar2State();
+  State<StatefulWidget> createState() => BarMarketingState();
 }
 
-class Bar2State extends State<Bar2> {
-  // late bool isShowingMainData;
+class BarMarketingState extends State<BarMarketing> {
+  // late bool isRegister;
 
   @override
   void initState() {
     super.initState();
-    // isShowingMainData = true;
+    // isRegister = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: widget.isShowingMainData ? 1.53 : 1.83,
+      aspectRatio: widget.isRegister ? 1.43 : 1.83,
       child: Stack(
         children: <Widget>[
           Column(
@@ -75,9 +64,9 @@ class Bar2State extends State<Bar2> {
                   Gaps.hGap16,
                   Expanded(
                     child: Text(
-                      widget.isShowingMainData
-                          ? 'Live Weekly Bonus'
-                          : 'Live Weekly Case Rankings',
+                      widget.isRegister
+                          ? 'Live Weekly Register Rankings'
+                          : 'Live Weekly Apply Rankings',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -87,17 +76,6 @@ class Bar2State extends State<Bar2> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  // widget.isShowingMainData ? Gaps.hGap8: Gaps.empty,
-                  widget.isShowingMainData
-                      ? LegendsListWidget(
-                          legends: [
-                            Legend('B', Colors.blue[100]!),
-                            Legend('A', Colors.blue[200]!),
-                            Legend('A+', Colors.blue[400]!),
-                            Legend('A++', Colors.blue[600]!),
-                          ],
-                        )
-                      : Gaps.empty,
                   Gaps.hGap16,
                 ],
               ),
@@ -107,10 +85,7 @@ class Bar2State extends State<Bar2> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: _LineChart(
-                      isShowingMainData: widget.isShowingMainData,
-                      weekCaseData: widget.weekCaseData,
-                      weekBonusData: widget.weekBonusData),
+                  child: _LineChart(weekCaseData: widget.weekCaseData),
                 ),
               ),
               const SizedBox(
@@ -120,16 +95,12 @@ class Bar2State extends State<Bar2> {
           ),
           IconButton(
             icon: Icon(
-              widget.isShowingMainData
-                  ? Icons.theater_comedy_outlined
-                  : Icons.text_rotation_angleup,
+              widget.isRegister
+                  ? Icons.person_search_outlined
+                  : Icons.how_to_reg_outlined,
               color: Colors.white.withOpacity(0.6),
             ),
-            onPressed: () {
-              // setState(() {
-              //   isShowingMainData = !isShowingMainData;
-              // });
-            },
+            onPressed: () {},
           )
         ],
       ),

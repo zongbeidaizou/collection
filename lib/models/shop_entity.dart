@@ -38,6 +38,14 @@ class ShopData {
 	bool? showWeekCaseData = false;
 	@JSONField(name: 'week_case_data')
 	List<ShopDataWeekCaseData>? weekCaseData = [];
+	@JSONField(name: 'show_week_register_data')
+	bool? showWeekRegisterData = false;
+	@JSONField(name: 'week_register_data')
+	List<ShopDataWeekCaseData>? weekRegisterData = [];
+	@JSONField(name: 'show_week_apply_data')
+	bool? showWeekApplyData = false;
+	@JSONField(name: 'week_apply_data')
+	List<ShopDataWeekCaseData>? weekApplyData = [];
 	@JSONField(name: 'show_week_bonus_data')
 	bool? showWeekBonusData = false;
 	@JSONField(name: 'week_bonus_data')

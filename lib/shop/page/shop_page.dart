@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/shop/widgets/bar_marketing.dart';
 import 'package:bounty_hunter/shop/widgets/pie2.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
@@ -203,12 +204,7 @@ class _ShopPageState extends State<ShopPage>
           gradient: LinearGradient(
             colors: isDark
                 ? [Colors.black, Colors.grey]
-                : [
-                    Colors.indigoAccent,
-                    Colors.indigoAccent.withOpacity(0.52),
-                    Colors.indigoAccent.withOpacity(0.44),
-                    Colors.indigoAccent.withOpacity(0.3)
-                  ],
+                : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.3)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -379,22 +375,62 @@ class _ShopPageState extends State<ShopPage>
                 ),
 
                 if (_data.showWeekBonusData!)
-                  Bar2(
-                      weekBonusData: _data.weekBonusData!,
-                      weekCaseData: _data.weekCaseData!,
-                      isShowingMainData: true)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Bar2(
+                        weekBonusData: _data.weekBonusData!,
+                        weekCaseData: _data.weekCaseData!,
+                        isShowingMainData: true),
+                  )
                 else
                   Gaps.empty,
                 if (_data.showWeekCaseData!)
-                  Bar2(
-                      weekBonusData: _data.weekBonusData!,
-                      weekCaseData: _data.weekCaseData!,
-                      isShowingMainData: false)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Bar2(
+                        weekBonusData: _data.weekBonusData!,
+                        weekCaseData: _data.weekCaseData!,
+                        isShowingMainData: false),
+                  )
+                else
+                  Gaps.empty,
+                if (_data.showWeekRegisterData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarMarketing(
+                        weekCaseData: _data.weekRegisterData!,
+                        isRegister: true),
+                  )
+                else
+                  Gaps.empty,
+                if (_data.showWeekApplyData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarMarketing(
+                        weekCaseData: _data.weekApplyData!, isRegister: false),
+                  )
                 else
                   Gaps.empty,
                 if (_data.showMonthAdditionData!)
                   Column(
                     children: [
+                      Gaps.vGap15,
                       Text(
                         'My Monthly Bonus',
                         style: const TextStyle(
@@ -469,17 +505,37 @@ class _ShopPageState extends State<ShopPage>
                 else
                   Gaps.empty,
                 if (_data.showMonthBonusData!)
-                  LineChartSample1(
-                      monthBonusData: _data.monthBonusData!,
-                      monthCaseData: _data.monthCaseData!,
-                      isShowingMainData: true)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: SizedBox(
+                      height: 300,
+                      child: LineChartSample1(
+                          monthBonusData: _data.monthBonusData!,
+                          monthCaseData: _data.monthCaseData!,
+                          isShowingMainData: true),
+                    ),
+                  )
                 else
                   Gaps.empty,
                 if (_data.showMonthCaseData!)
-                  LineChartSample1(
-                      monthBonusData: _data.monthBonusData!,
-                      monthCaseData: _data.monthCaseData!,
-                      isShowingMainData: false)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: SizedBox(
+                      height: 300,
+                      child: LineChartSample1(
+                          monthBonusData: _data.monthBonusData!,
+                          monthCaseData: _data.monthCaseData!,
+                          isShowingMainData: false),
+                    ),
+                  )
                 else
                   Gaps.empty,
 

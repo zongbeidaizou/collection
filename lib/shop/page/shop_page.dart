@@ -204,7 +204,7 @@ class _ShopPageState extends State<ShopPage>
           gradient: LinearGradient(
             colors: isDark
                 ? [Colors.black, Colors.grey]
-                : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.3)],
+                : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.1)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

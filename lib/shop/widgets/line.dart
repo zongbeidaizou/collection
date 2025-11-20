@@ -97,7 +97,7 @@ class _LineChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 27,
+        maxX: 40,
         maxY: 20,
         minY: 0,
       );
@@ -108,8 +108,8 @@ class _LineChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData2,
         minX: 0,
-        maxX: 27,
-        maxY: 10000,
+        maxX: 40,
+        maxY: 20000,
         minY: 0,
       );
   LineTouchData get lineTouchData2 {

@@ -96,7 +96,7 @@ class BarMarketingState extends State<BarMarketing> {
           IconButton(
             icon: Icon(
               widget.isRegister
-                  ? Icons.person_search_outlined
+                  ? Icons.person_outline_outlined
                   : Icons.how_to_reg_outlined,
               color: Colors.white.withOpacity(0.6),
             ),

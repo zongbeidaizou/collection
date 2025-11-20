@@ -250,6 +250,124 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  List<Widget> _buildGroups() {
+    // 按 qEndAt 日期分组
+    final Map<String, List<MarketingData>> groupedData = {};
+    final Map<String, DateTime> dateMap = {}; // 存储日期字符串对应的 DateTime，用于排序
+
+    for (final MarketingData item in _filteredList) {
+      String dateKey = 'Unknown';
+      DateTime? dateTime;
+
+      // 获取 qEndAt，优先使用 logs 中的，否则使用 item 中的
+      String? qEndAt;
+      if (item.aAAAASLTelemarketingDetailLogs != null &&
+          item.aAAAASLTelemarketingDetailLogs!.isNotEmpty &&
+          item.aAAAASLTelemarketingDetailLogs![0].qEndAt != null &&
+          item.aAAAASLTelemarketingDetailLogs![0].qEndAt!.isNotEmpty) {
+        qEndAt = item.aAAAASLTelemarketingDetailLogs![0].qEndAt;
+      } else if (item.qEndAt != null && item.qEndAt!.isNotEmpty) {
+        qEndAt = item.qEndAt;
+      }
+
+      if (qEndAt != null && qEndAt.isNotEmpty) {
+        try {
+          final DateTime endDate = DateTime.parse(qEndAt);
+          dateKey = DateFormat('MMM d', 'en_US').format(endDate);
+          dateTime = endDate;
+        } catch (e) {
+          dateKey = 'Unknown';
+        }
+      }
+
+      if (!groupedData.containsKey(dateKey)) {
+        groupedData[dateKey] = [];
+        if (dateTime != null) {
+          dateMap[dateKey] = dateTime;
+        }
+      }
+      groupedData[dateKey]!.add(item);
+    }
+
+    // 对分组按键（日期）进行排序，Unknown 放在最后
+    final sortedEntries = groupedData.entries.toList()
+      ..sort((a, b) {
+        if (a.key == 'Unknown') return 1;
+        if (b.key == 'Unknown') return -1;
+        final dateA = dateMap[a.key];
+        final dateB = dateMap[b.key];
+        if (dateA != null && dateB != null) {
+          return dateB.compareTo(dateA); // 降序，最新的在前
+        }
+        return a.key.compareTo(b.key);
+      });
+
+    // 生成Sliver列表
+    int currentGlobalIndex = 0;
+    return sortedEntries.map((entry) {
+      String date = entry.key;
+      List<MarketingData> itemList = entry.value;
+
+      // 保存当前分组的起始索引
+      final int groupStartIndex = currentGlobalIndex;
+      currentGlobalIndex += itemList.length;
+
+      return SliverMainAxisGroup(
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverAppBarDelegate(
+              Container(
+                alignment: Alignment.centerLeft,
+                width: double.infinity,
+                color: Colors.blue[100],
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text(
+                  'End Date: $date (${itemList.length} items)',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              34.0,
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(left: 6.0, right: 6.0, bottom: 12.0),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) {
+                  final item = itemList[index];
+                  final int globalItemIndex = groupStartIndex + index;
+                  final isMatched = _searchKeyword.isNotEmpty &&
+                      item.aPhone != null &&
+                      item.aPhone!
+                          .replaceAll(RegExp(r'[+\s-]'), '')
+                          .contains(_searchKeyword);
+
+                  return _Item(
+                      item: item,
+                      color: isMatched ? Colors.green[50]! : Colors.white,
+                      templates: templates,
+                      index: globalItemIndex,
+                      selected: _selectedIndex == globalItemIndex,
+                      onTap: (int itemIndex) {
+                        setState(() {
+                          _selectedIndex = itemIndex;
+                        });
+                      });
+                },
+                childCount: itemList.length,
+              ),
+            ),
+          ),
+        ],
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -332,32 +450,18 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 child: Scrollbar(
                   // 加个滚动条
                   controller: _scrollController,
-                  child: ListView.builder(
-                      itemCount: _filteredList.length,
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: const EdgeInsets.only(
-                          left: 6.0, right: 6.0, bottom: 12.0),
-                      itemBuilder: (_, index) {
-                        final item = _filteredList[index];
-                        final isMatched = _searchKeyword.isNotEmpty &&
-                            item.aPhone != null &&
-                            item.aPhone!
-                                .replaceAll(RegExp(r'[+\s-]'), '')
-                                .contains(_searchKeyword);
-
-                        return _Item(
-                            item: item,
-                            color: isMatched ? Colors.green[50]! : Colors.white,
-                            templates: templates,
-                            index: index,
-                            selected: _selectedIndex == index,
-                            onTap: (int itemIndex) {
-                              setState(() {
-                                _selectedIndex = itemIndex;
-                              });
-                            });
-                      }),
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: _filteredList.isNotEmpty
+                        ? _buildGroups()
+                        : [
+                            const SliverFillRemaining(
+                                child: Center(
+                                    child:
+                                        Text('no data, search by phone or sn')))
+                          ],
+                  ),
                 ),
               ),
             ),
@@ -1229,5 +1333,30 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
             ),
           ),
         ));
+  }
+}
+
+class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  SliverAppBarDelegate(this.widget, this.height);
+
+  final Widget widget;
+  final double height;
+
+  // minHeight 和 maxHeight 的值设置为相同时，header就不会收缩了
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return widget;
+  }
+
+  @override
+  bool shouldRebuild(SliverAppBarDelegate oldDelegate) {
+    return true;
   }
 }

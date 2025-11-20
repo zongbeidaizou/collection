@@ -238,6 +238,10 @@ MarketingDataAAAAASLTelemarketingDetailLogs $MarketingDataAAAAASLTelemarketingDe
   if (wPhoneStatus != null) {
     marketingDataAAAAASLTelemarketingDetailLogs.wPhoneStatus = wPhoneStatus;
   }
+  final String? xApplyAt = jsonConvert.convert<String>(json['x_apply_at']);
+  if (xApplyAt != null) {
+    marketingDataAAAAASLTelemarketingDetailLogs.xApplyAt = xApplyAt;
+  }
   return marketingDataAAAAASLTelemarketingDetailLogs;
 }
 
@@ -261,6 +265,7 @@ Map<String, dynamic> $MarketingDataAAAAASLTelemarketingDetailLogsToJson(
   data['u_status'] = entity.uStatus;
   data['v_wa_status'] = entity.vWaStatus;
   data['w_phone_status'] = entity.wPhoneStatus;
+  data['x_apply_at'] = entity.xApplyAt;
   return data;
 }
 
@@ -283,6 +288,7 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
     int? uStatus,
     int? vWaStatus,
     int? wPhoneStatus,
+    String? xApplyAt,
   }) {
     return MarketingDataAAAAASLTelemarketingDetailLogs()
       ..id = id ?? this.id
@@ -302,7 +308,8 @@ extension MarketingDataAAAAASLTelemarketingDetailLogsExtension on MarketingDataA
       ..tLastWaAt = tLastWaAt ?? this.tLastWaAt
       ..uStatus = uStatus ?? this.uStatus
       ..vWaStatus = vWaStatus ?? this.vWaStatus
-      ..wPhoneStatus = wPhoneStatus ?? this.wPhoneStatus;
+      ..wPhoneStatus = wPhoneStatus ?? this.wPhoneStatus
+      ..xApplyAt = xApplyAt ?? this.xApplyAt;
   }
 }
 

@@ -90,6 +90,8 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	int? vWaStatus = 0;
 	@JSONField(name: 'w_phone_status')
 	int? wPhoneStatus = 0;
+	@JSONField(name: 'x_apply_at')
+	String? xApplyAt = '';
 
 	MarketingDataAAAAASLTelemarketingDetailLogs();
 

@@ -757,7 +757,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                   : interested == 40
                                       ? Icons.sentiment_satisfied_sharp
                                       : Icons.face_outlined,
-                          size: 28,
+                          size: 22,
                           color: interested == 20
                               ? Colors.red
                               : interested == 30
@@ -779,80 +779,78 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            if (widget.item.aAAAASLTelemarketingDetailLogs !=
-                                    null &&
-                                widget.item.aAAAASLTelemarketingDetailLogs!
-                                    .isNotEmpty &&
-                                widget.item.aAAAASLTelemarketingDetailLogs![0]
-                                        .iRegisterTime !=
-                                    null &&
-                                widget.item.aAAAASLTelemarketingDetailLogs![0]
-                                        .iRegisterTime !=
-                                    '')
-                              RichText(
-                                text: TextSpan(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontSize: Dimens.font_sp12),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'cx registered at: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(fontSize: 8)),
-                                    TextSpan(
-                                        text: DateFormat('MMM d, hh:mm a')
-                                            .format(DateTime.parse(widget
-                                                .item
-                                                .aAAAASLTelemarketingDetailLogs![
-                                                    0]
-                                                .iRegisterTime!)),
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.black)),
-                                  ],
-                                ),
-                              )
-                            else if (widget.item.aAAAASLTelemarketingDetailLogs != null &&
-                                widget.item.aAAAASLTelemarketingDetailLogs!
-                                    .isNotEmpty &&
-                                widget.item.aAAAASLTelemarketingDetailLogs![0]
-                                        .gViewedTime !=
-                                    null &&
-                                widget.item.aAAAASLTelemarketingDetailLogs![0]
-                                        .gViewedTime !=
-                                    '')
-                              RichText(
-                                text: TextSpan(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontSize: Dimens.font_sp12),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: 'cx seen at: ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(fontSize: 8)),
-                                    TextSpan(
-                                        text: DateFormat('MMM d, hh:mm a')
-                                            .format(DateTime.parse(widget
-                                                .item
-                                                .aAAAASLTelemarketingDetailLogs![
-                                                    0]
-                                                .gViewedTime!)),
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.black)),
-                                  ],
-                                ),
-                              )
-                            else
-                              Gaps.empty,
                           ],
                         ),
+                      ),
+                      Column(
+                        children: [
+                          if (widget
+                                      .item.aAAAASLTelemarketingDetailLogs !=
+                                  null &&
+                              widget.item.aAAAASLTelemarketingDetailLogs!
+                                  .isNotEmpty &&
+                              widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                      .iRegisterTime !=
+                                  null &&
+                              widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                      .iRegisterTime !=
+                                  '')
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.person_outline_outlined,
+                                  size: 18,
+                                  color: Colors.green,
+                                ),
+                                Text(
+                                  DateFormat('MMMd,hh:mm a').format(
+                                      DateTime.parse(widget
+                                          .item
+                                          .aAAAASLTelemarketingDetailLogs![0]
+                                          .iRegisterTime!)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(fontSize: 8),
+                                ),
+                              ],
+                            )
+                          else
+                            Gaps.empty,
+                          if (widget
+                                      .item.aAAAASLTelemarketingDetailLogs !=
+                                  null &&
+                              widget.item.aAAAASLTelemarketingDetailLogs!
+                                  .isNotEmpty &&
+                              widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                      .xApplyAt !=
+                                  null &&
+                              widget.item.aAAAASLTelemarketingDetailLogs![0]
+                                      .xApplyAt !=
+                                  '')
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.how_to_reg_outlined,
+                                  size: 18,
+                                  color: Colors.green,
+                                ),
+                                Text(
+                                  DateFormat('MMMd,hh:mm a').format(
+                                      DateTime.parse(widget
+                                          .item
+                                          .aAAAASLTelemarketingDetailLogs![0]
+                                          .xApplyAt!)),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(fontSize: 8),
+                                ),
+                              ],
+                            )
+                          else
+                            Gaps.empty,
+                        ],
                       ),
                       Column(
                         mainAxisSize: MainAxisSize.min,

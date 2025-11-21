@@ -308,6 +308,10 @@ class _AccountRecordListPageState extends State<MarketingPage>
     return sortedEntries.map((entry) {
       String date = entry.key;
       List<MarketingData> itemList = entry.value;
+      final int registerCount =
+          itemList.where((item) => _hasRegisterRecord(item)).length;
+      final int applyCount =
+          itemList.where((item) => _hasApplyRecord(item)).length;
 
       // 保存当前分组的起始索引
       final int groupStartIndex = currentGlobalIndex;
@@ -324,7 +328,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 color: Colors.blue[100],
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Text(
-                  'End Date: $date (${itemList.length} items)',
+                  'End Date: $date (${itemList.length} items · Reg: $registerCount · Apply: $applyCount)',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -366,6 +370,24 @@ class _AccountRecordListPageState extends State<MarketingPage>
         ],
       );
     }).toList();
+  }
+
+  bool _hasRegisterRecord(MarketingData item) {
+    final logs = item.aAAAASLTelemarketingDetailLogs;
+    if (logs == null || logs.isEmpty) {
+      return false;
+    }
+    final registerTime = logs[0].iRegisterTime;
+    return registerTime != null && registerTime.isNotEmpty;
+  }
+
+  bool _hasApplyRecord(MarketingData item) {
+    final logs = item.aAAAASLTelemarketingDetailLogs;
+    if (logs == null || logs.isEmpty) {
+      return false;
+    }
+    final applyTime = logs[0].xApplyAt;
+    return applyTime != null && applyTime.isNotEmpty;
   }
 
   @override

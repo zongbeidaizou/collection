@@ -582,7 +582,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     }
   }
 
-  void _recordWhatsAppClick() async {
+  Future<void> _recordWhatsAppClick() async {
     // 使用保存的模板ID记录点击事件
     await Cache().appendToStringList('marketing_detail_logs',
         '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#k_wa_cnt#1');
@@ -590,7 +590,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     // 重置模板ID
   }
 
-  void _recordCallClick() async {
+  Future<void> _recordCallClick() async {
     // 使用保存的模板ID记录点击事件
     await Cache().appendToStringList('marketing_detail_logs',
         '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#l_phone_cnt#1');
@@ -669,7 +669,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     if (id == 0) {
       return '0'.padLeft(minLength, '0');
     }
-
+    id = int.parse('9${id.toString().padLeft(minLength, '0')}');
     while (id > 0) {
       int remainder = id % base;
       encoded = characters[remainder] + encoded;
@@ -704,7 +704,8 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: InkWell(
-                      onTap: () => Navigator.pop(context, template),
+                      onTap: () => Navigator.pop(context,
+                          '$template/${encodeBase62(widget.item.id!)}'),
                       borderRadius: BorderRadius.circular(8),
                       child: Container(
                         width: double.infinity,
@@ -795,8 +796,6 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
           widget.item.aAAAASLTelemarketingDetailLogs![0].rLastPhoneAt =
               currentTime2;
           setState(() {});
-          await Cache().appendToStringList('marketing_detail_logs',
-              '${widget.item.aAAAASLTelemarketingDetailLogs![0].id}#l_phone_cnt#1');
         }
       }
     }

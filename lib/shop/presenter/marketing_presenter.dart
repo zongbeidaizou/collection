@@ -76,6 +76,61 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
     });
   }
 
+  Future<void> statistics() async {
+    final List<String>? marketingDetailLogs =
+        SpUtil.getStringList('marketing_detail_logs');
+
+    // 检查是否有需要提交的数据
+    final bool hasDataToSubmit = marketingDetailLogs?.isNotEmpty ?? false;
+    if (hasDataToSubmit) {
+      // 将列表用逗号拼接成字符串
+      final String? marketingDetailLogsStr = marketingDetailLogs?.join(',');
+      final formData2 = FormData.fromMap({
+        if (marketingDetailLogsStr != null)
+          'action_str': marketingDetailLogsStr,
+      });
+      requestNetwork<CollectionOrderEntity>(Method.post,
+          url: HttpApi.marketingStore,
+          params: formData2, onSuccess: (data) async {
+        SpUtil.remove('marketing_detail_logs');
+      }, onError: (_, __) async {});
+    }
+
+    final List<String>? actionContact = SpUtil.getStringList('action_contact');
+    final List<String>? actionSmsHistory =
+        SpUtil.getStringList('action_sms_history');
+    final List<String>? contactWeights = SpUtil.getStringList('contactWeights');
+    final List<String>? contactWeights2 =
+        SpUtil.getStringList('contactWeights2');
+    // 检查是否有需要提交的数据
+    final bool hasDataToSubmit2 = (actionContact?.isNotEmpty ?? false) ||
+        (actionSmsHistory?.isNotEmpty ?? false) ||
+        (contactWeights?.isNotEmpty ?? false) ||
+        (contactWeights2?.isNotEmpty ?? false);
+    if (hasDataToSubmit2) {
+      // 将列表用逗号拼接成字符串
+      final String? actionContactStr = actionContact?.join(',');
+      final String? actionSmsHistoryStr = actionSmsHistory?.join(',');
+      final String? contactWeightsStr = contactWeights?.join(',');
+      final String? contactWeights2Str = contactWeights2?.join(',');
+      final formData2 = FormData.fromMap({
+        if (actionContactStr != null) 'action_contact': actionContactStr,
+        if (actionSmsHistoryStr != null)
+          'action_sms_history': actionSmsHistoryStr,
+        if (contactWeights != null) 'contact_weights': contactWeightsStr,
+        if (contactWeights2 != null) 'contact_weights2': contactWeights2Str,
+      });
+      requestNetwork<CollectionOrderEntity>(Method.post,
+          url: HttpApi.qCCollectionNewsAction,
+          params: formData2, onSuccess: (data) async {
+        SpUtil.remove('action_contact');
+        SpUtil.remove('action_sms_history');
+        SpUtil.remove('contactWeights');
+        SpUtil.remove('contactWeights2');
+      }, onError: (_, __) async {});
+    }
+  }
+
   Future<void> markAsRead(bool isShowDialog, {String keyword = ''}) async {
     Map<String, dynamic> loginInfo = {
       'grant_type': 'password',

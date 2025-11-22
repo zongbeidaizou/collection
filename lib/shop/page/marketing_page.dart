@@ -90,6 +90,10 @@ class _AccountRecordListPageState extends State<MarketingPage>
   bool _isSearchVisible = false;
   final TextEditingController _searchController = TextEditingController();
   String _searchKeyword = '';
+
+  // 定时器，每10秒请求一次 statistics
+  Timer? _statisticsTimer;
+
   @override
   MarketingPresenter createPresenter() {
     _accountRecordListPresenter = MarketingPresenter();
@@ -103,11 +107,17 @@ class _AccountRecordListPageState extends State<MarketingPage>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _accountRecordListPresenter.index(1, true);
     });
+
+    // 启动定时器，每10秒调用一次 statistics
+    _statisticsTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      _accountRecordListPresenter.statistics();
+    });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _statisticsTimer?.cancel();
     super.dispose();
   }
 

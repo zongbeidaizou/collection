@@ -824,6 +824,25 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aFLastCallAt != null) {
     collectionOrderOtherProfile.aFLastCallAt = aFLastCallAt;
   }
+  final int? cFWeekRegCnt = jsonConvert.convert<int>(json['c_f_week_reg_cnt']);
+  if (cFWeekRegCnt != null) {
+    collectionOrderOtherProfile.cFWeekRegCnt = cFWeekRegCnt;
+  }
+  final int? cGWeekApplyCnt = jsonConvert.convert<int>(
+      json['c_g_week_apply_cnt']);
+  if (cGWeekApplyCnt != null) {
+    collectionOrderOtherProfile.cGWeekApplyCnt = cGWeekApplyCnt;
+  }
+  final int? cHWeekWaiveLeftCnt = jsonConvert.convert<int>(
+      json['c_h_week_waive_left_cnt']);
+  if (cHWeekWaiveLeftCnt != null) {
+    collectionOrderOtherProfile.cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt;
+  }
+  final int? cIWeekBlockLeftCnt = jsonConvert.convert<int>(
+      json['c_i_week_block_left_cnt']);
+  if (cIWeekBlockLeftCnt != null) {
+    collectionOrderOtherProfile.cIWeekBlockLeftCnt = cIWeekBlockLeftCnt;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -866,6 +885,10 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['c_c_reviewing_count'] = entity.aJWeekRank;
   data['updated_at'] = entity.updatedAt;
   data['a_f_last_call_at'] = entity.aFLastCallAt;
+  data['c_f_week_reg_cnt'] = entity.cFWeekRegCnt;
+  data['c_g_week_apply_cnt'] = entity.cGWeekApplyCnt;
+  data['c_h_week_waive_left_cnt'] = entity.cHWeekWaiveLeftCnt;
+  data['c_i_week_block_left_cnt'] = entity.cIWeekBlockLeftCnt;
   return data;
 }
 
@@ -905,6 +928,10 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? aJWeekRank,
     String? updatedAt,
     String? aFLastCallAt,
+    int? cFWeekRegCnt,
+    int? cGWeekApplyCnt,
+    int? cHWeekWaiveLeftCnt,
+    int? cIWeekBlockLeftCnt,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -949,6 +976,10 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cCReviewingCount = cCReviewingCount ?? this.cCReviewingCount
       ..aJWeekRank = aJWeekRank ?? this.aJWeekRank
       ..updatedAt = updatedAt ?? this.updatedAt
-      ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt;
+      ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt
+      ..cFWeekRegCnt = cFWeekRegCnt ?? this.cFWeekRegCnt
+      ..cGWeekApplyCnt = cGWeekApplyCnt ?? this.cGWeekApplyCnt
+      ..cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt ?? this.cHWeekWaiveLeftCnt
+      ..cIWeekBlockLeftCnt = cIWeekBlockLeftCnt ?? this.cIWeekBlockLeftCnt;
   }
 }

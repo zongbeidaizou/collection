@@ -278,6 +278,14 @@ class CollectionOrderOtherProfile {
 	String? updatedAt = '';
 	@JSONField(name: "a_f_last_call_at")
 	String? aFLastCallAt = '';
+	@JSONField(name: "c_f_week_reg_cnt")
+	int? cFWeekRegCnt = 0;
+	@JSONField(name: "c_g_week_apply_cnt")
+	int? cGWeekApplyCnt = 0;
+	@JSONField(name: "c_h_week_waive_left_cnt")
+	int? cHWeekWaiveLeftCnt = 0;
+	@JSONField(name: "c_i_week_block_left_cnt")
+	int? cIWeekBlockLeftCnt = 0;
 
 	CollectionOrderOtherProfile();
 

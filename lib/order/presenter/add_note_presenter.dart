@@ -308,11 +308,15 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
       'type': type,
       'collection_order_id': orderId,
     });
-    await requestNetwork<CollectionOrderEntity>(Method.post,
+    await requestNetwork<Map<String, dynamic>>(Method.post,
         url: HttpApi.collectionOrders,
         params: formData,
-        isShow: true,
-        onSuccess: (data) async {}, onError: (_, __) async {
+        isShow: true, onSuccess: (data) async {
+      if (data != null) {
+        print(data);
+        view.showToast(data['message'] as String);
+      }
+    }, onError: (_, __) async {
       if (_ == 200006) {
       } else {}
     });

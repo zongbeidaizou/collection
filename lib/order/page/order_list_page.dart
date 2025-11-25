@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/order/provider/order_page_provider.dart';
@@ -58,12 +60,18 @@ class _OrderListPageState extends State<OrderListPage>
   List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
   OrderListProvider provider2 = OrderListProvider();
+  Timer? _statisticsTimer;
 
   @override
   void initState() {
     super.initState();
     _index = widget.index;
     // _onRefresh();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _statisticsTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+        _orderListPagePresenter.statistics();
+      });
+    });
   }
 
   @override

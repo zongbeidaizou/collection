@@ -159,6 +159,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   DateTime? _appPausedTime;
   DateTime? _appResumedTime;
   bool _isWhatsAppLaunched = false;
+  bool _isCallLaunched = false;
+  bool _isSmsLaunched = false;
   int? _currentTemplateId; // 存储当前选中的模板ID
   Timer? _cleanupTimer; // 清理定时器
   String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
@@ -200,10 +202,19 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               'Time spent outside app: ${timeSpentOutside.inSeconds} seconds');
 
           // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
-          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 3) {
+          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 1) {
             _recordWhatsAppClick();
           }
+          if (_isCallLaunched && timeSpentOutside.inSeconds > 2) {
+            _recordCallClick();
+          }
+          if (_isSmsLaunched && timeSpentOutside.inSeconds > 1) {
+            _recordSmsClick();
+          }
           _isWhatsAppLaunched = false;
+          _isCallLaunched = false;
+          _isSmsLaunched = false;
+          _currentTemplateId = null;
           _cleanupTimer?.cancel(); // 清理定时器
         }
         break;
@@ -212,14 +223,56 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     }
   }
 
-  void _recordWhatsAppClick() async {
-    // 使用保存的模板ID记录点击事件
+  Future<void> _recordSmsClick() async {
+    String type = '3';
+    if (widget.isAllContacts) {
+      type = '33';
+    }
     final templateId = _currentTemplateId ?? 0;
     await Cache().appendToStringList('action_contact',
-        '1:${widget.collectionOrderId}:${widget.contact.id}:$templateId');
+        '$type:${widget.collectionOrderId}:${widget.contact.id}:$templateId');
+    // 更新Sms最后访问时间
+    final currentTime = DateTime.now().toIso8601String();
+    _ensureContactWeightsExists();
+    widget.contact.aAAAAHLContactWeights!.uSmsLastAt = currentTime;
+    // 同时更新存储中的联系人列表
+    _updateContactListInStorage('uSmsLastAt', currentTime);
+    _currentTemplateId = null;
+  }
+
+  Future<void> _recordCallClick() async {
+    String type = '2';
+    if (widget.isAllContacts) {
+      type = '22';
+    }
+    await Cache().appendToStringList('action_contact',
+        '$type:${widget.collectionOrderId}:${widget.contact.id}:0');
+    // 更新Call最后访问时间
+    final currentTime = DateTime.now().toIso8601String();
+    _ensureContactWeightsExists();
+    widget.contact.aAAAAHLContactWeights!.eLastCallTime = currentTime;
+    // 同时更新存储中的联系人列表
+    _updateContactListInStorage('eLastCallTime', currentTime);
+  }
+
+  Future<void> _recordWhatsAppClick() async {
+    // 使用保存的模板ID记录点击事件
+    String type = '1';
+    if (widget.isAllContacts) {
+      type = '11';
+    }
+    final templateId = _currentTemplateId ?? 0;
+    await Cache().appendToStringList('action_contact',
+        '$type:${widget.collectionOrderId}:${widget.contact.id}:$templateId');
 
     // 重置模板ID
     _currentTemplateId = null;
+    // 更新WhatsApp最后访问时间
+    final currentTime = DateTime.now().toIso8601String();
+    _ensureContactWeightsExists();
+    widget.contact.aAAAAHLContactWeights!.vWaLastAt = currentTime;
+    // 同时更新存储中的联系人列表
+    _updateContactListInStorage('vWaLastAt', currentTime);
   }
 
   // 确保联系人权重对象存在
@@ -722,9 +775,9 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               _currentTemplateId = selectedTemplate.id; // 保存模板ID
               print('WhatsApp launched, waiting for user to return...');
 
-              // 启动清理定时器，30秒后自动清理状态
+              // 启动清理定时器，60秒后自动清理状态
               _cleanupTimer?.cancel();
-              _cleanupTimer = Timer(const Duration(seconds: 30), () {
+              _cleanupTimer = Timer(const Duration(seconds: 60), () {
                 if (mounted) {
                   setState(() {
                     _isWhatsAppLaunched = false;
@@ -732,50 +785,55 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                   });
                 }
               });
-              // 更新WhatsApp最后访问时间
-              final currentTime = DateTime.now().toIso8601String();
-              _ensureContactWeightsExists();
-              widget.contact.aAAAAHLContactWeights!.vWaLastAt = currentTime;
-              // 同时更新存储中的联系人列表
-              _updateContactListInStorage('vWaLastAt', currentTime);
+
               setState(() {});
             }
           } else if (type == 3) {
+            // 启动Sms
             final bool result = await launch(
                 'sms:${widget.contact.gPhone}?body=${selectedTemplate.dTemplate}');
             if (result) {
-              // 更新SMS最后访问时间
-              final currentTime = DateTime.now().toIso8601String();
-              _ensureContactWeightsExists();
-              widget.contact.aAAAAHLContactWeights!.uSmsLastAt = currentTime;
-              _updateContactListInStorage('uSmsLastAt', currentTime);
-              setState(() {});
+              // 设置Sms启动标志，等待用户返回应用
+              _isSmsLaunched = true;
+              _currentTemplateId = selectedTemplate.id; // 保存模板ID
+              print('Sms launched, waiting for user to return...');
 
-              await Cache().appendToStringList('action_contact',
-                  '3:${widget.collectionOrderId}:${widget.contact.id}:${selectedTemplate.id}');
+              // 启动清理定时器，60秒后自动清理状态
+              _cleanupTimer?.cancel();
+              _cleanupTimer = Timer(const Duration(seconds: 60), () {
+                if (mounted) {
+                  setState(() {
+                    _isSmsLaunched = false;
+                    _currentTemplateId = null;
+                  });
+                }
+              });
+
+              setState(() {});
             }
           }
-        }
-      } else if (type == 2) {
-        final String currentTime = DateTime.now().toIso8601String();
-        final url = 'tel:${widget.contact.gPhone}';
-        if (await canLaunch(url)) {
-          final bool result = await launch(url);
-          if (result) {
-            final String currentTime2 = DateTime.now().toIso8601String();
-            if (DateTime.parse(currentTime2)
-                    .difference(DateTime.parse(currentTime))
-                    .inSeconds >
-                5) {
-              // 更新Call最后访问时间
-              _ensureContactWeightsExists();
-              widget.contact.aAAAAHLContactWeights!.eLastCallTime =
-                  currentTime2;
-              _updateContactListInStorage('eLastCallTime', currentTime2);
-              setState(() {});
+        } else if (type == 2) {
+          // 启动Call
+          final url = 'tel:${widget.contact.gPhone}';
+          if (await canLaunch(url)) {
+            final bool result = await launch(url);
+            if (result) {
+              // 设置Call启动标志，等待用户返回应用
+              _isCallLaunched = true;
+              print('Call launched, waiting for user to return...');
 
-              await Cache().appendToStringList('action_contact',
-                  '2:${widget.collectionOrderId}:${widget.contact.id}:0');
+              // 启动清理定时器，60秒后自动清理状态
+              _cleanupTimer?.cancel();
+              _cleanupTimer = Timer(const Duration(seconds: 60), () {
+                if (mounted) {
+                  setState(() {
+                    _isCallLaunched = false;
+                    _currentTemplateId = null;
+                  });
+                }
+              });
+
+              setState(() {});
             }
           }
         }

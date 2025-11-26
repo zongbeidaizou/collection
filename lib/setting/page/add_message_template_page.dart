@@ -29,6 +29,8 @@ class Placeholder {
 
 /// 预定义的占位符列表
 final List<Placeholder> availablePlaceholders = [
+  const Placeholder(
+      key: '@app_name@', label: 'App Name', exampleValue: 'Leading Loan'),
   const Placeholder(key: '@name@', label: 'Cx name', exampleValue: 'John Doe'),
   const Placeholder(key: '@bvn@', label: 'Cx bvn', exampleValue: '22261764186'),
   const Placeholder(
@@ -42,21 +44,19 @@ final List<Placeholder> availablePlaceholders = [
   const Placeholder(
       key: '@expect_repay_time@',
       label: 'Expect Repay Time',
-      exampleValue: '2026-02-11'),
+      exampleValue: 'Nov 26, 2025'),
   const Placeholder(
       key: '@overdue_days@', label: 'Overdue Days', exampleValue: '10'),
-  const Placeholder(
-      key: '@app_name@', label: 'App Name', exampleValue: 'Leading Loan'),
   const Placeholder(
       key: '@url@', label: 'Download Link', exampleValue: 'https://moimoi.xin'),
   const Placeholder(
       key: '@account_name@', label: 'Account Name', exampleValue: 'John Doe'),
   const Placeholder(
-      key: '@account_no@', label: 'Account No', exampleValue: '1234567890'),
+      key: '@account_no@', label: 'Account No', exampleValue: '6698028745'),
   const Placeholder(
       key: '@account_bank@',
       label: 'Account Bank',
-      exampleValue: 'Bank of America'),
+      exampleValue: 'Access Bank'),
 ];
 
 /// 新增/编辑消息模板页面
@@ -249,10 +249,48 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
     }
 
     final int? days = int.tryParse(daysText);
-    if (days == null || days <= 0) {
+    if (days == null) {
       _showErrorDialog('Available days must be a number greater than 0');
       return;
     }
+
+    // 验证必须包含 @app_name@ 和 @name@
+    if (!content.contains('@app_name@')) {
+      _showErrorDialog('Content must include @app_name@ placeholder');
+      return;
+    }
+
+    if (!content.contains('@name@')) {
+      _showErrorDialog('Content must include @name@ placeholder');
+      return;
+    }
+
+    // 验证 @url@ 前后必须有空格
+    if (content.contains('@url@')) {
+      final RegExp urlPattern = RegExp(r'@url@');
+      final Iterable<Match> matches = urlPattern.allMatches(content);
+      for (final Match match in matches) {
+        final int startIndex = match.start;
+        final int endIndex = match.end;
+
+        // 检查前面是否有空格（或字符串开头）
+        final bool hasSpaceBefore = startIndex == 0 ||
+            content[startIndex - 1] == ' ' ||
+            content[startIndex - 1] == '\n';
+
+        // 检查后面是否有空格（或字符串结尾）
+        final bool hasSpaceAfter = endIndex >= content.length ||
+            content[endIndex] == ' ' ||
+            content[endIndex] == '\n';
+
+        if (!hasSpaceBefore || !hasSpaceAfter) {
+          _showErrorDialog(
+              '@url@ placeholder must have spaces before and after it');
+          return;
+        }
+      }
+    }
+
     if (widget.template != null) {
       await _messageTemplatePresenter.update(
           widget.template!.id!, title, content, days, _selectedCategory);

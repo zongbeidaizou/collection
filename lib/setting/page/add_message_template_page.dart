@@ -29,17 +29,34 @@ class Placeholder {
 
 /// 预定义的占位符列表
 final List<Placeholder> availablePlaceholders = [
-  const Placeholder(key: '@name@', label: 'Name', exampleValue: 'John Doe'),
-  const Placeholder(key: '@age@', label: 'Age', exampleValue: '25'),
-  const Placeholder(key: '@gender@', label: 'Gender', exampleValue: 'Male'),
+  const Placeholder(key: '@name@', label: 'Cx name', exampleValue: 'John Doe'),
+  const Placeholder(key: '@bvn@', label: 'Cx bvn', exampleValue: '22261764186'),
   const Placeholder(
-      key: '@phone@', label: 'Phone', exampleValue: '13800138000'),
+      key: '@mobile@', label: 'Cx mobile', exampleValue: '7038875111'),
   const Placeholder(
-      key: '@email@', label: 'Email', exampleValue: 'example@email.com'),
-  const Placeholder(key: '@amount@', label: 'Amount', exampleValue: '1000'),
-  const Placeholder(key: '@date@', label: 'Date', exampleValue: '2024-01-01'),
+      key: '@borrow_amount@', label: 'Borrow Amount', exampleValue: '₦100,000'),
   const Placeholder(
-      key: '@orderId@', label: 'Order ID', exampleValue: 'ORD123456'),
+      key: '@expect_repay_amount@',
+      label: 'Expect Repay Amount',
+      exampleValue: '₦25,000'),
+  const Placeholder(
+      key: '@expect_repay_time@',
+      label: 'Expect Repay Time',
+      exampleValue: '2026-02-11'),
+  const Placeholder(
+      key: '@overdue_days@', label: 'Overdue Days', exampleValue: '10'),
+  const Placeholder(
+      key: '@app_name@', label: 'App Name', exampleValue: 'Leading Loan'),
+  const Placeholder(
+      key: '@url@', label: 'Download Link', exampleValue: 'https://moimoi.xin'),
+  const Placeholder(
+      key: '@account_name@', label: 'Account Name', exampleValue: 'John Doe'),
+  const Placeholder(
+      key: '@account_no@', label: 'Account No', exampleValue: '1234567890'),
+  const Placeholder(
+      key: '@account_bank@',
+      label: 'Account Bank',
+      exampleValue: 'Bank of America'),
 ];
 
 /// 新增/编辑消息模板页面

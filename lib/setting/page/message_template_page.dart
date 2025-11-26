@@ -27,9 +27,10 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   final List<MessageTemplateData> _templates = [];
   late MessageTemplatePresenter _messageTemplatePresenter;
   final Map<int, String> _categoryMap = {
-    0: 'Collection message',
-    1: 'Marketing message',
-    2: 'Review message',
+    0: 'Template for messages to borrowers',
+    1: 'Template for messages to contacts',
+    2: 'Template for marketing messages',
+    3: 'Template for review messages',
   };
 
   @override

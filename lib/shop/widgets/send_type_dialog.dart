@@ -20,7 +20,11 @@ class SendTypeDialog extends StatefulWidget {
 
 class _SendTypeDialog extends State<SendTypeDialog> {
   int _value = -1;
-  final _list = ['Block customer', 'Fake customer contact list'];
+  final _list = [
+    'Block customer',
+    'Fake customer contact list',
+    'Retain this case'
+  ];
 
   Widget _buildItem(int index) {
     return Material(

@@ -605,32 +605,13 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     final List<CollectionLogOtherHJSmsTemplate> templates2 =
         List<CollectionLogOtherHJSmsTemplate>.from(dataList.where((value) {
       if (widget.contactIndex == 0 && !widget.isAllContacts) {
-        if (overdueDays < 6) {
-          return value['c_type'] == 26 &&
-              (int.parse(value['e_days'] as String) == overdueDays ||
-                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
-                  int.parse(value['e_days'] as String) < -100);
-        } else {
-          return value['c_type'] == 26 &&
-              (int.parse(value['e_days'] as String) > 2 ||
-                  int.parse(value['e_days'] as String) < -100);
-        }
+        return value['c_type'] == 26 &&
+            (int.parse(value['e_days'] as String) <= overdueDays ||
+                int.parse(value['e_days'] as String) > 999);
       } else {
-        if (overdueDays < 6) {
-          bool isMatch = value['c_type'] == 28 &&
-              (int.parse(value['e_days'] as String) == overdueDays ||
-                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
-                  int.parse(value['e_days'] as String) < -100);
-          print('isMatch: $isMatch');
-          return value['c_type'] == 28 &&
-              (int.parse(value['e_days'] as String) == overdueDays ||
-                  int.parse(value['e_days'] as String) == (overdueDays - 1) ||
-                  int.parse(value['e_days'] as String) < -100);
-        } else {
-          return value['c_type'] == 28 &&
-              (int.parse(value['e_days'] as String) > 2 ||
-                  int.parse(value['e_days'] as String) < -100);
-        }
+        return value['c_type'] == 28 &&
+            (int.parse(value['e_days'] as String) <= overdueDays ||
+                int.parse(value['e_days'] as String) > 999);
       }
     }) // 先过滤原始数据
             .map((value) {
@@ -695,7 +676,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
-    templates2.sort((a, b) => a.eDays!.compareTo(b.eDays!));
+    templates2.sort((a, b) => b.eDays!.compareTo(a.eDays!));
     Future<void> launchAction(int type) async {
       //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);

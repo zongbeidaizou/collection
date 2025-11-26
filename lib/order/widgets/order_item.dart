@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/page/sms_history_page.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
@@ -288,6 +290,23 @@ class OrderItem extends StatelessWidget {
                 ),
               ),
             ),
+            if (!inList && repayInfo != null && int.parse(repayInfo!.var9!) > 0)
+              Row(
+                children: [
+                  Icon(
+                    Icons.verified_outlined,
+                    color: Colors.green,
+                    size: 12,
+                  ),
+                  Text(
+                    "${int.parse(repayInfo!.var9!)}",
+                    style: TextStyle(color: Colors.green, fontSize: 12),
+                  ),
+                  Gaps.hGap12,
+                ],
+              )
+            else
+              Gaps.empty,
             if (item.eCollectionAdminId != item.aVTmpCollectionAdminId)
               Row(
                 children: [

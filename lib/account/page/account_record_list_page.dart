@@ -380,7 +380,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
           'Registered at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
     } else if (log.oType == 9) {
       txt =
-          'Borrowed at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
+          'Apply at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
     }
     String maskPhoneNumber(String phone) {
       if (phone.isEmpty || phone.length < 6) {
@@ -488,7 +488,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         offstage: !(log.oType == 9),
                         child: _buildGoodsTag(
                             const Color.fromARGB(255, 95, 92, 95),
-                            'Borrow Bonus'),
+                            'Apply Bonus'),
                       ),
                     ],
                   ),

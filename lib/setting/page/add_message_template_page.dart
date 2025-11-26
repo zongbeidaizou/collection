@@ -142,11 +142,13 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
   void _showPlaceholderDialog() {
     showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
         return Container(
+          height: MediaQuery.of(context).size.height * 0.88,
           padding: EdgeInsets.only(
             top: 16,
             left: 16,
@@ -162,9 +164,8 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                 style: TextStyles.textBold18,
               ),
               Gaps.vGap8,
-              Flexible(
+              Expanded(
                 child: ListView.builder(
-                  shrinkWrap: true,
                   itemCount: availablePlaceholders.length,
                   itemBuilder: (context, index) {
                     final placeholder = availablePlaceholders[index];

@@ -727,7 +727,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           ),
                           child: Text(
                             template.dTemplate! != ''
-                                ? template.dTemplate!
+                                ? template.sName!
                                 : 'Custom message.',
                             style: const TextStyle(
                               fontSize: 15,

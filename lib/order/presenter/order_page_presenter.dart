@@ -19,9 +19,7 @@ import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
 import '../iview/order_page_iview.dart';
 
-
 class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -31,14 +29,17 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
     });
   }
 
-  Future<List<CollectionOrderData>> index(int page, int status, bool isShowDialog) async {
-
-
+  Future<List<CollectionOrderData>> index(
+      int page, int status, bool isShowDialog) async {
     List<CollectionOrderData> _list = <CollectionOrderData>[];
-    FormData formData = FormData.fromMap({"page": page, 'k_status': status});
-    await requestNetwork<CollectionOrderEntity>(Method.get, url: HttpApi.collectionOrders, queryParameters: {"page": page, 'k_status': status}, onSuccess: (data) async {
+    FormData formData =
+        FormData.fromMap({"page": page, 'k_status': status, 'version': 2});
+    await requestNetwork<CollectionOrderEntity>(Method.get,
+        url: HttpApi.collectionOrders,
+        queryParameters: {"page": page, 'k_status': status, 'version': 2},
+        onSuccess: (data) async {
       if (data != null) {
-        _list =  data.data!;
+        _list = data.data!;
       }
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
@@ -51,14 +52,14 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
     return _list;
   }
 
-  Future<bool> deduction(Map<String, dynamic> loginInfo, bool isShowDialog) async {
-
+  Future<bool> deduction(
+      Map<String, dynamic> loginInfo, bool isShowDialog) async {
     FormData formData = FormData.fromMap(loginInfo);
-    requestNetwork<AuthorizStoreEntity>(Method.post, url: HttpApi.deduction, params: formData, onSuccess: (data) async {
+    requestNetwork<AuthorizStoreEntity>(Method.post,
+        url: HttpApi.deduction, params: formData, onSuccess: (data) async {
       // Map<String, dynamic> allDeviceInfo = {};
       // Map<String, dynamic> dynamicInfo = {};
-      if (data != null) {
-      }
+      if (data != null) {}
     }, onError: (_, __) async {
       if (_ == 200006) {
       } else {
@@ -68,10 +69,12 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
     return true;
   }
 
-  Future<void> product( bool isShowDialog) async {
+  Future<void> product(bool isShowDialog) async {
     String? productString = await Cache().checkCache('products');
     if (productString == null) {
-      await requestNetwork<ProductEntity>(Method.get, url: HttpApi.product, queryParameters: {"page": 1}, onSuccess: (data) async {
+      await requestNetwork<ProductEntity>(Method.get,
+          url: HttpApi.product,
+          queryParameters: {"page": 1}, onSuccess: (data) async {
         if (data != null) {
           view.setProduct(data.data!);
           Cache().cacheData('products', data.toString(), 3600);
@@ -82,15 +85,19 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
           view.showToast(__);
         }
       });
-    }else{
-      view.setProduct(ProductEntity.fromJson(jsonDecode(productString) as Map<String, dynamic >).data!);
+    } else {
+      view.setProduct(ProductEntity.fromJson(
+              jsonDecode(productString) as Map<String, dynamic>)
+          .data!);
     }
   }
 
-  Future<void> admins( bool isShowDialog) async {
+  Future<void> admins(bool isShowDialog) async {
     String? productString = await Cache().checkCache('admins');
     if (productString == null) {
-      await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
+      await requestNetwork<AdminEntity>(Method.get,
+          url: HttpApi.admins,
+          queryParameters: {"page": 1}, onSuccess: (data) async {
         if (data != null) {
           view.setAdmin(data.data!);
           Cache().cacheData('admins', data.toString(), 3600);
@@ -101,13 +108,17 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
           view.showToast(__);
         }
       });
-    }else{
-      view.setAdmin(AdminEntity.fromJson(jsonDecode(productString) as Map<String, dynamic >).data!);
+    } else {
+      view.setAdmin(AdminEntity.fromJson(
+              jsonDecode(productString) as Map<String, dynamic>)
+          .data!);
     }
   }
 
-  Future<void> profile( bool isShowDialog) async {
-    await requestNetwork<AdminEntity>(Method.get, url: HttpApi.admins, queryParameters: {"page": 1}, onSuccess: (data) async {
+  Future<void> profile(bool isShowDialog) async {
+    await requestNetwork<AdminEntity>(Method.get,
+        url: HttpApi.admins,
+        queryParameters: {"page": 1}, onSuccess: (data) async {
       if (data != null) {
         view.setAdmin(data.data!);
       }
@@ -118,6 +129,4 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
       }
     });
   }
-
- 
 }

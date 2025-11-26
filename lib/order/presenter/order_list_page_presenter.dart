@@ -40,7 +40,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     List<CollectionOrderData> _list = <CollectionOrderData>[];
     await requestNetwork<CollectionOrderEntity>(Method.get,
         url: HttpApi.collectionOrders,
-        queryParameters: {'page': page, 'keyword': keyword},
+        queryParameters: {'page': page, 'keyword': keyword, 'version': 2},
         onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;

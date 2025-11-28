@@ -1,4 +1,3 @@
-import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
 import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
-import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'add_message_template_page.dart';
 
@@ -43,8 +41,7 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
 
   /// 新增模板
   void _addTemplate() async {
-    final MessageTemplateData? result =
-        await Navigator.push<MessageTemplateData>(
+    await Navigator.push<MessageTemplateData>(
       context,
       MaterialPageRoute(
         builder: (context) => const AddMessageTemplatePage(),
@@ -54,8 +51,7 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
 
   /// 编辑模板
   void _editTemplate(MessageTemplateData template) async {
-    final MessageTemplateData? result =
-        await Navigator.push<MessageTemplateData>(
+    await Navigator.push<MessageTemplateData>(
       context,
       MaterialPageRoute(
         builder: (context) => AddMessageTemplatePage(template: template),
@@ -95,6 +91,7 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: MyAppBar(
         centerTitle: 'Message Template',
@@ -190,6 +187,10 @@ class _MessageTemplateItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String originalMessage = template.message ?? '';
+    final String previewMessage =
+        originalMessage.isEmpty ? '' : replacePlaceholders(originalMessage);
+
     return MyCard(
       child: InkWell(
         onTap: onEdit,
@@ -252,11 +253,41 @@ class _MessageTemplateItem extends StatelessWidget {
               ),
               Gaps.vGap8,
               Text(
-                template.message ?? '',
+                originalMessage,
                 style: Theme.of(context).textTheme.bodySmall,
                 maxLines: 6,
                 overflow: TextOverflow.ellipsis,
               ),
+              if (previewMessage.isNotEmpty) ...[
+                Gaps.vGap12,
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Colours.app_main.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(6.0),
+                    border: Border.all(
+                      color: Colours.app_main.withOpacity(0.2),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Preview (placeholders replaced):',
+                        style: TextStyles.textGray12,
+                      ),
+                      Gaps.vGap4,
+                      Text(
+                        previewMessage,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colours.text,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               Gaps.vGap12,
               Gaps.line,
               Gaps.vGap12,
@@ -281,4 +312,27 @@ class _MessageTemplateItem extends StatelessWidget {
       ),
     );
   }
+}
+
+const Map<String, String> _placeholderExampleValues = {
+  '@app_name@': 'Leading Loan',
+  '@name@': 'John Doe',
+  '@bvn@': '22261764186',
+  '@mobile@': '7038875111',
+  '@borrow_amount@': '₦100,000',
+  '@expect_repay_amount@': '₦25,000',
+  '@expect_repay_time@': 'Nov 26, 2025',
+  '@overdue_days@': '10',
+  '@url@': 'https://moimoi.xin',
+  '@account_name@': 'John Doe',
+  '@account_no@': '6698028745',
+  '@account_bank@': 'Access Bank',
+};
+
+String replacePlaceholders(String message) {
+  String preview = message;
+  _placeholderExampleValues.forEach((key, value) {
+    preview = preview.replaceAll(key, value);
+  });
+  return preview;
 }

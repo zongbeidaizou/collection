@@ -253,8 +253,8 @@ class _MessageTemplateItem extends StatelessWidget {
               Gaps.vGap8,
               Text(
                 template.message ?? '',
-                style: Theme.of(context).textTheme.bodyMedium,
-                maxLines: 3,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 6,
                 overflow: TextOverflow.ellipsis,
               ),
               Gaps.vGap12,

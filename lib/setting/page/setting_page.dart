@@ -42,6 +42,12 @@ class _SettingPageState extends State<SettingPage> {
                 },
               ),
               ClickItem(
+                title: 'WhatsApp Activation',
+                onTap: () {
+                  NavigatorUtils.push(context, SettingRouter.waActivationPage);
+                },
+              ),
+              ClickItem(
                 title: 'Sign out',
                 onTap: _showExitDialog,
               ),

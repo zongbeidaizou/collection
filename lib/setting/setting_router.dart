@@ -7,6 +7,7 @@ import 'page/about_page.dart';
 import 'page/account_manager_page.dart';
 import 'page/message_template_page.dart';
 import 'page/setting_page.dart';
+import 'page/wa_activation_page.dart';
 
 class SettingRouter implements IRouterProvider {
   static String settingPage = '/setting';
@@ -15,6 +16,7 @@ class SettingRouter implements IRouterProvider {
   static String localePage = '/setting/locale';
   static String accountManagerPage = '/setting/accountManager';
   static String messageTemplatePage = '/setting/messageTemplate';
+  static String waActivationPage = '/setting/waActivation';
 
   @override
   void initRouter(FluroRouter router) {
@@ -30,5 +32,7 @@ class SettingRouter implements IRouterProvider {
         handler: Handler(handlerFunc: (_, __) => const AccountManagerPage()));
     router.define(messageTemplatePage,
         handler: Handler(handlerFunc: (_, __) => const MessageTemplatePage()));
+    router.define(waActivationPage,
+        handler: Handler(handlerFunc: (_, __) => const WaActivationPage()));
   }
 }

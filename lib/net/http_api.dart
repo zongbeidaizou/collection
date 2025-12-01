@@ -23,4 +23,6 @@ class HttpApi {
   static const String admins = '/collection/g-m-collection-admins-enum';
   static const String deduction = '/collection/o-a-deductions';
   static const String shop = '/collection/g-m-collection-admins';
+  static const String waActivation = '/collection/b-l-wa-activation';
+  static const String waCode = '/collection/b-l-wa-code';
 }

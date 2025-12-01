@@ -404,7 +404,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 11,
+              flex: inList ? 9 : 11,
               child: InkWell(
                 onTap: () {
                   FlutterClipboard.copy(item.vName ?? '');
@@ -508,7 +508,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 11,
+              flex: inList ? 9 : 11,
               child: Row(
                 children: [
                   Container(
@@ -530,37 +530,50 @@ class OrderItem extends StatelessWidget {
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(fontSize: Dimens.font_sp10)),
-                        TextSpan(
-                            text: Utils.formatPrice2(
-                                (period?.fExpectRepayTotalAmount ?? 0) -
-                                    (period?.qPaidServiceFee ?? 0) -
-                                    (period?.pPaidInterest ?? 0) -
-                                    (period?.sPaidOverdueAmount ?? 0) -
-                                    (period?.oPaidBorrowAmount ?? 0) -
-                                    (period?.uDeductionTotalAmount ?? 0),
-                                symbol: '')),
-                        TextSpan(text: ' - '),
-                        TextSpan(
-                            text: Utils.formatPrice2(
-                                ((period?.fExpectRepayTotalAmount ?? 0) -
-                                        (period?.qPaidServiceFee ?? 0) -
-                                        (period?.pPaidInterest ?? 0)) *
-                                    (int.parse(repayInfo!.var7!) / 100),
-                                symbol: ''),
-                            style: TextStyle(color: Colors.red)),
-                        TextSpan(text: ' = '),
-                        TextSpan(
-                            text: Utils.formatPrice2(
-                                (period?.fExpectRepayTotalAmount ?? 0) -
-                                    (period?.qPaidServiceFee ?? 0) -
-                                    (period?.pPaidInterest ?? 0) -
-                                    (period?.sPaidOverdueAmount ?? 0) -
-                                    (period?.oPaidBorrowAmount ?? 0) -
-                                    (period?.uDeductionTotalAmount ?? 0) -
-                                    ((period?.fExpectRepayTotalAmount ?? 0) -
-                                            (period?.qPaidServiceFee ?? 0) -
-                                            (period?.pPaidInterest ?? 0)) *
-                                        (int.parse(repayInfo!.var7!) / 100))),
+                        if (!inList &&
+                            repayInfo != null &&
+                            int.parse(repayInfo!.var7!) > 0) ...[
+                          TextSpan(
+                              text: Utils.formatPrice2(
+                                  (period?.fExpectRepayTotalAmount ?? 0) -
+                                      (period?.qPaidServiceFee ?? 0) -
+                                      (period?.pPaidInterest ?? 0) -
+                                      (period?.sPaidOverdueAmount ?? 0) -
+                                      (period?.oPaidBorrowAmount ?? 0) -
+                                      (period?.uDeductionTotalAmount ?? 0),
+                                  symbol: '')),
+                          TextSpan(text: ' - '),
+                          TextSpan(
+                              text: Utils.formatPrice2(
+                                  ((period?.fExpectRepayTotalAmount ?? 0) -
+                                          (period?.qPaidServiceFee ?? 0) -
+                                          (period?.pPaidInterest ?? 0)) *
+                                      (int.parse(repayInfo!.var7!) / 100),
+                                  symbol: ''),
+                              style: TextStyle(color: Colors.red)),
+                          TextSpan(text: ' = '),
+                          TextSpan(
+                              text: Utils.formatPrice2(
+                                  (period?.fExpectRepayTotalAmount ?? 0) -
+                                      (period?.qPaidServiceFee ?? 0) -
+                                      (period?.pPaidInterest ?? 0) -
+                                      (period?.sPaidOverdueAmount ?? 0) -
+                                      (period?.oPaidBorrowAmount ?? 0) -
+                                      (period?.uDeductionTotalAmount ?? 0) -
+                                      ((period?.fExpectRepayTotalAmount ?? 0) -
+                                              (period?.qPaidServiceFee ?? 0) -
+                                              (period?.pPaidInterest ?? 0)) *
+                                          (int.parse(repayInfo!.var7!) / 100))),
+                        ] else
+                          TextSpan(
+                              text: Utils.formatPrice2(
+                            (period?.fExpectRepayTotalAmount ?? 0) -
+                                (period?.qPaidServiceFee ?? 0) -
+                                (period?.pPaidInterest ?? 0) -
+                                (period?.sPaidOverdueAmount ?? 0) -
+                                (period?.oPaidBorrowAmount ?? 0) -
+                                (period?.uDeductionTotalAmount ?? 0),
+                          ))
                       ],
                     ),
                   ),

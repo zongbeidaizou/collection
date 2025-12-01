@@ -21,6 +21,8 @@ import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
+import 'package:bounty_hunter/models/wa_entity.dart';
+import 'package:bounty_hunter/models/wacode_entity.dart';
 import 'package:bounty_hunter/order/models/search_entity.dart';
 import 'package:bounty_hunter/shop/models/user_entity.dart';
 
@@ -469,6 +471,23 @@ class JsonConvert {
       return data.map<ShopDataMonthAdditionData>((Map<String, dynamic> e) =>
           ShopDataMonthAdditionData.fromJson(e)).toList() as M;
     }
+    if (<WaEntity>[] is M) {
+      return data.map<WaEntity>((Map<String, dynamic> e) =>
+          WaEntity.fromJson(e)).toList() as M;
+    }
+    if (<WaData>[] is M) {
+      return data
+          .map<WaData>((Map<String, dynamic> e) => WaData.fromJson(e))
+          .toList() as M;
+    }
+    if (<WacodeEntity>[] is M) {
+      return data.map<WacodeEntity>((Map<String, dynamic> e) =>
+          WacodeEntity.fromJson(e)).toList() as M;
+    }
+    if (<WacodeData>[] is M) {
+      return data.map<WacodeData>((Map<String, dynamic> e) =>
+          WacodeData.fromJson(e)).toList() as M;
+    }
     if (<SearchEntity>[] is M) {
       return data.map<SearchEntity>((Map<String, dynamic> e) =>
           SearchEntity.fromJson(e)).toList() as M;
@@ -606,6 +625,10 @@ class JsonConvertClassCollection {
     (ShopDataMonthCaseData).toString(): ShopDataMonthCaseData.fromJson,
     (ShopDataMonthBonusData).toString(): ShopDataMonthBonusData.fromJson,
     (ShopDataMonthAdditionData).toString(): ShopDataMonthAdditionData.fromJson,
+    (WaEntity).toString(): WaEntity.fromJson,
+    (WaData).toString(): WaData.fromJson,
+    (WacodeEntity).toString(): WacodeEntity.fromJson,
+    (WacodeData).toString(): WacodeData.fromJson,
     (SearchEntity).toString(): SearchEntity.fromJson,
     (SearchItems).toString(): SearchItems.fromJson,
     (SearchItemsOwner).toString(): SearchItemsOwner.fromJson,

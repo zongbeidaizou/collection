@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
@@ -11,6 +12,7 @@ import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:sp_util/sp_util.dart';
 
 /// WhatsApp 激活页面
 class WaActivationPage extends StatefulWidget {
@@ -23,11 +25,15 @@ class WaActivationPage extends StatefulWidget {
 class _WaActivationPageState extends State<WaActivationPage>
     with BasePageMixin<WaActivationPage, WaActivationPresenter>
     implements WaActivationPageMvpView {
+  static const String _waCooldownKey = 'wa_activation_next_request_time';
+  static const String _waDataKey = 'wa_activation_last_data';
   late WaActivationPresenter _waActivationPresenter;
   WaData? _waData;
   WacodeData? _wacodeData;
   Timer? _codePollingTimer;
   bool _isPolling = false;
+  DateTime? _nextWaRequestTime;
+  Timer? _waCooldownTimer;
 
   @override
   WaActivationPresenter createPresenter() {
@@ -36,17 +42,47 @@ class _WaActivationPageState extends State<WaActivationPage>
   }
 
   @override
+  void initState() {
+    super.initState();
+    _loadWaCooldown();
+    _loadStoredWaData();
+  }
+
+  @override
   void dispose() {
     _codePollingTimer?.cancel();
+    _waCooldownTimer?.cancel();
     super.dispose();
   }
 
   @override
   void setWaData(WaData? data) {
+    final bool hasNumber =
+        data != null && data.wa != null && data.wa!.isNotEmpty;
+
     setState(() {
       _waData = data;
+      if (hasNumber) {
+        _nextWaRequestTime = DateTime.now().add(const Duration(minutes: 5));
+        SpUtil.putInt(
+            _waCooldownKey, _nextWaRequestTime!.millisecondsSinceEpoch);
+      }
     });
-    if (data != null && data.wa != null && data.wa!.isNotEmpty) {
+
+    if (data != null) {
+      final Map<String, dynamic> storeMap = {
+        'wa': data.wa,
+        'activation_id': data.activationId,
+        'tip': data.tip,
+        'tip2': data.tip2,
+      };
+      SpUtil.putString(_waDataKey, jsonEncode(storeMap));
+    } else {
+      SpUtil.remove(_waDataKey);
+    }
+
+    if (hasNumber) {
+      _startWaCooldownTimer();
       showToast(
           'Please copy this number to WhatsApp or WhatsApp Business and login with it');
     }
@@ -66,6 +102,10 @@ class _WaActivationPageState extends State<WaActivationPage>
 
   /// 获取 WhatsApp 号码
   void _getWaNumber() {
+    if (_isWaCooldownActive) {
+      showToast('Please wait before requesting a new number.');
+      return;
+    }
     _waActivationPresenter.getWaNumber();
   }
 
@@ -114,6 +154,81 @@ class _WaActivationPageState extends State<WaActivationPage>
     }
   }
 
+  bool get _isWaCooldownActive {
+    if (_nextWaRequestTime == null) return false;
+    return DateTime.now().isBefore(_nextWaRequestTime!);
+  }
+
+  String _waCooldownText() {
+    if (!_isWaCooldownActive || _nextWaRequestTime == null) {
+      return '';
+    }
+    final Duration remaining = _nextWaRequestTime!.difference(DateTime.now());
+    final int minutes = remaining.inMinutes;
+    final int seconds = remaining.inSeconds % 60;
+    return 'Please wait ${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')} to request a new number.';
+  }
+
+  void _startWaCooldownTimer() {
+    _waCooldownTimer?.cancel();
+    if (!_isWaCooldownActive) {
+      _nextWaRequestTime = null;
+      SpUtil.remove(_waCooldownKey);
+      return;
+    }
+    _waCooldownTimer =
+        Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      if (!_isWaCooldownActive) {
+        timer.cancel();
+        setState(() {
+          _nextWaRequestTime = null;
+        });
+        SpUtil.remove(_waCooldownKey);
+      } else {
+        setState(() {});
+      }
+    });
+  }
+
+  Future<void> _loadWaCooldown() async {
+    final int? storedTimestamp = SpUtil.getInt(_waCooldownKey);
+    if (storedTimestamp == null) return;
+
+    final DateTime storedTime =
+        DateTime.fromMillisecondsSinceEpoch(storedTimestamp);
+    if (DateTime.now().isBefore(storedTime)) {
+      setState(() {
+        _nextWaRequestTime = storedTime;
+      });
+      _startWaCooldownTimer();
+    } else {
+      SpUtil.remove(_waCooldownKey);
+    }
+  }
+
+  void _loadStoredWaData() {
+    final String? stored = SpUtil.getString(_waDataKey);
+    if (stored == null || stored.isEmpty) return;
+    try {
+      final Map<String, dynamic> map =
+          jsonDecode(stored) as Map<String, dynamic>;
+      final WaData storedData = WaData()
+        ..wa = map['wa'] as String?
+        ..activationId = map['activation_id'] as String?
+        ..tip = map['tip'] as String?
+        ..tip2 = map['tip2'] as String?;
+      setState(() {
+        _waData = storedData;
+      });
+    } catch (_) {
+      SpUtil.remove(_waDataKey);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,9 +253,18 @@ class _WaActivationPageState extends State<WaActivationPage>
                     ),
                     Gaps.vGap16,
                     MyButton(
-                      text: 'Get WhatsApp Number',
-                      onPressed: _getWaNumber,
+                      text: _isWaCooldownActive
+                          ? 'Please wait before requesting again'
+                          : 'Get WhatsApp Number',
+                      onPressed: _isWaCooldownActive ? null : _getWaNumber,
                     ),
+                    if (_isWaCooldownActive) ...[
+                      Gaps.vGap8,
+                      Text(
+                        _waCooldownText(),
+                        style: TextStyles.textGray12,
+                      ),
+                    ],
                     if (_waData != null &&
                         _waData!.wa != null &&
                         _waData!.wa!.isNotEmpty) ...[
@@ -223,7 +347,7 @@ class _WaActivationPageState extends State<WaActivationPage>
             // 获取验证码部分
             MyCard(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(2.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

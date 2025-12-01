@@ -52,17 +52,17 @@ class Utils {
         format: format);
   }
 
-  static String formatPrice2(num price) {
-    const CurrencyFormat euroSettings = CurrencyFormat(
-      // formatter settings for euro
+  static String formatPrice2(num price, {String symbol = '₦'}) {
+    final CurrencyFormat currencySettings = CurrencyFormat(
+      // formatter settings for ngn
       code: 'ng',
-      symbol: '₦',
+      symbol: symbol,
       symbolSide: SymbolSide.left,
       thousandSeparator: ',',
       decimalSeparator: '.',
       symbolSeparator: '',
     );
-    return CurrencyFormatter.format(price, euroSettings);
+    return CurrencyFormatter.format(price, currencySettings);
   }
 
   static String formatDateTime(String? time) {

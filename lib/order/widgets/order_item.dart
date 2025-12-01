@@ -290,6 +290,23 @@ class OrderItem extends StatelessWidget {
                 ),
               ),
             ),
+            if (!inList && repayInfo != null && int.parse(repayInfo!.var7!) > 0)
+              Row(
+                children: [
+                  Icon(
+                    Icons.discount,
+                    color: Colors.red,
+                    size: 12,
+                  ),
+                  Text(
+                    "-${int.parse(repayInfo!.var7!)}%",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                  Gaps.hGap12,
+                ],
+              )
+            else
+              Gaps.empty,
             if (!inList && repayInfo != null && int.parse(repayInfo!.var9!) > 0)
               Row(
                 children: [
@@ -387,7 +404,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 11,
               child: InkWell(
                 onTap: () {
                   FlutterClipboard.copy(item.vName ?? '');
@@ -469,19 +486,18 @@ class OrderItem extends StatelessWidget {
                         style: textTextStyle,
                         children: <TextSpan>[
                           TextSpan(
-                              text: 'Left:',
+                              text: 'Paid:',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
                                   ?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
-                              text: Utils.formatPrice2(
-                                  (period?.fExpectRepayTotalAmount ?? 0) -
-                                      (period?.qPaidServiceFee ?? 0) -
-                                      (period?.pPaidInterest ?? 0) -
-                                      (period?.sPaidOverdueAmount ?? 0) -
-                                      (period?.oPaidBorrowAmount ?? 0) -
-                                      (period?.uDeductionTotalAmount ?? 0))),
+                            text: Utils.formatPrice2(period?.nPaidAmount ?? 0),
+                            style: period?.nPaidAmount == 0
+                                ? textTextStyle
+                                : const TextStyle(
+                                    fontSize: 12, color: Colors.greenAccent),
+                          ),
                         ],
                       ),
                     ),
@@ -492,7 +508,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 8,
+              flex: 11,
               child: Row(
                 children: [
                   Container(
@@ -509,18 +525,42 @@ class OrderItem extends StatelessWidget {
                       style: textTextStyle,
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'Paid:',
+                            text: 'Left:',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(fontSize: Dimens.font_sp10)),
                         TextSpan(
-                          text: Utils.formatPrice2(period?.nPaidAmount ?? 0),
-                          style: period?.nPaidAmount == 0
-                              ? textTextStyle
-                              : const TextStyle(
-                                  fontSize: 12, color: Colors.greenAccent),
-                        ),
+                            text: Utils.formatPrice2(
+                                (period?.fExpectRepayTotalAmount ?? 0) -
+                                    (period?.qPaidServiceFee ?? 0) -
+                                    (period?.pPaidInterest ?? 0) -
+                                    (period?.sPaidOverdueAmount ?? 0) -
+                                    (period?.oPaidBorrowAmount ?? 0) -
+                                    (period?.uDeductionTotalAmount ?? 0),
+                                symbol: '')),
+                        TextSpan(text: ' - '),
+                        TextSpan(
+                            text: Utils.formatPrice2(
+                                ((period?.fExpectRepayTotalAmount ?? 0) -
+                                        (period?.qPaidServiceFee ?? 0) -
+                                        (period?.pPaidInterest ?? 0)) *
+                                    (int.parse(repayInfo!.var7!) / 100),
+                                symbol: ''),
+                            style: TextStyle(color: Colors.red)),
+                        TextSpan(text: ' = '),
+                        TextSpan(
+                            text: Utils.formatPrice2(
+                                (period?.fExpectRepayTotalAmount ?? 0) -
+                                    (period?.qPaidServiceFee ?? 0) -
+                                    (period?.pPaidInterest ?? 0) -
+                                    (period?.sPaidOverdueAmount ?? 0) -
+                                    (period?.oPaidBorrowAmount ?? 0) -
+                                    (period?.uDeductionTotalAmount ?? 0) -
+                                    ((period?.fExpectRepayTotalAmount ?? 0) -
+                                            (period?.qPaidServiceFee ?? 0) -
+                                            (period?.pPaidInterest ?? 0)) *
+                                        (int.parse(repayInfo!.var7!) / 100))),
                       ],
                     ),
                   ),
@@ -633,7 +673,7 @@ class OrderItem extends StatelessWidget {
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, item, period)} bonus'),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 9 ? '+5' : (period?.lOverdueDays ?? 0) > 8 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) > 20 ? '+20' : ''}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 10 ? '+5' : (period?.lOverdueDays ?? 0) > 9 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall

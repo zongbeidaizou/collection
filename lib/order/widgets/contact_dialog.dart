@@ -677,6 +677,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
     templates2.sort((a, b) => b.eDays!.compareTo(a.eDays!));
+
     Future<void> launchAction(int type) async {
       //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);
@@ -789,29 +790,29 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               setState(() {});
             }
           }
-        } else if (type == 2) {
-          // 启动Call
-          final url = 'tel:${widget.contact.gPhone}';
-          if (await canLaunch(url)) {
-            final bool result = await launch(url);
-            if (result) {
-              // 设置Call启动标志，等待用户返回应用
-              _isCallLaunched = true;
-              print('Call launched, waiting for user to return...');
+        }
+      } else if (type == 2) {
+        // 启动Call
+        final url = 'tel:${widget.contact.gPhone}';
+        if (await canLaunch(url)) {
+          final bool result = await launch(url);
+          if (result) {
+            // 设置Call启动标志，等待用户返回应用
+            _isCallLaunched = true;
+            print('Call launched, waiting for user to return...');
 
-              // 启动清理定时器，60秒后自动清理状态
-              _cleanupTimer?.cancel();
-              _cleanupTimer = Timer(const Duration(seconds: 60), () {
-                if (mounted) {
-                  setState(() {
-                    _isCallLaunched = false;
-                    _currentTemplateId = null;
-                  });
-                }
-              });
+            // 启动清理定时器，60秒后自动清理状态
+            _cleanupTimer?.cancel();
+            _cleanupTimer = Timer(const Duration(seconds: 60), () {
+              if (mounted) {
+                setState(() {
+                  _isCallLaunched = false;
+                  _currentTemplateId = null;
+                });
+              }
+            });
 
-              setState(() {});
-            }
+            setState(() {});
           }
         }
       }

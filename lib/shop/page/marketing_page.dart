@@ -222,7 +222,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
   }
 
   @override
-  void setTemplates(List<String> templates, String url) {
+  void setTemplates(List<MarketingOtherTemplates2> templates, String url) {
     //把模板中@url@ 替换成url
     templates =
         templates.map((template) => template.replaceAll('@url@', url)).toList();

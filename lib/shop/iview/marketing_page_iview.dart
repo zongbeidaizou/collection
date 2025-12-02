@@ -14,7 +14,7 @@ import '../../models/product_entity.dart';
 abstract class MarketingPageMvpView implements IMvpView {
   void onRefresh();
   void setLogs(List<MarketingData> logs, {bool clear = false});
-  void setTemplates(List<String> templates, String url);
+  void setTemplates(List<MarketingOtherTemplates2> templates, String url);
   void setPageSize(int pageSize);
   void setCurrentPage(int currentPage);
 }

@@ -384,6 +384,10 @@ class JsonConvert {
       return data.map<MarketingOther>((Map<String, dynamic> e) =>
           MarketingOther.fromJson(e)).toList() as M;
     }
+    if (<MarketingOtherTemplates2>[] is M) {
+      return data.map<MarketingOtherTemplates2>((Map<String, dynamic> e) =>
+          MarketingOtherTemplates2.fromJson(e)).toList() as M;
+    }
     if (<MessageTemplateEntity>[] is M) {
       return data.map<MessageTemplateEntity>((Map<String, dynamic> e) =>
           MessageTemplateEntity.fromJson(e)).toList() as M;
@@ -601,6 +605,7 @@ class JsonConvertClassCollection {
     (MarketingDataAAAAASLTelemarketingDetailLogs)
         .toString(): MarketingDataAAAAASLTelemarketingDetailLogs.fromJson,
     (MarketingOther).toString(): MarketingOther.fromJson,
+    (MarketingOtherTemplates2).toString(): MarketingOtherTemplates2.fromJson,
     (MessageTemplateEntity).toString(): MessageTemplateEntity.fromJson,
     (MessageTemplateData).toString(): MessageTemplateData.fromJson,
     (ProductEntity).toString(): ProductEntity.fromJson,

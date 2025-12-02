@@ -120,7 +120,7 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
         if (contactWeights != null) 'contact_weights': contactWeightsStr,
         if (contactWeights2 != null) 'contact_weights2': contactWeights2Str,
       });
-      requestNetwork<CollectionOrderEntity>(Method.post,
+      requestNetwork<List<dynamic>>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
           params: formData2, onSuccess: (data) async {
         SpUtil.remove('action_contact');

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
@@ -30,11 +32,23 @@ class SmsHistoryPage extends StatefulWidget {
 }
 
 class _SmsHistoryPageState extends State<SmsHistoryPage>
-    with BasePageMixin<SmsHistoryPage, SmsHistoryPresenter>
+    with
+        BasePageMixin<SmsHistoryPage, SmsHistoryPresenter>,
+        WidgetsBindingObserver
     implements SmsHistoryPageMvpView {
   List<HKContactSmsData> _list = <HKContactSmsData>[];
   late SmsHistoryPresenter _smsHistoryPresenter;
   int _selectedIndex = -1;
+  DateTime? _appPausedTime;
+  DateTime? _appResumedTime;
+  bool _isWhatsAppLaunched = false;
+  bool _isCallLaunched = false;
+  bool _isSmsLaunched = false;
+  int? _currentTemplateId; // 存储当前选中的模板ID
+  Timer? _cleanupTimer; // 清理定时器
+  String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
+  int method = 0;
+  HKContactSmsData? _record;
 
   @override
   SmsHistoryPresenter createPresenter() {
@@ -53,6 +67,91 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
     setState(() {
       _list = list;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cleanupTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.paused:
+        // 应用进入后台（比如打开WhatsApp）
+        _appPausedTime = DateTime.now();
+        print('App paused at: $_appPausedTime');
+        break;
+      case AppLifecycleState.resumed:
+        // 应用回到前台
+        _appResumedTime = DateTime.now();
+        print('App resumed at: $_appResumedTime');
+
+        // 如果之前有暂停时间，计算时间差
+        if (_appPausedTime != null) {
+          final Duration timeSpentOutside =
+              _appResumedTime!.difference(_appPausedTime!);
+          print(
+              'Time spent outside app: ${timeSpentOutside.inSeconds} seconds');
+
+          // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
+          if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 1) {
+            _recordWhatsAppClick();
+          }
+          if (_isCallLaunched && timeSpentOutside.inSeconds > 2) {
+            _recordCallClick();
+          }
+          if (_isSmsLaunched && timeSpentOutside.inSeconds > 1) {
+            _recordSmsClick();
+          }
+          _isWhatsAppLaunched = false;
+          _isCallLaunched = false;
+          _isSmsLaunched = false;
+          _currentTemplateId = null;
+          _cleanupTimer?.cancel(); // 清理定时器
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  Future<void> _recordSmsClick() async {
+    String type = '3';
+
+    final templateId = _currentTemplateId ?? 0;
+    await Cache().appendToStringList('action_sms_history',
+        '$type:${widget.collectionOrderId}:${_record!.id}:$templateId');
+    // 同时更新存储中的联系人列表
+    _currentTemplateId = null;
+  }
+
+  Future<void> _recordCallClick() async {
+    String type = '2';
+    await Cache().appendToStringList('action_sms_history',
+        '$type:${widget.collectionOrderId}:${_record!.id}:0');
+  }
+
+  Future<void> _recordWhatsAppClick() async {
+    // 使用保存的模板ID记录点击事件
+    String type = '1';
+
+    final templateId = _currentTemplateId ?? 0;
+    await Cache().appendToStringList('action_sms_history',
+        '$type:${widget.collectionOrderId}:${_record!.id}:$templateId');
+
+    // 重置模板ID
+    _currentTemplateId = null;
   }
 
   Future<void> _callContact(String phone) async {
@@ -142,7 +241,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
       return template.copyWith(dTemplate: processedTemplate);
     })).toList();
 
-    Future<void> launchAction(int type, HKContactSmsData record) async {
+    Future<void> launchAction2(int type, HKContactSmsData record) async {
       // 显示模板选择对话框
       if (type != 2) {
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
@@ -210,6 +309,135 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
         final url = 'tel:${record.address}';
         if (await canLaunch(url)) {
           await launch(url);
+        }
+      }
+    }
+
+    Future<void> launchAction(int type, HKContactSmsData record) async {
+      //type 1:whatsapp 2:call 3:sms
+      setState(() {
+        _record = record;
+      });
+      // 显示模板选择对话框
+      if (type != 2) {
+        // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
+        int? expandedIndex;
+        final CollectionLogOtherHJSmsTemplate? selectedTemplate =
+            await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  padding: EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: templates2.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final template = entry.value;
+                        final bool isExpanded = expandedIndex == index;
+                        return _TemplateItem(
+                          template: template,
+                          isExpanded: isExpanded,
+                          onSelect: () => Navigator.pop(context, template),
+                          onToggleExpand: () {
+                            setState(() {
+                              // 如果点击的是已展开的项，则收起；否则展开该项并收起其他项
+                              expandedIndex =
+                                  expandedIndex == index ? null : index;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+        if (selectedTemplate != null) {
+          if (type == 1) {
+            // 启动WhatsApp
+            final bool result = await Utils.launchWhatsAppURL(
+                '234${record.address!}',
+                message: selectedTemplate.dTemplate);
+            if (result) {
+              // 设置WhatsApp启动标志，等待用户返回应用
+              _isWhatsAppLaunched = true;
+              _currentTemplateId = selectedTemplate.id; // 保存模板ID
+              print('WhatsApp launched, waiting for user to return...');
+
+              // 启动清理定时器，60秒后自动清理状态
+              _cleanupTimer?.cancel();
+              _cleanupTimer = Timer(const Duration(seconds: 60), () {
+                if (mounted) {
+                  setState(() {
+                    _isWhatsAppLaunched = false;
+                    _currentTemplateId = null;
+                  });
+                }
+              });
+
+              setState(() {});
+            }
+          } else if (type == 3) {
+            // 启动Sms
+            final bool result = await launch(
+                'sms:${record.address}?body=${selectedTemplate.dTemplate}');
+            if (result) {
+              // 设置Sms启动标志，等待用户返回应用
+              _isSmsLaunched = true;
+              _currentTemplateId = selectedTemplate.id; // 保存模板ID
+              print('Sms launched, waiting for user to return...');
+
+              // 启动清理定时器，60秒后自动清理状态
+              _cleanupTimer?.cancel();
+              _cleanupTimer = Timer(const Duration(seconds: 60), () {
+                if (mounted) {
+                  setState(() {
+                    _isSmsLaunched = false;
+                    _currentTemplateId = null;
+                  });
+                }
+              });
+
+              setState(() {});
+            }
+          }
+        }
+      } else if (type == 2) {
+        // 启动Call
+        final url = 'tel:${record.address}';
+        if (await canLaunch(url)) {
+          final bool result = await launch(url);
+          if (result) {
+            // 设置Call启动标志，等待用户返回应用
+            _isCallLaunched = true;
+            print('Call launched, waiting for user to return...');
+
+            // 启动清理定时器，60秒后自动清理状态
+            _cleanupTimer?.cancel();
+            _cleanupTimer = Timer(const Duration(seconds: 60), () {
+              if (mounted) {
+                setState(() {
+                  _isCallLaunched = false;
+                  _currentTemplateId = null;
+                });
+              }
+            });
+
+            setState(() {});
+          }
         }
       }
     }
@@ -316,6 +544,102 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+/// 模板项 Widget
+class _TemplateItem extends StatelessWidget {
+  const _TemplateItem({
+    required this.template,
+    required this.isExpanded,
+    required this.onSelect,
+    required this.onToggleExpand,
+  });
+
+  final CollectionLogOtherHJSmsTemplate template;
+  final bool isExpanded;
+  final VoidCallback onSelect;
+  final VoidCallback onToggleExpand;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue[50],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: onSelect,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        template.sName ?? 'Empty message.',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          height: 1.4,
+                        ),
+                        softWrap: true,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isExpanded ? Icons.expand_less : Icons.expand_more,
+                        size: 20,
+                      ),
+                      onPressed: onToggleExpand,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (isExpanded && template.dTemplate != null)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Message Details:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      template.dTemplate!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                      ),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+          ],
         ),
       ),
     );

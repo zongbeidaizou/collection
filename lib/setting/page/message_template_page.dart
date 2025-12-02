@@ -25,10 +25,10 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   final List<MessageTemplateData> _templates = [];
   late MessageTemplatePresenter _messageTemplatePresenter;
   final Map<int, String> _categoryMap = {
-    0: 'Template for messages to borrowers',
-    1: 'Template for messages to contacts',
-    2: 'Template for marketing messages',
-    3: 'Template for review messages',
+    26: 'Template for messages to borrowers',
+    28: 'Template for messages to contacts',
+    25: 'Template for marketing messages',
+    32: 'Template for review messages',
   };
 
   @override
@@ -209,23 +209,6 @@ class _MessageTemplateItem extends StatelessWidget {
                           template.title ?? '',
                           style: TextStyles.textBold16,
                         ),
-                        Gaps.hGap8,
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 4.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colours.app_main.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            categoryMap[template.category ?? 0] ?? '',
-                            style: TextStyles.textSize12.copyWith(
-                              color: Colours.app_main,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -250,6 +233,22 @@ class _MessageTemplateItem extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4.0,
+                ),
+                decoration: BoxDecoration(
+                  color: Colours.app_main.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Text(
+                  categoryMap[template.category ?? 0] ?? '',
+                  style: TextStyles.textSize12.copyWith(
+                    color: Colours.app_main,
+                  ),
+                ),
               ),
               Gaps.vGap8,
               Text(

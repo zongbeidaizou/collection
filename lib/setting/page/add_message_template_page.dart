@@ -86,10 +86,10 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
   late MessageTemplateData? _template;
   int _selectedCategory = 0;
   final Map<int, String> _categoryMap = {
-    0: 'Template for messages to borrowers',
-    1: 'Template for messages to contacts',
-    2: 'Template for marketing messages',
-    3: 'Template for review messages',
+    26: 'Template for messages to borrowers',
+    28: 'Template for messages to contacts',
+    25: 'Template for marketing messages',
+    32: 'Template for review messages',
   };
   late MessageTemplatePresenter _messageTemplatePresenter;
 

@@ -607,11 +607,11 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       if (widget.contactIndex == 0 && !widget.isAllContacts) {
         return value['c_type'] == 26 &&
             (int.parse(value['e_days'] as String) <= overdueDays ||
-                int.parse(value['e_days'] as String) > 999);
+                int.parse(value['e_days'] as String) > 998);
       } else {
         return value['c_type'] == 28 &&
             (int.parse(value['e_days'] as String) <= overdueDays ||
-                int.parse(value['e_days'] as String) > 999);
+                int.parse(value['e_days'] as String) > 998);
       }
     }) // 先过滤原始数据
             .map((value) {

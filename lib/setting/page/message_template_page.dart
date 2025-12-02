@@ -234,21 +234,44 @@ class _MessageTemplateItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Colours.app_main.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: Text(
-                  categoryMap[template.category ?? 0] ?? '',
-                  style: TextStyles.textSize12.copyWith(
-                    color: Colours.app_main,
+              Row(
+                children: [
+                  if (template.id != null) ...[
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6.0,
+                        vertical: 2.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colours.text_gray.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: Text(
+                        'ID: ${template.id}',
+                        style: TextStyles.textSize12.copyWith(
+                          color: Colours.text_gray,
+                        ),
+                      ),
+                    ),
+                    Gaps.hGap8,
+                  ],
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colours.app_main.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Text(
+                      categoryMap[template.category ?? 0] ?? '',
+                      style: TextStyles.textSize12.copyWith(
+                        color: Colours.app_main,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
               Gaps.vGap8,
               Text(

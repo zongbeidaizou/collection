@@ -4,7 +4,6 @@ import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart'
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/res/resources.dart';
-import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'add_message_template_page.dart';
 
@@ -30,13 +29,21 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
     25: 'Template for marketing messages',
     32: 'Template for review messages',
   };
+  late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: _categoryMap.length, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _messageTemplatePresenter.index(1, true);
     });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   /// 新增模板
@@ -93,10 +100,25 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: MyAppBar(
-        centerTitle: 'Message Template',
-        actionName: 'Add',
-        onPressed: _addTemplate,
+      appBar: AppBar(
+        leading: const BackButton(
+          color: Colors.black,
+        ),
+        title: const Text('Message Template'),
+        actions: [
+          TextButton(
+            onPressed: _addTemplate,
+            child: const Text('Add'),
+          ),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          labelColor: Colours.app_main,
+          unselectedLabelColor: Colours.text_gray,
+          indicatorColor: Colours.app_main,
+          tabs: _categoryMap.values.map((label) => Tab(text: label)).toList(),
+        ),
       ),
       body: _templates.isEmpty
           ? Center(
@@ -110,23 +132,39 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
                 ],
               ),
             )
-          : ListView.builder(
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, bottom: 16.0, top: 8.0),
-              itemCount: _templates.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: <Widget>[
-                    Gaps.vGap15,
-                    _MessageTemplateItem(
-                      template: _templates[index],
-                      onEdit: () => _editTemplate(_templates[index]),
-                      onDelete: () => _deleteTemplate(_templates[index]),
-                      categoryMap: _categoryMap,
+          : TabBarView(
+              controller: _tabController,
+              children: _categoryMap.keys.map((categoryKey) {
+                final List<MessageTemplateData> filtered =
+                    _templates.where((t) => t.category == categoryKey).toList();
+                if (filtered.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No templates in this category',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                  ],
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16.0, bottom: 16.0, top: 8.0),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    final template = filtered[index];
+                    return Column(
+                      children: <Widget>[
+                        Gaps.vGap15,
+                        _MessageTemplateItem(
+                          template: template,
+                          onEdit: () => _editTemplate(template),
+                          onDelete: () => _deleteTemplate(template),
+                          categoryMap: _categoryMap,
+                        ),
+                      ],
+                    );
+                  },
                 );
-              },
+              }).toList(),
             ),
     );
   }
@@ -192,10 +230,11 @@ class _MessageTemplateItem extends StatelessWidget {
         originalMessage.isEmpty ? '' : replacePlaceholders(originalMessage);
 
     return MyCard(
+      shadowColor: Colors.blueAccent,
       child: InkWell(
         onTap: onEdit,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(6.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -234,53 +273,13 @@ class _MessageTemplateItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  if (template.id != null) ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6.0,
-                        vertical: 2.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colours.text_gray.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: Text(
-                        'ID: ${template.id}',
-                        style: TextStyles.textSize12.copyWith(
-                          color: Colours.text_gray,
-                        ),
-                      ),
-                    ),
-                    Gaps.hGap8,
-                  ],
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colours.app_main.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Text(
-                      categoryMap[template.category ?? 0] ?? '',
-                      style: TextStyles.textSize12.copyWith(
-                        color: Colours.app_main,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Gaps.vGap8,
               _buildMessageWithPlaceholders(
                 context,
                 originalMessage,
                 maxLines: 6,
               ),
               if (previewMessage.isNotEmpty) ...[
-                Gaps.vGap12,
+                Gaps.vGap8,
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12.0),
@@ -294,11 +293,6 @@ class _MessageTemplateItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Preview (placeholders replaced):',
-                        style: TextStyles.textGray12,
-                      ),
-                      Gaps.vGap4,
                       _buildPreviewWithHighlightedValues(
                         context,
                         originalMessage,
@@ -308,9 +302,9 @@ class _MessageTemplateItem extends StatelessWidget {
                   ),
                 ),
               ],
-              Gaps.vGap12,
+              Gaps.vGap4,
               Gaps.line,
-              Gaps.vGap12,
+              Gaps.vGap4,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

@@ -108,13 +108,34 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 @JsonSerializable()
 class MarketingOther {
 	String? url = '';
-	List<String>? templates = [];
+	List<MarketingOtherTemplates2>? templates2 = [];
 
 	MarketingOther();
 
 	factory MarketingOther.fromJson(Map<String, dynamic> json) => $MarketingOtherFromJson(json);
 
 	Map<String, dynamic> toJson() => $MarketingOtherToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class MarketingOtherTemplates2 {
+	int? id = 0;
+	int? category = 0;
+	@JSONField(name: 'available_days')
+	int? availableDays = 0;
+	String? message = '';
+	String? title = '';
+
+	MarketingOtherTemplates2();
+
+	factory MarketingOtherTemplates2.fromJson(Map<String, dynamic> json) => $MarketingOtherTemplates2FromJson(json);
+
+	Map<String, dynamic> toJson() => $MarketingOtherTemplates2ToJson(this);
 
 	@override
 	String toString() {

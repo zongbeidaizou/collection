@@ -299,11 +299,10 @@ class _MessageTemplateItem extends StatelessWidget {
                         style: TextStyles.textGray12,
                       ),
                       Gaps.vGap4,
-                      Text(
+                      _buildPreviewWithHighlightedValues(
+                        context,
+                        originalMessage,
                         previewMessage,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colours.text,
-                            ),
                       ),
                     ],
                   ),
@@ -382,6 +381,107 @@ class _MessageTemplateItem extends StatelessWidget {
       text: TextSpan(children: spans),
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  /// 构建预览文本，将被替换的占位符值用蓝色加粗显示
+  Widget _buildPreviewWithHighlightedValues(
+    BuildContext context,
+    String originalMessage,
+    String previewMessage,
+  ) {
+    if (previewMessage.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // 匹配占位符的正则表达式：@xxx@
+    final RegExp placeholderPattern = RegExp(r'@\w+@');
+    final List<Match> placeholderMatches =
+        placeholderPattern.allMatches(originalMessage).toList();
+
+    // 如果没有占位符，直接返回普通文本
+    if (placeholderMatches.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colours.text,
+            ),
+      );
+    }
+
+    // 构建替换值列表（按顺序），并记录每个替换值在原始消息中的位置
+    final List<MapEntry<String, int>> replacements = [];
+    for (final Match match in placeholderMatches) {
+      final String placeholder = match.group(0)!;
+      final String? replacement = _placeholderExampleValues[placeholder];
+      if (replacement != null && replacement.isNotEmpty) {
+        replacements.add(MapEntry(replacement, match.start));
+      }
+    }
+
+    if (replacements.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colours.text,
+            ),
+      );
+    }
+
+    // 在预览消息中查找并标记替换值（按顺序）
+    final List<TextSpan> spans = [];
+    int lastIndex = 0;
+
+    for (final MapEntry<String, int> replacement in replacements) {
+      final String value = replacement.key;
+      final int foundIndex = previewMessage.indexOf(value, lastIndex);
+
+      if (foundIndex != -1) {
+        // 添加替换值之前的普通文本
+        if (foundIndex > lastIndex) {
+          spans.add(TextSpan(
+            text: previewMessage.substring(lastIndex, foundIndex),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Colours.text,
+                ),
+          ));
+        }
+
+        // 添加替换值（蓝色加粗）
+        spans.add(TextSpan(
+          text: value,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+        ));
+
+        lastIndex = foundIndex + value.length;
+      }
+    }
+
+    // 添加剩余的普通文本
+    if (lastIndex < previewMessage.length) {
+      spans.add(TextSpan(
+        text: previewMessage.substring(lastIndex),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colours.text,
+            ),
+      ));
+    }
+
+    // 如果没有生成任何 spans，返回普通文本
+    if (spans.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colours.text,
+            ),
+      );
+    }
+
+    return RichText(
+      text: TextSpan(children: spans),
     );
   }
 }

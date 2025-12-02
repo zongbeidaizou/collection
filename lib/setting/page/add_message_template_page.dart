@@ -228,6 +228,110 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
     return previewText;
   }
 
+  /// 构建预览文本，将被替换的占位符值用蓝色加粗显示
+  Widget _buildPreviewWithHighlightedValues(
+    BuildContext context,
+    String originalMessage,
+  ) {
+    if (originalMessage.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // 生成预览文本
+    String previewMessage = originalMessage;
+    for (final placeholder in availablePlaceholders) {
+      previewMessage =
+          previewMessage.replaceAll(placeholder.key, placeholder.exampleValue);
+    }
+
+    // 匹配占位符的正则表达式：@xxx@
+    final RegExp placeholderPattern = RegExp(r'@\w+@');
+    final List<Match> placeholderMatches =
+        placeholderPattern.allMatches(originalMessage).toList();
+
+    // 如果没有占位符，直接返回普通文本
+    if (placeholderMatches.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodyMedium,
+      );
+    }
+
+    // 构建替换值列表（按顺序），并记录每个替换值在原始消息中的位置
+    final List<MapEntry<String, int>> replacements = [];
+    for (final Match match in placeholderMatches) {
+      final String placeholder = match.group(0)!;
+      try {
+        final Placeholder placeholderObj = availablePlaceholders.firstWhere(
+          (p) => p.key == placeholder,
+        );
+        if (placeholderObj.exampleValue.isNotEmpty) {
+          replacements.add(MapEntry(placeholderObj.exampleValue, match.start));
+        }
+      } catch (e) {
+        // 如果找不到对应的占位符，跳过
+        continue;
+      }
+    }
+
+    if (replacements.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodyMedium,
+      );
+    }
+
+    // 在预览消息中查找并标记替换值（按顺序）
+    final List<TextSpan> spans = [];
+    int lastIndex = 0;
+
+    for (final MapEntry<String, int> replacement in replacements) {
+      final String value = replacement.key;
+      final int foundIndex = previewMessage.indexOf(value, lastIndex);
+
+      if (foundIndex != -1) {
+        // 添加替换值之前的普通文本
+        if (foundIndex > lastIndex) {
+          spans.add(TextSpan(
+            text: previewMessage.substring(lastIndex, foundIndex),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ));
+        }
+
+        // 添加替换值（蓝色加粗）
+        spans.add(TextSpan(
+          text: value,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+        ));
+
+        lastIndex = foundIndex + value.length;
+      }
+    }
+
+    // 添加剩余的普通文本
+    if (lastIndex < previewMessage.length) {
+      spans.add(TextSpan(
+        text: previewMessage.substring(lastIndex),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ));
+    }
+
+    // 如果没有生成任何 spans，返回普通文本
+    if (spans.isEmpty) {
+      return Text(
+        previewMessage,
+        style: Theme.of(context).textTheme.bodyMedium,
+      );
+    }
+
+    return RichText(
+      text: TextSpan(children: spans),
+    );
+  }
+
   /// 保存模板
   void _saveTemplate() async {
     final String title = _titleController.text.trim();
@@ -523,12 +627,13 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                             style: TextStyles.textGray14,
                           ),
                           Gaps.vGap8,
-                          Text(
-                            _contentController.text.isEmpty
-                                ? '(No content)'
-                                : _getPreviewText(),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                          _contentController.text.isEmpty
+                              ? Text(
+                                  '(No content)',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                )
+                              : _buildPreviewWithHighlightedValues(
+                                  context, _contentController.text),
                         ],
                       ),
                     ),

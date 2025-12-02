@@ -274,11 +274,10 @@ class _MessageTemplateItem extends StatelessWidget {
                 ],
               ),
               Gaps.vGap8,
-              Text(
+              _buildMessageWithPlaceholders(
+                context,
                 originalMessage,
-                style: Theme.of(context).textTheme.bodySmall,
                 maxLines: 6,
-                overflow: TextOverflow.ellipsis,
               ),
               if (previewMessage.isNotEmpty) ...[
                 Gaps.vGap12,
@@ -332,6 +331,57 @@ class _MessageTemplateItem extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  /// 构建带有占位符高亮的消息文本
+  Widget _buildMessageWithPlaceholders(
+    BuildContext context,
+    String message, {
+    int maxLines = 6,
+  }) {
+    if (message.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // 匹配占位符的正则表达式：@xxx@
+    final RegExp placeholderPattern = RegExp(r'@\w+@');
+    final List<TextSpan> spans = [];
+    int lastIndex = 0;
+
+    for (final Match match in placeholderPattern.allMatches(message)) {
+      // 添加占位符之前的普通文本
+      if (match.start > lastIndex) {
+        spans.add(TextSpan(
+          text: message.substring(lastIndex, match.start),
+          style: Theme.of(context).textTheme.bodySmall,
+        ));
+      }
+
+      // 添加占位符（红色加粗）
+      spans.add(TextSpan(
+        text: match.group(0),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+      ));
+
+      lastIndex = match.end;
+    }
+
+    // 添加剩余的普通文本
+    if (lastIndex < message.length) {
+      spans.add(TextSpan(
+        text: message.substring(lastIndex),
+        style: Theme.of(context).textTheme.bodySmall,
+      ));
+    }
+
+    return RichText(
+      text: TextSpan(children: spans),
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

@@ -343,10 +343,10 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
       return;
     }
 
-    if (content.isEmpty) {
-      _showErrorDialog('Please enter content');
-      return;
-    }
+    // if (content.isEmpty) {
+    //   _showErrorDialog('Please enter content');
+    //   return;
+    // }
 
     if (daysText.isEmpty) {
       _showErrorDialog('Please enter available days');
@@ -360,15 +360,15 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
     }
 
     // 验证必须包含 @app_name@ 和 @name@
-    if (!content.contains('@app_name@')) {
+    if (content.isNotEmpty && !content.contains('@app_name@')) {
       _showErrorDialog('Content must include @app_name@ placeholder');
       return;
     }
 
-    if (!content.contains('@name@')) {
-      _showErrorDialog('Content must include @name@ placeholder');
-      return;
-    }
+    // if (content.isNotEmpty && !content.contains('@name@')) {
+    //   _showErrorDialog('Content must include @name@ placeholder');
+    //   return;
+    // }
 
     // 验证 @url@ 前后必须有空格
     if (content.contains('@url@')) {

@@ -176,9 +176,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            template.dTemplate! != ''
-                                ? template.dTemplate!
-                                : 'Custom message.',
+                            template.sName ?? 'Empty message.',
                             style: const TextStyle(
                               fontSize: 15,
                               height: 1.4,

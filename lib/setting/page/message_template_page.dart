@@ -24,10 +24,10 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   final List<MessageTemplateData> _templates = [];
   late MessageTemplatePresenter _messageTemplatePresenter;
   final Map<int, String> _categoryMap = {
-    26: 'Template for messages to borrowers',
-    28: 'Template for messages to contacts',
-    25: 'Template for marketing messages',
-    32: 'Template for review messages',
+    26: 'Messages to borrowers',
+    28: 'Messages to contacts',
+    25: 'marketing messages',
+    32: 'review messages',
   };
   late final TabController _tabController;
 

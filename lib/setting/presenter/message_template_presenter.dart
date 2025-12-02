@@ -55,7 +55,7 @@ class MessageTemplatePresenter
         url: HttpApi.messageTemplate,
         params: formData2, onSuccess: (data) async {
       if (data != null) {
-        view.showToast('保存成功');
+        view.showToast('Success');
       }
     });
   }

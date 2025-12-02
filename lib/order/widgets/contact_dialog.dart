@@ -695,6 +695,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
       // 显示模板选择对话框
       if (type != 2) {
+        // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
+        int? expandedIndex;
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
             await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
           context: context,
@@ -702,43 +704,39 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
           builder: (BuildContext context) {
-            return Container(
-              padding: EdgeInsets.only(
-                top: 16,
-                left: 16,
-                right: 16,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: templates2.map((template) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: InkWell(
-                        onTap: () => Navigator.pop(context, template),
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.blue[50],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            template.sName ?? 'Empty message.',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              height: 1.4,
-                            ),
-                            softWrap: true,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  padding: EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: templates2.asMap().entries.map((entry) {
+                        final int index = entry.key;
+                        final template = entry.value;
+                        final bool isExpanded = expandedIndex == index;
+                        return _TemplateItem(
+                          template: template,
+                          isExpanded: isExpanded,
+                          onSelect: () => Navigator.pop(context, template),
+                          onToggleExpand: () {
+                            setState(() {
+                              // 如果点击的是已展开的项，则收起；否则展开该项并收起其他项
+                              expandedIndex =
+                                  expandedIndex == index ? null : index;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                );
+              },
             );
           },
         );
@@ -1161,5 +1159,101 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
             ),
           ),
         ));
+  }
+}
+
+/// 模板项 Widget
+class _TemplateItem extends StatelessWidget {
+  const _TemplateItem({
+    required this.template,
+    required this.isExpanded,
+    required this.onSelect,
+    required this.onToggleExpand,
+  });
+
+  final CollectionLogOtherHJSmsTemplate template;
+  final bool isExpanded;
+  final VoidCallback onSelect;
+  final VoidCallback onToggleExpand;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue[50],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: onSelect,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        template.sName ?? 'Empty message.',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          height: 1.4,
+                        ),
+                        softWrap: true,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isExpanded ? Icons.expand_less : Icons.expand_more,
+                        size: 20,
+                      ),
+                      onPressed: onToggleExpand,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (isExpanded && template.dTemplate != null)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Message Details:',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      template.dTemplate!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        height: 1.5,
+                      ),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

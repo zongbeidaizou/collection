@@ -77,6 +77,8 @@ class CommissionData {
 	int? tCommissionAmountWithoutAssist = 0;
 	@JSONField(name: 'w_readed')
 	int? wReaded = 0;
+	@JSONField(name: 'u_is_settled')
+	int? uIsSettled = 0;
 	@JSONField(name: 'x_read_at')
 	String? xReadAt = '';
 	@JSONField(name: 'y_day_index')

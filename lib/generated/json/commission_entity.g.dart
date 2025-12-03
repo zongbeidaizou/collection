@@ -183,6 +183,10 @@ CommissionData $CommissionDataFromJson(Map<String, dynamic> json) {
   if (wReaded != null) {
     commissionData.wReaded = wReaded;
   }
+  final int? uIsSettled = jsonConvert.convert<int>(json['u_is_settled']);
+  if (uIsSettled != null) {
+    commissionData.uIsSettled = uIsSettled;
+  }
   final String? xReadAt = jsonConvert.convert<String>(json['x_read_at']);
   if (xReadAt != null) {
     commissionData.xReadAt = xReadAt;
@@ -231,6 +235,7 @@ Map<String, dynamic> $CommissionDataToJson(CommissionData entity) {
   data['t_commission_amount_without_assist'] =
       entity.tCommissionAmountWithoutAssist;
   data['w_readed'] = entity.wReaded;
+  data['u_is_settled'] = entity.uIsSettled;
   data['x_read_at'] = entity.xReadAt;
   data['y_day_index'] = entity.yDayIndex;
   data['created_at'] = entity.createdAt;
@@ -263,6 +268,7 @@ extension CommissionDataExtension on CommissionData {
     int? sAssistRate,
     int? tCommissionAmountWithoutAssist,
     int? wReaded,
+    int? uIsSettled,
     String? xReadAt,
     int? yDayIndex,
     String? createdAt,
@@ -292,6 +298,7 @@ extension CommissionDataExtension on CommissionData {
       ..tCommissionAmountWithoutAssist = tCommissionAmountWithoutAssist ??
           this.tCommissionAmountWithoutAssist
       ..wReaded = wReaded ?? this.wReaded
+      ..uIsSettled = uIsSettled ?? this.uIsSettled
       ..xReadAt = xReadAt ?? this.xReadAt
       ..yDayIndex = yDayIndex ?? this.yDayIndex
       ..createdAt = createdAt ?? this.createdAt

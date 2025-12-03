@@ -498,12 +498,29 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
             Positioned(
               top: 0.0,
               right: 0.0,
-              child: Text(
-                "+${log.hCommissionAmount}",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    "+${log.hCommissionAmount}",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Gaps.hGap4,
+                  //绿色圆点
+                  if (log.uIsSettled == 1)
+                    Container(
+                      width: 7,
+                      height: 7,
+                      decoration: const BoxDecoration(
+                        color: Colors.lightGreen,
+                        shape: BoxShape.circle,
+                      ),
+                    )
+                  else
+                    Gaps.empty
+                ],
               ),
             ),
             Positioned(

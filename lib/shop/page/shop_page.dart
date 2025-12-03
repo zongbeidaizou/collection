@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
 import 'package:bounty_hunter/shop/widgets/bar_marketing.dart';
 import 'package:bounty_hunter/shop/widgets/pie2.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
@@ -19,6 +20,7 @@ import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/shop_entity.dart';
@@ -130,6 +132,10 @@ class _ShopPageState extends State<ShopPage>
     _shopPagePresenter.show(true);
   }
 
+  void _showExitDialog() {
+    showDialog<void>(context: context, builder: (_) => const ExitDialog());
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
@@ -185,17 +191,29 @@ class _ShopPageState extends State<ShopPage>
         leadingWidth: 300,
         actions: <Widget>[
           IconButton(
+            tooltip: 'Edit Note',
+            onPressed: () {
+              NavigatorUtils.push(context, SettingRouter.messageTemplatePage);
+            },
+            icon: Icon(
+              Icons.edit_note,
+              color: iconColor,
+              size: 29,
+            ),
+          ),
+          IconButton(
+            icon: FaIcon(FontAwesomeIcons.squareWhatsapp,
+                size: 23, color: iconColor),
+            onPressed: () {
+              NavigatorUtils.push(context, SettingRouter.waActivationPage);
+            },
+          ),
+          IconButton(
             tooltip: 'Setting',
             onPressed: () {
               NavigatorUtils.push(context, SettingRouter.settingPage);
             },
-            icon: LoadAssetImage(
-              'shop/setting',
-              key: const Key('setting'),
-              width: 24.0,
-              height: 24.0,
-              color: iconColor,
-            ),
+            icon: Icon(Icons.settings, color: iconColor, size: 23),
           )
         ],
       ),

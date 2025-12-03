@@ -34,19 +34,19 @@ class _SettingPageState extends State<SettingPage> {
           return Column(
             children: <Widget>[
               Gaps.vGap5,
-              ClickItem(
-                title: 'Message Template',
-                onTap: () {
-                  NavigatorUtils.push(
-                      context, SettingRouter.messageTemplatePage);
-                },
-              ),
-              ClickItem(
-                title: 'WhatsApp Activation',
-                onTap: () {
-                  NavigatorUtils.push(context, SettingRouter.waActivationPage);
-                },
-              ),
+              // ClickItem(
+              //   title: 'Message Template',
+              //   onTap: () {
+              //     NavigatorUtils.push(
+              //         context, SettingRouter.messageTemplatePage);
+              //   },
+              // ),
+              // ClickItem(
+              //   title: 'WhatsApp Activation',
+              //   onTap: () {
+              //     NavigatorUtils.push(context, SettingRouter.waActivationPage);
+              //   },
+              // ),
               ClickItem(
                 title: 'Sign out',
                 onTap: _showExitDialog,

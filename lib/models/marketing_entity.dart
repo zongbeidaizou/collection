@@ -108,6 +108,7 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 @JsonSerializable()
 class MarketingOther {
 	String? url = '';
+	String? app = '';
 	List<MarketingOtherTemplates2>? templates2 = [];
 
 	MarketingOther();

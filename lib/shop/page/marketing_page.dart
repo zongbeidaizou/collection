@@ -23,6 +23,28 @@ import '../../widgets/load_image.dart';
 import '../../widgets/my_card.dart';
 import 'package:oktoast/oktoast.dart';
 
+String encodeBase62(int id) {
+  // 使用标准的 Base62 字符集：0-9, a-z, A-Z
+  const characters =
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const base = 62;
+  const minLength = 11;
+  String encoded = '';
+
+  // 处理 0 的特殊情况
+  if (id == 0) {
+    return '0'.padLeft(minLength, '0');
+  }
+  id = int.parse('9${id.toString().padLeft(minLength, '0')}');
+  while (id > 0) {
+    int remainder = id % base;
+    encoded = characters[remainder] + encoded;
+    id = id ~/ base; // 使用整数除法
+  }
+
+  return encoded;
+}
+
 const List<Color> bgColors = [
   Colours.app_main,
   Colors.orangeAccent,
@@ -84,7 +106,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
   bool _isLoading = false;
   late int _maxPage;
   late int _selectedIndex = 100000;
-  late List<String> templates = [];
+  late List<MarketingOtherTemplates2> _templates = [];
 
   // 搜索相关状态
   bool _isSearchVisible = false;
@@ -222,22 +244,18 @@ class _AccountRecordListPageState extends State<MarketingPage>
   }
 
   @override
-  void setTemplates(List<MarketingOtherTemplates2> templates, String url) {
-    //把模板中@url@ 替换成url
-    templates =
-        templates.map((template) => template.replaceAll('@url@', url)).toList();
+  void setTemplates(
+      List<MarketingOtherTemplates2> templates, String url, String appName) {
+    //把模板中@url@ 替换成url,把@app_name@ 替换成app_name
     setState(() {
-      this.templates = templates;
+      _templates = templates.map((template) {
+        return template.copyWith(
+            message: template.message
+                    ?.replaceAll('@url@', '$url/${encodeBase62(template.id!)}')
+                    .replaceAll('@app_name@', appName) ??
+                '');
+      }).toList();
     });
-  }
-
-  @override
-  void setPageSize(int pageSize) {
-    _maxPage = pageSize;
-  }
-
-  void setProduct(List<ProductData> product) {
-    // TODO: implement setProduct
   }
 
   bool _hasMore() {
@@ -364,7 +382,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
                   return _Item(
                       item: item,
                       color: isMatched ? Colors.green[50]! : Colors.white,
-                      templates: templates,
+                      templates: _templates,
                       index: globalItemIndex,
                       selected: _selectedIndex == globalItemIndex,
                       onTap: (int itemIndex) {
@@ -502,6 +520,11 @@ class _AccountRecordListPageState extends State<MarketingPage>
       ),
     );
   }
+
+  @override
+  void setPageSize(int pageSize) {
+    // TODO: implement setPageSize
+  }
 }
 
 class _Item extends StatefulWidget {
@@ -515,7 +538,7 @@ class _Item extends StatefulWidget {
   });
   final MarketingData item;
   final Color color;
-  final List<String> templates;
+  final List<MarketingOtherTemplates2> templates;
   final int index;
   bool selected;
   final void Function(int) onTap;
@@ -667,28 +690,6 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     return const SizedBox.shrink();
   }
 
-  String encodeBase62(int id) {
-    // 使用标准的 Base62 字符集：0-9, a-z, A-Z
-    const characters =
-        '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const base = 62;
-    const minLength = 11;
-    String encoded = '';
-
-    // 处理 0 的特殊情况
-    if (id == 0) {
-      return '0'.padLeft(minLength, '0');
-    }
-    id = int.parse('9${id.toString().padLeft(minLength, '0')}');
-    while (id > 0) {
-      int remainder = id % base;
-      encoded = characters[remainder] + encoded;
-      id = id ~/ base; // 使用整数除法
-    }
-
-    return encoded;
-  }
-
   Future<void> launchAction(int type) async {
     //type 1:whatsapp 2:call 3:sms
 
@@ -714,8 +715,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: InkWell(
-                      onTap: () => Navigator.pop(context,
-                          '$template/${encodeBase62(widget.item.id!)}'),
+                      onTap: () => Navigator.pop(context, template.message),
                       borderRadius: BorderRadius.circular(8),
                       child: Container(
                         width: double.infinity,
@@ -725,9 +725,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          template != ''
-                              ? '$template/${encodeBase62(widget.item.id!)}'
-                              : 'Custom message.',
+                          template.title ?? 'Custom message.',
                           style: const TextStyle(
                             fontSize: 15,
                             height: 1.4,

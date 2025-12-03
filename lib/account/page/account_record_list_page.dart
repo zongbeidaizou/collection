@@ -503,18 +503,18 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   Text(
                     "+${log.hCommissionAmount}",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
+                      color: Colors.green,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Gaps.hGap4,
-                  //绿色圆点
-                  if (log.uIsSettled == 1)
+                  //红色圆点
+                  if (log.uIsSettled != 1)
                     Container(
                       width: 7,
                       height: 7,
                       decoration: const BoxDecoration(
-                        color: Colors.lightGreen,
+                        color: Colors.redAccent,
                         shape: BoxShape.circle,
                       ),
                     )

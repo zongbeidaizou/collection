@@ -313,11 +313,11 @@ class OrderItem extends StatelessWidget {
                   Icon(
                     Icons.verified_outlined,
                     color: Colors.green,
-                    size: 12,
+                    size: 14,
                   ),
                   Text(
                     "${int.parse(repayInfo!.var9!)}",
-                    style: TextStyle(color: Colors.green, fontSize: 12),
+                    style: TextStyle(color: Colors.green, fontSize: 14),
                   ),
                   Gaps.hGap12,
                 ],
@@ -330,12 +330,12 @@ class OrderItem extends StatelessWidget {
                   Icon(
                     Icons.transfer_within_a_station,
                     color: Colors.red,
-                    size: 12,
+                    size: 14,
                   ),
                   Gaps.hGap2,
                   Text(
                       "${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 10 ? '+5' : (period?.lOverdueDays ?? 0) >= 10 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
-                      style: TextStyle(color: Colors.red, fontSize: 12)),
+                      style: TextStyle(color: Colors.red, fontSize: 14)),
                 ],
               )
             else

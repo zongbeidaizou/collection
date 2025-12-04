@@ -39,7 +39,9 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
     await requestNetwork<WacodeEntity>(
       Method.get,
       url: HttpApi.waCode,
-      params: formData,
+      queryParameters: {
+        'activation_id': activationId,
+      },
       isShow: false,
       onSuccess: (data) async {
         if (data != null && data.success == true) {

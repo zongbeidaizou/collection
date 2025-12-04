@@ -85,6 +85,19 @@ class _WaActivationPageState extends State<WaActivationPage>
       _startWaCooldownTimer();
       showToast(
           'Please copy this number to WhatsApp or WhatsApp Business and login with it');
+      // 自动开始轮询验证码
+      if (data.activationId != null && data.activationId!.isNotEmpty) {
+        // 如果已经有轮询在进行，先停止
+        if (_isPolling) {
+          _stopPolling();
+        }
+        // 延迟一小段时间后开始轮询，确保状态已更新
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _waData?.activationId != null) {
+            _startPollingCode();
+          }
+        });
+      }
     }
   }
 
@@ -352,7 +365,8 @@ class _WaActivationPageState extends State<WaActivationPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Step 2: Get Verification Code',
+                      //去whatsapp登录页面，点击获取验证码
+                      'Step 2: Go to WhatsApp login page and click get verification code',
                       style: TextStyles.textBold16,
                     ),
                     Gaps.vGap16,

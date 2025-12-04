@@ -555,8 +555,14 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                     Gaps.vGap8,
                     TextField(
                       controller: _daysController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                      ),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^-?\d*$'),
+                        ),
+                      ],
                       decoration: const InputDecoration(
                         hintText: 'Please enter available days',
                         border: OutlineInputBorder(),

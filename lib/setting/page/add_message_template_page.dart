@@ -361,8 +361,8 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
 
     // 验证必须包含 @app_name@ 和 @name@
     if (content.isNotEmpty && !content.contains('@app_name@')) {
-      _showErrorDialog('Content must include @app_name@ placeholder');
-      return;
+      // _showErrorDialog('Content must include @app_name@ placeholder');
+      // return;
     }
 
     // if (content.isNotEmpty && !content.contains('@name@')) {

@@ -697,7 +697,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       // 显示模板选择对话框
       if (type != 2) {
         // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
-        int? expandedIndex;
+        // 默认展开第一条模板
+        int? expandedIndex = 0;
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
             await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
           context: context,

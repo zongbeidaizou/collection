@@ -1,10 +1,7 @@
-import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
 import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
 import 'package:bounty_hunter/setting/setting_router.dart';
-import 'package:bounty_hunter/shop/iview/message_page_iview.dart';
-import 'package:bounty_hunter/shop/presenter/message_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
@@ -460,6 +457,7 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: MyAppBar(
         centerTitle: _template == null ? 'Add Template' : 'Edit Template',
@@ -567,6 +565,11 @@ class _AddMessageTemplatePageState extends State<AddMessageTemplatePage>
                           vertical: 8.0,
                         ),
                       ),
+                    ),
+                    Gaps.vGap8,
+                    Text(
+                      'The larger the overdue days, the higher the template will appear in the list.',
+                      style: TextStyles.textGray12,
                     ),
                   ],
                 ),

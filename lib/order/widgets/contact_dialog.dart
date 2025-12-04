@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 import '../../models/collection_log_entity.dart';
 import '../../util/toast_utils.dart';
@@ -1212,9 +1213,32 @@ class _TemplateItem extends StatelessWidget {
                       ),
                     ),
                     IconButton(
+                      icon: const Icon(
+                        Icons.copy,
+                        size: 18,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        final text = template.dTemplate;
+                        if (text != null && text.isNotEmpty) {
+                          Clipboard.setData(ClipboardData(text: text));
+                          showToast(
+                            'Message copied',
+                            position: ToastPosition.center,
+                            duration: const Duration(seconds: 1),
+                          );
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                    Gaps.hGap12,
+                    Gaps.hGap10,
+                    IconButton(
                       icon: Icon(
                         isExpanded ? Icons.expand_less : Icons.expand_more,
                         size: 20,
+                        color: Colors.green,
                       ),
                       onPressed: onToggleExpand,
                       padding: EdgeInsets.zero,

@@ -27,6 +27,27 @@ class _WaActivationPageState extends State<WaActivationPage>
     implements WaActivationPageMvpView {
   static const String _waCooldownKey = 'wa_activation_next_request_time';
   static const String _waDataKey = 'wa_activation_last_data';
+  static const String _selectedCountryKey = 'wa_activation_selected_country';
+  
+  // 国家列表
+  static const List<String> _countries = [
+    'Nigeria',
+    'Indonesia',
+    'Canada',
+    'Colombia',
+    'Philippines',
+    'Chile',
+  ];
+
+  static const Map<String, String> _countryCodes = <String, String>{
+    'Nigeria': '+234',
+    'Indonesia': '+62',
+    'Canada': '+1',
+    'Colombia': '+57',
+    'Philippines': '+63',
+    'Chile': '+56',
+  };
+  
   late WaActivationPresenter _waActivationPresenter;
   WaData? _waData;
   WacodeData? _wacodeData;
@@ -34,6 +55,7 @@ class _WaActivationPageState extends State<WaActivationPage>
   bool _isPolling = false;
   DateTime? _nextWaRequestTime;
   Timer? _waCooldownTimer;
+  String _selectedCountry = 'Nigeria'; // 默认尼日利亚
 
   @override
   WaActivationPresenter createPresenter() {
@@ -46,6 +68,22 @@ class _WaActivationPageState extends State<WaActivationPage>
     super.initState();
     _loadWaCooldown();
     _loadStoredWaData();
+    _loadSelectedCountry();
+  }
+  
+  /// 加载保存的国家选择
+  void _loadSelectedCountry() {
+    final String? savedCountry = SpUtil.getString(_selectedCountryKey);
+    if (savedCountry != null && _countries.contains(savedCountry)) {
+      setState(() {
+        _selectedCountry = savedCountry;
+      });
+    }
+  }
+  
+  /// 保存国家选择
+  void _saveSelectedCountry(String country) {
+    SpUtil.putString(_selectedCountryKey, country);
   }
 
   @override
@@ -119,7 +157,7 @@ class _WaActivationPageState extends State<WaActivationPage>
       showToast('Please wait before requesting a new number.');
       return;
     }
-    _waActivationPresenter.getWaNumber();
+    _waActivationPresenter.getWaNumber(country: _selectedCountry);
   }
 
   /// 开始轮询获取验证码
@@ -263,6 +301,50 @@ class _WaActivationPageState extends State<WaActivationPage>
                     Text(
                       'Step 1: Get WhatsApp Number',
                       style: TextStyles.textBold16,
+                    ),
+                    Gaps.vGap16,
+                    // 国家选择
+                    Text(
+                      'Country',
+                      style: TextStyles.textBold14,
+                    ),
+                    Gaps.vGap8,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      decoration: BoxDecoration(
+                        color: Colours.bg_gray,
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(color: Colours.line),
+                      ),
+                      child: DropdownButton<String>(
+                        value: _selectedCountry,
+                        isExpanded: true,
+                        underline: const SizedBox.shrink(),
+                        icon: const Icon(Icons.arrow_drop_down),
+                        style: TextStyle(color: Colors.black),
+                        items: _countries
+                            .map<DropdownMenuItem<String>>((String country) {
+                          return DropdownMenuItem<String>(
+                            value: country,
+                            child: Text(_countryCodes[country] != null
+                                ? '$country (${_countryCodes[country]})'
+                                : country),
+                          );
+                        }).toList(),
+                        onChanged: (String? newCountry) {
+                          if (newCountry != null) {
+                            setState(() {
+                              _selectedCountry = newCountry;
+                            });
+                            _saveSelectedCountry(newCountry);
+                          }
+                        },
+                      ),
+                    ),
+                    Gaps.vGap8,
+                    Text(
+                      'Selected country code: ${_countryCodes[_selectedCountry] ?? ''}',
+                      style: TextStyles.textGray12,
                     ),
                     Gaps.vGap16,
                     MyButton(

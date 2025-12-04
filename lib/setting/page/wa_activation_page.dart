@@ -63,7 +63,7 @@ class _WaActivationPageState extends State<WaActivationPage>
     setState(() {
       _waData = data;
       if (hasNumber) {
-        _nextWaRequestTime = DateTime.now().add(const Duration(minutes: 5));
+        _nextWaRequestTime = DateTime.now().add(const Duration(seconds: 1));
         SpUtil.putInt(
             _waCooldownKey, _nextWaRequestTime!.millisecondsSinceEpoch);
       }
@@ -465,6 +465,53 @@ class _WaActivationPageState extends State<WaActivationPage>
                 ),
               ),
             ),
+            Gaps.vGap16,
+            // 警告提示
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.orange[50],
+                borderRadius: BorderRadius.circular(8.0),
+                border: Border.all(color: Colors.orange[300]!),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.warning_amber_rounded,
+                          color: Colors.orange[700]),
+                      Gaps.hGap8,
+                      Text(
+                        'Important Warning',
+                        style: TextStyles.textBold14.copyWith(
+                          color: Colors.orange[900],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Gaps.vGap12,
+                  Text(
+                    'Please use this feature with caution. Frequently operating to get verification codes on a single phone device may cause WhatsApp to mark your device as a risky device. Once marked, your WhatsApp account on this phone will have a higher probability and frequency of being banned.',
+                    style: TextStyle(
+                      color: Colors.orange[900],
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
+                  ),
+                  Gaps.vGap8,
+                  Text(
+                    'If possible, please exchange phones with your friends and family periodically to use this Flutter app. On new phone devices, WhatsApp is less likely to mark them as risky devices.',
+                    style: TextStyle(
+                      color: Colors.orange[900],
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Gaps.vGap16,
           ],
         ),
       ),

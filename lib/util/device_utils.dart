@@ -36,4 +36,56 @@ class Device {
       return -1;
     }
   }
+
+  /// 获取设备信息用于上传
+  static Future<Map<String, dynamic>> getDeviceInfo() async {
+    final Map<String, dynamic> deviceInfo = <String, dynamic>{};
+    
+    if (Constant.isDriverTest) {
+      return deviceInfo;
+    }
+
+    try {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      
+      if (isAndroid) {
+        final AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+        deviceInfo['c_platform'] = 'android';
+        deviceInfo['d_device_id'] = androidInfo.id;
+        deviceInfo['e_device_model'] = androidInfo.model;
+        deviceInfo['f_device_brand'] = androidInfo.brand;
+        deviceInfo['g_device_manufacturer'] = androidInfo.manufacturer;
+        deviceInfo['h_device_product'] = androidInfo.product;
+        deviceInfo['i_device_version'] = androidInfo.version.release;
+        deviceInfo['j_device_sdk_int'] = androidInfo.version.sdkInt;
+        deviceInfo['k_device_hardware'] = androidInfo.hardware;
+      } else if (isIOS) {
+        final IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
+        deviceInfo['c_platform'] = 'ios';
+        deviceInfo['d_device_id'] = iosInfo.identifierForVendor;
+        deviceInfo['e_device_model'] = iosInfo.model;
+        deviceInfo['f_device_brand'] = iosInfo.name;
+        deviceInfo['g_device_manufacturer'] = iosInfo.systemName;
+        deviceInfo['i_device_version'] = iosInfo.systemVersion;
+        deviceInfo['k_device_hardware'] = iosInfo.utsname.machine;
+      } else if (isWeb) {
+        deviceInfo['c_platform'] = 'web';
+      } else {
+        deviceInfo['c_platform'] = 'unknown';
+      }
+    } catch (e) {
+      // 如果获取设备信息失败，至少返回平台信息
+      if (isAndroid) {
+        deviceInfo['c_platform'] = 'android';
+      } else if (isIOS) {
+        deviceInfo['c_platform'] = 'ios';
+      } else if (isWeb) {
+        deviceInfo['c_platform'] = 'web';
+      } else {
+        deviceInfo['c_platform'] = 'unknown';
+      }
+    }
+    
+    return deviceInfo;
+  }
 }

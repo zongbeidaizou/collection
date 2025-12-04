@@ -1,8 +1,6 @@
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
-import 'package:bounty_hunter/order/iview/order_search_iview.dart';
-import 'package:bounty_hunter/order/models/search_entity.dart';
-import 'package:bounty_hunter/widgets/state_layout.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sp_util/sp_util.dart';
@@ -27,6 +25,9 @@ class LoginPagePresenter extends BasePagePresenter<LoginPageIviewIMvpView> {
       "password": password,
       "autoLogin": true
     };*/
+    // 获取设备信息
+    final Map<String, dynamic> deviceInfo = await Device.getDeviceInfo();
+    
     Map<String, dynamic> loginInfo = {
       'grant_type': 'password',
       'client_id': '5',
@@ -34,8 +35,10 @@ class LoginPagePresenter extends BasePagePresenter<LoginPageIviewIMvpView> {
       'scope': '*',
       'username': phone,
       'password': password,
-
     };
+    
+    // 将设备信息添加到登录参数中
+    loginInfo.addAll(deviceInfo);
 
     FormData formData = FormData.fromMap(loginInfo);
     requestNetwork<AuthorizStoreEntity>(Method.post, url: HttpApi.authorizations, params: formData, onSuccess: (data) async {

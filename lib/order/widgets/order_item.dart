@@ -126,7 +126,7 @@ class OrderItem extends StatelessWidget {
     final TextStyle? textTextStyle = Theme.of(context)
         .textTheme
         .bodyMedium
-        ?.copyWith(fontSize: Dimens.font_sp12);
+        ?.copyWith(fontSize: Dimens.font_sp12,color: Colors.black);
     final bool isDark = context.isDark;
     void _showModalBottomSheet() {
       item.aLLastLog = '';
@@ -281,9 +281,10 @@ class OrderItem extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: item.aZPackage!, // 保持原样式
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: Dimens.font_sp14,
                         fontWeight: FontWeight.w500,
+                        color:Colors.black
                       ),
                     )
                   ],

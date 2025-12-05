@@ -730,6 +730,23 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 setState(() {
+                                  expandedIndices.clear();
+                                });
+                              },
+                              icon: const Icon(Icons.unfold_less, size: 18),
+                              label: const Text('Collapse All'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:2),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
                                   expandedIndices = {
                                     for (int i = 0;
                                         i < widget.templates.length;
@@ -747,23 +764,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                setState(() {
-                                  expandedIndices.clear();
-                                });
-                              },
-                              icon: const Icon(Icons.unfold_less, size: 18),
-                              label: const Text('Collapse All'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical:2),
-                              ),
-                            ),
-                          ),
+                          
                         ],
                       ),
                       Flexible(
@@ -875,25 +876,30 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                               if (isExpanded &&
                                   (template.message != null &&
                                       template.message!.isNotEmpty))
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.fromLTRB(
-                                      12, 0, 12, 12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Divider(color: Colors.white ,thickness: 2,),
-                                      Text(
-                                        template.message!,
-                                        style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 14,
-                                          height: 1.5,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context, template.message);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 0, 12, 12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Divider(color: Colors.white ,thickness: 2,),
+                                        Text(
+                                          template.message!,
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 14,
+                                            height: 1.5,
+                                          ),
+                                          softWrap: true,
                                         ),
-                                        softWrap: true,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                             ],

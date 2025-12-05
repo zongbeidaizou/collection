@@ -699,43 +699,101 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       if (type != 2) {
         // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
         // 默认展开第一条模板
-        int? expandedIndex = 0;
+        Set<int> expandedIndices = {0};
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
             await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
           context: context,
+          isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                  padding: EdgeInsets.only(
-                    top: 16,
-                    left: 16,
-                    right: 16,
-                    bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                return ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.9,
+                    minHeight: MediaQuery.of(context).size.height * 0.86,
                   ),
-                  child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      top: 16,
+                      left: 16,
+                      right: 16,
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: templates2.asMap().entries.map((entry) {
-                        final int index = entry.key;
-                        final template = entry.value;
-                        final bool isExpanded = expandedIndex == index;
-                        return _TemplateItem(
-                          template: template,
-                          isExpanded: isExpanded,
-                          onSelect: () => Navigator.pop(context, template),
-                          onToggleExpand: () {
-                            setState(() {
-                              // 如果点击的是已展开的项，则收起；否则展开该项并收起其他项
-                              expandedIndex =
-                                  expandedIndex == index ? null : index;
-                            });
-                          },
-                        );
-                      }).toList(),
+                      children: [
+                        // 全部展开/收缩按钮
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    expandedIndices.clear();
+                                  });
+                                },
+                                icon: const Icon(Icons.unfold_less, size: 18),
+                                label: const Text('Collapse All'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 2),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    expandedIndices = {
+                                      for (int i = 0; i < templates2.length; i++) i
+                                    };
+                                  });
+                                },
+                                icon: const Icon(Icons.unfold_more, size: 18),
+                                label: const Text('Expand All'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 2),
+                                ),
+                              ),
+                            ),
+                            
+                          ],
+                        ),
+                        Flexible(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: templates2.asMap().entries.map((entry) {
+                                final int index = entry.key;
+                                final template = entry.value;
+                                final bool isExpanded = expandedIndices.contains(index);
+                                return _TemplateItem(
+                                  template: template,
+                                  isExpanded: isExpanded,
+                                  onSelect: () => Navigator.pop(context, template),
+                                  onToggleExpand: () {
+                                    setState(() {
+                                      if (expandedIndices.contains(index)) {
+                                        expandedIndices.remove(index);
+                                      } else {
+                                        expandedIndices.add(index);
+                                      }
+                                    });
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -1191,112 +1249,94 @@ class _TemplateItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: onSelect,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    Expanded(
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: onSelect,
                       child: Text(
                         template.sName ?? 'Empty message.',
                         style: const TextStyle(
                           fontSize: 15,
                           height: 1.4,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
                         ),
                         softWrap: true,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.send,
-                        size: 18,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        final text = template.dTemplate;
-                        if (text != null && text.isNotEmpty) {
-                          Clipboard.setData(ClipboardData(text: text));
-                          showToast(
-                            'Message copied',
-                            position: ToastPosition.center,
-                            duration: const Duration(seconds: 1),
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.send,
+                      size: 18,
+                      color: Colors.blue,
                     ),
-                    Gaps.hGap12,
-                    Gaps.hGap10,
-                    IconButton(
-                      icon: const Icon(
-                        Icons.copy,
-                        size: 18,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        final text = template.dTemplate;
-                        if (text != null && text.isNotEmpty) {
-                          Clipboard.setData(ClipboardData(text: text));
-                          showToast(
-                            'Message copied',
-                            position: ToastPosition.center,
-                            duration: const Duration(seconds: 1),
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                    onPressed: onSelect,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  Gaps.hGap12,
+                  Gaps.hGap10,
+                  IconButton(
+                    icon: const Icon(
+                      Icons.copy,
+                      size: 18,
+                      color: Colors.blue,
                     ),
-                    Gaps.hGap12,
-                    Gaps.hGap10,
-                    IconButton(
-                      icon: Icon(
-                        isExpanded ? Icons.expand_less : Icons.expand_more,
-                        size: 20,
-                        color: Colors.green,
-                      ),
-                      onPressed: onToggleExpand,
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
+                    onPressed: () {
+                      final text = template.dTemplate;
+                      if (text != null && text.isNotEmpty) {
+                        Clipboard.setData(ClipboardData(text: text));
+                        showToast(
+                          'Message copied',
+                          position: ToastPosition.center,
+                          duration: const Duration(seconds: 1),
+                        );
+                      }
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  Gaps.hGap12,
+                  Gaps.hGap10,
+                  IconButton(
+                    icon: Icon(
+                      isExpanded ? Icons.expand_less : Icons.expand_more,
+                      size: 20,
+                      color: Colors.green,
                     ),
-                  ],
-                ),
+                    onPressed: onToggleExpand,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
               ),
             ),
             if (isExpanded && template.dTemplate != null)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Divider(),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Message Details:',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[700],
+              InkWell(
+                onTap: onSelect,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Divider(),
+                      Text(
+                        template.dTemplate!,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          height: 1.5,
+                          color: Colors.black,
+                        ),
+                        softWrap: true,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      template.dTemplate!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
-                      softWrap: true,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
           ],

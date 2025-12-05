@@ -1214,6 +1214,28 @@ class _TemplateItem extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(
+                        Icons.send,
+                        size: 18,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        final text = template.dTemplate;
+                        if (text != null && text.isNotEmpty) {
+                          Clipboard.setData(ClipboardData(text: text));
+                          showToast(
+                            'Message copied',
+                            position: ToastPosition.center,
+                            duration: const Duration(seconds: 1),
+                          );
+                        }
+                      },
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                    Gaps.hGap12,
+                    Gaps.hGap10,
+                    IconButton(
+                      icon: const Icon(
                         Icons.copy,
                         size: 18,
                         color: Colors.blue,

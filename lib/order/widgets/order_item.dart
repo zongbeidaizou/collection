@@ -646,7 +646,7 @@ class OrderItem extends StatelessWidget {
                                       .inHours >=
                                   24)
                               ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
-                              : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left'),
+                              : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left',style: textTextStyle,),
                           Text(
                               item.aDLastLogTime != null &&
                                       item.aDLastLogTime!.isNotEmpty
@@ -655,7 +655,7 @@ class OrderItem extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
-                                  ?.copyWith(fontSize: 8)),
+                                  ?.copyWith(fontSize: 8,color:Colors.black)),
                         ],
                       ),
                     ],
@@ -685,13 +685,13 @@ class OrderItem extends StatelessWidget {
                           children: [
                             Text(
                                 // ignore: unnecessary_parenthesis
-                                '${_calculateBonus(provider, item, period)} bonus'),
+                                '${_calculateBonus(provider, item, period)} bonus',style: textTextStyle,),
                             Text(
                                 "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 10 ? '+5' : (period?.lOverdueDays ?? 0) >= 10 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
-                                    ?.copyWith(fontSize: 8))
+                                    ?.copyWith(fontSize: 8,color: Colors.black))
                           ],
                         );
                       }),
@@ -712,7 +712,7 @@ class OrderItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   item.aLLastLog!,
-                  style: TextStyle(color: Colors.grey, fontSize: 11),
+                  style: TextStyle(color: Colors.black, fontSize: 11),
                   maxLines: 2, // 设置最大行数为2
                   overflow: TextOverflow.ellipsis,
                 ),

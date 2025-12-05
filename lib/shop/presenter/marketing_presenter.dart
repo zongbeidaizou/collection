@@ -66,8 +66,10 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
         _data = data;
         view.setPageSize((data.total! / data.perPage!).ceil());
         view.setCurrentPage(data.currentPage!);
+        final List<MarketingOtherTemplates2> templates = data.other!.templates2!;
+        templates.sort((a, b) => b.availableDays!.compareTo(a.availableDays!));
         view.setTemplates(
-            data.other!.templates2!, data.other!.url!, data.other!.app!);
+            templates, data.other!.url!, data.other!.app!);
       }
     }, onError: (_, __) async {
       if (_ == 200006) {

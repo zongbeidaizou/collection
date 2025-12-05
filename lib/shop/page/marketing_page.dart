@@ -695,52 +695,223 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
 
     // 显示模板选择对话框
     if (type != 2) {
+      // 默认展开第一条模板
+      Set<int> expandedIndices = {0};
+
       final String? selectedTemplate = await showModalBottomSheet<String>(
         context: context,
+        isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
         builder: (BuildContext context) {
-          return Container(
-            padding: EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 16,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: widget.templates.map((template) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context, template.message),
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[50],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          template.title ?? 'Custom message.',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            height: 1.4,
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
+                  minHeight: MediaQuery.of(context).size.height * 0.86,
+                ),
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: 16,
+                    left: 16,
+                    right: 16,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 全部展开/收缩按钮
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  expandedIndices = {
+                                    for (int i = 0;
+                                        i < widget.templates.length;
+                                        i++)
+                                      i
+                                  };
+                                });
+                              },
+                              icon: const Icon(Icons.unfold_more, size: 18),
+                              label: const Text('Expand All'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 2),
+                              ),
+                            ),
                           ),
-                          softWrap: true,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  expandedIndices.clear();
+                                });
+                              },
+                              icon: const Icon(Icons.unfold_less, size: 18),
+                              label: const Text('Collapse All'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical:2),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Flexible(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: widget.templates.asMap().entries.map((entry) {
+                              final int index = entry.key;
+                              final template = entry.value;
+                              final bool isExpanded = expandedIndices.contains(index);
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue[50],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context, template.message);
+                                        },
+                                        child: Text(
+                                        template.title ?? 'Custom message.',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          height: 1.4,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                          ),
+                                          softWrap: true,
+                                        ),
+                                      ),
+                                    ),
+                                     IconButton(
+                                      icon: const Icon(
+                                        Icons.send_outlined,
+                                        size: 18,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context, template.message);
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                    Gaps.hGap12,
+                                    Gaps.hGap10,
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.copy,
+                                        size: 18,
+                                        color: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        final text = template.message;
+                                        if (text != null && text.isNotEmpty) {
+                                          Clipboard.setData(
+                                              ClipboardData(text: text));
+                                          showToast(
+                                            'Message copied',
+                                            position: ToastPosition.center,
+                                            duration:
+                                                const Duration(seconds: 1),
+                                          );
+                                        }
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                    Gaps.hGap12,
+                                    Gaps.hGap10,
+                                    IconButton(
+                                      icon: Icon(
+                                        isExpanded
+                                            ? Icons.expand_less
+                                            : Icons.expand_more,
+                                        size: 20,
+                                        color: Colors.green,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (expandedIndices.contains(index)) {
+                                            expandedIndices.remove(index);
+                                          } else {
+                                            expandedIndices.add(index);
+                                          }
+                                        });
+                                      },
+                                      padding: EdgeInsets.zero,
+                                      constraints: const BoxConstraints(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (isExpanded &&
+                                  (template.message != null &&
+                                      template.message!.isNotEmpty))
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.fromLTRB(
+                                      12, 0, 12, 12),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Divider(color: Colors.white ,thickness: 2,),
+                                      Text(
+                                        template.message!,
+                                        style: const TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 14,
+                                          height: 1.5,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          );
-        },
-      );
+                    ],
+                  ),
+                ),
+              );
+          },
+        );
+      },
+    );
       if (selectedTemplate != null) {
         if (type == 1) {
           // 启动WhatsApp

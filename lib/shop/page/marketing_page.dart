@@ -360,6 +360,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
+                    color: Colors.black
                   ),
                 ),
               ),

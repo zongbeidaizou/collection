@@ -286,15 +286,18 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
     for (final MarketingData item in _filteredList) {
       String dateKey = 'Unknown';
+      DateTime? startDateTime;
       DateTime? dateTime;
 
       // 获取 qEndAt，优先使用 logs 中的，否则使用 item 中的
       String? qEndAt;
+      String createdAt = '';
       if (item.aAAAASLTelemarketingDetailLogs != null &&
           item.aAAAASLTelemarketingDetailLogs!.isNotEmpty &&
           item.aAAAASLTelemarketingDetailLogs![0].qEndAt != null &&
           item.aAAAASLTelemarketingDetailLogs![0].qEndAt!.isNotEmpty) {
         qEndAt = item.aAAAASLTelemarketingDetailLogs![0].qEndAt;
+        createdAt = item.aAAAASLTelemarketingDetailLogs![0].createdAt ?? '';
       } else if (item.qEndAt != null && item.qEndAt!.isNotEmpty) {
         qEndAt = item.qEndAt;
       }
@@ -302,7 +305,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
       if (qEndAt != null && qEndAt.isNotEmpty) {
         try {
           final DateTime endDate = DateTime.parse(qEndAt);
-          dateKey = DateFormat('MMM d', 'en_US').format(endDate);
+          final DateTime createdDate = DateTime.parse(createdAt);
+          dateKey = '${DateFormat('MMM d', 'en_US').format(createdDate)} - ${DateFormat('MMM d', 'en_US').format(endDate)}';
           dateTime = endDate;
         } catch (e) {
           dateKey = 'Unknown';
@@ -356,7 +360,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 color: Colors.blue[100],
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Text(
-                  'End Date: $date (${itemList.length} items · Reg: $registerCount · Apply: $applyCount)',
+                  'Valid time: $date (${itemList.length} items · Reg: $registerCount · Apply: $applyCount)',
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

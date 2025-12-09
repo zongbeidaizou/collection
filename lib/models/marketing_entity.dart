@@ -92,6 +92,8 @@ class MarketingDataAAAAASLTelemarketingDetailLogs {
 	int? wPhoneStatus = 0;
 	@JSONField(name: 'x_apply_at')
 	String? xApplyAt = '';
+	@JSONField(name: 'created_at')
+	String? createdAt = '';
 
 	MarketingDataAAAAASLTelemarketingDetailLogs();
 

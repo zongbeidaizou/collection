@@ -74,6 +74,9 @@ class RepaymentBillDialog extends StatelessWidget {
                                 repayInfo?.receiveBank ?? 'N/A'),
                             _buildNigerianStyleRow('Account Number',
                                 repayInfo?.accountNo ?? 'N/A'),
+                            _buildNigerianStyleRow('Loan Amount',
+                                Utils.formatPrice2(repayInfo?.borrowAmount ?? 0),
+                                isAmount: true),
                             _buildNigerianStyleRow('Disbursement Amt.',
                                 Utils.formatPrice2(repayInfo?.loanAmount ?? 0),
                                 isAmount: true),
@@ -698,6 +701,8 @@ class RepaymentBillDialog extends StatelessWidget {
                         Icons.account_balance, repayInfo?.receiveBank ?? 'N/A'),
                     _buildKakaQuickInfo('Disbursement Account Number',
                         Icons.add_card_outlined, repayInfo?.accountNo ?? 'N/A'),
+                    _buildKakaQuickInfo('Loan Amount', Icons.attach_money_outlined,
+                        Utils.formatPrice2(repayInfo?.borrowAmount ?? 0)),
                     _buildKakaQuickInfo(
                         'Disbursement Amount',
                         Icons.attach_money_outlined,
@@ -867,6 +872,9 @@ class RepaymentBillDialog extends StatelessWidget {
                           'Disbursement Bank', repayInfo?.receiveBank ?? 'N/A'),
                       _buildMoimoiFormalRow(
                           'Account Number', repayInfo?.accountNo ?? 'N/A'),
+                          _buildMoimoiFormalRow('Loan Amount',
+                          Utils.formatPrice2(repayInfo?.borrowAmount ?? 0),
+                          isAmount: true),
                       _buildMoimoiFormalRow('Disbursement Amount',
                           Utils.formatPrice2(repayInfo?.loanAmount ?? 0),
                           isAmount: true),

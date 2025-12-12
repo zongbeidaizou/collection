@@ -359,12 +359,22 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 width: double.infinity,
                 color: Colors.blue[100],
                 padding: const EdgeInsets.only(left: 10.0),
-                child: Text(
-                  'Valid time: $date (${itemList.length} items · Reg: $registerCount · Apply: $applyCount)',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black
+                child: RichText(
+                  text: TextSpan(
+                    style:  TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600]
+                    ),
+                    children: [
+                      const TextSpan(text: 'Valid time:  '),
+                      TextSpan(text: date, style:  const TextStyle(color: Colors.black)),
+                      TextSpan(text: ' · ${itemList.length}'),
+                      const TextSpan(text: ' items'),
+                        const TextSpan(text: ' · Reg: '),
+                        TextSpan(text: registerCount.toString(), style:  const TextStyle(color: Colors.red,fontWeight: FontWeight.bold)),
+                      const TextSpan(text: ' · Apply: '),
+                      TextSpan(text: applyCount.toString(), style:  const TextStyle(color: Colors.green,fontWeight: FontWeight.bold)),
+                    ],
                   ),
                 ),
               ),
@@ -1094,6 +1104,26 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                 color: Colors.black87,
                               ),
                             ),
+                            Gaps.vGap4,
+                            Row(
+                              children: [
+                                Text(
+                                  (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color:Colors.red,
+                                  ),
+                                ),
+                                Gaps.hGap4,
+                                Text(
+                                  (widget.item.aBFirstApplyBonus! + widget.item.aDSecondApplyBonus! + widget.item.aFThirdApplyBonus! + widget.item.aHFourthApplyBonus! + widget.item.aJFifthApplyBonus!).toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color:Colors.green,
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),

@@ -112,6 +112,60 @@ MarketingData $MarketingDataFromJson(Map<String, dynamic> json) {
   if (uStatus != null) {
     marketingData.uStatus = uStatus;
   }
+  final int? aAFirstRegisterBonus = jsonConvert.convert<int>(
+      json['a_a_first_register_bonus']);
+  if (aAFirstRegisterBonus != null) {
+    marketingData.aAFirstRegisterBonus = aAFirstRegisterBonus;
+  }
+  final int? aBFirstApplyBonus = jsonConvert.convert<int>(
+      json['a_b_first_apply_bonus']);
+  if (aBFirstApplyBonus != null) {
+    marketingData.aBFirstApplyBonus = aBFirstApplyBonus;
+  }
+  final int? aCSecondRegisterBonus = jsonConvert.convert<int>(
+      json['a_c_second_register_bonus']);
+  if (aCSecondRegisterBonus != null) {
+    marketingData.aCSecondRegisterBonus = aCSecondRegisterBonus;
+  }
+  final int? aDSecondApplyBonus = jsonConvert.convert<int>(
+      json['a_d_second_apply_bonus']);
+  if (aDSecondApplyBonus != null) {
+    marketingData.aDSecondApplyBonus = aDSecondApplyBonus;
+  }
+  final int? aEThirdRegisterBonus = jsonConvert.convert<int>(
+      json['a_e_third_register_bonus']);
+  if (aEThirdRegisterBonus != null) {
+    marketingData.aEThirdRegisterBonus = aEThirdRegisterBonus;
+  }
+  final int? aFThirdApplyBonus = jsonConvert.convert<int>(
+      json['a_f_third_apply_bonus']);
+  if (aFThirdApplyBonus != null) {
+    marketingData.aFThirdApplyBonus = aFThirdApplyBonus;
+  }
+  final int? aGFourthRegisterBonus = jsonConvert.convert<int>(
+      json['a_g_fourth_register_bonus']);
+  if (aGFourthRegisterBonus != null) {
+    marketingData.aGFourthRegisterBonus = aGFourthRegisterBonus;
+  }
+  final int? aHFourthApplyBonus = jsonConvert.convert<int>(
+      json['a_h_fourth_apply_bonus']);
+  if (aHFourthApplyBonus != null) {
+    marketingData.aHFourthApplyBonus = aHFourthApplyBonus;
+  }
+  final int? aIFifthRegisterBonus = jsonConvert.convert<int>(
+      json['a_i_fifth_register_bonus']);
+  if (aIFifthRegisterBonus != null) {
+    marketingData.aIFifthRegisterBonus = aIFifthRegisterBonus;
+  }
+  final int? aJFifthApplyBonus = jsonConvert.convert<int>(
+      json['a_j_fifth_apply_bonus']);
+  if (aJFifthApplyBonus != null) {
+    marketingData.aJFifthApplyBonus = aJFifthApplyBonus;
+  }
+  final int? aLFlowedCount = jsonConvert.convert<int>(json['a_l_flowed_count']);
+  if (aLFlowedCount != null) {
+    marketingData.aLFlowedCount = aLFlowedCount;
+  }
   final List<
       MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = (json['a_a_a_a_a_s_l_telemarketing_detail_logs'] as List<
       dynamic>?)?.map(
@@ -133,6 +187,17 @@ Map<String, dynamic> $MarketingDataToJson(MarketingData entity) {
   data['e_status'] = entity.eStatus;
   data['q_end_at'] = entity.qEndAt;
   data['u_status'] = entity.uStatus;
+  data['a_a_first_register_bonus'] = entity.aAFirstRegisterBonus;
+  data['a_b_first_apply_bonus'] = entity.aBFirstApplyBonus;
+  data['a_c_second_register_bonus'] = entity.aCSecondRegisterBonus;
+  data['a_d_second_apply_bonus'] = entity.aDSecondApplyBonus;
+  data['a_e_third_register_bonus'] = entity.aEThirdRegisterBonus;
+  data['a_f_third_apply_bonus'] = entity.aFThirdApplyBonus;
+  data['a_g_fourth_register_bonus'] = entity.aGFourthRegisterBonus;
+  data['a_h_fourth_apply_bonus'] = entity.aHFourthApplyBonus;
+  data['a_i_fifth_register_bonus'] = entity.aIFifthRegisterBonus;
+  data['a_j_fifth_apply_bonus'] = entity.aJFifthApplyBonus;
+  data['a_l_flowed_count'] = entity.aLFlowedCount;
   data['a_a_a_a_a_s_l_telemarketing_detail_logs'] =
       entity.aAAAASLTelemarketingDetailLogs?.map((v) => v.toJson()).toList();
   return data;
@@ -146,6 +211,17 @@ extension MarketingDataExtension on MarketingData {
     int? eStatus,
     String? qEndAt,
     int? uStatus,
+    int? aAFirstRegisterBonus,
+    int? aBFirstApplyBonus,
+    int? aCSecondRegisterBonus,
+    int? aDSecondApplyBonus,
+    int? aEThirdRegisterBonus,
+    int? aFThirdApplyBonus,
+    int? aGFourthRegisterBonus,
+    int? aHFourthApplyBonus,
+    int? aIFifthRegisterBonus,
+    int? aJFifthApplyBonus,
+    int? aLFlowedCount,
     List<
         MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs,
   }) {
@@ -156,6 +232,19 @@ extension MarketingDataExtension on MarketingData {
       ..eStatus = eStatus ?? this.eStatus
       ..qEndAt = qEndAt ?? this.qEndAt
       ..uStatus = uStatus ?? this.uStatus
+      ..aAFirstRegisterBonus = aAFirstRegisterBonus ?? this.aAFirstRegisterBonus
+      ..aBFirstApplyBonus = aBFirstApplyBonus ?? this.aBFirstApplyBonus
+      ..aCSecondRegisterBonus = aCSecondRegisterBonus ??
+          this.aCSecondRegisterBonus
+      ..aDSecondApplyBonus = aDSecondApplyBonus ?? this.aDSecondApplyBonus
+      ..aEThirdRegisterBonus = aEThirdRegisterBonus ?? this.aEThirdRegisterBonus
+      ..aFThirdApplyBonus = aFThirdApplyBonus ?? this.aFThirdApplyBonus
+      ..aGFourthRegisterBonus = aGFourthRegisterBonus ??
+          this.aGFourthRegisterBonus
+      ..aHFourthApplyBonus = aHFourthApplyBonus ?? this.aHFourthApplyBonus
+      ..aIFifthRegisterBonus = aIFifthRegisterBonus ?? this.aIFifthRegisterBonus
+      ..aJFifthApplyBonus = aJFifthApplyBonus ?? this.aJFifthApplyBonus
+      ..aLFlowedCount = aLFlowedCount ?? this.aLFlowedCount
       ..aAAAASLTelemarketingDetailLogs = aAAAASLTelemarketingDetailLogs ??
           this.aAAAASLTelemarketingDetailLogs;
   }

@@ -1107,19 +1107,33 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                             Gaps.vGap4,
                             Row(
                               children: [
-                                Text(
-                                  (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color:Colors.red,
+                                Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString(),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color:Colors.red,
+                                    ),
                                   ),
                                 ),
                                 Gaps.hGap4,
-                                Text(
-                                  (widget.item.aBFirstApplyBonus! + widget.item.aDSecondApplyBonus! + widget.item.aFThirdApplyBonus! + widget.item.aHFourthApplyBonus! + widget.item.aJFifthApplyBonus!).toString(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color:Colors.green,
+                                Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    (widget.item.aBFirstApplyBonus! + widget.item.aDSecondApplyBonus! + widget.item.aFThirdApplyBonus! + widget.item.aHFourthApplyBonus! + widget.item.aJFifthApplyBonus!).toString(),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color:Colors.green,
+                                    ),
                                   ),
                                 ),
                               ],

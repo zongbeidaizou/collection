@@ -7,6 +7,7 @@ import 'package:bounty_hunter/util/cache.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -14,9 +15,12 @@ import 'package:oktoast/oktoast.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../models/collection_log_entity.dart';
 import '../../util/toast_utils.dart';
+
+const MethodChannel _contactChannel = MethodChannel('contact_channel');
 
 class ContactDialog extends StatefulWidget {
   const ContactDialog({
@@ -166,6 +170,37 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   Timer? _cleanupTimer; // 清理定时器
   String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
   int method = 0;
+
+  Future<void> _addContactToPhone() async {
+    final phone = widget.contact.gPhone ?? '';
+    if (phone.isEmpty) {
+      showToast('Phone number is empty');
+      return;
+    }
+    if (!Platform.isAndroid) {
+      showToast('Adding to contacts is supported on Android only');
+      return;
+    }
+    final PermissionStatus status = await Permission.contacts.request();
+    if (!status.isGranted) {
+      showToast('Please grant contacts permission first');
+      return;
+    }
+
+    try {
+      //日期格式类似于 Dec 16
+      final date = DateFormat('MMM dd').format(DateTime.now());
+      await _contactChannel.invokeMethod('addContact', {
+        'name': 'z-$date-${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
+        'phone': phone,
+        'label': 'Collection',
+        'company': 'Collection',
+      });
+      showToast('Added to contacts');
+    } catch (e) {
+      showToast('Failed to add to contacts');
+    }
+  }
 
   @override
   void initState() {
@@ -893,7 +928,9 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
+                  child: InkWell(
+                        onTap: () => _addContactToPhone(),
+                        child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -905,30 +942,31 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                           overflow: TextOverflow.ellipsis),
                       Gaps.vGap4,
                       Row(
-                        children: [
-                          Icon(
-                            widget.contactIndex == 0 && !widget.isAllContacts
-                                ? Icons.radio_button_on
-                                : Icons.group_outlined,
-                            size: 16,
-                            color: widget.contactIndex == 0 &&
-                                    !widget.isAllContacts
-                                ? Colors.redAccent
-                                : Colors.grey,
-                          ),
-                          Gaps.hGap4,
-                          Text(
-                            maskPhoneNumber(widget.contact.gPhone ?? ''),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.blueAccent,
+                          children: [
+                            Icon(
+                              widget.contactIndex == 0 && !widget.isAllContacts
+                                  ? Icons.radio_button_on
+                                  : Icons.group_outlined,
+                              size: 16,
+                              color: widget.contactIndex == 0 &&
+                                      !widget.isAllContacts
+                                  ? Colors.redAccent
+                                  : Colors.grey,
                             ),
-                          ),
-                        ],
-                      ),
+                            Gaps.hGap4,
+                            Text(
+                              maskPhoneNumber(widget.contact.gPhone ?? ''),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      
                     ],
-                  ),
+                  ),),
                 ),
                 InkWell(
                   onTap: () => launchAction(3),

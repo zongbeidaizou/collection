@@ -13,6 +13,7 @@ import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -148,7 +149,7 @@ class _OrderPageState extends State<OrderPage>
       final name = item.vName ?? '';
       try {
         await contactChannel.invokeMethod('addContact', {
-          'name': name,
+          'name': 'z-$name',
           'phone': phone,
           'label': label,
           'company': company,

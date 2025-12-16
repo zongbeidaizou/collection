@@ -287,6 +287,8 @@ class OrderItem extends StatelessWidget {
           'name': item.vName ?? '',
           'phone': phone,
           'label': 'Collection',
+          // 公司名称，可以根据实际业务字段调整，目前使用 app 名称字段
+          'company': 'Collection',
         });
         showToast('Added to contacts');
       } catch (e) {
@@ -321,12 +323,12 @@ class OrderItem extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.discount,
-                    color: Colors.red,
+                    color: Colors.green,
                     size: 12,
                   ),
                   Text(
                     "-${int.parse(repayInfo!.var7!)}%",
-                    style: TextStyle(color: Colors.red, fontSize: 12),
+                    style: TextStyle(color: Colors.green, fontSize: 12),
                   ),
                   Gaps.hGap12,
                 ],

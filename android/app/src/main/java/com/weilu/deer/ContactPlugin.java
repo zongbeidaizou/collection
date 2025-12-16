@@ -35,7 +35,8 @@ public class ContactPlugin implements FlutterPlugin, MethodChannel.MethodCallHan
       String name = call.argument("name");
       String phone = call.argument("phone");
       String label = call.argument("label");
-      boolean added = ContactHelper.addContact(applicationContext, name, phone, label);
+      String company = call.argument("company");
+      boolean added = ContactHelper.addContact(applicationContext, name, phone, label, company);
       if (added) {
         result.success(true);
       } else {

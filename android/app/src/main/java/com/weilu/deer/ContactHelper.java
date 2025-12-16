@@ -17,7 +17,7 @@ public final class ContactHelper {
 
   private ContactHelper() {}
 
-  public static boolean addContact(Context context, String name, String phone, String label) {
+  public static boolean addContact(Context context, String name, String phone, String label, String company) {
     if (context == null || TextUtils.isEmpty(phone)) {
       return false;
     }
@@ -38,6 +38,7 @@ public final class ContactHelper {
 
       long rawContactId = ContentUris.parseId(rawContactUri);
 
+      // 电话号码
       values.clear();
       values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
       values.put(
@@ -51,6 +52,7 @@ public final class ContactHelper {
           TextUtils.isEmpty(label) ? "BountyHunter" : label);
       resolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
+      // 姓名
       if (!TextUtils.isEmpty(name)) {
         values.clear();
         values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
@@ -58,6 +60,19 @@ public final class ContactHelper {
             ContactsContract.Data.MIMETYPE,
             ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
         values.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name);
+        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
+      }
+
+      // 公司名称
+      if (!TextUtils.isEmpty(company)) {
+        values.clear();
+        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+        values.put(
+            ContactsContract.Data.MIMETYPE,
+            ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE);
+        values.put(ContactsContract.CommonDataKinds.Organization.COMPANY, company);
+        values.put(ContactsContract.CommonDataKinds.Organization.TYPE,
+            ContactsContract.CommonDataKinds.Organization.TYPE_WORK);
         resolver.insert(ContactsContract.Data.CONTENT_URI, values);
       }
       return true;

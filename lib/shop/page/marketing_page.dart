@@ -1363,7 +1363,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${DateTime.parse(widget.item.aAAAASLTelemarketingDetailLogs![0].qEndAt ?? '2000-07-10T18:58:39.000000Z').difference(DateTime.now()).inHours} H left',
+                            '',
                             style: TextStyle(
                               fontSize: 8,
                               color: Colors.grey[600],

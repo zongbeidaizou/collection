@@ -104,7 +104,7 @@ class OrderItem extends StatelessWidget {
 
   // 根据报名状态返回对应的背景颜色
   Color _getBackgroundColorByStatus(CollectionOrderData item, bool isDark) {
-    final appName = item?.aZPackage?.toLowerCase() ?? '';
+    final appName = item.aZPackage?.toLowerCase() ?? '';
     if (appName.contains('kaka')) {
       return Colors.blue.shade50;
     } else if (appName.contains('leading')) {
@@ -276,6 +276,51 @@ class OrderItem extends StatelessWidget {
         return;
       }
 
+      // 弹出输入框，允许用户自定义 label 和 company
+      final labelController = TextEditingController(text: 'Collection');
+      final companyController = TextEditingController(text: 'Collection');
+
+      final bool? confirmed = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: const Text('Add to contacts'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: labelController,
+                  decoration: const InputDecoration(labelText: 'Label'),
+                ),
+                TextField(
+                  controller: companyController,
+                  decoration: const InputDecoration(labelText: 'Company'),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (confirmed != true) {
+        return;
+      }
+
+      final String label =
+          labelController.text.trim().isEmpty ? 'Collection' : labelController.text.trim();
+      final String company =
+          companyController.text.trim().isEmpty ? 'Collection' : companyController.text.trim();
+
       final PermissionStatus status = await Permission.contacts.request();
       if (!status.isGranted) {
         showToast('Please grant contacts permission first');
@@ -286,9 +331,8 @@ class OrderItem extends StatelessWidget {
         await _contactChannel.invokeMethod('addContact', {
           'name': item.vName ?? '',
           'phone': phone,
-          'label': 'Collection',
-          // 公司名称，可以根据实际业务字段调整，目前使用 app 名称字段
-          'company': 'Collection',
+          'label': label,
+          'company': company,
         });
         showToast('Added to contacts');
       } catch (e) {

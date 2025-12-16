@@ -85,8 +85,55 @@ class _OrderPageState extends State<OrderPage>
       return;
     }
 
+    // 弹出输入框，允许用户自定义 label 和 company（应用到本次批量添加的所有联系人）
+    final labelController = TextEditingController(text: 'Collection');
+    final companyController = TextEditingController(text: 'Collection');
+
+    final bool? confirmed = await showDialog<bool>(
+      context: ctx,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Add all cases contacts to phone'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: labelController,
+                decoration: const InputDecoration(labelText: 'Label'),
+              ),
+              TextField(
+                controller: companyController,
+                decoration: const InputDecoration(labelText: 'Company'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) {
+      return;
+    }
+
+    final String label =
+        labelController.text.trim().isEmpty ? 'Collection' : labelController.text.trim();
+    final String company =
+        companyController.text.trim().isEmpty ? 'Collection' : companyController.text.trim();
+
     final orderListProvider = ctx.read<OrderListProvider>();
-    final contacts = orderListProvider.list;
+    final contacts = orderListProvider.list
+        .where((item) => (item.uPhone ?? '').isNotEmpty)
+        .toList();
 
     if (contacts.isEmpty) {
       showToast('No contacts to add');
@@ -103,8 +150,8 @@ class _OrderPageState extends State<OrderPage>
         await contactChannel.invokeMethod('addContact', {
           'name': name,
           'phone': phone,
-          'label': 'Collection',
-          'company': 'Collection',
+          'label': label,
+          'company': company,
         });
         successCount++;
       } catch (_) {

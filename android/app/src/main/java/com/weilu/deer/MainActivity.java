@@ -41,7 +41,8 @@ public class MainActivity extends FlutterActivity {
               }
               String name = call.argument("name");
               String phone = call.argument("phone");
-              boolean ok = ContactHelper.addContact(this, name, phone);
+              String label = call.argument("label");
+              boolean ok = ContactHelper.addContact(this, name, phone, label);
               if (ok) {
                 result.success(true);
               } else {

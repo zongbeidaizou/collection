@@ -268,17 +268,17 @@ class OrderItem extends StatelessWidget {
     Future<void> _addContactToPhone() async {
       final phone = item.uPhone ?? '';
       if (phone.isEmpty) {
-        showToast('手机号为空');
+        showToast('Phone number is empty');
         return;
       }
       if (!Platform.isAndroid) {
-        showToast('仅支持安卓添加通讯录');
+        showToast('Adding to contacts is supported on Android only');
         return;
       }
 
       final PermissionStatus status = await Permission.contacts.request();
       if (!status.isGranted) {
-        showToast('请先授予通讯录权限');
+        showToast('Please grant contacts permission first');
         return;
       }
 
@@ -286,10 +286,11 @@ class OrderItem extends StatelessWidget {
         await _contactChannel.invokeMethod('addContact', {
           'name': item.vName ?? '',
           'phone': phone,
+          'label': 'Collection',
         });
-        showToast('已添加到通讯录');
+        showToast('Added to contacts');
       } catch (e) {
-        showToast('添加通讯录失败');
+        showToast('Failed to add to contacts');
       }
     }
 

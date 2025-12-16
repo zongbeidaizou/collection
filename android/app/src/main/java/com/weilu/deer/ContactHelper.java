@@ -17,7 +17,7 @@ public final class ContactHelper {
 
   private ContactHelper() {}
 
-  public static boolean addContact(Context context, String name, String phone) {
+  public static boolean addContact(Context context, String name, String phone, String label) {
     if (context == null || TextUtils.isEmpty(phone)) {
       return false;
     }
@@ -46,7 +46,9 @@ public final class ContactHelper {
       values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone);
       values.put(
           ContactsContract.CommonDataKinds.Phone.TYPE,
-          ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+          ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM);
+      values.put(ContactsContract.CommonDataKinds.Phone.LABEL,
+          TextUtils.isEmpty(label) ? "BountyHunter" : label);
       resolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
       if (!TextUtils.isEmpty(name)) {

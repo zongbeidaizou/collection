@@ -1,38 +1,34 @@
-import 'dart:ffi';
-
-import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'dart:io' show Platform;
 import 'package:bounty_hunter/order/page/sms_history_page.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
 import 'package:bounty_hunter/shop/widgets/send_type_dialog.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bounty_hunter/order/widgets/pay_type_dialog.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
-import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../providers/user_provider.dart';
-import '../../shop/widgets/price_input_dialog.dart';
 import '../order_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clipboard/clipboard.dart';
 
 import 'dart:ui';
 
-import 'add_note.dart';
 import 'contact_dialog.dart';
+
+const MethodChannel _contactChannel = MethodChannel('contact_channel');
 
 class OrderItem extends StatelessWidget {
   const OrderItem({
@@ -269,6 +265,34 @@ class OrderItem extends StatelessWidget {
       return end.difference(start).inDays;
     }
 
+    Future<void> _addContactToPhone() async {
+      final phone = item.uPhone ?? '';
+      if (phone.isEmpty) {
+        showToast('手机号为空');
+        return;
+      }
+      if (!Platform.isAndroid) {
+        showToast('仅支持安卓添加通讯录');
+        return;
+      }
+
+      final PermissionStatus status = await Permission.contacts.request();
+      if (!status.isGranted) {
+        showToast('请先授予通讯录权限');
+        return;
+      }
+
+      try {
+        await _contactChannel.invokeMethod('addContact', {
+          'name': item.vName ?? '',
+          'phone': phone,
+        });
+        showToast('已添加到通讯录');
+      } catch (e) {
+        showToast('添加通讯录失败');
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -436,30 +460,33 @@ class OrderItem extends StatelessWidget {
             ),
             Expanded(
               flex: 5,
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 1.4),
-                    height: 8.0,
-                    width: 8.0,
-                    decoration: BoxDecoration(
-                      color: Colours.app_main.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(4.0),
+              child: InkWell(
+                onTap: _addContactToPhone,
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 1.4),
+                      height: 8.0,
+                      width: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colours.app_main.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
                     ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: textTextStyle,
-                      children: <TextSpan>[
-                        // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                        TextSpan(
-                            text: inList
-                                ? maskPhoneNumber(item.uPhone!)
-                                : item.uPhone!),
-                      ],
+                    RichText(
+                      text: TextSpan(
+                        style: textTextStyle,
+                        children: <TextSpan>[
+                          // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                          TextSpan(
+                              text: inList
+                                  ? maskPhoneNumber(item.uPhone!)
+                                  : item.uPhone!),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

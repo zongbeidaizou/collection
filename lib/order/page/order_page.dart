@@ -170,12 +170,14 @@ class _OrderPageState extends State<OrderPage>
                 NavigatorUtils.push(context, OrderRouter.orderSearchPage);
               },
               tooltip: 'Search',
-              icon: LoadAssetImage(
-                'order/icon_search',
-                width: 22.0,
-                height: 22.0,
-                color: ThemeUtils.getIconColor(context),
-              ),
+              icon: Icon(Icons.search, size: 30.0, color: ThemeUtils.getIconColor(context)),
+            ),
+            IconButton(
+              onPressed: () {
+                NavigatorUtils.push(context, OrderRouter.orderSearchPage);
+              },
+              tooltip: 'Add Contact',
+              icon: Icon(Icons.group_add, size: 30.0, color: ThemeUtils.getIconColor(context)),
             )
           ],
           backgroundColor: Colors.transparent,

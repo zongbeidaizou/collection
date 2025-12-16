@@ -527,6 +527,12 @@ CollectionLogOtherPeriod $CollectionLogOtherPeriodFromJson(
   if (aZLeftAmount != null) {
     collectionLogOtherPeriod.aZLeftAmount = aZLeftAmount;
   }
+  final int? zDeductionTotalOverdueAmount = jsonConvert.convert<int>(
+      json['z_deduction_total_overdue_amount']);
+  if (zDeductionTotalOverdueAmount != null) {
+    collectionLogOtherPeriod.zDeductionTotalOverdueAmount =
+        zDeductionTotalOverdueAmount;
+  }
   return collectionLogOtherPeriod;
 }
 
@@ -554,6 +560,8 @@ Map<String, dynamic> $CollectionLogOtherPeriodToJson(
   data['a_p_expect_repay_time'] = entity.aPExpectRepayTime;
   data['a_u_current_deduction_fee'] = entity.aUCurrentDeductionFee;
   data['a_z_left_amount'] = entity.aZLeftAmount;
+  data['z_deduction_total_overdue_amount'] =
+      entity.zDeductionTotalOverdueAmount;
   return data;
 }
 
@@ -580,6 +588,7 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
     String? aPExpectRepayTime,
     int? aUCurrentDeductionFee,
     int? aZLeftAmount,
+    int? zDeductionTotalOverdueAmount,
   }) {
     return CollectionLogOtherPeriod()
       ..id = id ?? this.id
@@ -605,7 +614,9 @@ extension CollectionLogOtherPeriodExtension on CollectionLogOtherPeriod {
       ..aPExpectRepayTime = aPExpectRepayTime ?? this.aPExpectRepayTime
       ..aUCurrentDeductionFee = aUCurrentDeductionFee ??
           this.aUCurrentDeductionFee
-      ..aZLeftAmount = aZLeftAmount ?? this.aZLeftAmount;
+      ..aZLeftAmount = aZLeftAmount ?? this.aZLeftAmount
+      ..zDeductionTotalOverdueAmount = zDeductionTotalOverdueAmount ??
+          this.zDeductionTotalOverdueAmount;
   }
 }
 

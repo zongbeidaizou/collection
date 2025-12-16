@@ -189,6 +189,8 @@ class CollectionLogOtherPeriod {
   int? aUCurrentDeductionFee = 0;
   @JSONField(name: 'a_z_left_amount')
   int? aZLeftAmount = 0;
+  @JSONField(name: 'z_deduction_total_overdue_amount')
+  int? zDeductionTotalOverdueAmount = 0;
 
   CollectionLogOtherPeriod();
 

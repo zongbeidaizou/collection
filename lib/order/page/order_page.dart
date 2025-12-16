@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:io' show Platform;
 
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,9 @@ import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
+import 'package:flutter/services.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/order_list_provider.dart';
@@ -68,6 +71,48 @@ class _OrderPageState extends State<OrderPage>
     precacheImage(ImageUtils.getAssetImage('order/dwc_s'), context);
     precacheImage(ImageUtils.getAssetImage('order/ywc_s'), context);
     precacheImage(ImageUtils.getAssetImage('order/yqx_s'), context);
+  }
+
+  Future<void> _addAllContacts(BuildContext ctx) async {
+    if (!Platform.isAndroid) {
+      showToast('Adding to contacts is supported on Android only');
+      return;
+    }
+
+    final PermissionStatus status = await Permission.contacts.request();
+    if (!status.isGranted) {
+      showToast('Please grant contacts permission first');
+      return;
+    }
+
+    final orderListProvider = ctx.read<OrderListProvider>();
+    final contacts = orderListProvider.list;
+
+    if (contacts.isEmpty) {
+      showToast('No contacts to add');
+      return;
+    }
+
+    const MethodChannel contactChannel = MethodChannel('contact_channel');
+    int successCount = 0;
+
+    for (final item in contacts) {
+      final phone = item.uPhone ?? '';
+      final name = item.vName ?? '';
+      try {
+        await contactChannel.invokeMethod('addContact', {
+          'name': name,
+          'phone': phone,
+          'label': 'Collection',
+          'company': 'Collection',
+        });
+        successCount++;
+      } catch (_) {
+        // Ignore individual failures, continue with others
+      }
+    }
+
+    showToast('Added $successCount contacts');
   }
 
   @override
@@ -151,14 +196,6 @@ class _OrderPageState extends State<OrderPage>
   }
 
   List<Widget> _sliverBuilder(BuildContext context, int sloganIndex) {
-    final List<String> messages = [
-      'Every call is a chance to collect—did you move closer to your goal today?',
-      'No account left behind, no payment lost!',
-      "Hang-ups don't hurt—what hurts is giving up!",
-      'The golden 48 hours—miss them, lose the payment!',
-      'More calls today, bigger paychecks tomorrow!',
-      'Average collectors earn flat rates. Elite collectors earn exponential rewards!'
-    ];
     return <Widget>[
       SliverOverlapAbsorber(
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -174,7 +211,7 @@ class _OrderPageState extends State<OrderPage>
             ),
             IconButton(
               onPressed: () {
-                NavigatorUtils.push(context, OrderRouter.orderSearchPage);
+                _addAllContacts(context);
               },
               tooltip: 'Add Contact',
               icon: Icon(Icons.group_add, size: 30.0, color: ThemeUtils.getIconColor(context)),
@@ -310,7 +347,6 @@ class _TabView extends StatefulWidget {
 class _TabViewState extends State<_TabView> {
   @override
   Widget build(BuildContext context) {
-    final List<List<String>> imgList = context.isDark ? darkImg : img;
     return Stack(
       children: <Widget>[
         Container(

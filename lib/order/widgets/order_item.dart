@@ -379,6 +379,57 @@ class OrderItem extends StatelessWidget {
               )
             else
               Gaps.empty,
+            if (!inList && repayInfo != null && int.parse(repayInfo!.var5!) > 0)  
+            Row(
+              children: [
+                Icon(
+                  Icons.web_stories_outlined,
+                  color: Colors.blue,
+                  size: 14,
+                ),
+                Text(
+                  "${int.parse(repayInfo!.var5!)}",
+                  style: TextStyle(color: Colors.blue, fontSize: 14),
+                ),
+                Gaps.hGap12,
+              ],
+            )
+            else
+              Gaps.empty,
+            if (!inList && repayInfo != null && int.parse(repayInfo!.var6!) > 0)  
+            Row(
+                children: [
+                  Icon(
+                    Icons.confirmation_number_rounded,
+                    color: Colors.green,
+                    size: 14,
+                  ),
+                  Text(
+                    "${int.parse(repayInfo!.var6!)}",
+                    style: TextStyle(color: Colors.green, fontSize: 14),
+                  ),
+                  Gaps.hGap12,
+                ],
+              )
+            else
+              Gaps.empty,
+            if (!inList && repayInfo != null && int.parse(repayInfo!.var4!) > 0)  
+            Row(
+              children: [
+                Icon(
+                  Icons.commit_outlined,
+                  color: Colors.blue,
+                  size: 14,
+                ),
+                Text(
+                  "${int.parse(repayInfo!.var4!)}",
+                  style: TextStyle(color: Colors.blue, fontSize: 14),
+                ),
+                Gaps.hGap12,
+              ],
+            )    
+            else
+              Gaps.empty,
             if (!inList && repayInfo != null && int.parse(repayInfo!.var9!) > 0)
               Row(
                 children: [
@@ -825,10 +876,28 @@ class OrderItem extends StatelessWidget {
                       '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
                 },
               ),
+              OrderItemButton(
+                key: Key('extend'),
+                text: "Ext",
+                icon: Icon(Icons.extension_outlined,
+                    size: 15, color: Colors.white),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: (period?.lOverdueDays ?? 0) <= 0
+                    ? Colors.grey
+                    : Colours.dark_app_main,
+                onTap: () {
+                  if ((period?.lOverdueDays ?? 0) <= 0) {
+                    showToast('Case is not overdue, cannot be waived.');
+                    return;
+                  }
+                  NavigatorUtils.push(context,
+                      '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
+                },
+              ),
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('sms_recording'),
-                text: "SmsRecord",
+                text: "Sms",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: showContactDays > (period?.lOverdueDays ?? 0)
                     ? Colors.grey
@@ -861,7 +930,7 @@ class OrderItem extends StatelessWidget {
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_22_$index'),
-                text: "AllConts",
+                text: "All",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: showContactDays > (period?.lOverdueDays ?? 0)
                     ? Colors.grey
@@ -879,7 +948,7 @@ class OrderItem extends StatelessWidget {
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_2_$index'),
-                text: "Contacts",
+                text: "Conts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 icon: Icon(Icons.people_alt_outlined,

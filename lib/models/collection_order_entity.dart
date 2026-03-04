@@ -286,6 +286,19 @@ class CollectionOrderOtherProfile {
 	int? cHWeekWaiveLeftCnt = 0;
 	@JSONField(name: "c_i_week_block_left_cnt")
 	int? cIWeekBlockLeftCnt = 0;
+	@JSONField(name: "c_j_week_wa_left_cnt")
+	int? cJWeekWaLeftCnt = 0;  
+	@JSONField(name: "c_k_day_wa_left_cnt")
+	int? cKDayWaLeftCnt = 0; 
+	@JSONField(name: "c_l_week_coupon_left_cnt")
+	int? cLWeekCouponLeftCnt = 0;  
+	@JSONField(name: "c_m_week_extend_left_cnt")
+	int? cMWeekExtendLeftCnt = 0;
+	@JSONField(name: "c_n_week_extend_cnt")
+	int? cNWeekExtendCnt = 0;  
+	@JSONField(name: "c_o_month_extend_cnt")
+	int? cOMonthExtendCnt = 0;           
+
 
 	CollectionOrderOtherProfile();
 

@@ -1,6 +1,6 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
-import 'collection_order_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 
 
 CommissionEntity $CommissionEntityFromJson(Map<String, dynamic> json) {

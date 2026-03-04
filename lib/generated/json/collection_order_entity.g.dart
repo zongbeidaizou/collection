@@ -843,6 +843,36 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (cIWeekBlockLeftCnt != null) {
     collectionOrderOtherProfile.cIWeekBlockLeftCnt = cIWeekBlockLeftCnt;
   }
+  final int? cJWeekWaLeftCnt = jsonConvert.convert<int>(
+      json['c_j_week_wa_left_cnt']);
+  if (cJWeekWaLeftCnt != null) {
+    collectionOrderOtherProfile.cJWeekWaLeftCnt = cJWeekWaLeftCnt;
+  }
+  final int? cKDayWaLeftCnt = jsonConvert.convert<int>(
+      json['c_k_day_wa_left_cnt']);
+  if (cKDayWaLeftCnt != null) {
+    collectionOrderOtherProfile.cKDayWaLeftCnt = cKDayWaLeftCnt;
+  }
+  final int? cLWeekCouponLeftCnt = jsonConvert.convert<int>(
+      json['c_l_week_coupon_left_cnt']);
+  if (cLWeekCouponLeftCnt != null) {
+    collectionOrderOtherProfile.cLWeekCouponLeftCnt = cLWeekCouponLeftCnt;
+  }
+  final int? cMWeekExtendLeftCnt = jsonConvert.convert<int>(
+      json['c_m_week_extend_left_cnt']);
+  if (cMWeekExtendLeftCnt != null) {
+    collectionOrderOtherProfile.cMWeekExtendLeftCnt = cMWeekExtendLeftCnt;
+  }
+  final int? cNWeekExtendCnt = jsonConvert.convert<int>(
+      json['c_n_week_extend_cnt']);
+  if (cNWeekExtendCnt != null) {
+    collectionOrderOtherProfile.cNWeekExtendCnt = cNWeekExtendCnt;
+  }
+  final int? cOMonthExtendCnt = jsonConvert.convert<int>(
+      json['c_o_month_extend_cnt']);
+  if (cOMonthExtendCnt != null) {
+    collectionOrderOtherProfile.cOMonthExtendCnt = cOMonthExtendCnt;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -889,6 +919,12 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['c_g_week_apply_cnt'] = entity.cGWeekApplyCnt;
   data['c_h_week_waive_left_cnt'] = entity.cHWeekWaiveLeftCnt;
   data['c_i_week_block_left_cnt'] = entity.cIWeekBlockLeftCnt;
+  data['c_j_week_wa_left_cnt'] = entity.cJWeekWaLeftCnt;
+  data['c_k_day_wa_left_cnt'] = entity.cKDayWaLeftCnt;
+  data['c_l_week_coupon_left_cnt'] = entity.cLWeekCouponLeftCnt;
+  data['c_m_week_extend_left_cnt'] = entity.cMWeekExtendLeftCnt;
+  data['c_n_week_extend_cnt'] = entity.cNWeekExtendCnt;
+  data['c_o_month_extend_cnt'] = entity.cOMonthExtendCnt;
   return data;
 }
 
@@ -932,6 +968,12 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? cGWeekApplyCnt,
     int? cHWeekWaiveLeftCnt,
     int? cIWeekBlockLeftCnt,
+    int? cJWeekWaLeftCnt,
+    int? cKDayWaLeftCnt,
+    int? cLWeekCouponLeftCnt,
+    int? cMWeekExtendLeftCnt,
+    int? cNWeekExtendCnt,
+    int? cOMonthExtendCnt,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -980,6 +1022,12 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cFWeekRegCnt = cFWeekRegCnt ?? this.cFWeekRegCnt
       ..cGWeekApplyCnt = cGWeekApplyCnt ?? this.cGWeekApplyCnt
       ..cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt ?? this.cHWeekWaiveLeftCnt
-      ..cIWeekBlockLeftCnt = cIWeekBlockLeftCnt ?? this.cIWeekBlockLeftCnt;
+      ..cIWeekBlockLeftCnt = cIWeekBlockLeftCnt ?? this.cIWeekBlockLeftCnt
+      ..cJWeekWaLeftCnt = cJWeekWaLeftCnt ?? this.cJWeekWaLeftCnt
+      ..cKDayWaLeftCnt = cKDayWaLeftCnt ?? this.cKDayWaLeftCnt
+      ..cLWeekCouponLeftCnt = cLWeekCouponLeftCnt ?? this.cLWeekCouponLeftCnt
+      ..cMWeekExtendLeftCnt = cMWeekExtendLeftCnt ?? this.cMWeekExtendLeftCnt
+      ..cNWeekExtendCnt = cNWeekExtendCnt ?? this.cNWeekExtendCnt
+      ..cOMonthExtendCnt = cOMonthExtendCnt ?? this.cOMonthExtendCnt;
   }
 }

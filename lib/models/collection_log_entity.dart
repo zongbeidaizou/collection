@@ -194,7 +194,7 @@ class CollectionLogOtherPeriod {
   @JSONField(name: 'b_b_coupon_amount')
   int? bBCouponAmount = 0;  
   @JSONField(name: 'b_c_borrow_count')
-  int? bCCouponAmount = 0;    
+  int? bCBorrowCount = 0;    
 
   CollectionLogOtherPeriod();
 

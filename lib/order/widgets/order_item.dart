@@ -383,13 +383,13 @@ class OrderItem extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.web_stories_outlined,
-                  color: Colors.blue,
+                  Icons.auto_fix_normal,
+                  color: Colors.orange,
                   size: 14,
                 ),
                 Text(
                   "${int.parse(repayInfo!.var5!)}",
-                  style: TextStyle(color: Colors.blue, fontSize: 14),
+                  style: TextStyle(color: Colors.orange, fontSize: 14),
                 ),
                 Gaps.hGap12,
               ],
@@ -411,23 +411,6 @@ class OrderItem extends StatelessWidget {
                   Gaps.hGap12,
                 ],
               )
-            else
-              Gaps.empty,
-            if (!inList && repayInfo != null && int.parse(repayInfo!.var4!) > 0)  
-            Row(
-              children: [
-                Icon(
-                  Icons.commit_outlined,
-                  color: Colors.blue,
-                  size: 14,
-                ),
-                Text(
-                  "${int.parse(repayInfo!.var4!)}",
-                  style: TextStyle(color: Colors.blue, fontSize: 14),
-                ),
-                Gaps.hGap12,
-              ],
-            )    
             else
               Gaps.empty,
             if (!inList && repayInfo != null && int.parse(repayInfo!.var9!) > 0)
@@ -514,7 +497,8 @@ class OrderItem extends StatelessWidget {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: item.tBorrowSn),
+                          TextSpan(text: item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                          TextSpan(text: '(${item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})'),
                         ],
                       ),
                     ),
@@ -841,6 +825,18 @@ class OrderItem extends StatelessWidget {
                   maxLines: 2, // 设置最大行数为2
                   overflow: TextOverflow.ellipsis,
                 ),
+              ),
+              if(DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours< 24)
+              Gaps.hGap4,
+              if(DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours< 24)
+              OrderItemButton(
+                key: Key('order_button_4_$index'),
+                text: 'Retain',
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: buttonColor,
+                onTap: () {
+                  _showModalBottomSheet();
+                },
               ),
               Gaps.hGap4,
               OrderItemButton(

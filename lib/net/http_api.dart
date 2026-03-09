@@ -25,4 +25,5 @@ class HttpApi {
   static const String shop = '/collection/g-m-collection-admins';
   static const String waActivation = '/collection/b-l-wa-activation';
   static const String waCode = '/collection/b-l-wa-code';
+  static const String retains = '/collection/b-o-retains';
 }

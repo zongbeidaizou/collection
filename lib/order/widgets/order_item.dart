@@ -23,6 +23,8 @@ import '../../providers/user_provider.dart';
 import '../order_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clipboard/clipboard.dart';
+import 'package:dio/dio.dart';
+import '../../net/net.dart';
 
 import 'dart:ui';
 
@@ -30,7 +32,7 @@ import 'contact_dialog.dart';
 
 const MethodChannel _contactChannel = MethodChannel('contact_channel');
 
-class OrderItem extends StatelessWidget {
+class OrderItem extends StatefulWidget {
   const OrderItem({
     super.key,
     required this.tabIndex,
@@ -65,6 +67,14 @@ class OrderItem extends StatelessWidget {
   final CollectionLogOtherPeriod? period;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final void Function(int)? moreAction;
+
+  @override
+  State<OrderItem> createState() => _OrderItemState();
+}
+
+class _OrderItemState extends State<OrderItem> {
+  bool _isRetained = false;
+
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
@@ -72,11 +82,11 @@ class OrderItem extends StatelessWidget {
     Color buttonColor = isDark ? Colours.dark_app_main : Colours.app_main;
     Color backgroundColor = Colors.white;
 
-    if (inList) {
-      if (item.aNCurrentDayLogCount! == 0) {
+    if (widget.inList) {
+      if (widget.item.aNCurrentDayLogCount! == 0) {
         shadowColor = isDark ? Colors.white : Colors.redAccent.withOpacity(0.2);
         buttonColor = Colors.redAccent;
-      } else if (item.aOCurrentDayCallCount! == 0) {
+      } else if (widget.item.aOCurrentDayCallCount! == 0) {
         shadowColor =
             isDark ? Colors.white : Color(0xFF3BA28D).withOpacity(0.2);
         buttonColor = Color(0xFF3BA28D);
@@ -84,16 +94,16 @@ class OrderItem extends StatelessWidget {
     }
 
     // 根据报名状态设置不同的背景颜色
-    backgroundColor = _getBackgroundColorByStatus(item, isDark);
+    backgroundColor = _getBackgroundColorByStatus(widget.item, isDark);
 
-    if (item.tBorrowSn == 'QRSOSEDpZn') {
+    if (widget.item.tBorrowSn == 'QRSOSEDpZn') {
       print('');
     }
     return Padding(
-        padding: inList ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
+        padding: widget.inList ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
         child: MyCard(
           shadowColor: shadowColor,
-          onlyBottom: !inList,
+          onlyBottom: !widget.inList,
           color: backgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -125,9 +135,9 @@ class OrderItem extends StatelessWidget {
         ?.copyWith(fontSize: Dimens.font_sp12,color: Colors.black);
     final bool isDark = context.isDark;
     void _showModalBottomSheet() {
-      item.aLLastLog = '';
+      widget.item.aLLastLog = '';
       NavigatorUtils.push(context,
-          '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
+          '${OrderRouter.notePage}?id=${widget.item.id}&item=${widget.item.toString()}');
       // return showModalBottomSheet<int>(
       //   context: context,
       //   isScrollControlled: true,
@@ -156,15 +166,15 @@ class OrderItem extends StatelessWidget {
               resizeToAvoidBottomInset: true,
               body: ContactDialog(
                 contactList: _sortContactList(
-                    allContacts ? allContactList : contactList),
-                repayInfo: repayInfo,
+                    allContacts ? widget.allContactList : widget.contactList),
+                repayInfo: widget.repayInfo,
                 isAllContacts: allContacts,
-                collectionOrderId: item.id!,
-                period: period!,
-                showContactDays: showContactDays,
+                collectionOrderId: widget.item.id!,
+                period: widget.period!,
+                showContactDays: widget.showContactDays,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
-                  onSendSms?.call(templateId, smsContent,
+                  widget.onSendSms?.call(templateId, smsContent,
                       contactId: contactId, phone: phone);
                   // Toast.show('收款类型：$type');
                 },
@@ -185,7 +195,7 @@ class OrderItem extends StatelessWidget {
             repayInfo: repayInfo,
             onPressed: (templateId, smsContent) {
               // Toast.show('收款类型：$templateId');
-              onSendSms?.call(templateId, smsContent);
+              widget.onSendSms?.call(templateId, smsContent);
               // Toast.show('收款类型：$type');
             },
           );
@@ -200,7 +210,7 @@ class OrderItem extends StatelessWidget {
         builder: (BuildContext context) {
           return SendTypeDialog(
             onPressed: (i, value) {
-              moreAction?.call(i);
+              widget.moreAction?.call(i);
             },
           );
         },
@@ -266,7 +276,7 @@ class OrderItem extends StatelessWidget {
     }
 
     Future<void> _addContactToPhone() async {
-      final phone = item.uPhone ?? '';
+      final phone = widget.item.uPhone ?? '';
       if (phone.isEmpty) {
         showToast('Phone number is empty');
         return;
@@ -329,7 +339,7 @@ class OrderItem extends StatelessWidget {
 
       try {
         await _contactChannel.invokeMethod('addContact', {
-          'name': item.vName ?? '',
+          'name': widget.item.vName ?? '',
           'phone': phone,
           'label': label,
           'company': company,
@@ -337,6 +347,40 @@ class OrderItem extends StatelessWidget {
         showToast('Added to contacts');
       } catch (e) {
         showToast('Failed to add to contacts');
+      }
+    }
+
+    Future<void> _retainOrder() async {
+      if (widget.item.id == null) {
+        showToast('Order ID is missing');
+        return;
+      }
+
+      try {
+        final formData = FormData.fromMap({
+          'collection_order_id': widget.item.id,
+        });
+
+        await DioUtils.instance.requestNetwork<Map<String, dynamic>>(
+          Method.post,
+          HttpApi.retains,
+          params: formData,
+          onSuccess: (data) {
+            setState(() {
+              _isRetained = true;
+            });
+            if (data != null && data.containsKey('message')) {
+              showToast(data['message'] as String);
+            } else {
+              showToast('Order retained successfully');
+            }
+          },
+          onError: (code, msg) {
+            showToast(msg);
+          },
+        );
+      } catch (e) {
+        showToast('Failed to retain order');
       }
     }
 
@@ -351,7 +395,7 @@ class OrderItem extends StatelessWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: item.aZPackage!, // 保持原样式
+                      text: widget.item.aZPackage!, // 保持原样式
                       style: const TextStyle(
                         fontSize: Dimens.font_sp14,
                         fontWeight: FontWeight.w500,
@@ -362,7 +406,7 @@ class OrderItem extends StatelessWidget {
                 ),
               ),
             ),
-            if (!inList && repayInfo != null && int.parse(repayInfo!.var7!) > 0)
+            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var7!) > 0)
               Row(
                 children: [
                   Icon(
@@ -371,7 +415,7 @@ class OrderItem extends StatelessWidget {
                     size: 12,
                   ),
                   Text(
-                    "-${int.parse(repayInfo!.var7!)}%",
+                    "-${int.parse(widget.repayInfo!.var7!)}%",
                     style: TextStyle(color: Colors.green, fontSize: 12),
                   ),
                   Gaps.hGap12,
@@ -379,7 +423,7 @@ class OrderItem extends StatelessWidget {
               )
             else
               Gaps.empty,
-            if (!inList && repayInfo != null && int.parse(repayInfo!.var5!) > 0)  
+            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var5!) > 0)  
             Row(
               children: [
                 Icon(
@@ -388,7 +432,7 @@ class OrderItem extends StatelessWidget {
                   size: 14,
                 ),
                 Text(
-                  "${int.parse(repayInfo!.var5!)}",
+                  "${int.parse(widget.repayInfo!.var5!)}",
                   style: TextStyle(color: Colors.orange, fontSize: 14),
                 ),
                 Gaps.hGap12,
@@ -396,7 +440,7 @@ class OrderItem extends StatelessWidget {
             )
             else
               Gaps.empty,
-            if (!inList && repayInfo != null && int.parse(repayInfo!.var6!) > 0)  
+            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var6!) > 0)  
             Row(
                 children: [
                   Icon(
@@ -405,7 +449,7 @@ class OrderItem extends StatelessWidget {
                     size: 14,
                   ),
                   Text(
-                    "${int.parse(repayInfo!.var6!)}",
+                    "${int.parse(widget.repayInfo!.var6!)}",
                     style: TextStyle(color: Colors.green, fontSize: 14),
                   ),
                   Gaps.hGap12,
@@ -413,7 +457,7 @@ class OrderItem extends StatelessWidget {
               )
             else
               Gaps.empty,
-            if (!inList && repayInfo != null && int.parse(repayInfo!.var9!) > 0)
+            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var9!) > 0)
               Row(
                 children: [
                   Icon(
@@ -422,7 +466,7 @@ class OrderItem extends StatelessWidget {
                     size: 14,
                   ),
                   Text(
-                    "${int.parse(repayInfo!.var9!)}",
+                    "${int.parse(widget.repayInfo!.var9!)}",
                     style: TextStyle(color: Colors.green, fontSize: 14),
                   ),
                   Gaps.hGap12,
@@ -430,7 +474,7 @@ class OrderItem extends StatelessWidget {
               )
             else
               Gaps.empty,
-            if (item.eCollectionAdminId != item.aVTmpCollectionAdminId)
+            if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
               Row(
                 children: [
                   Icon(
@@ -440,7 +484,7 @@ class OrderItem extends StatelessWidget {
                   ),
                   Gaps.hGap2,
                   Text(
-                      "${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 10 ? '+5' : (period?.lOverdueDays ?? 0) >= 10 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
+                      "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
                       style: TextStyle(color: Colors.red, fontSize: 14)),
                 ],
               )
@@ -454,16 +498,16 @@ class OrderItem extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(5)),
               ),
               child: Text(
-                inList
-                    ? item.aKNo!
+                widget.inList
+                    ? widget.item.aKNo!
                     : (DateTime.now()
                                 .difference(DateTime.parse(
-                                    track?.lastActiveTime ??
+                                    widget.track?.lastActiveTime ??
                                         '2000-07-10T18:58:39.000000Z'))
                                 .inHours >=
                             24)
-                        ? 'Last used: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
-                        : 'Last used: ${DateTime.now().difference(DateTime.parse(track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+                        ? 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,
@@ -497,8 +541,8 @@ class OrderItem extends StatelessWidget {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: '(${item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})'),
+                          TextSpan(text: widget.item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
+                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})'),
                         ],
                       ),
                     ),
@@ -506,15 +550,15 @@ class OrderItem extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
-                  FlutterClipboard.copy('${item.uPhone!}-${item.tBorrowSn!}');
+                  FlutterClipboard.copy('${widget.item.uPhone!}-${widget.item.tBorrowSn!}');
                 },
               ),
             ),
             Expanded(
-              flex: inList ? 9 : 11,
+              flex: widget.inList ? 9 : 11,
               child: InkWell(
                 onTap: () {
-                  FlutterClipboard.copy(item.vName ?? '');
+                  FlutterClipboard.copy(widget.item.vName ?? '');
                 },
                 child: Row(
                   children: [
@@ -532,7 +576,7 @@ class OrderItem extends StatelessWidget {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: item.vName),
+                          TextSpan(text: widget.item.vName),
                         ],
                       ),
                     ),
@@ -561,9 +605,9 @@ class OrderItem extends StatelessWidget {
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
-                              text: inList
-                                  ? maskPhoneNumber(item.uPhone!)
-                                  : item.uPhone!),
+                              text: widget.inList
+                                  ? maskPhoneNumber(widget.item.uPhone!)
+                                  : widget.item.uPhone!),
                         ],
                       ),
                     ),
@@ -602,8 +646,8 @@ class OrderItem extends StatelessWidget {
                                   .titleSmall
                                   ?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(
-                            text: Utils.formatPrice2(period?.nPaidAmount ?? 0),
-                            style: period?.nPaidAmount == 0
+                            text: Utils.formatPrice2(widget.period?.nPaidAmount ?? 0),
+                            style: widget.period?.nPaidAmount == 0
                                 ? textTextStyle
                                 : const TextStyle(
                                     fontSize: 12, color: Colors.greenAccent),
@@ -618,7 +662,7 @@ class OrderItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: inList ? 9 : 11,
+              flex: widget.inList ? 9 : 11,
               child: Row(
                 children: [
                   Container(
@@ -640,49 +684,49 @@ class OrderItem extends StatelessWidget {
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(fontSize: Dimens.font_sp10)),
-                        if (!inList &&
-                            repayInfo != null &&
-                            int.parse(repayInfo!.var7!) > 0) ...[
+                        if (!widget.inList &&
+                            widget.repayInfo != null &&
+                            int.parse(widget.repayInfo!.var7!) > 0) ...[
                           TextSpan(
                               text: Utils.formatPrice2(
-                                  (period?.fExpectRepayTotalAmount ?? 0) -
-                                      (period?.qPaidServiceFee ?? 0) -
-                                      (period?.pPaidInterest ?? 0) -
-                                      (period?.sPaidOverdueAmount ?? 0) -
-                                      (period?.oPaidBorrowAmount ?? 0) -
-                                      (period?.uDeductionTotalAmount ?? 0),
+                                  (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                      (widget.period?.qPaidServiceFee ?? 0) -
+                                      (widget.period?.pPaidInterest ?? 0) -
+                                      (widget.period?.sPaidOverdueAmount ?? 0) -
+                                      (widget.period?.oPaidBorrowAmount ?? 0) -
+                                      (widget.period?.uDeductionTotalAmount ?? 0),
                                   symbol: '')),
                           TextSpan(text: ' - '),
                           TextSpan(
                               text: Utils.formatPrice2(
-                                  ((period?.fExpectRepayTotalAmount ?? 0) -
-                                          (period?.qPaidServiceFee ?? 0) -
-                                          (period?.pPaidInterest ?? 0)) *
-                                      (int.parse(repayInfo!.var7!) / 100),
+                                  ((widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                          (widget.period?.qPaidServiceFee ?? 0) -
+                                          (widget.period?.pPaidInterest ?? 0)) *
+                                      (int.parse(widget.repayInfo!.var7!) / 100),
                                   symbol: ''),
                               style: TextStyle(color: Colors.red)),
                           TextSpan(text: ' = '),
                           TextSpan(
                               text: Utils.formatPrice2(
-                                  (period?.fExpectRepayTotalAmount ?? 0) -
-                                      (period?.qPaidServiceFee ?? 0) -
-                                      (period?.pPaidInterest ?? 0) -
-                                      (period?.sPaidOverdueAmount ?? 0) -
-                                      (period?.oPaidBorrowAmount ?? 0) -
-                                      (period?.uDeductionTotalAmount ?? 0) -
-                                      ((period?.fExpectRepayTotalAmount ?? 0) -
-                                              (period?.qPaidServiceFee ?? 0) -
-                                              (period?.pPaidInterest ?? 0)) *
-                                          (int.parse(repayInfo!.var7!) / 100))),
+                                  (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                      (widget.period?.qPaidServiceFee ?? 0) -
+                                      (widget.period?.pPaidInterest ?? 0) -
+                                      (widget.period?.sPaidOverdueAmount ?? 0) -
+                                      (widget.period?.oPaidBorrowAmount ?? 0) -
+                                      (widget.period?.uDeductionTotalAmount ?? 0) -
+                                      ((widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                              (widget.period?.qPaidServiceFee ?? 0) -
+                                              (widget.period?.pPaidInterest ?? 0)) *
+                                          (int.parse(widget.repayInfo!.var7!) / 100))),
                         ] else
                           TextSpan(
                               text: Utils.formatPrice2(
-                            (period?.fExpectRepayTotalAmount ?? 0) -
-                                (period?.qPaidServiceFee ?? 0) -
-                                (period?.pPaidInterest ?? 0) -
-                                (period?.sPaidOverdueAmount ?? 0) -
-                                (period?.oPaidBorrowAmount ?? 0) -
-                                (period?.uDeductionTotalAmount ?? 0),
+                            (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                (widget.period?.qPaidServiceFee ?? 0) -
+                                (widget.period?.pPaidInterest ?? 0) -
+                                (widget.period?.sPaidOverdueAmount ?? 0) -
+                                (widget.period?.oPaidBorrowAmount ?? 0) -
+                                (widget.period?.uDeductionTotalAmount ?? 0),
                           ))
                       ],
                     ),
@@ -715,7 +759,7 @@ class OrderItem extends StatelessWidget {
                                 ?.copyWith(fontSize: Dimens.font_sp10)),
                         TextSpan(
                             text: calculateCalendarDaysDifference(
-                                    DateTime.parse(item.pExpectRepayTime!),
+                                    DateTime.parse(widget.item.pExpectRepayTime!),
                                     DateTime.now())
                                 .toString()),
                       ],
@@ -728,7 +772,7 @@ class OrderItem extends StatelessWidget {
         ),
         Gaps.vGap8,
         // Gaps.line,
-        if (inList)
+        if (widget.inList)
           Row(
             children: [
               Expanded(
@@ -750,16 +794,16 @@ class OrderItem extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text((DateTime.parse(item.sFlowOutTime!)
+                          Text((DateTime.parse(widget.item.sFlowOutTime!)
                                       .difference(DateTime.now())
                                       .inHours >=
                                   24)
-                              ? '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
-                              : '${DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left',style: textTextStyle,),
+                              ? '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
+                              : '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left',style: textTextStyle,),
                           Text(
-                              item.aDLastLogTime != null &&
-                                      item.aDLastLogTime!.isNotEmpty
-                                  ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(item.aDLastLogTime!))}'
+                              widget.item.aDLastLogTime != null &&
+                                      widget.item.aDLastLogTime!.isNotEmpty
+                                  ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.aDLastLogTime!))}'
                                   : '',
                               style: Theme.of(context)
                                   .textTheme
@@ -794,9 +838,9 @@ class OrderItem extends StatelessWidget {
                           children: [
                             Text(
                                 // ignore: unnecessary_parenthesis
-                                '${_calculateBonus(provider, item, period)} bonus',style: textTextStyle,),
+                                '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${item.eCollectionAdminId! != item.aVTmpCollectionAdminId! && (period?.lOverdueDays ?? 0) < 10 ? '+5' : (period?.lOverdueDays ?? 0) >= 10 && (period?.lOverdueDays ?? 0) < 20 ? '+10' : (period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
@@ -815,32 +859,32 @@ class OrderItem extends StatelessWidget {
         Gaps.vGap8,
         Gaps.line,
         Gaps.vGap8,
-        if (inList)
+        if (widget.inList)
           Row(
             children: <Widget>[
               Expanded(
                 child: Text(
-                  item.aLLastLog!,
+                  widget.item.aLLastLog!,
                   style: TextStyle(color: Colors.black, fontSize: 11),
                   maxLines: 2, // 设置最大行数为2
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if(DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours< 24)
+              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
               Gaps.hGap4,
-              if(DateTime.parse(item.sFlowOutTime!).difference(DateTime.now()).inHours< 24)
+              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
               OrderItemButton(
-                key: Key('order_button_4_$index'),
+                key: Key('order_button_4_${widget.index}'),
                 text: 'Retain',
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: buttonColor,
                 onTap: () {
-                  _showModalBottomSheet();
+                  _retainOrder();
                 },
               ),
               Gaps.hGap4,
               OrderItemButton(
-                key: Key('order_button_3_$index'),
+                key: Key('order_button_3_${widget.index}'),
                 text: 'Detail',
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: buttonColor,
@@ -860,16 +904,16 @@ class OrderItem extends StatelessWidget {
                 icon: Icon(Icons.next_plan_outlined,
                     size: 15, color: Colors.white),
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: (period?.lOverdueDays ?? 0) <= 0
+                bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
                     ? Colors.grey
                     : Colours.dark_app_main,
                 onTap: () {
-                  if ((period?.lOverdueDays ?? 0) <= 0) {
+                  if ((widget.period?.lOverdueDays ?? 0) <= 0) {
                     showToast('Case is not overdue, cannot be waived.');
                     return;
                   }
                   NavigatorUtils.push(context,
-                      '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
+                      '${OrderRouter.orderInfoPage}?id=${widget.item.id}&track=${widget.track.toString()}&period=${widget.period.toString()}');
                 },
               ),
               OrderItemButton(
@@ -878,16 +922,16 @@ class OrderItem extends StatelessWidget {
                 icon: Icon(Icons.extension_outlined,
                     size: 15, color: Colors.white),
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: (period?.lOverdueDays ?? 0) <= 0
+                bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
                     ? Colors.grey
                     : Colours.dark_app_main,
                 onTap: () {
-                  if ((period?.lOverdueDays ?? 0) <= 0) {
+                  if ((widget.period?.lOverdueDays ?? 0) <= 0) {
                     showToast('Case is not overdue, cannot be waived.');
                     return;
                   }
                   NavigatorUtils.push(context,
-                      '${OrderRouter.orderInfoPage}?id=${item.id}&track=${track.toString()}&period=${period.toString()}');
+                      '${OrderRouter.orderInfoPage}?id=${widget.item.id}&track=${widget.track.toString()}&period=${widget.period.toString()}');
                 },
               ),
               Gaps.hGap4,
@@ -895,14 +939,14 @@ class OrderItem extends StatelessWidget {
                 key: Key('sms_recording'),
                 text: "Sms",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: showContactDays > (period?.lOverdueDays ?? 0)
+                bgColor: widget.showContactDays > (widget.period?.lOverdueDays ?? 0)
                     ? Colors.grey
                     : Colours.dark_app_main,
                 icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
                 onTap: () async {
-                  if (showContactDays > (period?.lOverdueDays ?? 0)) {
+                  if (widget.showContactDays > (widget.period?.lOverdueDays ?? 0)) {
                     showToast(
-                        'Will show sms record overdue days: $showContactDays');
+                        'Will show sms record overdue days: ${widget.showContactDays}');
                     return;
                   }
                   showModalBottomSheet(
@@ -913,10 +957,10 @@ class OrderItem extends StatelessWidget {
                           height: 580,
                           color: Colors.grey,
                           child: SmsHistoryPage(
-                            borrowId: item.aBorrowId!,
-                            collectionOrderId: item.id!,
-                            repayInfo: repayInfo,
-                            period: period!,
+                            borrowId: widget.item.aBorrowId!,
+                            collectionOrderId: widget.item.id!,
+                            repayInfo: widget.repayInfo,
+                            period: widget.period!,
                           ));
                     },
                   );
@@ -925,17 +969,17 @@ class OrderItem extends StatelessWidget {
               // Gaps.hGap4,
               Gaps.hGap4,
               OrderItemButton(
-                key: Key('order_button_22_$index'),
+                key: Key('order_button_22_${widget.index}'),
                 text: "All",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: showContactDays > (period?.lOverdueDays ?? 0)
+                bgColor: widget.showContactDays > (widget.period?.lOverdueDays ?? 0)
                     ? Colors.grey
                     : Colours.dark_app_main,
                 icon: Icon(Icons.group_add, size: 15, color: Colors.white),
                 onTap: () async {
-                  if (showContactDays > (period?.lOverdueDays ?? 0)) {
+                  if (widget.showContactDays > (widget.period?.lOverdueDays ?? 0)) {
                     showToast(
-                        'Will show all contact overdue days: $showContactDays');
+                        'Will show all contact overdue days: ${widget.showContactDays}');
                     return;
                   }
                   _showContactListModal(allContacts: true);
@@ -943,7 +987,7 @@ class OrderItem extends StatelessWidget {
               ),
               Gaps.hGap4,
               OrderItemButton(
-                key: Key('order_button_2_$index'),
+                key: Key('order_button_2_${widget.index}'),
                 text: "Conts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,

@@ -263,6 +263,10 @@ class JsonConvert {
       return data.map<CollectionLogOtherSmsHistory>((Map<String, dynamic> e) =>
           CollectionLogOtherSmsHistory.fromJson(e)).toList() as M;
     }
+    if (<CollectionLogOtherCouponList>[] is M) {
+      return data.map<CollectionLogOtherCouponList>((Map<String, dynamic> e) =>
+          CollectionLogOtherCouponList.fromJson(e)).toList() as M;
+    }
     if (<CollectionLogOtherHJSmsTemplate>[] is M) {
       return data.map<CollectionLogOtherHJSmsTemplate>((
           Map<String, dynamic> e) =>
@@ -563,6 +567,8 @@ class JsonConvertClassCollection {
     (CollectionLogOtherContactInfo2Links)
         .toString(): CollectionLogOtherContactInfo2Links.fromJson,
     (CollectionLogOtherSmsHistory).toString(): CollectionLogOtherSmsHistory
+        .fromJson,
+    (CollectionLogOtherCouponList).toString(): CollectionLogOtherCouponList
         .fromJson,
     (CollectionLogOtherHJSmsTemplate)
         .toString(): CollectionLogOtherHJSmsTemplate.fromJson,

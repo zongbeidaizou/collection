@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -252,10 +254,12 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (repayInfo != null) {
     collectionLogOther.repayInfo = repayInfo;
   }
-  final List<dynamic>? contactInfo = (json['contact_info'] as List<dynamic>?)
-      ?.map(
-          (e) => e)
-      .toList();
+  final List<
+      CollectionLogOtherContactInfo2Data>? contactInfo = (json['contact_info'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherContactInfo2Data>(
+          e) as CollectionLogOtherContactInfo2Data).toList();
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
@@ -297,8 +301,8 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (hJSmsTemplate != null) {
     collectionLogOther.hJSmsTemplate = hJSmsTemplate;
   }
-  final CollectionLogOtherOther? other = jsonConvert.convert<
-      CollectionLogOtherOther>(json['other']);
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     collectionLogOther.other = other;
   }
@@ -317,7 +321,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
-  data['contact_info'] = entity.contactInfo;
+  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
   data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
   data['coupon_list'] = entity.couponList?.map((v) => v.toJson()).toList();
@@ -337,13 +341,13 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    List<dynamic>? contactInfo,
+    List<CollectionLogOtherContactInfo2Data>? contactInfo,
     CollectionLogOtherContactInfo2? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     List<CollectionLogOtherCouponList>? couponList,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
-    CollectionLogOtherOther? other,
+    CollectionOrderOther? other,
     String? lastContactFetchTime,
   }) {
     return CollectionLogOther()

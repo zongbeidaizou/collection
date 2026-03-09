@@ -15,6 +15,7 @@
       "h_phone": "",
       "i_target": 0,
       "j_content": "cx said he will work on his payment",
+      "m_overdue_days": 0,
       "k_promise_time": "",
       "q_sms_template_id": 0,
       "r_contact_id": 0,
@@ -25,6 +26,7 @@
   ],
   "other": {
     "avatar": "https:\/\/cashmama.ng.loancloud.net\/attachment_data\/cashmama.ng.loancloud.net\/ocr\/2025\/0528\/10\/124676\/17484241043984.jpg",
+    "show_contact_days": 0,
     "track": {
       "last_active_time": "2025-07-03T13:21:24.000000Z",
       "apply_time": "2025-07-07T13:29:47.000000Z",
@@ -55,7 +57,10 @@
       "a_n_user_id": 135,
       "a_p_expect_repay_time": "2025-07-13T11:00:00.000000Z",
       "a_u_current_deduction_fee": 0,
-      "a_z_left_amount": 22000
+      "a_z_left_amount": 22000,
+      "z_deduction_total_overdue_amount": 22000,
+      "b_b_coupon_amount": 22000,
+      "b_c_borrow_count": 22000
     },
     "repay_info": {
       "expect_repay_amount": 22000,
@@ -165,11 +170,28 @@
       "created_at": "2024-11-28T07:53:28.000000Z",
       "id": 1018
     }],
+    "coupon_list": [{
+      "a_user_id": 0,
+      "b_borrow_id": 0,
+      "c_period_id": 0,
+      "d_coupon_chance_id": 50,
+      "e_coupon_prize_id": 50,
+      "f_discount_rate": 50,
+      "g_discount_amount": 50,
+      "h_borrow_amount": 50,
+      "i_expire_at": 50,
+      "j_use_at": 50,
+      "k_status": 50,
+      "l_admin_id": 50,
+      "m_comment": 50,
+      "created_at": "2024-11-28T07:53:28.000000Z"
+    }],
     "h_j_sms_template_newest_updated_at": "Sat Aug 16 2025 09:26:28 GMT+0100",
     "h_j_sms_template": [{
       "id": 0,
       "d_template": "15921181128",
       "s_name": "15921181128",
+      "c_type": 1,
       "e_days": "your otp is 1208"
     }],
     "other": {

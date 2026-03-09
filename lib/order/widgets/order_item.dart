@@ -457,23 +457,23 @@ class _OrderItemState extends State<OrderItem> {
               )
             else
               Gaps.empty,
-            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var9!) > 0)
-              Row(
-                children: [
-                  Icon(
-                    Icons.verified_outlined,
-                    color: Colors.green,
-                    size: 14,
-                  ),
-                  Text(
-                    "${int.parse(widget.repayInfo!.var9!)}",
-                    style: TextStyle(color: Colors.green, fontSize: 14),
-                  ),
-                  Gaps.hGap12,
-                ],
-              )
-            else
-              Gaps.empty,
+            // if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var9!) > 0)
+            //   Row(
+            //     children: [
+            //       Icon(
+            //         Icons.verified_outlined,
+            //         color: Colors.green,
+            //         size: 14,
+            //       ),
+            //       Text(
+            //         "${int.parse(widget.repayInfo!.var9!)}",
+            //         style: TextStyle(color: Colors.green, fontSize: 14),
+            //       ),
+            //       Gaps.hGap12,
+            //     ],
+            //   )
+            // else
+            //   Gaps.empty,
             if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
               Row(
                 children: [

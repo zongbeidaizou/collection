@@ -1,7 +1,5 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
-import 'package:bounty_hunter/models/collection_order_entity.dart';
-
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -254,12 +252,10 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (repayInfo != null) {
     collectionLogOther.repayInfo = repayInfo;
   }
-  final List<
-      CollectionLogOtherContactInfo2Data>? contactInfo = (json['contact_info'] as List<
-      dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<CollectionLogOtherContactInfo2Data>(
-          e) as CollectionLogOtherContactInfo2Data).toList();
+  final List<dynamic>? contactInfo = (json['contact_info'] as List<dynamic>?)
+      ?.map(
+          (e) => e)
+      .toList();
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
@@ -277,6 +273,15 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (smsHistory != null) {
     collectionLogOther.smsHistory = smsHistory;
   }
+  final List<
+      CollectionLogOtherCouponList>? couponList = (json['coupon_list'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherCouponList>(
+          e) as CollectionLogOtherCouponList).toList();
+  if (couponList != null) {
+    collectionLogOther.couponList = couponList;
+  }
   final String? hJSmsTemplateNewestUpdatedAt = jsonConvert.convert<String>(
       json['h_j_sms_template_newest_updated_at']);
   if (hJSmsTemplateNewestUpdatedAt != null) {
@@ -292,8 +297,8 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (hJSmsTemplate != null) {
     collectionLogOther.hJSmsTemplate = hJSmsTemplate;
   }
-  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
-      json['other']);
+  final CollectionLogOtherOther? other = jsonConvert.convert<
+      CollectionLogOtherOther>(json['other']);
   if (other != null) {
     collectionLogOther.other = other;
   }
@@ -312,9 +317,10 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
   data['track'] = entity.track?.toJson();
   data['period'] = entity.period?.toJson();
   data['repay_info'] = entity.repayInfo?.toJson();
-  data['contact_info'] = entity.contactInfo?.map((v) => v.toJson()).toList();
+  data['contact_info'] = entity.contactInfo;
   data['contact_info2'] = entity.contactInfo2?.toJson();
   data['sms_history'] = entity.smsHistory?.map((v) => v.toJson()).toList();
+  data['coupon_list'] = entity.couponList?.map((v) => v.toJson()).toList();
   data['h_j_sms_template_newest_updated_at'] =
       entity.hJSmsTemplateNewestUpdatedAt;
   data['h_j_sms_template'] =
@@ -331,12 +337,13 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    List<CollectionLogOtherContactInfo2Data>? contactInfo,
+    List<dynamic>? contactInfo,
     CollectionLogOtherContactInfo2? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
+    List<CollectionLogOtherCouponList>? couponList,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
-    CollectionOrderOther? other,
+    CollectionLogOtherOther? other,
     String? lastContactFetchTime,
   }) {
     return CollectionLogOther()
@@ -348,6 +355,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
       ..contactInfo = contactInfo ?? this.contactInfo
       ..contactInfo2 = contactInfo2 ?? this.contactInfo2
       ..smsHistory = smsHistory ?? this.smsHistory
+      ..couponList = couponList ?? this.couponList
       ..hJSmsTemplateNewestUpdatedAt = hJSmsTemplateNewestUpdatedAt ??
           this.hJSmsTemplateNewestUpdatedAt
       ..hJSmsTemplate = hJSmsTemplate ?? this.hJSmsTemplate
@@ -1353,6 +1361,126 @@ extension CollectionLogOtherSmsHistoryExtension on CollectionLogOtherSmsHistory 
       ..kSendStatus = kSendStatus ?? this.kSendStatus
       ..createdAt = createdAt ?? this.createdAt
       ..id = id ?? this.id;
+  }
+}
+
+CollectionLogOtherCouponList $CollectionLogOtherCouponListFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherCouponList collectionLogOtherCouponList = CollectionLogOtherCouponList();
+  final int? aUserId = jsonConvert.convert<int>(json['a_user_id']);
+  if (aUserId != null) {
+    collectionLogOtherCouponList.aUserId = aUserId;
+  }
+  final int? bBorrowId = jsonConvert.convert<int>(json['b_borrow_id']);
+  if (bBorrowId != null) {
+    collectionLogOtherCouponList.bBorrowId = bBorrowId;
+  }
+  final int? cPeriodId = jsonConvert.convert<int>(json['c_period_id']);
+  if (cPeriodId != null) {
+    collectionLogOtherCouponList.cPeriodId = cPeriodId;
+  }
+  final int? dCouponChanceId = jsonConvert.convert<int>(
+      json['d_coupon_chance_id']);
+  if (dCouponChanceId != null) {
+    collectionLogOtherCouponList.dCouponChanceId = dCouponChanceId;
+  }
+  final int? eCouponPrizeId = jsonConvert.convert<int>(
+      json['e_coupon_prize_id']);
+  if (eCouponPrizeId != null) {
+    collectionLogOtherCouponList.eCouponPrizeId = eCouponPrizeId;
+  }
+  final int? fDiscountRate = jsonConvert.convert<int>(json['f_discount_rate']);
+  if (fDiscountRate != null) {
+    collectionLogOtherCouponList.fDiscountRate = fDiscountRate;
+  }
+  final int? gDiscountAmount = jsonConvert.convert<int>(
+      json['g_discount_amount']);
+  if (gDiscountAmount != null) {
+    collectionLogOtherCouponList.gDiscountAmount = gDiscountAmount;
+  }
+  final int? hBorrowAmount = jsonConvert.convert<int>(json['h_borrow_amount']);
+  if (hBorrowAmount != null) {
+    collectionLogOtherCouponList.hBorrowAmount = hBorrowAmount;
+  }
+  final int? iExpireAt = jsonConvert.convert<int>(json['i_expire_at']);
+  if (iExpireAt != null) {
+    collectionLogOtherCouponList.iExpireAt = iExpireAt;
+  }
+  final int? jUseAt = jsonConvert.convert<int>(json['j_use_at']);
+  if (jUseAt != null) {
+    collectionLogOtherCouponList.jUseAt = jUseAt;
+  }
+  final int? kStatus = jsonConvert.convert<int>(json['k_status']);
+  if (kStatus != null) {
+    collectionLogOtherCouponList.kStatus = kStatus;
+  }
+  final int? lAdminId = jsonConvert.convert<int>(json['l_admin_id']);
+  if (lAdminId != null) {
+    collectionLogOtherCouponList.lAdminId = lAdminId;
+  }
+  final int? mComment = jsonConvert.convert<int>(json['m_comment']);
+  if (mComment != null) {
+    collectionLogOtherCouponList.mComment = mComment;
+  }
+  final String? createdAt = jsonConvert.convert<String>(json['created_at']);
+  if (createdAt != null) {
+    collectionLogOtherCouponList.createdAt = createdAt;
+  }
+  return collectionLogOtherCouponList;
+}
+
+Map<String, dynamic> $CollectionLogOtherCouponListToJson(
+    CollectionLogOtherCouponList entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['a_user_id'] = entity.aUserId;
+  data['b_borrow_id'] = entity.bBorrowId;
+  data['c_period_id'] = entity.cPeriodId;
+  data['d_coupon_chance_id'] = entity.dCouponChanceId;
+  data['e_coupon_prize_id'] = entity.eCouponPrizeId;
+  data['f_discount_rate'] = entity.fDiscountRate;
+  data['g_discount_amount'] = entity.gDiscountAmount;
+  data['h_borrow_amount'] = entity.hBorrowAmount;
+  data['i_expire_at'] = entity.iExpireAt;
+  data['j_use_at'] = entity.jUseAt;
+  data['k_status'] = entity.kStatus;
+  data['l_admin_id'] = entity.lAdminId;
+  data['m_comment'] = entity.mComment;
+  data['created_at'] = entity.createdAt;
+  return data;
+}
+
+extension CollectionLogOtherCouponListExtension on CollectionLogOtherCouponList {
+  CollectionLogOtherCouponList copyWith({
+    int? aUserId,
+    int? bBorrowId,
+    int? cPeriodId,
+    int? dCouponChanceId,
+    int? eCouponPrizeId,
+    int? fDiscountRate,
+    int? gDiscountAmount,
+    int? hBorrowAmount,
+    int? iExpireAt,
+    int? jUseAt,
+    int? kStatus,
+    int? lAdminId,
+    int? mComment,
+    String? createdAt,
+  }) {
+    return CollectionLogOtherCouponList()
+      ..aUserId = aUserId ?? this.aUserId
+      ..bBorrowId = bBorrowId ?? this.bBorrowId
+      ..cPeriodId = cPeriodId ?? this.cPeriodId
+      ..dCouponChanceId = dCouponChanceId ?? this.dCouponChanceId
+      ..eCouponPrizeId = eCouponPrizeId ?? this.eCouponPrizeId
+      ..fDiscountRate = fDiscountRate ?? this.fDiscountRate
+      ..gDiscountAmount = gDiscountAmount ?? this.gDiscountAmount
+      ..hBorrowAmount = hBorrowAmount ?? this.hBorrowAmount
+      ..iExpireAt = iExpireAt ?? this.iExpireAt
+      ..jUseAt = jUseAt ?? this.jUseAt
+      ..kStatus = kStatus ?? this.kStatus
+      ..lAdminId = lAdminId ?? this.lAdminId
+      ..mComment = mComment ?? this.mComment
+      ..createdAt = createdAt ?? this.createdAt;
   }
 }
 

@@ -416,38 +416,50 @@ class _OrderItemState extends State<OrderItem> {
               ),
             ),
             if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var7!) > 0)
-              Row(
-                children: [
-                  Icon(
-                    Icons.discount,
-                    color: Colors.green,
-                    size: 12,
-                  ),
-                  Text(
-                    "-${int.parse(widget.repayInfo!.var7!)}%",
-                    style: TextStyle(color: Colors.green, fontSize: 12),
-                  ),
-                  Gaps.hGap12,
-                ],
+              InkWell(
+                onTap: () {
+                    showToast('This loan can be reduced by a maximum of ${widget.repayInfo!.var7!} %. ');
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.discount,
+                      color: Colors.green,
+                      size: 12,
+                    ),
+                    Text(
+                      "-${int.parse(widget.repayInfo!.var7!)}%",
+                      style: TextStyle(color: Colors.green, fontSize: 12),
+                    ),
+                    Gaps.hGap12,
+                  ],
+                ),
               )
             else
               Gaps.empty,
             if (!widget.inList &&
                 widget.repayInfo != null &&
                 int.parse(widget.repayInfo!.var5!) > 0)
-              Row(
-                children: [
-                  Icon(
-                    Icons.auto_fix_normal,
-                    color: Colors.orange,
-                    size: 14,
-                  ),
-                  Text(
-                    "${int.parse(widget.repayInfo!.var5!)}",
-                    style: TextStyle(color: Colors.orange, fontSize: 14),
-                  ),
-                  Gaps.hGap12,
-                ],
+              InkWell(
+                onTap: () {
+                    showToast('This customer has ${widget.repayInfo!.var5!} lottery draw chances.');
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.auto_fix_normal,
+                      color: Colors.orange,
+                      size: 14,
+                    ),
+                    Text(
+                      "${int.parse(widget.repayInfo!.var5!)}",
+                      style: TextStyle(color: Colors.orange, fontSize: 14),
+                    ),
+                    Gaps.hGap12,
+                  ],
+                ),
               )
             else
               Gaps.empty,
@@ -508,46 +520,74 @@ class _OrderItemState extends State<OrderItem> {
             else
               Gaps.empty,
             if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var3!) > 0)
-              Row(
-                children: [
-                  Icon(
-                    Icons.extension_outlined,
-                    color: Colors.purpleAccent,
-                    size: 14,
-                  ),
-                  Text(
-                    "${int.parse(widget.repayInfo!.var3!)}",
-                    style: TextStyle(color: Colors.purpleAccent, fontSize: 14),
-                  ),
-                  Gaps.hGap12,
-                ],
+              InkWell(
+                onTap: () {
+                    showToast('This customer has ${widget.repayInfo!.var3!} opportunities to extend..');
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.extension_outlined,
+                      color: Colors.purpleAccent,
+                      size: 14,
+                    ),
+                    Text(
+                      "${int.parse(widget.repayInfo!.var3!)}",
+                      style: TextStyle(color: Colors.purpleAccent, fontSize: 14),
+                    ),
+                    Gaps.hGap12,
+                  ],
+                ),
               )
             else
               Gaps.empty,
             if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
-              Row(
-                children: [
-                  Icon(
-                    Icons.transfer_within_a_station,
-                    color: Colors.red,
-                    size: 14,
-                  ),
-                  Gaps.hGap2,
-                  Text(
-                      "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
-                      style: TextStyle(color: Colors.red, fontSize: 14)),
-                ],
+              InkWell(
+                onTap: () {
+                    showToast("This case is a transferred case and will receive an additional ${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% bonus.");
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.transfer_within_a_station,
+                      color: Colors.red,
+                      size: 14,
+                    ),
+                    Gaps.hGap2,
+                    Text(
+                        "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
+                        style: TextStyle(color: Colors.red, fontSize: 14)),
+                  ],
+                ),
               )
             else
               Gaps.empty,
             Gaps.hGap4,
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-              ),
-              child: Text(
+            InkWell(
+                onTap: () {
+                  if(!widget.inList){
+                    
+                    showToast("The last time this customer used the app was ${(DateTime.now()
+                                .difference(DateTime.parse(
+                                    widget.track?.lastActiveTime ??
+                                        '2000-07-10T18:58:39.000000Z'))
+                                .inHours >=
+                            24)
+                        ? ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago'}");
+                  }
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      widget.inList? Icons.tag : Icons.login,
+                      color: Theme.of(context).colorScheme.tertiary,
+                      size: 14,
+                    ),
+                    Text(
                 widget.inList
                     ? widget.item.aKNo!
                     : (DateTime.now()
@@ -556,14 +596,39 @@ class _OrderItemState extends State<OrderItem> {
                                         '2000-07-10T18:58:39.000000Z'))
                                 .inHours >=
                             24)
-                        ? 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
-                        : 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+                        ? ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+                        : ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
                 style: TextStyle(
                   fontSize: Dimens.font_sp12,
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
-            ),
+                  ],
+                ),
+              ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            //   decoration: BoxDecoration(
+            //     color: Theme.of(context).colorScheme.tertiary.withOpacity(0.1),
+            //     borderRadius: const BorderRadius.all(Radius.circular(5)),
+            //   ),
+            //   child: Text(
+            //     widget.inList
+            //         ? widget.item.aKNo!
+            //         : (DateTime.now()
+            //                     .difference(DateTime.parse(
+            //                         widget.track?.lastActiveTime ??
+            //                             '2000-07-10T18:58:39.000000Z'))
+            //                     .inHours >=
+            //                 24)
+            //             ? 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
+            //             : 'Last used: ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago',
+            //     style: TextStyle(
+            //       fontSize: Dimens.font_sp12,
+            //       color: Theme.of(context).colorScheme.tertiary,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         Gaps.vGap4,

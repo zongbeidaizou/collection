@@ -303,7 +303,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   }
 
   Future<void> moreAction(int type, int orderId) async {
-    String url = HttpApi.collectionOrders;
+    String url = HttpApi.adminActions;
     if (type == 3) {
       url = HttpApi.coupon;
     }

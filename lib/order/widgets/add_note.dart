@@ -526,7 +526,7 @@ class _DeliveryProcesses extends StatelessWidget {
                       Text(
                         processes[index].overdueDays == 0
                             ? ''
-                            : ' (${processes[index].overdueDays} days)',
+                            : ' (Day ${processes[index].overdueDays} past due.)',
                         style: DefaultTextStyle.of(context)
                             .style
                             .copyWith(fontSize: 14.0, color: Colors.grey),
@@ -628,7 +628,7 @@ class _InnerTimeline extends StatelessWidget {
       // return index == 0 || index == messages.length + 1;
       return false;
     }
-
+    final bool isDark = context.isDark;
     final TextStyle? textTextStyle = Theme.of(context)
         .textTheme
         .bodyMedium
@@ -655,9 +655,18 @@ class _InnerTimeline extends StatelessWidget {
                   position: 0.5,
                   // border: Border(top:BorderSide(width: 1,color: Colors.black)),
                   color: Colors.white,
-                  size: 26,
-                  child: Text(messages[index].createdAt,
-                      style: TextStyle(fontSize: 10)),
+                  size: 36,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    padding: EdgeInsets.only(left: 6, right: 0, top: 7, bottom: 0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Text(messages[index].createdAt,
+                        style: TextStyle(fontSize: 10)),
+                  ),
                 )
               : null,
           startConnectorBuilder: (_, index) => Connector.dashedLine(
@@ -730,7 +739,7 @@ class _InnerTimeline extends StatelessWidget {
                         // TextSpan(text: " "),
                         TextSpan(
                             text: messages[index].message,
-                            style: TextStyle(fontSize: 12)),
+                            style: TextStyle(fontSize: 12, color: isDark ? Colors.white : Colors.black)),
                       ],
                     ),
                   ),

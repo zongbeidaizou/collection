@@ -101,7 +101,7 @@ class _OrderItemState extends State<OrderItem> {
       }
     }
 
-    // 根据报名状态设置不同的背景颜色
+    // 根据包名状态设置不同的背景颜色
     backgroundColor = _getBackgroundColorByStatus(widget.item, isDark);
 
     if (widget.item.tBorrowSn == 'QRSOSEDpZn') {
@@ -124,14 +124,14 @@ class _OrderItemState extends State<OrderItem> {
   Color _getBackgroundColorByStatus(CollectionOrderData item, bool isDark) {
     final appName = item.aZPackage?.toLowerCase() ?? '';
     if (appName.contains('kaka')) {
-      return Colors.blue.shade50;
+      return isDark ? Colors.blue.shade50 : Colors.blue.shade50;
     } else if (appName.contains('leading')) {
-      return Colors.green.shade50;
+      return isDark ? Colors.green.shade50 : Colors.green.shade50;
     } else if (appName.contains('moimoi')) {
-      return Colors.orange.shade50;
+      return isDark ? Colors.orange.shade50 : Colors.orange.shade50;
     }
     // 默认颜色
-    return Colors.green.shade50;
+    return isDark ? Colors.green.shade50 : Colors.green.shade50;
 
     // 默认背景颜色
   }

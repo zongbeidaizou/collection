@@ -137,11 +137,11 @@ class _OrderItemState extends State<OrderItem> {
   }
 
   Widget _buildContent(BuildContext context, Color buttonColor) {
+    final bool isDark = context.isDark;
     final TextStyle? textTextStyle = Theme.of(context)
         .textTheme
         .bodyMedium
-        ?.copyWith(fontSize: Dimens.font_sp12,color: Colors.black);
-    final bool isDark = context.isDark;
+        ?.copyWith(fontSize: Dimens.font_sp12,color: isDark ? Colors.white : Colors.black);
     void _showModalBottomSheet() {
       widget.item.aLLastLog = '';
       NavigatorUtils.push(context,
@@ -924,7 +924,7 @@ class _OrderItemState extends State<OrderItem> {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
-                                  ?.copyWith(fontSize: 8,color:Colors.black)),
+                                  ?.copyWith(fontSize: 8,color:isDark ? Colors.white : Colors.black)),
                         ],
                       ),
                     ],
@@ -960,7 +960,7 @@ class _OrderItemState extends State<OrderItem> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
-                                    ?.copyWith(fontSize: 8,color: Colors.black))
+                                    ?.copyWith(fontSize: 8,color:isDark ? Colors.white : Colors.black))
                           ],
                         );
                       }),

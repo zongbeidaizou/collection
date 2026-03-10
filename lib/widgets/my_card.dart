@@ -22,7 +22,7 @@ class MyCard extends StatelessWidget {
     final bool isDark = context.isDark;
 
     final Color backgroundColor = color ?? (isDark ? Colours.dark_bg_gray_ : Colors.white);
-    final Color sColor = isDark ? Colors.transparent : (shadowColor ?? const Color(0x80DCE7FA));
+    final Color sColor = isDark ? Colors.white54 : (shadowColor ?? const Color(0x80DCE7FA));
 
     return DecoratedBox(
       decoration: BoxDecoration(

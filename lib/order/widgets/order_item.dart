@@ -981,7 +981,7 @@ class _OrderItemState extends State<OrderItem> {
               Expanded(
                 child: Text(
                   widget.item.aLLastLog!,
-                  style: TextStyle(color: Colors.black, fontSize: 11),
+                  style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 11),
                   maxLines: 2, // 设置最大行数为2
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -126,7 +126,7 @@ class _OrderItemState extends State<OrderItem> {
     if (appName.contains('kaka')) {
       return isDark ? Colors.blue.shade50 : Colors.blue.shade50;
     } else if (appName.contains('leading')) {
-      return isDark ? Colors.green.shade50 : Colors.green.shade50;
+      return isDark ? const Color.fromARGB(255, 22, 24, 22) : Colors.green.shade50;
     } else if (appName.contains('moimoi')) {
       return isDark ? Colors.orange.shade50 : Colors.orange.shade50;
     }
@@ -405,10 +405,10 @@ class _OrderItemState extends State<OrderItem> {
                   children: [
                     TextSpan(
                       text: widget.item.aZPackage!, // 保持原样式
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontSize: Dimens.font_sp14,
                         fontWeight: FontWeight.w500,
-                        color:Colors.black
+                        color: isDark ? Colors.white : Colors.black
                       ),
                     )
                   ],
@@ -656,8 +656,8 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})'),
+                          TextSpan(text: widget.item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
+                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ],
                       ),
                     ),
@@ -691,7 +691,7 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.vName),
+                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ],
                       ),
                     ),
@@ -722,7 +722,7 @@ class _OrderItemState extends State<OrderItem> {
                           TextSpan(
                               text: widget.inList
                                   ? maskPhoneNumber(widget.item.uPhone!)
-                                  : widget.item.uPhone!),
+                                  : widget.item.uPhone!, style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ],
                       ),
                     ),
@@ -759,11 +759,11 @@ class _OrderItemState extends State<OrderItem> {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall
-                                  ?.copyWith(fontSize: Dimens.font_sp10)),
+                                  ?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
                           TextSpan(
                             text: Utils.formatPrice2(widget.period?.nPaidAmount ?? 0),
                             style: widget.period?.nPaidAmount == 0
-                                ? textTextStyle
+                                ? TextStyle(color: isDark ? Colors.white : Colors.black)
                                 : const TextStyle(
                                     fontSize: 12, color: Colors.greenAccent),
                           ),
@@ -798,7 +798,7 @@ class _OrderItemState extends State<OrderItem> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
-                                ?.copyWith(fontSize: Dimens.font_sp10)),
+                                ?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
                         if (!widget.inList &&
                             widget.repayInfo != null &&
                             int.parse(widget.repayInfo!.var7!) > 0) ...[
@@ -810,8 +810,8 @@ class _OrderItemState extends State<OrderItem> {
                                       (widget.period?.sPaidOverdueAmount ?? 0) -
                                       (widget.period?.oPaidBorrowAmount ?? 0) -
                                       (widget.period?.uDeductionTotalAmount ?? 0),
-                                  symbol: '')),
-                          TextSpan(text: ' - '),
+                                  symbol: ''), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                          TextSpan(text: ' - ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                           TextSpan(
                               text: Utils.formatPrice2(
                                   ((widget.period?.fExpectRepayTotalAmount ?? 0) -
@@ -820,7 +820,7 @@ class _OrderItemState extends State<OrderItem> {
                                       (int.parse(widget.repayInfo!.var7!) / 100),
                                   symbol: ''),
                               style: TextStyle(color: Colors.red)),
-                          TextSpan(text: ' = '),
+                          TextSpan(text: ' = ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                           TextSpan(
                               text: Utils.formatPrice2(
                                   (widget.period?.fExpectRepayTotalAmount ?? 0) -
@@ -832,7 +832,8 @@ class _OrderItemState extends State<OrderItem> {
                                       ((widget.period?.fExpectRepayTotalAmount ?? 0) -
                                               (widget.period?.qPaidServiceFee ?? 0) -
                                               (widget.period?.pPaidInterest ?? 0)) *
-                                          (int.parse(widget.repayInfo!.var7!) / 100))),
+                                          (int.parse(widget.repayInfo!.var7!) / 100)),
+                                          style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ] else
                           TextSpan(
                               text: Utils.formatPrice2(
@@ -842,7 +843,7 @@ class _OrderItemState extends State<OrderItem> {
                                 (widget.period?.sPaidOverdueAmount ?? 0) -
                                 (widget.period?.oPaidBorrowAmount ?? 0) -
                                 (widget.period?.uDeductionTotalAmount ?? 0),
-                          ))
+                          ), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                       ],
                     ),
                   ),
@@ -867,16 +868,16 @@ class _OrderItemState extends State<OrderItem> {
                       style: textTextStyle,
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'overdue days: ',
+                            text: 'overdue:',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
-                                ?.copyWith(fontSize: Dimens.font_sp10)),
+                                ?.copyWith(fontSize: Dimens.font_sp12, color: isDark ? Colors.white : Colors.black)),
                         TextSpan(
                             text: calculateCalendarDaysDifference(
                                     DateTime.parse(widget.item.pExpectRepayTime!),
                                     DateTime.now())
-                                .toString()),
+                                .toString(), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                       ],
                     ),
                   ),

@@ -10,22 +10,29 @@ class SendTypeDialog extends StatefulWidget {
   const SendTypeDialog({
     super.key,
     required this.onPressed,
+    required this.overdueDays,
   });
 
   final void Function(int, String) onPressed;
-
+  final int overdueDays;
   @override
   _SendTypeDialog createState() => _SendTypeDialog();
 }
 
 class _SendTypeDialog extends State<SendTypeDialog> {
   int _value = -1;
-  final _list = [
-    'Block customer',
-    'Fake customer contact list',
-    'Copy Contacts',
-    'Issue discount coupon (10%)'
-  ];
+  late final List<String> _list;
+
+  @override
+  void initState() {
+    super.initState();
+    _list = [
+      'Block customer',
+      'Fake customer contact list',
+      'Issue discount coupon (10%)',
+      if (widget.overdueDays > 4) 'Copy Contacts',
+    ];
+  }
 
   Widget _buildItem(int index) {
     return Material(

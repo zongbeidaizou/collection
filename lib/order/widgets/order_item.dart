@@ -217,6 +217,7 @@ class _OrderItemState extends State<OrderItem> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return SendTypeDialog(
+            overdueDays: widget.period?.lOverdueDays ?? 0,
             onPressed: (i, value) {
               widget.moreAction?.call(i);
             },

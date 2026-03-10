@@ -251,6 +251,7 @@ class _ShopSettingPageState extends State<ShopSettingPage> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return SendTypeDialog(
+          overdueDays: 0,
           onPressed: (i, value) {
             setState(() {
               _sendType = i;

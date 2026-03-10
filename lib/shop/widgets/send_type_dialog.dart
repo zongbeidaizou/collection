@@ -23,8 +23,8 @@ class _SendTypeDialog extends State<SendTypeDialog> {
   final _list = [
     'Block customer',
     'Fake customer contact list',
-    'Retain this case',
-    'Issue discount coupon',
+    'Copy Contacts',
+    'Issue discount coupon (10%)'
   ];
 
   Widget _buildItem(int index) {

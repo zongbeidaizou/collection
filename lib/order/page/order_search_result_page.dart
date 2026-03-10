@@ -112,6 +112,7 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
                   products: _product,
                   admins: _admins,
                   repayInfo: CollectionLogOtherRepayInfo(),
+                  couponList: const [],
                   track: CollectionLogOtherTrack(),
                   period: CollectionLogOtherPeriod(),
                   contactList: [],

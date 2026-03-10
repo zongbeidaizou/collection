@@ -450,7 +450,7 @@ class CollectionLogOtherCouponList {
 	@JSONField(name: 'h_borrow_amount')
 	int? hBorrowAmount = 0;
 	@JSONField(name: 'i_expire_at')
-	int? iExpireAt = 0;
+	String? iExpireAt = '';
 	@JSONField(name: 'j_use_at')
 	int? jUseAt = 0;
 	@JSONField(name: 'k_status')

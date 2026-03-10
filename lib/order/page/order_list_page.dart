@@ -150,6 +150,7 @@ class _OrderListPageState extends State<OrderListPage>
                                   products: _product,
                                   admins: _admins,
                                   repayInfo: CollectionLogOtherRepayInfo(),
+                                  couponList: const [],
                                   track: CollectionLogOtherTrack(),
                                   period: provider2.list
                                       .where((element) => indexMap[widget.index]

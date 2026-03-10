@@ -44,6 +44,7 @@ class OrderItem extends StatefulWidget {
     required this.smsHistory,
     required this.contactList,
     required this.repayInfo,
+    required this.couponList,
     required this.track,
     required this.period,
     this.onSendSms,
@@ -63,6 +64,7 @@ class OrderItem extends StatefulWidget {
   final List<CollectionLogOtherContactInfo2Data> allContactList;
   final List<CollectionLogOtherSmsHistory> smsHistory;
   final CollectionLogOtherRepayInfo? repayInfo;
+  final List<CollectionLogOtherCouponList> couponList;
   final CollectionLogOtherTrack? track;
   final CollectionLogOtherPeriod? period;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
@@ -74,6 +76,12 @@ class OrderItem extends StatefulWidget {
 
 class _OrderItemState extends State<OrderItem> {
   bool _isRetained = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isRetained = (widget.item.bBHasRetain ?? 0) == 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -423,57 +431,98 @@ class _OrderItemState extends State<OrderItem> {
               )
             else
               Gaps.empty,
-            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var5!) > 0)  
-            Row(
-              children: [
-                Icon(
-                  Icons.auto_fix_normal,
-                  color: Colors.orange,
-                  size: 14,
-                ),
-                Text(
-                  "${int.parse(widget.repayInfo!.var5!)}",
-                  style: TextStyle(color: Colors.orange, fontSize: 14),
-                ),
-                Gaps.hGap12,
-              ],
-            )
-            else
-              Gaps.empty,
-            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var6!) > 0)  
-            Row(
+            if (!widget.inList &&
+                widget.repayInfo != null &&
+                int.parse(widget.repayInfo!.var5!) > 0)
+              Row(
                 children: [
                   Icon(
-                    Icons.confirmation_number_rounded,
-                    color: Colors.green,
+                    Icons.auto_fix_normal,
+                    color: Colors.orange,
                     size: 14,
                   ),
                   Text(
-                    "${int.parse(widget.repayInfo!.var6!)}",
-                    style: TextStyle(color: Colors.green, fontSize: 14),
+                    "${int.parse(widget.repayInfo!.var5!)}",
+                    style: TextStyle(color: Colors.orange, fontSize: 14),
                   ),
                   Gaps.hGap12,
                 ],
               )
             else
               Gaps.empty,
-            // if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var9!) > 0)
-            //   Row(
-            //     children: [
-            //       Icon(
-            //         Icons.verified_outlined,
-            //         color: Colors.green,
-            //         size: 14,
-            //       ),
-            //       Text(
-            //         "${int.parse(widget.repayInfo!.var9!)}",
-            //         style: TextStyle(color: Colors.green, fontSize: 14),
-            //       ),
-            //       Gaps.hGap12,
-            //     ],
-            //   )
-            // else
-            //   Gaps.empty,
+            if (!widget.inList &&
+                widget.repayInfo != null &&
+                int.parse(widget.repayInfo!.var6!) > 0)
+              InkWell(
+                onTap: () {
+                  if (widget.couponList.isEmpty) {
+                    showToast('No coupon data');
+                    return;
+                  }
+                  showDialog<void>(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        title: const Text('Coupon List'),
+                        content: SizedBox(
+                          width: double.maxFinite,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: widget.couponList.length,
+                            itemBuilder: (_, index) {
+                              final coupon = widget.couponList[index];
+                              return ListTile(
+                                dense: true,
+                                title: Text(
+                                    'Discount: ${coupon.fDiscountRate ?? 0}%,  Expired at: ${DateFormat('MMM d').format(DateTime.parse(coupon.iExpireAt!).toUtc().add(const Duration(hours: 1)))}'),
+                              );
+                            },
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: const Text('Close'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.confirmation_number_rounded,
+                      color: Colors.green,
+                      size: 14,
+                    ),
+                    Text(
+                      "${int.parse(widget.repayInfo!.var6!)}",
+                      style: TextStyle(color: Colors.green, fontSize: 14),
+                    ),
+                    Gaps.hGap12,
+                  ],
+                ),
+              )
+            else
+              Gaps.empty,
+            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var3!) > 0)
+              Row(
+                children: [
+                  Icon(
+                    Icons.extension_outlined,
+                    color: Colors.purpleAccent,
+                    size: 14,
+                  ),
+                  Text(
+                    "${int.parse(widget.repayInfo!.var3!)}",
+                    style: TextStyle(color: Colors.purpleAccent, fontSize: 14),
+                  ),
+                  Gaps.hGap12,
+                ],
+              )
+            else
+              Gaps.empty,
             if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
               Row(
                 children: [
@@ -916,25 +965,25 @@ class _OrderItemState extends State<OrderItem> {
                       '${OrderRouter.orderInfoPage}?id=${widget.item.id}&track=${widget.track.toString()}&period=${widget.period.toString()}');
                 },
               ),
-              OrderItemButton(
-                key: Key('extend'),
-                text: "Ext",
-                icon: Icon(Icons.extension_outlined,
-                    size: 15, color: Colors.white),
-                textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
-                    ? Colors.grey
-                    : Colours.dark_app_main,
-                onTap: () {
-                  if ((widget.period?.lOverdueDays ?? 0) <= 0) {
-                    showToast('Case is not overdue, cannot be waived.');
-                    return;
-                  }
-                  NavigatorUtils.push(context,
-                      '${OrderRouter.orderInfoPage}?id=${widget.item.id}&track=${widget.track.toString()}&period=${widget.period.toString()}');
-                },
-              ),
-              Gaps.hGap4,
+              // OrderItemButton(
+              //   key: Key('extend'),
+              //   text: "Ext",
+              //   icon: Icon(Icons.extension_outlined,
+              //       size: 15, color: Colors.white),
+              //   textColor: isDark ? Colours.dark_button_text : Colors.white,
+              //   bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
+              //       ? Colors.grey
+              //       : Colours.dark_app_main,
+              //   onTap: () {
+              //     if ((widget.period?.lOverdueDays ?? 0) <= 0) {
+              //       showToast('Case is not overdue, cannot be waived.');
+              //       return;
+              //     }
+              //     NavigatorUtils.push(context,
+              //         '${OrderRouter.orderInfoPage}?id=${widget.item.id}&track=${widget.track.toString()}&period=${widget.period.toString()}');
+              //   },
+              // ),
+              // Gaps.hGap4,
               OrderItemButton(
                 key: Key('sms_recording'),
                 text: "Sms",
@@ -988,7 +1037,7 @@ class _OrderItemState extends State<OrderItem> {
               Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_2_${widget.index}'),
-                text: "Conts",
+                text: "Contacts",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 icon: Icon(Icons.people_alt_outlined,
@@ -998,18 +1047,30 @@ class _OrderItemState extends State<OrderItem> {
                 },
               ),
               Gaps.hGap4,
-              InkWell(
-                  onTap: () {
-                    _showSendTypeDialog();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(top: 7, bottom: 7),
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Icon(Icons.more_vert, size: 15, color: Colors.white),
-                  )),
+              OrderItemButton(
+                key: Key('order_button_more_${widget.index}'),
+                text: "Actions",
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                icon: Icon(Icons.more_vert,
+                    size: 15, color: Colors.white),
+                onTap: () async {
+                  _showSendTypeDialog();
+                },
+              ),
+              // Gaps.hGap4,
+              // InkWell(
+              //     onTap: () {
+              //       _showSendTypeDialog();
+              //     },
+              //     child: Container(
+              //       padding: EdgeInsets.only(top: 7, bottom: 7),
+              //       decoration: BoxDecoration(
+              //         color: Colors.blueAccent,
+              //         borderRadius: BorderRadius.circular(4.0),
+              //       ),
+              //       child: Icon(Icons.more_vert, size: 15, color: Colors.white),
+              //     )),
             ],
           )
       ],

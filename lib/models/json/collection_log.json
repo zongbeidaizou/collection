@@ -179,7 +179,7 @@
       "f_discount_rate": 50,
       "g_discount_amount": 50,
       "h_borrow_amount": 50,
-      "i_expire_at": 50,
+      "i_expire_at": "2024-11-28T07:53:28.000000Z",
       "j_use_at": 50,
       "k_status": 50,
       "l_admin_id": 50,

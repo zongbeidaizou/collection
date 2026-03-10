@@ -303,13 +303,17 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
   }
 
   Future<void> moreAction(int type, int orderId) async {
+    String url = HttpApi.collectionOrders;
+    if (type == 3) {
+      url = HttpApi.coupon;
+    }
     final formData = FormData.fromMap({
       // 包含原始 data 中的所有字段
       'type': type,
       'collection_order_id': orderId,
     });
     await requestNetwork<Map<String, dynamic>>(Method.post,
-        url: HttpApi.collectionOrders,
+        url: url,
         params: formData,
         isShow: true, onSuccess: (data) async {
       if (data != null) {

@@ -116,6 +116,8 @@ class CollectionOrderData {
 	int? aVTmpCollectionAdminId = 0;
 	@JSONField(name: "a_z_package")
 	String? aZPackage = '';
+	@JSONField(name: "b_b_has_retain")
+	int? bBHasRetain = 0;  
 	@JSONField(name: "a_a_a_a_a_q_b_periods")
 	CollectionLogOtherPeriod? aAAAAQBPeriods;
 

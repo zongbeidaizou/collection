@@ -1406,7 +1406,7 @@ CollectionLogOtherCouponList $CollectionLogOtherCouponListFromJson(
   if (hBorrowAmount != null) {
     collectionLogOtherCouponList.hBorrowAmount = hBorrowAmount;
   }
-  final int? iExpireAt = jsonConvert.convert<int>(json['i_expire_at']);
+  final String? iExpireAt = jsonConvert.convert<String>(json['i_expire_at']);
   if (iExpireAt != null) {
     collectionLogOtherCouponList.iExpireAt = iExpireAt;
   }
@@ -1463,7 +1463,7 @@ extension CollectionLogOtherCouponListExtension on CollectionLogOtherCouponList 
     int? fDiscountRate,
     int? gDiscountAmount,
     int? hBorrowAmount,
-    int? iExpireAt,
+    String? iExpireAt,
     int? jUseAt,
     int? kStatus,
     int? lAdminId,

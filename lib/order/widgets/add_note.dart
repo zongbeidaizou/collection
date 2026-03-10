@@ -359,13 +359,20 @@ class _AddNoteState extends State<AddNote>
               children: [
                 OrderItem(
                   key: Key('order_item_'),
-                  index: 1, tabIndex: 1, inList: false, admins: _admins,
+                  index: 1,
+                  tabIndex: 1,
+                  inList: false,
+                  admins: _admins,
                   showContactDays: _showContactDays,
-                  products: _product, item: item,
-                  smsHistory: _smsHistory, repayInfo: _repayInfo,
+                  products: _product,
+                  item: item,
+                  smsHistory: _smsHistory,
+                  repayInfo: _repayInfo,
+                  couponList: _data?.other?.couponList ?? const [],
                   contactList: _contact2List,
                   allContactList: _allContactList,
-                  track: _track, period: _period,
+                  track: _track,
+                  period: _period,
                   moreAction: (i) {
                     _addNotePresenter.moreAction(i, item.id!);
                   },

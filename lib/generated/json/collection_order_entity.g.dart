@@ -291,6 +291,10 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aZPackage != null) {
     collectionOrderData.aZPackage = aZPackage;
   }
+  final int? bBHasRetain = jsonConvert.convert<int>(json['b_b_has_retain']);
+  if (bBHasRetain != null) {
+    collectionOrderData.bBHasRetain = bBHasRetain;
+  }
   final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
       CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
   if (aAAAAQBPeriods != null) {
@@ -345,6 +349,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
   data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['a_z_package'] = entity.aZPackage;
+  data['b_b_has_retain'] = entity.bBHasRetain;
   data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
 }
@@ -394,6 +399,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? aOCurrentDayCallCount,
     int? aVTmpCollectionAdminId,
     String? aZPackage,
+    int? bBHasRetain,
     CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
@@ -446,6 +452,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
           this.aVTmpCollectionAdminId
       ..aZPackage = aZPackage ?? this.aZPackage
+      ..bBHasRetain = bBHasRetain ?? this.bBHasRetain
       ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
   }
 }

@@ -172,7 +172,7 @@ class _AccountRecordListPageState extends State<MessagePage>
               ),
         // toolbarHeight: 30,
         title: Text("News",
-            style: TextStyle(color: ThemeUtils.getIconColor(context))),
+            style: TextStyle(color: ThemeUtils.getTextColor(context))),
         actions: <Widget>[
           // IconButton(
           //         tooltip: 'mark all as read',
@@ -231,7 +231,7 @@ class _MessageItem extends StatelessWidget {
               ? Colors.white
               : bgColors[item.gCat!].withOpacity(0.46),
           color:
-              item.eReaded == 1 ? Colors.grey.shade200 : Colors.blue.shade200,
+              item.eReaded == 1 ? ThemeUtils.getBackgroundColor(context) : Colors.blue.shade200,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -248,7 +248,7 @@ class _MessageItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                     ),
-                    Expanded(child: Text(catText[item.gCat!])),
+                    Expanded(child: Text(catText[item.gCat!], style: TextStyle(color: ThemeUtils.getTextColor(context)),)),
                     Text(
                         DateFormat('MMM d, yyyy hh:mm a', 'en_US').format(
                             DateTime.parse(item.createdAt!)
@@ -256,7 +256,7 @@ class _MessageItem extends StatelessWidget {
                                 .add(const Duration(hours: 1))),
                         style: item.eReaded == 1
                             ? TextStyles.textSize12
-                            : TextStyle(fontSize: 12, color: Colors.black)),
+                            : TextStyle(fontSize: 12, color: ThemeUtils.getTextColor(context))),
                   ],
                 ),
                 Gaps.vGap8,
@@ -265,7 +265,7 @@ class _MessageItem extends StatelessWidget {
                 Text(item.hContent!,
                     style: item.eReaded == 1
                         ? TextStyles.textSize12
-                        : TextStyle(fontSize: 12, color: Colors.black)),
+                        : TextStyle(fontSize: 12, color: ThemeUtils.getTextColor(context))),
               ],
             ),
           ),

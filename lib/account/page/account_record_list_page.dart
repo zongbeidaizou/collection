@@ -182,7 +182,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                     ),
               // toolbarHeight: 30,
               title: Text("Bonus Record",
-                  style: TextStyle(color: ThemeUtils.getIconColor(context))),
+                  style: TextStyle(color: ThemeUtils.getTextColor(context))),
               actions: <Widget>[
                 // IconButton(
                 //   tooltip: 'mark all as read',
@@ -371,10 +371,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
     } else if (log.oType == 3) {
       txt = 'Manually Calculated';
-    } else if (log.oType == 5) {
-      txt = log.aAComment!;
     } else if (log.oType == 4) {
       txt = log.aAComment!;
+    } else if (log.oType == 5) {
+      txt = log.aAComment!;
+    } else if (log.oType == 7) {
+      txt = 'Extension Bonus  ';
     } else if (log.oType == 8) {
       txt =
           'Registered at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
@@ -404,7 +406,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       width: double.infinity,
       padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
-        color: bgColors[log.oType!],
+        color: ThemeUtils.getBackgroundColor(context),
         border: Border(
           bottom: Divider.createBorderSide(context, width: 0.8),
         ),
@@ -421,11 +423,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                     children: [
                       TextSpan(
                         text: maskPhoneNumber(log.pPhone!),
-                        style: const TextStyle(color: Colors.black),
+                        style: TextStyle(color: ThemeUtils.getTextColor(context)),
                       ),
                       TextSpan(
                         text: ' - ${log.nBorrowSn}',
-                        style: const TextStyle(color: Colors.grey),
+                        style: TextStyle(color: ThemeUtils.getTextColor(context)),
                       ),
                     ],
                   ),
@@ -500,6 +502,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               right: 0.0,
               child: Row(
                 children: [
+                  if (log.uIsSettled != 1)
+                    Text('Unsettled', style: TextStyle(fontSize: Dimens.font_sp10, color: ThemeUtils.getTextColor(context)),)
+                  else
+                    Gaps.empty,
+                  Gaps.hGap4,
                   Text(
                     "+${log.hCommissionAmount}",
                     style: TextStyle(
@@ -507,19 +514,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Gaps.hGap4,
-                  //红色圆点
-                  if (log.uIsSettled != 1)
-                    Container(
-                      width: 7,
-                      height: 7,
-                      decoration: const BoxDecoration(
-                        color: Colors.redAccent,
-                        shape: BoxShape.circle,
-                      ),
-                    )
-                  else
-                    Gaps.empty
+                  
+                  
                 ],
               ),
             ),

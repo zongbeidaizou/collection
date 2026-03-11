@@ -1022,7 +1022,7 @@ class _OrderItemState extends State<OrderItem> {
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
                     ? Colors.grey
-                    : Colours.dark_app_main,
+                    : (isDark ? Colours.dark_app_main : Colours.app_main),
                 onTap: () {
                   if ((widget.period?.lOverdueDays ?? 0) <= 0) {
                     showToast('Case is not overdue, cannot be waived.');
@@ -1057,7 +1057,7 @@ class _OrderItemState extends State<OrderItem> {
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: widget.showContactDays > (widget.period?.lOverdueDays ?? 0)
                     ? Colors.grey
-                    : Colours.dark_app_main,
+                    : (isDark ? Colours.dark_app_main : Colours.app_main),
                 icon: Icon(Icons.forum_outlined, size: 15, color: Colors.white),
                 onTap: () async {
                   if (widget.showContactDays > (widget.period?.lOverdueDays ?? 0)) {
@@ -1090,7 +1090,7 @@ class _OrderItemState extends State<OrderItem> {
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: widget.showContactDays > (widget.period?.lOverdueDays ?? 0)
                     ? Colors.grey
-                    : Colours.dark_app_main,
+                    : (isDark ? Colours.dark_app_main : Colours.app_main),
                 icon: Icon(Icons.group_add, size: 15, color: Colors.white),
                 onTap: () async {
                   if (widget.showContactDays > (widget.period?.lOverdueDays ?? 0)) {

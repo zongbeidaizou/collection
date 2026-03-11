@@ -14,6 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
 
 class SmsHistoryPage extends StatefulWidget {
   const SmsHistoryPage({
@@ -444,10 +445,10 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
 
     return Container(
       padding: const EdgeInsets.only(left: 6, right: 6, top: 6),
-      color: Colors.grey.shade200,
+      color: ThemeUtils.getBackgroundColor(context),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: ThemeUtils.getBackgroundColor(context),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8.0),
             topRight: Radius.circular(8.0),
@@ -459,9 +460,10 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
             final record = _list[index];
             return Card(
               margin: const EdgeInsets.all(8.0),
+              shadowColor: ThemeUtils.getShadowColor(context),
               color: _selectedIndex == index
-                  ? const Color.fromARGB(255, 210, 234, 253)
-                  : Colors.white,
+                  ? const Color.fromARGB(255, 116, 133, 146)
+                  : ThemeUtils.getBackgroundColor(context),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -482,7 +484,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                                   record.aBContactName!.isNotEmpty
                               ? record.aBContactName!
                               : record.address!,
-                          style: const TextStyle(fontSize: 14),
+                          style: TextStyle(fontSize: 14, color: ThemeUtils.getTextColor(context)),
                         ),
                         const Expanded(child: Gaps.empty),
                         IconButton(
@@ -522,7 +524,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                       record.body!,
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade600,
+                        color: ThemeUtils.getTextColor(context),
                       ),
                     ),
                     Gaps.vGap4,
@@ -534,7 +536,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
                               DateTime.fromMillisecondsSinceEpoch(
                                   record.dateSent! * 1000)),
                           style:
-                              const TextStyle(fontSize: 10, color: Colors.grey),
+                              TextStyle(fontSize: 10, color: ThemeUtils.getTextColor(context)),
                         ),
                         Gaps.hGap8
                       ],

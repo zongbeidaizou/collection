@@ -19,6 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../models/collection_log_entity.dart';
 import '../../util/toast_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
 
 const MethodChannel _contactChannel = MethodChannel('contact_channel');
 
@@ -66,10 +67,10 @@ class _ContactDialogState extends State<ContactDialog> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 6, right: 6, top: 6),
-      color: Colors.grey.shade200,
+      color: ThemeUtils.getBackgroundColor(context),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ThemeUtils.getBackgroundColor(context),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8.0),
             topRight: Radius.circular(8.0),
@@ -916,13 +917,16 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     return Card(
       shadowColor: Colors.blue,
       margin: const EdgeInsets.all(4.0),
+      color: widget.selected
+                ? const Color.fromARGB(255, 245, 151, 151)
+                : ThemeUtils.getBackgroundColor(context),
       child: Stack(
         children: [
-          ColoredBox(
-            color: widget.selected
-                ? const Color.fromARGB(255, 210, 234, 253)
-                : Colors.transparent,
-          ),
+          // ColoredBox(
+          //   color: widget.selected
+          //       ? const Color.fromARGB(255, 210, 234, 253)
+          //       : Colors.transparent,
+          // ),
           Padding(
             padding: const EdgeInsets.all(3.4),
             child: Row(
@@ -1277,11 +1281,12 @@ class _TemplateItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = context.isDark;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blue[50],
+          color: isDark ? ThemeUtils.getBackgroundColor(context) : Colors.blue[50],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
@@ -1297,10 +1302,10 @@ class _TemplateItem extends StatelessWidget {
                       onTap: onSelect,
                       child: Text(
                         template.sName ?? 'Empty message.',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 15,
                           height: 1.4,
-                          color: Colors.black,
+                          color: ThemeUtils.getTextColor(context),
                           fontWeight: FontWeight.w600,
                         ),
                         softWrap: true,
@@ -1366,10 +1371,10 @@ class _TemplateItem extends StatelessWidget {
                       const Divider(),
                       Text(
                         template.dTemplate!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           height: 1.5,
-                          color: Colors.black,
+                          color: ThemeUtils.getTextColor(context),
                         ),
                         softWrap: true,
                       ),

@@ -13,7 +13,7 @@ class ThemeUtils {
   }
 
   static Color? getIconColor(BuildContext context) {
-    return isDark(context) ? Colours.dark_text : null;
+    return isDark(context) ? Colours.bg_color : null;
   }
   
   static Color getStickyHeaderColor(BuildContext context) {
@@ -26,6 +26,15 @@ class ThemeUtils {
 
   static Color? getKeyboardActionsColor(BuildContext context) {
     return isDark(context) ? Colours.dark_bg_color : Colors.grey[200];
+  }
+  static Color? getTextColor(BuildContext context) {
+    return isDark(context) ? Colours.bg_color : Colors.black87;
+  }
+  static Color? getBackgroundColor(BuildContext context) {
+    return isDark(context) ? Colours.dark_bg_color : Colors.white;
+  }
+  static Color? getShadowColor(BuildContext context) {
+    return isDark(context) ? Colors.white : Colors.black87;
   }
 
   static const SystemUiOverlayStyle light = SystemUiOverlayStyle(

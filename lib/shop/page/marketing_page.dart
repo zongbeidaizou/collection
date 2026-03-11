@@ -280,6 +280,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
   bool get wantKeepAlive => true;
 
   List<Widget> _buildGroups() {
+    final bool isDark = context.isDark;
     // 按 qEndAt 日期分组
     final Map<String, List<MarketingData>> groupedData = {};
     final Map<String, DateTime> dateMap = {}; // 存储日期字符串对应的 DateTime，用于排序
@@ -462,7 +463,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
             onTap: _toggleSearch,
             child: Container(
                 padding: EdgeInsets.only(left: 16, right: 16),
-                child: Center(child: Text('Search'))),
+                child: Center(child: Text('Search',style: TextStyle(color: ThemeUtils.getIconColor(context))))),
           )
         ],
       ),
@@ -1068,7 +1069,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
             children: <Widget>[
               MyCard(
                 shadowColor: Colors.blueAccent,
-                color: widget.color,
+                color: ThemeUtils.getBackgroundColor(context),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
@@ -1098,10 +1099,10 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                           children: [
                             Text(
                               maskPhoneNumber(widget.item.aPhone ?? ''),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                                color: ThemeUtils.getTextColor(context),
                               ),
                             ),
                             Gaps.vGap4,
@@ -1170,7 +1171,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall
-                                      ?.copyWith(fontSize: 8),
+                                      ?.copyWith(fontSize: 8,color: ThemeUtils.getTextColor(context)),
                                 ),
                               ],
                             )
@@ -1203,7 +1204,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall
-                                      ?.copyWith(fontSize: 8),
+                                      ?.copyWith(fontSize: 8,color: ThemeUtils.getTextColor(context)),
                                 ),
                               ],
                             )
@@ -1245,7 +1246,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                             getLastClickTime('sms'),
                             style: TextStyle(
                               fontSize: 8,
-                              color: Colors.grey[600],
+                              color: ThemeUtils.getTextColor(context),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -1289,7 +1290,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                             getLastClickTime('call'),
                             style: TextStyle(
                               fontSize: 8,
-                              color: Colors.grey[600],
+                              color: ThemeUtils.getTextColor(context),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -1333,7 +1334,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                             getLastClickTime('whatsapp'),
                             style: TextStyle(
                               fontSize: 8,
-                              color: Colors.grey[600],
+                              color: ThemeUtils.getTextColor(context),
                               fontWeight: FontWeight.w500,
                             ),
                           ),

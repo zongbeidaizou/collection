@@ -1069,7 +1069,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
             children: <Widget>[
               MyCard(
                 shadowColor: Colors.blueAccent,
-                color: ThemeUtils.getBackgroundColor(context),
+                color: widget.selected? Colors.red : ThemeUtils.getBackgroundColor(context),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       left: 4.0, right: 4.0, top: 6.0, bottom: 6.0),
@@ -1217,6 +1217,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                         children: [
                           InkWell(
                             onTap: () {
+                              widget.onTap(widget.index);
                               setState(() {
                                 method = 'sms';
                               });

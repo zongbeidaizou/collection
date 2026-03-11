@@ -99,7 +99,7 @@ class _SettingPageState extends State<SettingPage> {
   void _showUpdateDialog() {
     showDialog<void>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (_) => const UpdateDialog());
   }
 }

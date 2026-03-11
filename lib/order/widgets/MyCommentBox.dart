@@ -98,7 +98,7 @@ class _MyCommentBoxState extends State<MyCommentBox> {
   void _showDialog() {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Select Promiss Repay Time"),

@@ -213,7 +213,7 @@ class _FreightConfigPageState extends State<FreightConfigPage> {
   void _showOrderPriceInputDialog(int index) {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return PriceInputDialog(
           title: '订单金额',
@@ -234,7 +234,7 @@ class _FreightConfigPageState extends State<FreightConfigPage> {
   void _showRangePriceInputDialog(int index) {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return RangePriceInputDialog(
           title: '订单金额',
@@ -252,7 +252,7 @@ class _FreightConfigPageState extends State<FreightConfigPage> {
   void _showFreightInputDialog(int index) {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return PriceInputDialog(
           title: _list[index].type == 1 ? '运费比率' : '运费金额',

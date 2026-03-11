@@ -197,7 +197,7 @@ class _OrderItemState extends State<OrderItem> {
         BuildContext context, CollectionLogOtherRepayInfo repayInfo) {
       showDialog<void>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return SmsDialog(
             repayInfo: repayInfo,
@@ -214,7 +214,7 @@ class _OrderItemState extends State<OrderItem> {
     void _showSendTypeDialog() {
       showElasticDialog<void>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return SendTypeDialog(
             overdueDays: widget.period?.lOverdueDays ?? 0,
@@ -229,7 +229,7 @@ class _OrderItemState extends State<OrderItem> {
     void _showCallPhoneDialog(BuildContext context, String phone) {
       showDialog<void>(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('提示'),

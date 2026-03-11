@@ -278,7 +278,7 @@ class _GoodsSizePageState extends State<GoodsSizePage> {
   void _showGoodsSizeDialog() {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return GoodsSizeDialog(
           onPressed: (name) {

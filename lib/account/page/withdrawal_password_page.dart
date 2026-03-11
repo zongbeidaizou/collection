@@ -52,7 +52,7 @@ class _WithdrawalPasswordPageState extends State<WithdrawalPasswordPage> {
   void _showHintDialog() {
     showElasticDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return BaseDialog(
           hiddenTitle: true,
@@ -72,7 +72,7 @@ class _WithdrawalPasswordPageState extends State<WithdrawalPasswordPage> {
   void _showVerifyDialog() {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (_) => const SMSVerifyDialog()
     );
   }

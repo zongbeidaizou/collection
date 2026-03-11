@@ -50,7 +50,7 @@ class _ContactDialogState extends State<ContactDialog> {
   void _showSmsDialog(BuildContext context, int contactId, String phone) {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return SmsDialog(
           repayInfo: widget.repayInfo,

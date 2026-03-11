@@ -218,7 +218,7 @@ class _ShopSettingPageState extends State<ShopSettingPage> {
   void _showInputDialog(String title, void Function(String) onPressed) {
     showDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return PriceInputDialog(
           title: title,
@@ -231,7 +231,7 @@ class _ShopSettingPageState extends State<ShopSettingPage> {
   void _showPayTypeDialog() {
     showElasticDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return PayTypeDialog(
           value: _selectValue,
@@ -248,7 +248,7 @@ class _ShopSettingPageState extends State<ShopSettingPage> {
   void _showSendTypeDialog() {
     showElasticDialog<void>(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return SendTypeDialog(
           overdueDays: 0,

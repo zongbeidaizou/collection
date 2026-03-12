@@ -250,20 +250,28 @@ class _OrderPageState extends State<OrderPage>
         sliver: SliverAppBar(
           systemOverlayStyle: isDark ? ThemeUtils.light : ThemeUtils.dark,
           actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                NavigatorUtils.push(context, OrderRouter.orderSearchPage);
-              },
-              tooltip: 'Search',
-              icon: Icon(Icons.search, size: 30.0, color: ThemeUtils.getIconColor(context)),
-            ),
+           
             IconButton(
               onPressed: () {
                 _addAllContacts(context);
               },
               tooltip: 'Add Contact',
               icon: Icon(Icons.group_add, size: 30.0, color: ThemeUtils.getIconColor(context)),
-            )
+            ),
+             IconButton(
+              onPressed: () {
+                NavigatorUtils.push(context, OrderRouter.orderSearchPage);
+              },
+              tooltip: 'Search',
+              icon: Icon(Icons.search, size: 30.0, color: ThemeUtils.getIconColor(context)),
+            ),
+             IconButton(
+              onPressed: () {
+                NavigatorUtils.push(context, OrderRouter.orderReceivePage);
+              },
+              tooltip: 'Receive',
+              icon: Icon(Icons.move_up, size: 30.0, color: ThemeUtils.getIconColor(context)),
+            ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0.0,

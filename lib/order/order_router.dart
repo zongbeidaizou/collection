@@ -5,6 +5,7 @@ import 'package:bounty_hunter/routers/i_router.dart';
 import 'page/order_info_page.dart';
 import 'page/order_page.dart';
 import 'page/order_search_page.dart';
+import 'page/order_receive_page.dart';
 import 'page/order_track_page.dart';
 
 class OrderRouter implements IRouterProvider{
@@ -12,6 +13,7 @@ class OrderRouter implements IRouterProvider{
   static String orderPage = '/order';
   static String orderInfoPage = '/order/info';
   static String orderSearchPage = '/order/search';
+  static String orderReceivePage = '/order/receive';
   static String orderTrackPage = '/order/track';
   static String notePage = '/order/note';
 
@@ -44,6 +46,7 @@ class OrderRouter implements IRouterProvider{
       );
     }));
     router.define(orderSearchPage, handler: Handler(handlerFunc: (_, __) => const OrderSearchPage()));
+    router.define(orderReceivePage, handler: Handler(handlerFunc: (_, __) => const OrderReceivePage()));
     router.define(orderTrackPage, handler: Handler(handlerFunc: (_, __) => const OrderTrackPage()));
   }
   

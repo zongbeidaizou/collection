@@ -50,6 +50,7 @@ class OrderItem extends StatefulWidget {
     this.onSendSms,
     this.moreAction,
     this.inList = true,
+    this.source = 'order',
     required this.allContactList,
   });
 
@@ -57,6 +58,7 @@ class OrderItem extends StatefulWidget {
   final int index;
   final int showContactDays;
   final bool inList;
+  final String source;
   final CollectionOrderData item;
   final List<ProductData> products;
   final List<AdminData> admins;
@@ -124,11 +126,11 @@ class _OrderItemState extends State<OrderItem> {
   Color _getBackgroundColorByStatus(CollectionOrderData item, bool isDark) {
     final appName = item.aZPackage?.toLowerCase() ?? '';
     if (appName.contains('kaka')) {
-      return isDark ? Colors.blue.shade50 : Colors.blue.shade50;
+      return isDark ? const Color.fromARGB(255, 6, 81, 134) : Colors.blue.shade50;
     } else if (appName.contains('leading')) {
       return isDark ? const Color.fromARGB(255, 22, 24, 22) : Colors.green.shade50;
     } else if (appName.contains('moimoi')) {
-      return isDark ? Colors.orange.shade50 : Colors.orange.shade50;
+      return isDark ? const Color.fromARGB(255, 129, 117, 97) : Colors.orange.shade50;
     }
     // 默认颜色
     return isDark ? Colors.green.shade50 : Colors.green.shade50;
@@ -381,7 +383,41 @@ class _OrderItemState extends State<OrderItem> {
             if (data != null && data.containsKey('message')) {
               showToast(data['message'] as String);
             } else {
-              showToast('Order retained successfully');
+              showToast('Order receive successfully');
+            }
+          },
+          onError: (code, msg) {
+            showToast(msg);
+          },
+        );
+      } catch (e) {
+        showToast('Failed to receive order');
+      }
+    }
+
+    Future<void> _receiveOrder() async {
+      if (widget.item.id == null) {
+        showToast('Order ID is missing');
+        return;
+      }
+
+      try {
+        final formData = FormData.fromMap({
+          'collection_order_id': widget.item.id,
+        });
+
+        await DioUtils.instance.requestNetwork<Map<String, dynamic>>(
+          Method.post,
+          HttpApi.receives,
+          params: formData,
+          onSuccess: (data) {
+            setState(() {
+              _isRetained = true;
+            });
+            if (data != null && data.containsKey('message')) {
+              showToast(data['message'] as String);
+            } else {
+              showToast('Order receive successfully');
             }
           },
           onError: (code, msg) {
@@ -910,12 +946,12 @@ class _OrderItemState extends State<OrderItem> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text((DateTime.parse(widget.item.sFlowOutTime!)
+                          Text(widget.source == 'order' ? ((DateTime.parse(widget.item.sFlowOutTime!)
                                       .difference(DateTime.now())
                                       .inHours >=
                                   24)
                               ? '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
-                              : '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left',style: textTextStyle,),
+                              : '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left') : ' ----',style: textTextStyle,),
                           Text(
                               widget.item.aDLastLogTime != null &&
                                       widget.item.aDLastLogTime!.isNotEmpty
@@ -956,7 +992,7 @@ class _OrderItemState extends State<OrderItem> {
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 && provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 && provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! ? '+20' : ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
@@ -988,7 +1024,7 @@ class _OrderItemState extends State<OrderItem> {
               ),
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
               Gaps.hGap4,
-              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
+              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained && widget.source == 'order')
               OrderItemButton(
                 key: Key('order_button_4_${widget.index}'),
                 text: 'Retain',
@@ -999,15 +1035,27 @@ class _OrderItemState extends State<OrderItem> {
                 },
               ),
               Gaps.hGap4,
-              OrderItemButton(
-                key: Key('order_button_3_${widget.index}'),
-                text: 'Detail',
-                textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: buttonColor,
-                onTap: () {
-                  _showModalBottomSheet();
-                },
-              )
+              if(widget.source == 'order')
+                OrderItemButton(
+                  key: Key('order_button_3_${widget.index}'),
+                  text: 'Detail',
+                  textColor: isDark ? Colours.dark_button_text : Colors.white,
+                  bgColor: buttonColor,
+                  onTap: () {
+                    _showModalBottomSheet();
+                  },
+                ),
+                if(widget.source == 'receive')
+                OrderItemButton(
+                  key: Key('order_button_4_${widget.index}'),
+                  text: 'Receive',
+                  textColor: isDark ? Colours.dark_button_text : Colors.white,
+                  bgColor: buttonColor,
+                  onTap: () {
+                    _receiveOrder();
+                  },
+                )
+                
             ],
           )
         else
@@ -1160,7 +1208,7 @@ class _OrderItemState extends State<OrderItem> {
     // 计算额外佣金率
     final int overdueDays = period?.lOverdueDays ?? 0;
     final bool isDifferentAdmin =
-        item.eCollectionAdminId! != item.aVTmpCollectionAdminId!;
+        item.eCollectionAdminId! != item.aVTmpCollectionAdminId! || provider.userEntity.profile!.id != item.aVTmpCollectionAdminId!;
 
     double additionalRate = 0.0;
     if (isDifferentAdmin) {

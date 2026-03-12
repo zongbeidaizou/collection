@@ -32,19 +32,19 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
 
   Future<List<CollectionOrderData>> index(
       int page, int status, bool isShowDialog,
-      {String keyword = ''}) async {
-    if (keyword == 'JJJJJJJJJJJ') {
+      {String keyword = '', String keyword2 = ''}) async {
+    if (keyword == 'JJJJJJJJJJJ' || keyword2 == 'JJJJJJJJJJJ') {
       return [];
     }
 
     List<CollectionOrderData> _list = <CollectionOrderData>[];
     await requestNetwork<CollectionOrderEntity>(Method.get,
         url: HttpApi.collectionOrders,
-        queryParameters: {'page': page, 'keyword': keyword, 'version': '3.0'},
+        queryParameters: {'page': page, 'keyword': keyword,'keyword2': keyword2,  'version': '4'},
         onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;
-        if (keyword == '') {
+        if (keyword == '' && keyword2 == '') {
           view.getContext().read<OrderListProvider>().setList(data.data!);
         }
 
@@ -60,6 +60,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     });
     return _list;
   }
+  
 
   Future<bool> deduction(
       Map<String, dynamic> loginInfo, bool isShowDialog) async {

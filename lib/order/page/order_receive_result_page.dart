@@ -24,8 +24,8 @@ const List<List<int>> indexMap = [
   [4, 5]
 ];
 
-class OrderSearchResultPage extends StatefulWidget {
-  const OrderSearchResultPage({
+class OrderReceiveResultPage extends StatefulWidget {
+  const OrderReceiveResultPage({
     super.key,
     required this.index,
     required this.keyword,
@@ -35,14 +35,14 @@ class OrderSearchResultPage extends StatefulWidget {
   final String keyword;
 
   @override
-  _OrderSearchResultPageState createState() => _OrderSearchResultPageState();
+  _OrderReceiveResultPageState createState() => _OrderReceiveResultPageState();
 }
 
-class _OrderSearchResultPageState extends State<OrderSearchResultPage>
+class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
     with
-        AutomaticKeepAliveClientMixin<OrderSearchResultPage>,
-        ChangeNotifierMixin<OrderSearchResultPage>,
-        BasePageMixin<OrderSearchResultPage, OrderListPagePresenter>
+        AutomaticKeepAliveClientMixin<OrderReceiveResultPage>,
+        ChangeNotifierMixin<OrderReceiveResultPage>,
+        BasePageMixin<OrderReceiveResultPage, OrderListPagePresenter>
     implements OrderListPageIMvpView {
   final ScrollController _controller = ScrollController();
   final StateType _stateType = StateType.loading;
@@ -118,11 +118,12 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
                   contactList: [],
                   smsHistory: [],
                   allContactList: [],
+                  source:'receive',
                 ),
               )
             : Center(
                 child:
-                    Text('Search by phone or contact phone or borrower name ')),
+                    Text('Receive by phone or contact phone or borrower name ')),
       ),
     );
   }
@@ -147,9 +148,9 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
   }
 
   Future<void> _onRefresh() async {
-    String keyword = widget.keyword.isNotEmpty ? widget.keyword : 'JJJJJJJJJJJ';
+    String keyword = widget.keyword.isNotEmpty ? widget.keyword : 'random';
     _list = await _orderListPagePresenter.index(1, widget.index, true,
-        keyword: keyword);
+        keyword2: keyword);
     setState(() {
       _page = 1;
     });

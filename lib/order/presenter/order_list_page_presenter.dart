@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
-import 'package:bounty_hunter/order/iview/order_search_iview.dart';
-import 'package:bounty_hunter/order/models/search_entity.dart';
-import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -38,26 +36,41 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
     }
 
     List<CollectionOrderData> _list = <CollectionOrderData>[];
-    await requestNetwork<CollectionOrderEntity>(Method.get,
-        url: HttpApi.collectionOrders,
-        queryParameters: {'page': page, 'keyword': keyword,'keyword2': keyword2,  'version': '4'},
-        onSuccess: (data) async {
-      if (data != null) {
-        _list = data.data!;
-        if (keyword == '' && keyword2 == '') {
-          view.getContext().read<OrderListProvider>().setList(data.data!);
-        }
+    await requestNetwork<CollectionOrderEntity>(
+      Method.get,
+      url: HttpApi.collectionOrders,
+      queryParameters: {
+        'page': page,
+        'keyword': keyword,
+        'keyword2': keyword2,
+        'version': '4'
+      },
+      onSuccess: (data) async {
+        if (data != null) {
+          _list = data.data!;
+          if (keyword == '' && keyword2 == '') {
+            view.getContext().read<OrderListProvider>().setList(data.data!);
+          }
 
-        // view.setList(data.data!);
-      }
-      view.getContext().read<UserProvider>().setUserEntity(data!.other!);
-      view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
-    }, onError: (_, __) async {
+          // view.setList(data.data!);
+          view.getContext().read<UserProvider>().setUserEntity(data.other!);
+          view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
+
+          // After a successful index call, show the admin info dialog
+          // once per day, only for the first page and non-search requests.
+            await _maybeShowAdminInfoDialog(
+              view.getContext(),
+              data.other?.profile,
+            );
+        }
+      },
+      onError: (_, __) async {
       if (_ == 200006) {
       } else {
         view.showToast(__);
       }
-    });
+      },
+    );
     return _list;
   }
   
@@ -193,5 +206,79 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
         SpUtil.remove('contactWeights2');
       }, onError: (_, __) async {});
     }
+  }
+
+  static const String _kAdminInfoDialogLastShownKey =
+      'order_list_admin_info_dialog_last_shown_date';
+
+  Future<void> _maybeShowAdminInfoDialog(
+      BuildContext context, CollectionOrderOtherProfile? profile) async {
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    final lastShown = await Cache().getString(_kAdminInfoDialogLastShownKey);
+    if (lastShown == today) return;
+
+    await Cache().setString(_kAdminInfoDialogLastShownKey, today);
+
+    final name = profile?.aName ?? '--';
+    final marketing = profile?.cRTodayMarketingCnt ?? 0;
+    final weekCouponLeft = profile?.cLWeekCouponLeftCnt ?? 0;
+    final weekExtendCnt = profile?.cNWeekExtendCnt ?? 0;
+    final weekRetainLeft = profile?.cPWeekRetainLeftCnt ?? 0;
+    final weekReceiveLeft = profile?.cQWeekReceiveLeftCnt ?? 0;
+    final weekWaLeft = profile?.cJWeekWaLeftCnt ?? 0;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext ctx) {
+        final textStyle = Theme.of(ctx).textTheme.bodyMedium;
+        Widget row(String label, String value) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                Expanded(child: Text(label, style: textStyle)),
+                Text(value, style: textStyle),
+              ],
+            ),
+          );
+        }
+
+        final now2 = DateTime.now();
+        final todayStr =
+            '${now2.year}-${now2.month.toString().padLeft(2, '0')}-${now2.day.toString().padLeft(2, '0')}';
+
+        return AlertDialog(
+          title: Text('Admin Info ($todayStr)'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                row('Admin', name),
+                const Divider(height: 16),
+                row('New marketing cases today', marketing.toString()),
+                row('Discount coupons remaining this week',
+                    weekCouponLeft.toString()),
+                row('Extensions remaining this week', weekExtendCnt.toString()),
+                row('Retains available this week', weekRetainLeft.toString()),
+                row('Receives available this week', weekReceiveLeft.toString()),
+                row('WhatsApp applications available this week',
+                    weekWaLeft.toString()),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -9,6 +9,16 @@ class Cache {
 
   Cache._internal();
 
+  Future<void> setString(String key, String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
+  }
+
+  Future<String?> getString(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
+
   Future<void> cacheData(String key, String data, int expiredSecond) async {
     final DateTime expiredTime = DateTime.now().add(Duration(seconds: expiredSecond));
     final SharedPreferences prefs = await SharedPreferences.getInstance();

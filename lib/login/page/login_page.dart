@@ -14,7 +14,6 @@ import 'package:sp_util/sp_util.dart';
 import '../../mvp/base_page.dart';
 import '../../routers/routers.dart';
 import '../iview/login_page_iview.dart';
-import '../login_router.dart';
 import '../presenter/login_page_presenter.dart';
 
 /// design/1注册登录/index.html
@@ -55,6 +54,7 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     });
     _nameController.text = SpUtil.getString(Constant.phone).nullSafe;
+    _passwordController.text = SpUtil.getString(Constant.password).nullSafe;
   }
 
   void _verify() {
@@ -87,12 +87,14 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifierMixin<LoginPag
   
   void _login() {
     SpUtil.putString(Constant.phone, _nameController.text);
+    SpUtil.putString(Constant.password, _passwordController.text);
     String phone = SpUtil.getString(Constant.phone)!;
     _loginPagePresenter.login(phone, _passwordController.text, false);
   }
   
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: MyAppBar(
         isBack: false,

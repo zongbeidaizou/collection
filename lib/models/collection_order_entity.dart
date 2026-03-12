@@ -299,7 +299,14 @@ class CollectionOrderOtherProfile {
 	@JSONField(name: "c_n_week_extend_cnt")
 	int? cNWeekExtendCnt = 0;  
 	@JSONField(name: "c_o_month_extend_cnt")
-	int? cOMonthExtendCnt = 0;           
+	int? cOMonthExtendCnt = 0;
+	@JSONField(name: "c_p_week_retain_left_cnt")
+	int? cPWeekRetainLeftCnt = 0;  
+	@JSONField(name: "c_q_week_receive_left_cnt")
+	int? cQWeekReceiveLeftCnt = 0;
+	@JSONField(name: "c_r_today_marketing_cnt")
+	int? cRTodayMarketingCnt = 0;
+
 
 
 	CollectionOrderOtherProfile();

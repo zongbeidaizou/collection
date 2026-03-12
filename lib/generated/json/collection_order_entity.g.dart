@@ -880,6 +880,21 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (cOMonthExtendCnt != null) {
     collectionOrderOtherProfile.cOMonthExtendCnt = cOMonthExtendCnt;
   }
+  final int? cPWeekRetainLeftCnt = jsonConvert.convert<int>(
+      json['c_p_week_retain_left_cnt']);
+  if (cPWeekRetainLeftCnt != null) {
+    collectionOrderOtherProfile.cPWeekRetainLeftCnt = cPWeekRetainLeftCnt;
+  }
+  final int? cQWeekReceiveLeftCnt = jsonConvert.convert<int>(
+      json['c_q_week_receive_left_cnt']);
+  if (cQWeekReceiveLeftCnt != null) {
+    collectionOrderOtherProfile.cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt;
+  }
+  final int? cRTodayMarketingCnt = jsonConvert.convert<int>(
+      json['c_r_today_marketing_cnt']);
+  if (cRTodayMarketingCnt != null) {
+    collectionOrderOtherProfile.cRTodayMarketingCnt = cRTodayMarketingCnt;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -932,6 +947,9 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['c_m_week_extend_left_cnt'] = entity.cMWeekExtendLeftCnt;
   data['c_n_week_extend_cnt'] = entity.cNWeekExtendCnt;
   data['c_o_month_extend_cnt'] = entity.cOMonthExtendCnt;
+  data['c_p_week_retain_left_cnt'] = entity.cPWeekRetainLeftCnt;
+  data['c_q_week_receive_left_cnt'] = entity.cQWeekReceiveLeftCnt;
+  data['c_r_today_marketing_cnt'] = entity.cRTodayMarketingCnt;
   return data;
 }
 
@@ -981,6 +999,9 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? cMWeekExtendLeftCnt,
     int? cNWeekExtendCnt,
     int? cOMonthExtendCnt,
+    int? cPWeekRetainLeftCnt,
+    int? cQWeekReceiveLeftCnt,
+    int? cRTodayMarketingCnt,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -1035,6 +1056,9 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cLWeekCouponLeftCnt = cLWeekCouponLeftCnt ?? this.cLWeekCouponLeftCnt
       ..cMWeekExtendLeftCnt = cMWeekExtendLeftCnt ?? this.cMWeekExtendLeftCnt
       ..cNWeekExtendCnt = cNWeekExtendCnt ?? this.cNWeekExtendCnt
-      ..cOMonthExtendCnt = cOMonthExtendCnt ?? this.cOMonthExtendCnt;
+      ..cOMonthExtendCnt = cOMonthExtendCnt ?? this.cOMonthExtendCnt
+      ..cPWeekRetainLeftCnt = cPWeekRetainLeftCnt ?? this.cPWeekRetainLeftCnt
+      ..cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt ?? this.cQWeekReceiveLeftCnt
+      ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt;
   }
 }

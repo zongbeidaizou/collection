@@ -30,7 +30,7 @@ class _SendTypeDialog extends State<SendTypeDialog> {
       'Block customer',
       'Fake customer contact list',
       'Issue discount coupon (10%)',
-      if (widget.overdueDays > 4) 'Copy Contacts',
+      // if (widget.overdueDays > 4) 'Copy Contacts',
     ];
   }
 

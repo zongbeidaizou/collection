@@ -109,6 +109,41 @@ class _ContactDialogState extends State<ContactDialog> {
                     'Label contacts to boost efficiency. Labels are permanent, private, and visible only to you.'),
               ),
             Gaps.vGap8,
+            if (widget.period != null && widget.period!.lOverdueDays! > 5)
+              SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  icon: const Icon(Icons.copy, color: Colors.white, size: 18),
+                  label: const Text(
+                    'Copy all contacts (name & phone)',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () {
+                    final lines = widget.contactList
+                        .map((c) =>
+                            '${c.fName?.trim() ?? ''} ${c.gPhone?.trim() ?? ''}'
+                                .trim())
+                        .where((value) => value.isNotEmpty)
+                        .toList();
+                    if (lines.isEmpty) {
+                      showToast('No contacts to copy');
+                      return;
+                    }
+                    final text = lines.join('\n');
+                    Clipboard.setData(ClipboardData(text: text));
+                    showToast('All contacts copied');
+                  },
+                ),
+              ),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.contactList.length,

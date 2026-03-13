@@ -17,6 +17,7 @@ import 'package:flutter_swiper_null_safety_flutter3/flutter_swiper_null_safety_f
 import 'package:quick_actions/quick_actions.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sp_util/sp_util.dart';
+import '../../routers/routers.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -74,7 +75,7 @@ class _SplashPageState extends State<SplashPage> {
   void _initSplash() {
         final String accessToken = SpUtil.getString(Constant.accessToken).nullSafe;
         if (accessToken.isNotEmpty) {
-          NavigatorUtils.push(context, OrderRouter.orderPage, clearStack: true);
+          NavigatorUtils.push(context, Routes.home, clearStack: true);
         } else {
           _goLogin();
         }

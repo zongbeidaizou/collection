@@ -28,6 +28,7 @@ import 'package:dio/dio.dart';
 import '../../net/net.dart';
 
 import 'dart:ui';
+import 'repayment_bill_dialog.dart';
 
 import 'contact_dialog.dart';
 
@@ -52,6 +53,7 @@ class OrderItem extends StatefulWidget {
     this.moreAction,
     this.inList = true,
     this.source = 'order',
+    this.avatar = '',
     required this.allContactList,
   });
 
@@ -72,7 +74,7 @@ class OrderItem extends StatefulWidget {
   final CollectionLogOtherPeriod? period;
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final void Function(int)? moreAction;
-
+  final String avatar;
   @override
   State<OrderItem> createState() => _OrderItemState();
 }
@@ -117,7 +119,7 @@ class _OrderItemState extends State<OrderItem> {
           onlyBottom: !widget.inList,
           color: backgroundColor,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
             child: _buildContent(context, buttonColor),
           ),
         ));
@@ -923,7 +925,7 @@ class _OrderItemState extends State<OrderItem> {
             ),
           ],
         ),
-        Gaps.vGap8,
+        Gaps.vGap4,
         // Gaps.line,
         if (widget.inList)
           Row(
@@ -1009,9 +1011,8 @@ class _OrderItemState extends State<OrderItem> {
             ],
           ),
 
-        Gaps.vGap8,
+        if(widget.inList) Gaps.vGap8,
         Gaps.line,
-        Gaps.vGap8,
         if (widget.inList)
           Row(
             children: <Widget>[
@@ -1063,6 +1064,29 @@ class _OrderItemState extends State<OrderItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              OrderItemButton(
+                key: Key('order_bill'),
+                text: "Bill",
+                icon: Icon(Icons.receipt,
+                    size: 15, color: Colors.white),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
+                    ? Colors.grey
+                    : (isDark ? Colours.dark_app_main : Colours.app_main),
+                onTap: () {
+          showDialog<void>(
+                            context: context,
+                            builder: (context) {
+                              return RepaymentBillDialog(
+                                avatar: widget.avatar,
+                                repayInfo: widget.repayInfo,
+                                period: widget.period,
+                                track: widget.track,
+                              );
+                            },
+                          );
+                },
+              ),
               OrderItemButton(
                 key: Key('order_reducation'),
                 text: "Waive",
@@ -1132,7 +1156,7 @@ class _OrderItemState extends State<OrderItem> {
                 },
               ),
               // Gaps.hGap4,
-              Gaps.hGap4,
+              // Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_22_${widget.index}'),
                 text: "All",
@@ -1150,7 +1174,7 @@ class _OrderItemState extends State<OrderItem> {
                   _showContactListModal(allContacts: true);
                 },
               ),
-              Gaps.hGap4,
+              // Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_2_${widget.index}'),
                 text: "Contacts",
@@ -1162,7 +1186,7 @@ class _OrderItemState extends State<OrderItem> {
                   _showContactListModal();
                 },
               ),
-              Gaps.hGap4,
+              // Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_more_${widget.index}'),
                 text: "Actions",
@@ -1364,7 +1388,7 @@ class OrderItemButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4.0),
@@ -1379,7 +1403,7 @@ class OrderItemButton extends StatelessWidget {
                 children: [
                   Text(text,
                       style: TextStyle(
-                          fontSize: Dimens.font_sp14, color: textColor)),
+                          fontSize: 13, color: textColor)),
                   Gaps.hGap2,
                   icon!,
                 ],

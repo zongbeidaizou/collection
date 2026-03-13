@@ -374,6 +374,7 @@ class _AddNoteState extends State<AddNote>
                   allContactList: _allContactList,
                   track: _track,
                   period: _period,
+                  avatar: _avatar ?? '',
                   moreAction: (i) {
                     _addNotePresenter.moreAction(i, item.id!);
                   },

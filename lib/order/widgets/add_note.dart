@@ -375,25 +375,6 @@ class _AddNoteState extends State<AddNote>
                   track: _track,
                   period: _period,
                   moreAction: (i) {
-                    if (i == 3) {
-                      if ((_period?.lOverdueDays ?? 0) <= 4) {
-                        showToast('Only overdue days > 4 can copy contacts');
-                        return;
-                      }
-                      if (_contact2List.isEmpty) {
-                        showToast('No contacts');
-                        return;
-                      }
-                      final text = _contact2List
-                          .map((e) =>
-                              '${(e.fName ?? '').trim()} ${(e.gPhone ?? '').trim()}'
-                                  .trim())
-                          .where((s) => s.isNotEmpty)
-                          .join('\n');
-                      FlutterClipboard.copy(text);
-                      showToast('Copied contacts');
-                      return;
-                    }
                     _addNotePresenter.moreAction(i, item.id!);
                   },
                   onSendSms: (smsTemplateId, smsContent,

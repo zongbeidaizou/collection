@@ -4,6 +4,9 @@ import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/widgets/base_dialog.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user_provider.dart';
 
 /// design/7店铺-店铺配置/index.html#artboard9
 class SendTypeDialog extends StatefulWidget {
@@ -21,20 +24,14 @@ class SendTypeDialog extends StatefulWidget {
 
 class _SendTypeDialog extends State<SendTypeDialog> {
   int _value = -1;
-  late final List<String> _list;
+  List<String> _buildOptions(int couponLeftCnt, int extendLeftCnt) => [
+        'Block customer',
+        'Fake customer contact list',
+        'Issue discount coupon (10%) ($couponLeftCnt left)',
+        'Extend ($extendLeftCnt left)',
+      ];
 
-  @override
-  void initState() {
-    super.initState();
-    _list = [
-      'Block customer',
-      'Fake customer contact list',
-      'Issue discount coupon (10%)',
-      // if (widget.overdueDays > 4) 'Copy Contacts',
-    ];
-  }
-
-  Widget _buildItem(int index) {
+  Widget _buildItem(int index, List<String> options) {
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
@@ -45,7 +42,7 @@ class _SendTypeDialog extends State<SendTypeDialog> {
               Gaps.hGap16,
               Expanded(
                 child: Text(
-                  _list[index],
+                  options[index],
                   style: _value == index
                       ? TextStyle(
                           fontSize: Dimens.font_sp14,
@@ -75,19 +72,25 @@ class _SendTypeDialog extends State<SendTypeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final int couponLeftCnt = context.select<UserProvider, int>(
+        (p) => p.userEntity.profile?.cLWeekCouponLeftCnt ?? 0);
+    final int extendLeftCnt = context.select<UserProvider, int>(
+        (p) => p.userEntity.profile?.cNWeekExtendCnt ?? 0);
+    final options = _buildOptions(couponLeftCnt, extendLeftCnt);
     return BaseDialog(
       title: 'More Options',
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(_list.length, (i) => _buildItem(i))),
+          children:
+              List.generate(options.length, (i) => _buildItem(i, options))),
       onPressed: () {
         if (_value == -1) {
           showToast('Please select a type');
           return;
         }
         NavigatorUtils.goBack(context);
-        widget.onPressed(_value, _list[_value]);
+        widget.onPressed(_value, options[_value]);
       },
     );
   }

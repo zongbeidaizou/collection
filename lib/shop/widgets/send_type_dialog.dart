@@ -104,7 +104,7 @@ class _SendTypeDialog extends State<SendTypeDialog> {
     final int couponLeftCnt = context.select<UserProvider, int>(
         (p) => p.userEntity.profile?.cLWeekCouponLeftCnt ?? 0);
     final int extendLeftCnt = context.select<UserProvider, int>(
-        (p) => p.userEntity.profile?.cNWeekExtendCnt ?? 0);
+        (p) => p.userEntity.profile?.cMWeekExtendLeftCnt ?? 0);
     final options = _buildOptions(couponLeftCnt, extendLeftCnt);
     return BaseDialog(
       title: 'More Options',

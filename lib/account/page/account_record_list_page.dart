@@ -502,7 +502,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               right: 0.0,
               child: Row(
                 children: [
-                  if (log.uIsSettled != 1)
+                  if (log.uIsSettled != 1 && log.oType != 7)
                     Text('Unsettled', style: TextStyle(fontSize: Dimens.font_sp10, color: ThemeUtils.getTextColor(context)),)
                   else
                     Gaps.empty,

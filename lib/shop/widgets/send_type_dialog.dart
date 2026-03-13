@@ -31,6 +31,21 @@ class _SendTypeDialog extends State<SendTypeDialog> {
         'Extend ($extendLeftCnt left for this week)',
       ];
 
+  IconData _iconForIndex(int index) {
+    switch (index) {
+      case 0:
+        return Icons.block;
+      case 1:
+        return Icons.contacts;
+      case 2:
+        return Icons.confirmation_number_rounded;
+      case 3:
+        return Icons.extension_outlined;
+      default:
+        return Icons.circle;
+    }
+  }
+
   Widget _buildItem(int index, List<String> options) {
     return Material(
       type: MaterialType.transparency,
@@ -41,14 +56,28 @@ class _SendTypeDialog extends State<SendTypeDialog> {
             children: <Widget>[
               Gaps.hGap16,
               Expanded(
-                child: Text(
-                  options[index],
-                  style: _value == index
-                      ? TextStyle(
-                          fontSize: Dimens.font_sp14,
-                          color: Theme.of(context).primaryColor,
-                        )
-                      : null,
+                child: Row(
+                  children: [
+                    Icon(
+                      _iconForIndex(index),
+                      size: 18,
+                      color: _value == index
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                    Gaps.hGap8,
+                    Expanded(
+                      child: Text(
+                        options[index],
+                        style: _value == index
+                            ? TextStyle(
+                                fontSize: Dimens.font_sp14,
+                                color: Theme.of(context).primaryColor,
+                              )
+                            : null,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Visibility(

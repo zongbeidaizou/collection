@@ -27,8 +27,8 @@ class _SendTypeDialog extends State<SendTypeDialog> {
   List<String> _buildOptions(int couponLeftCnt, int extendLeftCnt) => [
         'Block customer',
         'Fake customer contact list',
-        'Issue discount coupon (10%) ($couponLeftCnt left)',
-        'Extend ($extendLeftCnt left)',
+        'Issue discount coupon (10%) ($couponLeftCnt left for this week)',
+        'Extend ($extendLeftCnt left for this week)',
       ];
 
   Widget _buildItem(int index, List<String> options) {

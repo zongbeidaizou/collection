@@ -1,11 +1,6 @@
 import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
-import 'package:bounty_hunter/order/provider/order_page_provider.dart';
-import 'package:bounty_hunter/order/widgets/order_item.dart';
-import 'package:bounty_hunter/order/widgets/order_tag_item.dart';
 import 'package:bounty_hunter/util/change_notifier_manage.dart';
-import 'package:bounty_hunter/widgets/my_refresh_list.dart';
-import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
@@ -14,6 +9,8 @@ import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
+import '../../providers/user_provider.dart';
+import 'package:bounty_hunter/order/widgets/order_item.dart';
 import '../iview/order_list_page_iview.dart';
 
 const List<List<int>> indexMap = [
@@ -45,15 +42,8 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
         BasePageMixin<OrderReceiveResultPage, OrderListPagePresenter>
     implements OrderListPageIMvpView {
   final ScrollController _controller = ScrollController();
-  final StateType _stateType = StateType.loading;
-
-  /// 是否正在加载数据
-  bool _isLoading = false;
-  final int _maxPage = 3;
-  int _page = 1;
   int _index = 0;
   List<CollectionOrderData> _list = <CollectionOrderData>[];
-  List<CollectionOrderData> _listNew = <CollectionOrderData>[];
   List<ProductData> _product = <ProductData>[];
   List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
@@ -84,6 +74,8 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final int receiveLeftCnt = context.select<UserProvider, int>(
+        (p) => p.userEntity.profile?.cQWeekReceiveLeftCnt ?? 0);
     return NotificationListener(
       onNotification: (ScrollNotification note) {
         if (note.metrics.pixels == note.metrics.maxScrollExtent) {
@@ -98,32 +90,58 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
         /// 默认40， 多添加的80为Header高度
         child: _list.isNotEmpty
             ? ListView.builder(
-                itemCount: _list.length,
+                itemCount: _list.length + 1,
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.only(
                     left: 16.0, right: 16.0, bottom: 28.0),
-                itemBuilder: (_, index) => OrderItem(
-                  key: Key('order_item_$index'),
-                  index: index,
-                  showContactDays: 0,
-                  tabIndex: _index,
-                  item: _list[index],
-                  products: _product,
-                  admins: _admins,
-                  repayInfo: CollectionLogOtherRepayInfo(),
-                  couponList: const [],
-                  track: CollectionLogOtherTrack(),
-                  period: _list[index].aAAAAQBPeriods ?? CollectionLogOtherPeriod(),
-                  contactList: [],
-                  smsHistory: [],
-                  allContactList: [],
-                  source:'receive',
-                ),
+                itemBuilder: (_, index) {
+                  if (index == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                      child: Text(
+                        'Receivable cases left this week: $receiveLeftCnt',
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                    );
+                  }
+                  final item = _list[index - 1];
+                  return OrderItem(
+                    key: Key('order_item_${index - 1}'),
+                    index: index - 1,
+                    showContactDays: 0,
+                    tabIndex: _index,
+                    item: item,
+                    products: _product,
+                    admins: _admins,
+                    repayInfo: CollectionLogOtherRepayInfo(),
+                    couponList: const <CollectionLogOtherCouponList>[],
+                    track: CollectionLogOtherTrack(),
+                    period:
+                        item.aAAAAQBPeriods ?? CollectionLogOtherPeriod(),
+                    contactList: <CollectionLogOtherContactInfo2Data>[],
+                    smsHistory: <CollectionLogOtherSmsHistory>[],
+                    allContactList: <CollectionLogOtherContactInfo2Data>[],
+                    source: 'receive',
+                  );
+                },
               )
             : Center(
-                child:
-                    Text('Receive by phone or contact phone or borrower name ')),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Receivable cases left this week: $receiveLeftCnt',
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                        'Receive by phone or contact phone or borrower name '),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -152,7 +170,7 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
     _list = await _orderListPagePresenter.index(1, widget.index, true,
         keyword2: keyword);
     setState(() {
-      _page = 1;
+      // refresh list
     });
   }
 

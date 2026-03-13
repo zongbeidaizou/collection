@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/shop/widgets/send_type_dialog.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
@@ -727,7 +728,7 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black,fontSize: (widget.item.vName?.nullSafe.length ?? 0) > 22 ? 10 : 12)),
                         ],
                       ),
                     ),

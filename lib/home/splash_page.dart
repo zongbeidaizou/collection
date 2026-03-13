@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/demo/demo_page.dart';
 import 'package:bounty_hunter/login/login_router.dart';
+import 'package:bounty_hunter/order/order_router.dart';
 import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/util/app_navigator.dart';
 import 'package:bounty_hunter/util/device_utils.dart';
 import 'package:bounty_hunter/util/image_utils.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/fractionally_aligned_sized_box.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
@@ -70,14 +72,12 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _initSplash() {
-    _subscription = Stream.value(1).delay(const Duration(milliseconds: 1500)).listen((_) {
-      if (SpUtil.getBool(Constant.keyGuide, defValue: false)! || Constant.isDriverTest) {
-        SpUtil.putBool(Constant.keyGuide, false);
-        _initGuide();
-      } else {
-        _goLogin();
-      }
-    });
+        final String accessToken = SpUtil.getString(Constant.accessToken).nullSafe;
+        if (accessToken.isNotEmpty) {
+          NavigatorUtils.push(context, OrderRouter.orderPage, clearStack: true);
+        } else {
+          _goLogin();
+        }
   }
 
   void _goLogin() {

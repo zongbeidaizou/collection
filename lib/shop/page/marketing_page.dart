@@ -359,24 +359,56 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
                 color: Colors.blue[100],
-                padding: const EdgeInsets.only(left: 10.0),
-                child: RichText(
-                  text: TextSpan(
-                    style:  TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600]
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style:  TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600]
+                          ),
+                          children: [
+                            const TextSpan(text: 'Valid time:  '),
+                            TextSpan(text: date, style:  const TextStyle(color: Colors.black)),
+                            TextSpan(text: ' · ${itemList.length}'),
+                            const TextSpan(text: ' items'),
+                              const TextSpan(text: ' · Reg: '),
+                              TextSpan(text: registerCount.toString(), style:  const TextStyle(color: Colors.red,fontWeight: FontWeight.bold)),
+                            const TextSpan(text: ' · Apply: '),
+                            TextSpan(text: applyCount.toString(), style:  const TextStyle(color: Colors.green,fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
                     ),
-                    children: [
-                      const TextSpan(text: 'Valid time:  '),
-                      TextSpan(text: date, style:  const TextStyle(color: Colors.black)),
-                      TextSpan(text: ' · ${itemList.length}'),
-                      const TextSpan(text: ' items'),
-                        const TextSpan(text: ' · Reg: '),
-                        TextSpan(text: registerCount.toString(), style:  const TextStyle(color: Colors.red,fontWeight: FontWeight.bold)),
-                      const TextSpan(text: ' · Apply: '),
-                      TextSpan(text: applyCount.toString(), style:  const TextStyle(color: Colors.green,fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+                    IconButton(
+                      icon: const Icon(Icons.copy, size: 18),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        final phones = itemList
+                            .where((item) => item.aPhone != null && item.aPhone!.isNotEmpty)
+                            .map((item) => item.aPhone!)
+                            .toList();
+                        if (phones.isEmpty) {
+                          showToast(
+                            'No phone numbers to copy',
+                            position: ToastPosition.center,
+                            duration: const Duration(seconds: 1),
+                          );
+                          return;
+                        }
+                        final text = phones.join(',');
+                        Clipboard.setData(ClipboardData(text: text));
+                        showToast(
+                          '${phones.length} phone numbers copied',
+                          position: ToastPosition.center,
+                          duration: const Duration(seconds: 1),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
               34.0,

@@ -47,6 +47,9 @@ class ContactDialog extends StatefulWidget {
 
 class _ContactDialogState extends State<ContactDialog> {
   int _selectedIndex = -1;
+  bool _isSelectionMode = false;
+  Set<int> _selectedContactIndices = <int>{};
+  
   void _showSmsDialog(BuildContext context, int contactId, String phone) {
     showDialog<void>(
       context: context,
@@ -110,39 +113,100 @@ class _ContactDialogState extends State<ContactDialog> {
               ),
             Gaps.vGap8,
             if (widget.period != null && widget.period!.lOverdueDays! > 5)
-              SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  ),
-                  icon: const Icon(Icons.copy, color: Colors.white, size: 18),
-                  label: const Text(
-                    'Copy all contacts (name & phone)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+              Row(
+                children: [
+                  
+                  Expanded(
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        backgroundColor: _isSelectionMode ? Colors.green : Colors.blue,
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      icon: Icon(
+                        _isSelectionMode ? Icons.copy : Icons.check_circle_outline,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                      label: Text(
+                        _isSelectionMode
+                            ? 'Copy (${_selectedContactIndices.length} selected)'
+                            : 'Select',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_isSelectionMode) {
+                          // 复制选中的号码
+                          if (_selectedContactIndices.isEmpty) {
+                            showToast('Please select at least one contact');
+                            return;
+                          }
+                          final phones = _selectedContactIndices
+                              .map((index) => widget.contactList[index].gPhone?.trim() ?? '')
+                              .where((phone) => phone.isNotEmpty)
+                              .toList();
+                          if (phones.isEmpty) {
+                            showToast('No phone numbers to copy');
+                            return;
+                          }
+                          final text = phones.join(',');
+                          Clipboard.setData(ClipboardData(text: text));
+                          showToast('${phones.length} phone numbers copied');
+                          // 退出选择模式
+                          setState(() {
+                            _isSelectionMode = false;
+                            _selectedContactIndices.clear();
+                          });
+                        } else {
+                          // 进入选择模式
+                          setState(() {
+                            _isSelectionMode = true;
+                            _selectedContactIndices.clear();
+                          });
+                        }
+                      },
                     ),
                   ),
-                  onPressed: () {
-                    final lines = widget.contactList
-                        .map((c) =>
-                            '${c.fName?.trim() ?? ''} ${c.gPhone?.trim() ?? ''}'
-                                .trim())
-                        .where((value) => value.isNotEmpty)
-                        .toList();
-                    if (lines.isEmpty) {
-                      showToast('No contacts to copy');
-                      return;
-                    }
-                    final text = lines.join('\n');
-                    Clipboard.setData(ClipboardData(text: text));
-                    showToast('All contacts copied');
-                  },
-                ),
+                  Gaps.hGap4,
+
+                  Expanded(
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      icon: const Icon(Icons.copy, color: Colors.white, size: 18),
+                      label: const Text(
+                        'Copy all contacts',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onPressed: () {
+                        final lines = widget.contactList
+                            .map((c) =>
+                                '${c.fName?.trim() ?? ''} ${c.gPhone?.trim() ?? ''}'
+                                    .trim())
+                            .where((value) => value.isNotEmpty)
+                            .toList();
+                        if (lines.isEmpty) {
+                          showToast('No contacts to copy');
+                          return;
+                        }
+                        final text = lines.join('\n');
+                        Clipboard.setData(ClipboardData(text: text));
+                        showToast('All contacts copied');
+                      },
+                    ),
+                  ),
+                ],
               ),
             Expanded(
               child: ListView.builder(
@@ -161,6 +225,17 @@ class _ContactDialogState extends State<ContactDialog> {
                     },
                     contactIndex: index,
                     isAllContacts: widget.isAllContacts,
+                    isSelectionMode: _isSelectionMode,
+                    isSelectedForCopy: _selectedContactIndices.contains(index),
+                    onSelectionChanged: (int index, bool selected) {
+                      setState(() {
+                        if (selected) {
+                          _selectedContactIndices.add(index);
+                        } else {
+                          _selectedContactIndices.remove(index);
+                        }
+                      });
+                    },
                   );
                 },
               ),
@@ -181,6 +256,9 @@ class ContactCard extends StatefulWidget {
   bool selected;
   final CollectionLogOtherPeriod? period;
   final bool isAllContacts;
+  final bool isSelectionMode;
+  final bool isSelectedForCopy;
+  final void Function(int, bool)? onSelectionChanged;
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
@@ -190,6 +268,9 @@ class ContactCard extends StatefulWidget {
     required this.selected,
     required this.period,
     required this.isAllContacts,
+    this.isSelectionMode = false,
+    this.isSelectedForCopy = false,
+    this.onSelectionChanged,
   });
 
   @override
@@ -966,9 +1047,21 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
             padding: const EdgeInsets.all(3.4),
             child: Row(
               children: [
+                if (widget.isSelectionMode)
+                  Checkbox(
+                    value: widget.isSelectedForCopy,
+                    onChanged: (bool? value) {
+                      widget.onSelectionChanged?.call(widget.contactIndex, value ?? false);
+                    },
+                  ),
                 Expanded(
                   child: InkWell(
-                        onTap: () => _addContactToPhone(),
+                        onTap: widget.isSelectionMode
+                            ? () {
+                                widget.onSelectionChanged?.call(
+                                    widget.contactIndex, !widget.isSelectedForCopy);
+                              }
+                            : () => _addContactToPhone(),
                         child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

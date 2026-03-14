@@ -71,7 +71,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         if (contactWeights != null) 'contact_weights': contactWeightsStr,
         if (contactWeights2 != null) 'contact_weights2': contactWeights2Str,
       });
-      requestNetwork<List<dynamic>>(Method.post,
+      requestNetwork<Map<String, dynamic>>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
           params: formData2, onSuccess: (data) async {
         SpUtil.remove('action_contact');

@@ -46,7 +46,7 @@ const typeColors = [
   Color.fromARGB(255, 65, 83, 0), //0 罚款
   Colors.green, //1结清
   Colors.purpleAccent, //2日达标奖金
-  Color(0xFF6A64E8),//3部分还款
+  Color.fromARGB(255, 137, 139, 141),//3部分还款
   Color.fromARGB(218, 218, 125, 4),//4周排名奖金
   Color.fromARGB(255, 244, 0, 159),//5月度奖金
   Colors.red,//6转移奖金
@@ -71,8 +71,8 @@ const typeIcons = [
 const typeDescriptions = [
   'Penalty', //0 罚款
   'Settled', //1结清
-  'Partial Repayment', //2部分还款
-  'Manually Calculated', //3手动
+  'Achievement', //达标佣金
+  'Partial Repayment', //3部分还款
   'Weekly Ranking Bonus', //4周排名奖金
   'Monthly Bonus', //5月度奖金
   'Transfer Bonus', //6转移奖金
@@ -326,13 +326,17 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                           ),
                         ),
 
-                        // Display type statistics with icons
-                        ...typeStats.entries
-                            .where((entry) => (entry.value['sum'] ?? 0) > 0)
-                            .expand((entry) {
-                              final type = entry.key;
-                              final sum = entry.value['sum'] ?? 0;
-                              final count = entry.value['count'] ?? 0;
+                        // Display type statistics with icons (sorted by type)
+                        ...() {
+                          final sortedEntries = typeStats.entries
+                              .where((entry) => (entry.value['sum'] ?? 0) > 0)
+                              .toList()
+                            ..sort((a, b) => a.key.compareTo(b.key));
+                          return sortedEntries;
+                        }().expand((entry) {
+                          final type = entry.key;
+                          final sum = (entry.value['sum'] as int?) ?? 0;
+                          final count = (entry.value['count'] as int?) ?? 0;
                               return [
                                 WidgetSpan(
                                   child: Padding(
@@ -431,16 +435,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
 
   Widget _buildItem(CommissionData log, int i) {
     String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
-    if (log.oType == 1 || log.oType == 6) {
+    if (log.oType == 1 || log.oType == 6 ||  log.oType == 3) {
       txt =
           'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
     } else if (log.oType == 2) {
       txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
-    } else if (log.oType == 3) {
-      txt = 'Manually Calculated';
-    } else if (log.oType == 4) {
-      txt = log.aAComment!;
-    } else if (log.oType == 5) {
+    } else if (log.oType == 0 || log.oType == 4 || log.oType == 5) {
       txt = log.aAComment!;
     } else if (log.oType == 7) {
       txt = 'Extension Bonus  ';
@@ -484,7 +484,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
           children: <Widget>[
             Row(
               children: [
-                Gaps.hGap16,
+                // Gaps.hGap4,
                 RichText(
                   text: TextSpan(
                     children: [
@@ -587,17 +587,17 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 ],
               ),
             ),
-            Positioned(
-              bottom: 10.0,
-              left: 0.0,
-              child: Center(
-                  child: Text(log.yDayIndex!.toString(),
-                      style: TextStyle(
-                          fontSize: 14, color: Colors.grey.shade500))),
-            ),
+            // Positioned(
+            //   bottom: 10.0,
+            //   left: 0.0,
+            //   child: Center(
+            //       child: Text(log.yDayIndex!.toString(),
+            //           style: TextStyle(
+            //               fontSize: 14, color: Colors.grey.shade500))),
+            // ),
             Positioned(
               bottom: 0.0,
-              left: 16.0,
+              left: 0.0,
               child: Row(
                 children: [
                   Text(

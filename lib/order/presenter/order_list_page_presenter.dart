@@ -56,12 +56,20 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
           view.getContext().read<UserProvider>().setUserEntity(data.other!);
           view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
 
+          // Record last successful index time per status (tab), 30 minutes TTL.
+          if (page == 1 && keyword == '' && keyword2 == '') {
+            await Cache().cacheData(
+                'order_list_last_index_time_$status',
+                DateTime.now().toIso8601String(),
+                1800);
+          }
+
           // After a successful index call, show the admin info dialog
           // once per day, only for the first page and non-search requests.
-            await _maybeShowAdminInfoDialog(
-              view.getContext(),
-              data.other?.profile,
-            );
+          await _maybeShowAdminInfoDialog(
+            view.getContext(),
+            data.other?.profile,
+          );
         }
       },
       onError: (_, __) async {

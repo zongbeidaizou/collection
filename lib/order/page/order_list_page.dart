@@ -4,12 +4,9 @@ import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/order/provider/order_page_provider.dart';
 import 'package:bounty_hunter/order/widgets/order_item.dart';
-import 'package:bounty_hunter/order/widgets/order_tag_item.dart';
 import 'package:bounty_hunter/util/change_notifier_manage.dart';
 import 'package:bounty_hunter/widgets/my_refresh_list.dart';
-import 'package:bounty_hunter/widgets/state_layout.dart';
 import 'package:provider/provider.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
@@ -17,7 +14,7 @@ import '../../models/collection_order_entity.dart';
 import '../../models/product_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
-import '../../providers/user_provider.dart';
+import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
 
 const List<List<int>> indexMap = [
@@ -47,11 +44,8 @@ class _OrderListPageState extends State<OrderListPage>
         BasePageMixin<OrderListPage, OrderListPagePresenter>
     implements OrderListPageIMvpView {
   final ScrollController _controller = ScrollController();
-  final StateType _stateType = StateType.loading;
-
   /// 是否正在加载数据
   bool _isLoading = false;
-  final int _maxPage = 3;
   int _page = 1;
   int _index = 0;
   List<CollectionOrderData> _list = <CollectionOrderData>[];
@@ -60,6 +54,7 @@ class _OrderListPageState extends State<OrderListPage>
   List<AdminData> _admins = <AdminData>[];
   late OrderListPagePresenter _orderListPagePresenter;
   OrderListProvider provider2 = OrderListProvider();
+  Timer? _autoRefreshTimer;
   Timer? _statisticsTimer;
 
   @override
@@ -71,7 +66,35 @@ class _OrderListPageState extends State<OrderListPage>
       _statisticsTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
         _orderListPagePresenter.statistics();
       });
+
+      // Auto refresh check: periodically check if index API has not been called
+      // in the last 30 minutes for this tab, and trigger a refresh if needed.
+      _autoRefreshTimer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+        if (!mounted) {
+          timer.cancel();
+          return;
+        }
+        final String cacheKey = 'order_list_last_index_time_$_index';
+        final String? lastIndexTime = await Cache().checkCache(cacheKey);
+        if (lastIndexTime == null && mounted) {
+          _onRefresh();
+        }
+      });
+
+      // Also check immediately on first load
+      final String cacheKey = 'order_list_last_index_time_$_index';
+      final String? lastIndexTime = await Cache().checkCache(cacheKey);
+      if (lastIndexTime == null && mounted) {
+        _onRefresh();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _autoRefreshTimer?.cancel();
+    _statisticsTimer?.cancel();
+    super.dispose();
   }
 
   @override

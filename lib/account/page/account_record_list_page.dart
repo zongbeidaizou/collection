@@ -43,7 +43,7 @@ const List<String> groupNames = [
   'AA',
 ];
 const typeColors = [
-  Colors.transparent,
+  Color.fromARGB(255, 65, 83, 0), //0 罚款
   Colors.green, //1结清
   Color.fromARGB(255, 128, 188, 225), //2部分还款
   Color(0xFF6A64E8),//3手动
@@ -55,7 +55,7 @@ const typeColors = [
   Color.fromARGB(255, 187, 230, 118),//9申请奖金
 ];
 const typeIcons = [
-  Icons.lens_blur,
+  Icons.money_off_csred_outlined, //0 罚款
   Icons.lens, //1结清
   Icons.radio_button_off, //2部分还款
   Icons.draw, //3手动
@@ -539,6 +539,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  Gaps.hGap4,
                   Icon(typeIcons[log.oType!], size: 14, color: typeColors[log.oType!],),
                   
                 ],

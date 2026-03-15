@@ -42,6 +42,31 @@ const List<String> groupNames = [
   'A',
   'AA',
 ];
+const typeColors = [
+  Colors.transparent,
+  Colors.green, //1结清
+  Color.fromARGB(255, 128, 188, 225), //2部分还款
+  Color(0xFF6A64E8),//3手动
+  Color.fromARGB(218, 218, 125, 4),//4周排名奖金
+  Color.fromARGB(255, 244, 0, 159),//5月度奖金
+  Colors.red,//6转移奖金
+  Colors.purpleAccent,//7展期奖金·
+  Color.fromARGB(255, 244, 234, 52),//8注册奖金
+  Color.fromARGB(255, 187, 230, 118),//9申请奖金
+];
+const typeIcons = [
+  Icons.lens_blur,
+  Icons.lens, //1结清
+  Icons.radio_button_off, //2部分还款
+  Icons.draw, //3手动
+  Icons.bar_chart_rounded, //4周排名奖金
+  Icons.golf_course, //5月度奖金
+  Icons.transfer_within_a_station, //6转移奖金
+  Icons.extension_outlined, //7展期奖金
+  Icons.person_outline_outlined, //8注册奖金
+  Icons.how_to_reg_outlined, //9申请奖金
+
+];
 
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
@@ -277,7 +302,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: '$date total bonus: ',
+                        text: '$date total: ',
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500), // 默认黑色
                       ),
@@ -452,46 +477,46 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   },
                   child: Row(
                     children: <Widget>[
-                      Offstage(
-                        offstage: !(log.oType == 2),
-                        child: _buildGoodsTag(
-                            Theme.of(context).colorScheme.error, 'Achievement'),
-                      ),
-                      Offstage(
-                        offstage: !(log.oType == 5),
-                        child: _buildGoodsTag(Colors.purple, 'Monthly Bonus'),
-                      ),
-                      Offstage(
-                        offstage: !(log.oType == 6),
-                        child: _buildGoodsTag(Colors.blue, 'Transfer Bonus'),
-                      ),
-                      Offstage(
-                        offstage: !(log.oType == 4),
-                        child: _buildGoodsTag(
-                            const Color.fromARGB(255, 39, 197, 160),
-                            'Weekly Bonus'),
-                      ),
-                      Offstage(
-                        offstage: !(log.oType == 3),
-                        child: _buildGoodsTag(
-                            Theme.of(context).primaryColor, 'Manually Bonus'),
-                      ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 2),
+                      //   child: _buildGoodsTag(
+                      //       Theme.of(context).colorScheme.error, 'Achievement'),
+                      // ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 5),
+                      //   child: _buildGoodsTag(Colors.purple, 'Monthly Bonus'),
+                      // ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 6),
+                      //   child: _buildGoodsTag(Colors.blue, 'Transfer Bonus'),
+                      // ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 4),
+                      //   child: _buildGoodsTag(
+                      //       const Color.fromARGB(255, 39, 197, 160),
+                      //       'Weekly Bonus'),
+                      // ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 3),
+                      //   child: _buildGoodsTag(
+                      //       Theme.of(context).primaryColor, 'Manually Bonus'),
+                      // ),
                       Offstage(
                         offstage: !(log.wReaded == 0),
                         child: _buildGoodsTag(Colors.green, 'New'),
                       ),
-                      Offstage(
-                        offstage: !(log.oType == 8),
-                        child: _buildGoodsTag(
-                            const Color.fromARGB(255, 180, 177, 180),
-                            'Register Bonus'),
-                      ),
-                      Offstage(
-                        offstage: !(log.oType == 9),
-                        child: _buildGoodsTag(
-                            const Color.fromARGB(255, 95, 92, 95),
-                            'Apply Bonus'),
-                      ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 8),
+                      //   child: _buildGoodsTag(
+                      //       const Color.fromARGB(255, 180, 177, 180),
+                      //       'Register Bonus'),
+                      // ),
+                      // Offstage(
+                      //   offstage: !(log.oType == 9),
+                      //   child: _buildGoodsTag(
+                      //       const Color.fromARGB(255, 95, 92, 95),
+                      //       'Apply Bonus'),
+                      // ),
                     ],
                   ),
                 ),
@@ -502,19 +527,19 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               right: 0.0,
               child: Row(
                 children: [
-                  if (log.uIsSettled != 1 && log.oType != 7)
-                    Text('Unsettled', style: TextStyle(fontSize: Dimens.font_sp10, color: ThemeUtils.getTextColor(context)),)
-                  else
-                    Gaps.empty,
-                  Gaps.hGap4,
+                  // if (log.uIsSettled != 1 && log.oType != 7)
+                  //   Text('Unsettled', style: TextStyle(fontSize: Dimens.font_sp10, color: ThemeUtils.getTextColor(context)),)
+                  // else
+                  //   Gaps.empty,
+                  // Gaps.hGap4,
                   Text(
                     "+${log.hCommissionAmount}",
                     style: TextStyle(
-                      color: Colors.green,
+                      color: typeColors[log.oType!],
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  
+                  Icon(typeIcons[log.oType!], size: 14, color: typeColors[log.oType!],),
                   
                 ],
               ),

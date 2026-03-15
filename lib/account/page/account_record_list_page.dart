@@ -394,7 +394,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   ),
                 ),
               ),
-              34.0,
+              38.0,
             ),
           ),
           Container(
@@ -469,9 +469,9 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
     }
 
     return Container(
-      height: 72.0,
+      height: 52.0,
       width: double.infinity,
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(9.0),
       decoration: BoxDecoration(
         color: ThemeUtils.getBackgroundColor(context),
         border: Border(

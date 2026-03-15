@@ -45,20 +45,20 @@ const List<String> groupNames = [
 const typeColors = [
   Color.fromARGB(255, 65, 83, 0), //0 罚款
   Colors.green, //1结清
-  Color.fromARGB(255, 128, 188, 225), //2部分还款
-  Color(0xFF6A64E8),//3手动
+  Colors.purpleAccent, //2日达标奖金
+  Color(0xFF6A64E8),//3部分还款
   Color.fromARGB(218, 218, 125, 4),//4周排名奖金
   Color.fromARGB(255, 244, 0, 159),//5月度奖金
   Colors.red,//6转移奖金
-  Colors.purpleAccent,//7展期奖金·
+  Color.fromARGB(255, 128, 188, 225),//7展期奖金·
   Color.fromARGB(255, 244, 234, 52),//8注册奖金
   Color.fromARGB(255, 187, 230, 118),//9申请奖金
 ];
 const typeIcons = [
   Icons.money_off_csred_outlined, //0 罚款
   Icons.lens, //1结清
-  Icons.radio_button_off, //2部分还款
-  Icons.draw, //3手动
+  Icons.adjust, //2日达标奖金
+  Icons.radio_button_off, //3部分还款
   Icons.bar_chart_rounded, //4周排名奖金
   Icons.golf_course, //5月度奖金
   Icons.transfer_within_a_station, //6转移奖金
@@ -325,10 +325,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextSpan(
-                          text: '  [',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
+
                         // Display type statistics with icons
                         ...typeStats.entries
                             .where((entry) => (entry.value['sum'] ?? 0) > 0)
@@ -387,10 +384,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                 ),
                               ];
                             }),
-                        TextSpan(
-                          text: ']',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
+
                       ],
                     ],
                   ),

@@ -568,12 +568,12 @@ class _OrderItemState extends State<OrderItem> {
                   children: [
                     Icon(
                       Icons.extension_outlined,
-                      color: Colors.purpleAccent,
+                      color: Color.fromARGB(255, 128, 188, 225),
                       size: 14,
                     ),
                     Text(
                       "${int.parse(widget.repayInfo!.var3!)}",
-                      style: TextStyle(color: Colors.purpleAccent, fontSize: 14),
+                      style: TextStyle(color: Color.fromARGB(255, 128, 188, 225), fontSize: 14),
                     ),
                     Gaps.hGap12,
                   ],

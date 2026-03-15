@@ -68,6 +68,19 @@ const typeIcons = [
 
 ];
 
+const typeDescriptions = [
+  'Penalty', //0 罚款
+  'Settled', //1结清
+  'Partial Repayment', //2部分还款
+  'Manually Calculated', //3手动
+  'Weekly Ranking Bonus', //4周排名奖金
+  'Monthly Bonus', //5月度奖金
+  'Transfer Bonus', //6转移奖金
+  'Extension Bonus', //7展期奖金
+  'Registration Bonus', //8注册奖金
+  'Application Bonus', //9申请奖金
+];
+
 /// design/6店铺-账户/index.html#artboard1
 class AccountRecordListPage extends StatefulWidget {
   const AccountRecordListPage({super.key, required this.searchKeyword});
@@ -276,18 +289,17 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       List<CommissionData> logList = entry.value;
       int totalBonus =
           logList.fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
-      int bbBonus = logList
-          .where((bonus) => bonus.kLevel == 1)
-          .fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
-      int bBonus = logList
-          .where((bonus) => bonus.kLevel == 2)
-          .fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
-      int aBonus = logList
-          .where((bonus) => bonus.kLevel == 3)
-          .fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
-      int aaBonus = logList
-          .where((bonus) => bonus.kLevel == 4)
-          .fold(0, (sum, bonus) => sum + bonus.hCommissionAmount!);
+      
+      // Calculate bonus sum and count for each type
+      final Map<int, Map<String, int>> typeStats = {};
+      for (final log in logList) {
+        final type = log.oType ?? 0;
+        if (!typeStats.containsKey(type)) {
+          typeStats[type] = {'sum': 0, 'count': 0};
+        }
+        typeStats[type]!['sum'] = (typeStats[type]!['sum'] ?? 0) + (log.hCommissionAmount ?? 0);
+        typeStats[type]!['count'] = (typeStats[type]!['count'] ?? 0) + 1;
+      }
       return SliverMainAxisGroup(
         slivers: [
           SliverPersistentHeader(
@@ -310,38 +322,74 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         TextSpan(
                           text: '$totalBonus',
                           style: TextStyle(
-                            color: Colors.red, // 总奖金用深蓝色
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
                           text: '  [',
-                          style: TextStyle(color: Colors.grey[600]), // BB奖金用灰色
+                          style: TextStyle(color: Colors.grey[600]),
                         ),
-                        if (bbBonus > 0)
-                          TextSpan(
-                            text: 'BB:₦$bbBonus',
-                            style: TextStyle(color: Colors.grey[600]), // B奖金用蓝色
-                          ),
-                        if (bBonus > 0)
-                          TextSpan(
-                            text: ' B:$bBonus',
-                            style: TextStyle(color: Colors.grey[600]), // B奖金用蓝色
-                          ),
-                        if (aBonus > 0)
-                          TextSpan(
-                            text: ' A:₦$aBonus',
-                            style: TextStyle(color: Colors.grey[600]), // A奖金用绿色
-                          ),
-                        if (aaBonus > 0)
-                          TextSpan(
-                            text: ' AA:₦$aaBonus',
-                            style:
-                                TextStyle(color: Colors.grey[600]), // AA奖金用红色
-                          ),
+                        // Display type statistics with icons
+                        ...typeStats.entries
+                            .where((entry) => (entry.value['sum'] ?? 0) > 0)
+                            .expand((entry) {
+                              final type = entry.key;
+                              final sum = entry.value['sum'] ?? 0;
+                              final count = entry.value['count'] ?? 0;
+                              return [
+                                WidgetSpan(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showDialog<void>(
+                                          context: context,
+                                          builder: (BuildContext ctx) {
+                                            return AlertDialog(
+                                              title: Text(typeDescriptions[type]),
+                                              content: Text(
+                                                'Total: ₦$sum\n'
+                                                'Count: $count',
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.of(ctx).pop(),
+                                                  child: const Text('OK'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Tooltip(
+                                        message: typeDescriptions[type],
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              typeIcons[type],
+                                              size: 14,
+                                              color: typeColors[type],
+                                            ),
+                                            Text(
+                                              '₦$sum($count) ',
+                                              style: TextStyle(
+                                                color: typeColors[type],
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ];
+                            }),
                         TextSpan(
                           text: ']',
-                          style: TextStyle(color: Colors.grey[600]), // BB奖金用灰色
+                          style: TextStyle(color: Colors.grey[600]),
                         ),
                       ],
                     ],

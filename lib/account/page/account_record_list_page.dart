@@ -343,14 +343,99 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                                     child: GestureDetector(
                                       onTap: () {
+                                        // Filter records of this type
+                                        final filteredLogs = logList.where((log) => log.oType == type).toList();
                                         showDialog<void>(
                                           context: context,
                                           builder: (BuildContext ctx) {
                                             return AlertDialog(
                                               title: Text(typeDescriptions[type]),
-                                              content: Text(
-                                                'Total: ₦$sum\n'
-                                                'Count: $count',
+                                              content: SizedBox(
+                                                width: double.maxFinite,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        'Total: ₦$sum\n'
+                                                        'Count: $count',
+                                                        style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 16),
+                                                      const Divider(),
+                                                      const SizedBox(height: 8),
+                                                      ...filteredLogs.map((log) {
+                                                        String maskPhoneNumber(String phone) {
+                                                          if (phone.isEmpty || phone.length < 6) {
+                                                            return phone;
+                                                          }
+                                                          List<String> phoneChars = phone.split('');
+                                                          if (phoneChars.length > 2) phoneChars[2] = '*';
+                                                          if (phoneChars.length > 3) phoneChars[3] = '*';
+                                                          if (phoneChars.length > 4) phoneChars[4] = '*';
+                                                          return phoneChars.join();
+                                                        }
+                                                        
+                                                        String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
+                                                        if (log.oType == 1 || log.oType == 6 || log.oType == 3) {
+                                                          txt = 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
+                                                        } else if (log.oType == 2) {
+                                                          txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
+                                                        } else if (log.oType == 0 || log.oType == 4 || log.oType == 5) {
+                                                          txt = log.aAComment!;
+                                                        } else if (log.oType == 7) {
+                                                          txt = 'Extension Bonus';
+                                                        } else if (log.oType == 8) {
+                                                          txt = 'Registered at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
+                                                        } else if (log.oType == 9) {
+                                                          txt = 'Apply at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
+                                                        }
+                                                        
+                                                        return Padding(
+                                                          padding: const EdgeInsets.only(bottom: 12.0),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      '${maskPhoneNumber(log.pPhone!)} - ${log.nBorrowSn}',
+                                                                      style: const TextStyle(
+                                                                        fontWeight: FontWeight.w500,
+                                                                        fontSize: 14,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Text(
+                                                                    '+₦${log.hCommissionAmount}',
+                                                                    style: TextStyle(
+                                                                      color: typeColors[type],
+                                                                      fontWeight: FontWeight.bold,
+                                                                      fontSize: 14,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              const SizedBox(height: 4),
+                                                              Text(
+                                                                txt,
+                                                                style: TextStyle(
+                                                                  fontSize: 8,
+                                                                  color: Colors.grey[600],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      }),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                               actions: [
                                                 TextButton(

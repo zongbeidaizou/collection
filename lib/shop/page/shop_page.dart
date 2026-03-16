@@ -191,6 +191,17 @@ class _ShopPageState extends State<ShopPage>
         leadingWidth: 300,
         actions: <Widget>[
           IconButton(
+            tooltip: 'Day details',
+            onPressed: () {
+              _showAdminInfoDialog();
+            },
+            icon: Icon(
+              Icons.calendar_month,
+              color: iconColor,
+              size: 20,
+            ),
+          ),
+          IconButton(
             tooltip: 'Edit Note',
             onPressed: () {
               NavigatorUtils.push(context, SettingRouter.messageTemplatePage);
@@ -770,6 +781,71 @@ class _ShopPageState extends State<ShopPage>
   ShopPagePresenter createPresenter() {
     _shopPagePresenter = ShopPagePresenter();
     return _shopPagePresenter;
+  }
+
+  /// Show admin info dialog (same content as order list admin info dialog)
+  Future<void> _showAdminInfoDialog() async {
+    final ctx = context;
+    final profile = ctx.read<UserProvider>().userEntity.profile;
+
+    final name = profile?.aName ?? '--';
+    final marketing = profile?.cRTodayMarketingCnt ?? 0;
+    final weekCouponLeft = profile?.cLWeekCouponLeftCnt ?? 0;
+    final weekExtendCnt = profile?.cNWeekExtendCnt ?? 0;
+    final weekRetainLeft = profile?.cPWeekRetainLeftCnt ?? 0;
+    final weekReceiveLeft = profile?.cQWeekReceiveLeftCnt ?? 0;
+    final weekWaLeft = profile?.cJWeekWaLeftCnt ?? 0;
+
+    final now = DateTime.now();
+    final todayStr =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    await showDialog<void>(
+      context: ctx,
+      barrierDismissible: true,
+      builder: (BuildContext dialogCtx) {
+        final textStyle = Theme.of(dialogCtx).textTheme.bodyMedium;
+        Widget row(String label, String value) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                Expanded(child: Text(label, style: textStyle)),
+                Text(value, style: textStyle),
+              ],
+            ),
+          );
+        }
+
+        return AlertDialog(
+          title: Text('Admin Info ($todayStr)'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                row('Admin', name),
+                const Divider(height: 16),
+                row('New marketing cases today', marketing.toString()),
+                row('Discount coupons remaining this week',
+                    weekCouponLeft.toString()),
+                row('Extensions remaining this week', weekExtendCnt.toString()),
+                row('Retains available this week', weekRetainLeft.toString()),
+                row('Receives available this week', weekReceiveLeft.toString()),
+                row('WhatsApp applications available this week',
+                    weekWaLeft.toString()),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogCtx).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // 构建表头单元格

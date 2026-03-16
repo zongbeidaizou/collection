@@ -584,7 +584,7 @@ class _OrderItemState extends State<OrderItem> {
             if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
               InkWell(
                 onTap: () {
-                    showToast("This case is a transferred case and will receive an additional ${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% bonus.");
+                    showToast("This case is a transferred case and will receive an additional ${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! &&  (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) > 8 ? '+10' : '')}% bonus.");
                     return;
                   },
                 child: Row(
@@ -596,7 +596,7 @@ class _OrderItemState extends State<OrderItem> {
                     ),
                     Gaps.hGap2,
                     Text(
-                        "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ''}% ",
+                        "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) >= 10 ? '+10' : '')}% ",
                         style: TextStyle(color: Colors.red, fontSize: 14)),
                   ],
                 ),
@@ -995,7 +995,7 @@ class _OrderItemState extends State<OrderItem> {
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) < 10 ? '+5' : (widget.period?.lOverdueDays ?? 0) >= 10 && (widget.period?.lOverdueDays ?? 0) < 20 && provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! ? '+10' : (widget.period?.lOverdueDays ?? 0) >= 20 && provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! ? '+20' : ''}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) >= 10 ? '+10' : '')}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall

@@ -57,8 +57,8 @@ const typeColors = [
 const typeIcons = [
   Icons.money_off_csred_outlined, //0 罚款
   Icons.lens, //1结清
-  Icons.adjust, //2日达标奖金
-  Icons.radio_button_off, //3部分还款
+  Icons.my_location, //2日达标奖金
+  Icons.nightlight, //3部分还款
   Icons.bar_chart_rounded, //4周排名奖金
   Icons.golf_course, //5月度奖金
   Icons.transfer_within_a_station, //6转移奖金
@@ -329,7 +329,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         // Display type statistics with icons (sorted by type)
                         ...() {
                           final sortedEntries = typeStats.entries
-                              .where((entry) => (entry.value['sum'] ?? 0) > 0)
+                              .where((entry) => (entry.value['sum'] ?? 0) >= 0)
                               .toList()
                             ..sort((a, b) => a.key.compareTo(b.key));
                           return sortedEntries;

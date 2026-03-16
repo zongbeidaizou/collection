@@ -607,15 +607,7 @@ class _OrderItemState extends State<OrderItem> {
             InkWell(
                 onTap: () {
                   if(!widget.inList){
-                    
-                    showToast("The last time this customer used the app was ${(DateTime.now()
-                                .difference(DateTime.parse(
-                                    widget.track?.lastActiveTime ??
-                                        '2000-07-10T18:58:39.000000Z'))
-                                .inHours >=
-                            24)
-                        ? ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inDays} days ago'
-                        : ' ${DateTime.now().difference(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z')).inHours} hours ago'}");
+                    showToast("The last time this customer used the app was ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z').toUtc().add(const Duration(hours: 1)))}");
                   }
                     return;
                   },

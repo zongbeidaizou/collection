@@ -1062,9 +1062,7 @@ class _OrderItemState extends State<OrderItem> {
                 icon: Icon(Icons.receipt,
                     size: 15, color: Colors.white),
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: (widget.period?.lOverdueDays ?? 0) <= 0
-                    ? Colors.grey
-                    : (isDark ? Colours.dark_app_main : Colours.app_main),
+                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 onTap: () {
           showDialog<void>(
                             context: context,

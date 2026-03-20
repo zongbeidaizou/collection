@@ -260,7 +260,7 @@ class _OrderPageState extends State<OrderPage>
           actions: <Widget>[
             Center(
               child: SizedBox(
-                width: 200,
+                width: 210,
                 child: TextField(
                   controller: _phoneFilterController,
                   textInputAction: TextInputAction.search,
@@ -272,7 +272,7 @@ class _OrderPageState extends State<OrderPage>
                   },
                   decoration: InputDecoration(
                     isDense: true,
-                    hintText: 'Filter phone',
+                    hintText: 'Search for the case phone',
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                     suffixIcon: _phoneFilterKeyword.isEmpty

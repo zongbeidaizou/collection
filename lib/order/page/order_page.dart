@@ -251,7 +251,6 @@ class _OrderPageState extends State<OrderPage>
         sliver: SliverAppBar(
           systemOverlayStyle: isDark ? ThemeUtils.light : ThemeUtils.dark,
           actions: <Widget>[
-           
             IconButton(
               onPressed: () {
                 _addAllContacts(context);
@@ -277,7 +276,7 @@ class _OrderPageState extends State<OrderPage>
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           centerTitle: true,
-          expandedHeight: 100.0, // 不随着滑动隐藏标题
+          expandedHeight: 1.0, // 不随着滑动隐藏标题
           pinned: true, // 固定在顶部
           flexibleSpace: MyFlexibleSpaceBar(
             background: isDark

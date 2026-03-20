@@ -70,6 +70,11 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
         //todo 搜索
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            tooltip: 'Back',
+            onPressed: () => NavigatorUtils.goBack(context),
+            icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
+          ),
           centerTitle: true,
           backgroundColor: Colours.app_main,
           flexibleSpace:  LoadAssetImage('statistic/statistic_bg',

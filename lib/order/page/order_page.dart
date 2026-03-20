@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import '../../goods/goods_router.dart';
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
+import '../../models/collection_order_entity.dart';
 
 final List<IconData> _iconList = [
   Icons.play_for_work_sharp,
@@ -386,12 +387,13 @@ class _OrderPageState extends State<OrderPage>
                       fontSize: Dimens.font_sp14,
                     ),
                     indicatorColor: Colors.transparent,
-                    tabs: const <Widget>[
-                      _TabView(0, 'New', 10),
-                      _TabView(1, 'Negotiating', 10),
-                      _TabView(2, 'PTP', 10),
-                      _TabView(3, 'BP', 10),
-                      _TabView(4, 'No Answer', 10),
+                    tabs: <Widget>[
+                      _TabView(0, 'New', 10, keyword: _phoneFilterKeyword),
+                      _TabView(
+                          1, 'Negotiating', 10, keyword: _phoneFilterKeyword),
+                      _TabView(2, 'PTP', 10, keyword: _phoneFilterKeyword),
+                      _TabView(3, 'BP', 10, keyword: _phoneFilterKeyword),
+                      _TabView(4, 'No Answer', 10, keyword: _phoneFilterKeyword),
                       // _TabView(5, 'Fraud', 10),
                     ],
                     onTap: (index) {
@@ -437,11 +439,12 @@ List<List<String>> darkImg = [
 ];
 
 class _TabView extends StatefulWidget {
-  const _TabView(this.index, this.text, this.fontSize);
+  const _TabView(this.index, this.text, this.fontSize, {required this.keyword});
 
   final int index;
   final double fontSize;
   final String text;
+  final String keyword;
 
   @override
   State<_TabView> createState() => _TabViewState();
@@ -502,108 +505,73 @@ class _TabViewState extends State<_TabView> {
         ),
         Positioned(
           right: 6.0,
-          child: Consumer<UserProvider>(builder: (_, provider, __) {
-            if (widget.index == 0 &&
-                ((provider.userEntity.profile?.kCurrentNewCount ?? 0) != 0)) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error,
-                  borderRadius: BorderRadius.circular(11.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5.5, vertical: 2.0),
-                  child: Text(
-                    provider.userEntity.profile?.kCurrentNewCount?.toString() ??
-                        '0',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: Dimens.font_sp12),
-                  ),
-                ),
-              );
-            } else if (widget.index == 1 &&
-                ((provider.userEntity.profile?.lCurrentNegotiatingCount ?? 0) !=
-                    0)) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error,
-                  borderRadius: BorderRadius.circular(11.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5.5, vertical: 2.0),
-                  child: Text(
-                    provider.userEntity.profile?.lCurrentNegotiatingCount
-                            ?.toString() ??
-                        '0',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: Dimens.font_sp12),
-                  ),
-                ),
-              );
-            } else if (widget.index == 2 &&
-                ((provider.userEntity.profile?.mCurrrentPromisedCount ?? 0) !=
-                    0)) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error,
-                  borderRadius: BorderRadius.circular(11.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5.5, vertical: 2.0),
-                  child: Text(
-                    provider.userEntity.profile?.mCurrrentPromisedCount
-                            ?.toString() ??
-                        '0',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: Dimens.font_sp12),
-                  ),
-                ),
-              );
-            } else if (widget.index == 3 &&
-                ((provider.userEntity.profile?.nCurrentBrokenCount ?? 0) !=
-                    0)) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error,
-                  borderRadius: BorderRadius.circular(11.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5.5, vertical: 2.0),
-                  child: Text(
-                    provider.userEntity.profile?.nCurrentBrokenCount
-                            ?.toString() ??
-                        '0',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: Dimens.font_sp12),
-                  ),
-                ),
-              );
-            } else if (widget.index == 4 &&
-                ((provider.userEntity.profile?.oCurrentRefusedCount ?? 0) !=
-                    0)) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.error,
-                  borderRadius: BorderRadius.circular(11.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5.5, vertical: 2.0),
-                  child: Text(
-                    provider.userEntity.profile?.oCurrentRefusedCount
-                            ?.toString() ??
-                        '0',
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: Dimens.font_sp12),
-                  ),
-                ),
-              );
+          child: Consumer2<UserProvider, OrderListProvider>(
+              builder: (_, userProvider, orderListProvider, __) {
+            final String kw = widget.keyword.trim();
+
+            int badgeCount;
+            if (kw.isEmpty) {
+              // Default mode: use profile counts.
+              if (widget.index == 0) {
+                badgeCount =
+                    userProvider.userEntity.profile?.kCurrentNewCount ?? 0;
+              } else if (widget.index == 1) {
+                badgeCount =
+                    userProvider.userEntity.profile?.lCurrentNegotiatingCount ??
+                        0;
+              } else if (widget.index == 2) {
+                badgeCount = userProvider.userEntity.profile
+                        ?.mCurrrentPromisedCount ??
+                    0;
+              } else if (widget.index == 3) {
+                badgeCount =
+                    userProvider.userEntity.profile?.nCurrentBrokenCount ?? 0;
+              } else {
+                badgeCount =
+                    userProvider.userEntity.profile?.oCurrentRefusedCount ?? 0;
+              }
             } else {
+              // Search mode: compute from filtered keyword & current tab list.
+              final String kwLower = kw.toLowerCase();
+              final String kwDigits = kw.replaceAll(RegExp(r'[^0-9]'), '');
+
+              bool matches(CollectionOrderData data) {
+                final phoneDigits = (data.uPhone ?? '')
+                    .replaceAll(RegExp(r'[^0-9]'), '');
+                final name = (data.vName ?? '').toLowerCase();
+
+                if (kwDigits.isNotEmpty && phoneDigits.contains(kwDigits)) {
+                  return true;
+                }
+                return name.contains(kwLower);
+              }
+
+              final List<int> statusList = indexMap[widget.index];
+              badgeCount = orderListProvider.list
+                  .where((e) => statusList.contains(e.kStatus))
+                  .where((e) => matches(e))
+                  .length;
+            }
+
+            if (badgeCount == 0) {
               return Gaps.empty;
             }
+
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.error,
+                borderRadius: BorderRadius.circular(11.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 5.5, vertical: 2.0),
+                child: Text(
+                  badgeCount.toString(),
+                  style: const TextStyle(
+                      color: Colors.white, fontSize: Dimens.font_sp12),
+                ),
+              ),
+            );
           }),
         )
       ],

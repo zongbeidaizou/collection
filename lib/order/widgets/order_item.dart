@@ -822,7 +822,7 @@ class _OrderItemState extends State<OrderItem> {
                   ),
                   RichText(
                     text: TextSpan(
-                      style: textTextStyle,
+                      style: textTextStyle?.copyWith(fontSize: 11),
                       children: <TextSpan>[
                         TextSpan(
                             text: 'Left:',
@@ -1384,7 +1384,7 @@ class OrderItemButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(4.0),
         ),
         constraints: BoxConstraints(
-          minWidth: icon != null ? 58 : 44,
+          minWidth: icon != null ? 56 : 44,
           maxHeight: 30.0,
           minHeight: 30.0,
         ),
@@ -1393,8 +1393,8 @@ class OrderItemButton extends StatelessWidget {
                 children: [
                   Text(text,
                       style: TextStyle(
-                          fontSize: 13, color: textColor)),
-                  Gaps.hGap2,
+                          fontSize: 12, color: textColor)),
+                  Gaps.hGap1,
                   icon!,
                 ],
               )

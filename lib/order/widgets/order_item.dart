@@ -722,7 +722,7 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black,fontSize: (widget.item.vName?.nullSafe.length ?? 0) > 22 ? 10 : 12)),
+                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black,fontSize: (widget.item.vName?.nullSafe.length ?? 0) > 22 ? ((widget.item.vName?.nullSafe.length ?? 0) > 26 ? 9 : 10) : 12)),
                         ],
                       ),
                     ),

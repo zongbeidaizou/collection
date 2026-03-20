@@ -13,7 +13,6 @@ import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +55,9 @@ class _OrderPageState extends State<OrderPage>
 
   int _lastReportedPage = 0;
   int _sloganIndex = 0;
+
+  final TextEditingController _phoneFilterController = TextEditingController();
+  String _phoneFilterKeyword = '';
 
   @override
   void initState() {
@@ -167,6 +169,7 @@ class _OrderPageState extends State<OrderPage>
   @override
   void dispose() {
     _tabController?.dispose();
+    _phoneFilterController.dispose();
     super.dispose();
   }
 
@@ -234,7 +237,10 @@ class _OrderPageState extends State<OrderPage>
                   key: const Key('pageView'),
                   itemCount: 5,
                   controller: _pageController,
-                  itemBuilder: (_, index) => OrderListPage(index: index),
+                  itemBuilder: (_, index) => OrderListPage(
+                    index: index,
+                    keyword: _phoneFilterKeyword,
+                  ),
                 ),
               ),
             ),
@@ -251,6 +257,46 @@ class _OrderPageState extends State<OrderPage>
         sliver: SliverAppBar(
           systemOverlayStyle: isDark ? ThemeUtils.light : ThemeUtils.dark,
           actions: <Widget>[
+            Center(
+              child: SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _phoneFilterController,
+                  textInputAction: TextInputAction.search,
+                  keyboardType: TextInputType.phone,
+                  onChanged: (val) {
+                    setState(() {
+                      _phoneFilterKeyword = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: 'Filter phone',
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    suffixIcon: _phoneFilterKeyword.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              _phoneFilterController.clear();
+                              setState(() {
+                                _phoneFilterKeyword = '';
+                              });
+                            },
+                          ),
+                    filled: true,
+                    fillColor: isDark
+                        ? Colors.black.withOpacity(0.30)
+                        : Colors.white.withOpacity(0.70),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             IconButton(
               onPressed: () {
                 _addAllContacts(context);
@@ -265,12 +311,13 @@ class _OrderPageState extends State<OrderPage>
               tooltip: 'Search',
               icon: Icon(Icons.search, size: 30.0, color: ThemeUtils.getIconColor(context)),
             ),
+            
              IconButton(
               onPressed: () {
                 NavigatorUtils.push(context, GoodsRouter.goodsPage);
               },
               tooltip: 'Receive',
-              icon: Icon(Icons.description_outlined, size: 30.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.description_outlined, size: 28.0, color: ThemeUtils.getIconColor(context)),
             ),
           ],
           backgroundColor: Colors.transparent,

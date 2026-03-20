@@ -29,9 +29,11 @@ class OrderListPage extends StatefulWidget {
   const OrderListPage({
     super.key,
     required this.index,
+    this.keyword = '',
   });
 
   final int index;
+  final String keyword;
 
   @override
   _OrderListPageState createState() => _OrderListPageState();
@@ -144,66 +146,71 @@ class _OrderListPageState extends State<OrderListPage>
             );
           },
           child: Consumer<OrderListProvider>(builder: (_, provider2, child) {
+            final String keyword = widget.keyword.trim();
+            final String keywordDigits = _normalizeDigits(keyword);
+
+            bool matches(CollectionOrderData data) {
+              if (keyword.isEmpty) return true;
+
+              final phoneDigits = _normalizeDigits(data.uPhone ?? '');
+              final name = (data.vName ?? '').toLowerCase();
+              final kwLower = keyword.toLowerCase();
+
+              // Fuzzy phone match: digits contains.
+              if (keywordDigits.isNotEmpty &&
+                  phoneDigits.contains(keywordDigits)) {
+                return true;
+              }
+
+              // Fuzzy name match.
+              return name.contains(kwLower);
+            }
+
+            final List<CollectionOrderData> tabList = provider2.list
+                .where((element) => indexMap[widget.index].contains(element.kStatus))
+                .toList();
+
+            final List<CollectionOrderData> filteredList =
+                keyword.isEmpty ? tabList : tabList.where(matches).toList();
+
             return SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                sliver: provider2.list
-                        .where((element) =>
-                            indexMap[widget.index].contains(element.kStatus))
-                        .toList()
-                        .isEmpty
-                    ? SliverFillRemaining(child: Center(child: Text("no data")))
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          return index <
-                                  provider2.list
-                                      .where((element) => indexMap[widget.index]
-                                          .contains(element.kStatus))
-                                      .toList()
-                                      .length
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              sliver: filteredList.isEmpty
+                  ? const SliverFillRemaining(child: Center(child: Text("no data")))
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return index < filteredList.length
                               ? OrderItem(
                                   key: Key('order_item_$index'),
                                   index: index,
                                   tabIndex: _index,
                                   showContactDays: 0,
-                                  item: provider2.list
-                                      .where((element) => indexMap[widget.index]
-                                          .contains(element.kStatus))
-                                      .toList()[index],
+                                  item: filteredList[index],
                                   products: _product,
                                   admins: _admins,
                                   repayInfo: CollectionLogOtherRepayInfo(),
                                   couponList: const [],
                                   track: CollectionLogOtherTrack(),
-                                  period: provider2.list
-                                      .where((element) => indexMap[widget.index]
-                                          .contains(element.kStatus))
-                                      .toList()[index]
-                                      .aAAAAQBPeriods,
+                                  period: filteredList[index].aAAAAQBPeriods,
                                   contactList: [],
                                   allContactList: [],
                                   smsHistory: [],
                                 )
-                              : MoreWidget(
-                                  provider2.list
-                                      .where((element) => indexMap[widget.index]
-                                          .contains(element.kStatus))
-                                      .toList()
-                                      .length,
-                                  _hasMore(),
-                                  10);
+                              : MoreWidget(filteredList.length, _hasMore(), 10);
                         },
-                            childCount: provider2.list
-                                    .where((element) => indexMap[widget.index]
-                                        .contains(element.kStatus))
-                                    .toList()
-                                    .length +
-                                1),
-                      ));
+                        childCount: filteredList.length + 1,
+                      ),
+                    ),
+            );
           }),
         ),
       ),
     );
+  }
+
+  String _normalizeDigits(String value) {
+    return value.replaceAll(RegExp(r'[^0-9]'), '');
   }
 
   @override

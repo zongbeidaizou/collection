@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../account/page/account_record_list_page.dart';
 import '../providers/user_provider.dart';
 import '../shop/page/message_page.dart';
+import '../order/page/order_receive_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,9 +28,9 @@ class _HomeState extends State<Home> with RestorationMixin {
   late List<Widget> _pageList;
   final List<String> _appBarTitles = [
     'Cases',
-    'Verify',
     'Marketing',
-    'Logs',
+    'Receive',
+    'Verify',
     'Bonus',
     'News',
     'Account'
@@ -55,9 +56,9 @@ class _HomeState extends State<Home> with RestorationMixin {
   void initData() {
     _pageList = [
       const OrderPage(),
-      const ReviewPage(),
       const MarketingPage(),
-      const GoodsPage(),
+      const OrderReceivePage(),
+      const ReviewPage(),
       const AccountRecordListPage(searchKeyword: ''),
       const MessagePage(),
       const ShopPage(),
@@ -82,18 +83,7 @@ class _HomeState extends State<Home> with RestorationMixin {
           color: Colours.app_main,
         ),
       ],
-      const [
-        Icon(
-          Icons.fact_check,
-          size: _imageSize,
-          color: Colours.unselected_item_color,
-        ),
-        Icon(
-          Icons.fact_check,
-          size: _imageSize,
-          color: Colours.app_main,
-        ),
-      ],
+      
       [
         SizedBox(
           width: 56,
@@ -170,12 +160,24 @@ class _HomeState extends State<Home> with RestorationMixin {
       ],
       const [
         Icon(
-          Icons.flag_circle_rounded,
+          Icons.move_up,
           size: _imageSize,
           color: Colours.unselected_item_color,
         ),
         Icon(
-          Icons.flag_circle_rounded,
+          Icons.move_up,
+          size: _imageSize,
+          color: Colours.app_main,
+        ),
+      ],
+      const [
+        Icon(
+          Icons.fact_check,
+          size: _imageSize,
+          color: Colours.unselected_item_color,
+        ),
+        Icon(
+          Icons.fact_check,
           size: _imageSize,
           color: Colours.app_main,
         ),

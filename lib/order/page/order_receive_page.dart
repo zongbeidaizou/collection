@@ -45,6 +45,7 @@ class _OrderReceivePageState extends State<OrderReceivePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
+        showBack: false,
         hintText: 'phone or contact phone',
         onPressed: (text) {
           if (text.isEmpty) {

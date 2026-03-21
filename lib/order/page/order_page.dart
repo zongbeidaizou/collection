@@ -257,90 +257,86 @@ class _OrderPageState extends State<OrderPage>
         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
         sliver: SliverAppBar(
           systemOverlayStyle: isDark ? ThemeUtils.light : ThemeUtils.dark,
-          actions: <Widget>[
-            Center(
-              child: SizedBox(
-                width: 210,
-                child: Builder(
-                  builder: (context) {
-                    final Color iconColor =
-                        isDark ? Colours.dark_text_gray : Colours.text_gray_c;
-                    return Container(
-                      height: 32.0,
-                      decoration: BoxDecoration(
-                        color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
-                        borderRadius: BorderRadius.circular(4.0),
+          title:Builder(
+            builder: (context) {
+              final Color iconColor =
+                  isDark ? Colours.dark_text_gray : Colours.text_gray_c;
+              return Container(
+                height: 32.0,
+                decoration: BoxDecoration(
+                  color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: TextField(
+                  autofocus: false,
+                  controller: _phoneFilterController,
+                  textInputAction: TextInputAction.search,
+                  keyboardType: TextInputType.phone,
+                  onChanged: (val) {
+                    setState(() {
+                      _phoneFilterKeyword = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(
+                      left: -8.0,
+                      right: -16.0,
+                      bottom: 14.0,
+                    ),
+                    border: InputBorder.none,
+                    icon: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 8.0,
+                        left: 8.0,
                       ),
-                      child: TextField(
-                        autofocus: false,
-                        controller: _phoneFilterController,
-                        textInputAction: TextInputAction.search,
-                        keyboardType: TextInputType.phone,
-                        onChanged: (val) {
-                          setState(() {
-                            _phoneFilterKeyword = val;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                            left: -8.0,
-                            right: -16.0,
-                            bottom: 14.0,
-                          ),
-                          border: InputBorder.none,
-                          icon: Padding(
+                      child: LoadAssetImage(
+                        'order/order_search',
+                        color: iconColor,
+                      ),
+                    ),
+                    hintText: 'Search for the case phone',
+                    suffixIcon: _phoneFilterKeyword.isEmpty
+                        ? null
+                        : Padding(
                             padding: const EdgeInsets.only(
+                              left: 16.0,
                               top: 8.0,
                               bottom: 8.0,
-                              left: 8.0,
                             ),
-                            child: LoadAssetImage(
-                              'order/order_search',
-                              color: iconColor,
+                            child: GestureDetector(
+                              child: LoadAssetImage(
+                                'order/order_delete',
+                                color: iconColor,
+                              ),
+                              onTap: () {
+                                _phoneFilterController.clear();
+                                setState(() {
+                                  _phoneFilterKeyword = '';
+                                });
+                              },
                             ),
                           ),
-                          hintText: 'Search for the case phone',
-                          suffixIcon: _phoneFilterKeyword.isEmpty
-                              ? null
-                              : Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 16.0,
-                                    top: 8.0,
-                                    bottom: 8.0,
-                                  ),
-                                  child: GestureDetector(
-                                    child: LoadAssetImage(
-                                      'order/order_delete',
-                                      color: iconColor,
-                                    ),
-                                    onTap: () {
-                                      _phoneFilterController.clear();
-                                      setState(() {
-                                        _phoneFilterKeyword = '';
-                                      });
-                                    },
-                                  ),
-                                ),
-                        ),
-                      ),
-                    );
-                  },
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            
             IconButton(
               onPressed: () {
                 _addAllContacts(context);
               },
               tooltip: 'Add Contact',
-              icon: Icon(Icons.group_add, size: 30.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.group_add, size: 26.0, color: ThemeUtils.getIconColor(context)),
             ),
              IconButton(
               onPressed: () {
                 NavigatorUtils.push(context, OrderRouter.orderSearchPage);
               },
               tooltip: 'Search',
-              icon: Icon(Icons.search, size: 30.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.search, size: 26.0, color: ThemeUtils.getIconColor(context)),
             ),
             
              IconButton(
@@ -348,7 +344,7 @@ class _OrderPageState extends State<OrderPage>
                 NavigatorUtils.push(context, GoodsRouter.goodsPage);
               },
               tooltip: 'Receive',
-              icon: Icon(Icons.description_outlined, size: 28.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.description_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),
             ),
           ],
           backgroundColor: Colors.transparent,

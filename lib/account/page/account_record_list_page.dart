@@ -101,6 +101,8 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   late AccountRecordListPresenter _accountRecordListPresenter;
   late int _currentPage = 1;
   final List<CommissionData> _list = [];
+  final TextEditingController _phoneFilterController = TextEditingController();
+  String _phoneFilterKeyword = '';
   bool _isLoading = false;
   late int _maxPage;
   @override
@@ -112,6 +114,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   @override
   void initState() {
     super.initState();
+    _phoneFilterController.addListener(_onPhoneFilterChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Avoid keyboard auto-opening when this page is pushed from a search page.
       FocusManager.instance.primaryFocus?.unfocus();
@@ -123,6 +126,12 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       _onRefresh();
       // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });
+  }
+
+  @override
+  void dispose() {
+    _phoneFilterController.dispose();
+    super.dispose();
   }
 
   @override
@@ -160,6 +169,34 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       _currentPage = 1;
     });
     _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
+  }
+
+  void _onPhoneFilterChanged() {
+    final String normalized = _normalizePhone(_phoneFilterController.text);
+    if (normalized == _phoneFilterKeyword) return;
+    if (!mounted) return;
+    setState(() {
+      _phoneFilterKeyword = normalized;
+    });
+  }
+
+  String _normalizePhone(String input) {
+    final digitsOnly = input.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digitsOnly.isEmpty) return '';
+    // Keep the last 10 digits for stable "contains" matching.
+    return digitsOnly.length > 10
+        ? digitsOnly.substring(digitsOnly.length - 10)
+        : digitsOnly;
+  }
+
+  List<CommissionData> _getDisplayList() {
+    if (_phoneFilterKeyword.isEmpty) return _list;
+    return _list.where((log) {
+      final String? phone = log.pPhone;
+      if (phone == null || phone.isEmpty) return false;
+      final String normalizedPhone = _normalizePhone(phone);
+      return normalizedPhone.contains(_phoneFilterKeyword);
+    }).toList();
   }
 
   @override
@@ -206,6 +243,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   bool get wantKeepAlive => false;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final bool isDark = context.isDark;
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
@@ -227,8 +265,68 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       fit: BoxFit.fill,
                     ),
               // toolbarHeight: 30,
-              title: Text("Bonus Record",
-                  style: TextStyle(color: ThemeUtils.getTextColor(context))),
+              title: Container(
+                height: 32,
+                decoration: BoxDecoration(
+                  color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: TextField(
+                  autofocus: false,
+                  controller: _phoneFilterController,
+                  keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: 'Phone',
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.only(
+                      left: -8.0,
+                      right: -16.0,
+                      bottom: 14.0,
+                    ),
+                    icon: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 8.0,
+                        left: 8.0,
+                      ),
+                      child: LoadAssetImage(
+                        'order/order_search',
+                        color: isDark
+                            ? Colours.dark_text_gray
+                            : Colours.text_gray_c,
+                        width: 18,
+                        height: 18,
+                      ),
+                    ),
+                    suffixIcon: _phoneFilterKeyword.isEmpty
+                        ? null
+                        : GestureDetector(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                top: 8.0,
+                                bottom: 8.0,
+                              ),
+                              child: LoadAssetImage(
+                                'order/order_delete',
+                                color: isDark
+                                    ? Colours.dark_text_gray
+                                    : Colours.text_gray_c,
+                                width: 18,
+                                height: 18,
+                              ),
+                            ),
+                            onTap: () {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback((_) {
+                                _phoneFilterController.text = '';
+                              });
+                            },
+                          ),
+                  ),
+                ),
+              ),
               actions: <Widget>[
                 // IconButton(
                 //   tooltip: 'mark all as read',
@@ -263,24 +361,29 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
         child: RefreshIndicator(
           onRefresh: _onRefresh,
           displacement: 20.0,
-          child: CustomScrollView(
-            slivers: _list.isNotEmpty
-                ? _buildGroups()
+          child: Builder(
+            builder: (_) {
+              final displayList = _getDisplayList();
+              return CustomScrollView(
+                slivers: displayList.isNotEmpty
+                    ? _buildGroups(displayList)
                 : [
                     const SliverFillRemaining(
                         child: Center(
                             child: Text('no data, search by phone or sn')))
                   ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  List<Widget> _buildGroups() {
+  List<Widget> _buildGroups(List<CommissionData> sourceList) {
     // 按日期分组
     final Map<String, List<CommissionData>> groupedLog = {};
-    for (final CommissionData log in _list) {
+    for (final CommissionData log in sourceList) {
       final DateTime createdAt = DateTime.parse(log.createdAt!);
 
       // 将日期格式化为年月日字符串

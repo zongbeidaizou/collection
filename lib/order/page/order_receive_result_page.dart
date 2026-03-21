@@ -1,5 +1,6 @@
 import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bounty_hunter/util/change_notifier_manage.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,11 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
   void initState() {
     super.initState();
     _index = widget.index;
+    // Prevent soft keyboard from popping up when this page opens.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    });
     // _onRefresh();
   }
 

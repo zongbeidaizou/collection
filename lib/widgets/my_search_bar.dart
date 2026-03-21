@@ -36,6 +36,20 @@ class _MySearchBarState extends State<MySearchBar> {
 
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focus = FocusNode();
+  bool _didHideKeyboard = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _didHideKeyboard) return;
+      _didHideKeyboard = true;
+      // Ensure this search bar does not automatically open the soft keyboard.
+      _focus.unfocus();
+      FocusScope.of(context).unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    });
+  }
 
   @override
   void dispose() {
@@ -115,7 +129,7 @@ class _MySearchBarState extends State<MySearchBar> {
         ),
         child: TextField(
           key: const Key('search_text_field'),
-          autofocus: true,
+          autofocus: false,
           controller: _controller,
           focusNode: _focus,
           keyboardType: TextInputType.number,

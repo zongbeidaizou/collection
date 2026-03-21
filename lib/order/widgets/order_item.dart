@@ -1003,8 +1003,9 @@ class _OrderItemState extends State<OrderItem> {
             ],
           ),
 
-        if(widget.inList) Gaps.vGap8,
+        if(widget.inList) Gaps.vGap4,
         Gaps.line,
+         Gaps.vGap8,
         if (widget.inList)
           Row(
             children: <Widget>[

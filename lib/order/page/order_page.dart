@@ -261,40 +261,70 @@ class _OrderPageState extends State<OrderPage>
             Center(
               child: SizedBox(
                 width: 210,
-                child: TextField(
-                  controller: _phoneFilterController,
-                  textInputAction: TextInputAction.search,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (val) {
-                    setState(() {
-                      _phoneFilterKeyword = val;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    isDense: true,
-                    hintText: 'Search for the case phone',
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    suffixIcon: _phoneFilterKeyword.isEmpty
-                        ? null
-                        : IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              _phoneFilterController.clear();
-                              setState(() {
-                                _phoneFilterKeyword = '';
-                              });
-                            },
+                child: Builder(
+                  builder: (context) {
+                    final Color iconColor =
+                        isDark ? Colours.dark_text_gray : Colours.text_gray_c;
+                    return Container(
+                      height: 32.0,
+                      decoration: BoxDecoration(
+                        color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      child: TextField(
+                        autofocus: false,
+                        controller: _phoneFilterController,
+                        textInputAction: TextInputAction.search,
+                        keyboardType: TextInputType.phone,
+                        onChanged: (val) {
+                          setState(() {
+                            _phoneFilterKeyword = val;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                            left: -8.0,
+                            right: -16.0,
+                            bottom: 14.0,
                           ),
-                    filled: true,
-                    fillColor: isDark
-                        ? Colors.black.withOpacity(0.30)
-                        : Colors.white.withOpacity(0.70),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(18),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
+                          border: InputBorder.none,
+                          icon: Padding(
+                            padding: const EdgeInsets.only(
+                              top: 8.0,
+                              bottom: 8.0,
+                              left: 8.0,
+                            ),
+                            child: LoadAssetImage(
+                              'order/order_search',
+                              color: iconColor,
+                            ),
+                          ),
+                          hintText: 'Search for the case phone',
+                          suffixIcon: _phoneFilterKeyword.isEmpty
+                              ? null
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 16.0,
+                                    top: 8.0,
+                                    bottom: 8.0,
+                                  ),
+                                  child: GestureDetector(
+                                    child: LoadAssetImage(
+                                      'order/order_delete',
+                                      color: iconColor,
+                                    ),
+                                    onTap: () {
+                                      _phoneFilterController.clear();
+                                      setState(() {
+                                        _phoneFilterKeyword = '';
+                                      });
+                                    },
+                                  ),
+                                ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

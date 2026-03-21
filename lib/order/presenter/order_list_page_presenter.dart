@@ -59,7 +59,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
           // Record last successful index time per status (tab), 30 minutes TTL.
           if (page == 1 && keyword == '' && keyword2 == '') {
             await Cache().cacheData(
-                'order_list_last_index_time_$status',
+                'order_list_last_index_time',
                 DateTime.now().toIso8601String(),
                 1800);
           }

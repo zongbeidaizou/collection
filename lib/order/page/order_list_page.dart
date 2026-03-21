@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/order/provider/order_page_provider.dart';
 import 'package:bounty_hunter/order/widgets/order_item.dart';
@@ -58,6 +59,8 @@ class _OrderListPageState extends State<OrderListPage>
   OrderListProvider provider2 = OrderListProvider();
   Timer? _autoRefreshTimer;
   Timer? _statisticsTimer;
+  bool _isCheckingStaleRefresh = false;
+  static const Duration _staleDuration = Duration(minutes: 30);
 
   @override
   void initState() {
@@ -72,23 +75,11 @@ class _OrderListPageState extends State<OrderListPage>
       // Auto refresh check: periodically check if index API has not been called
       // in the last 30 minutes for this tab, and trigger a refresh if needed.
       _autoRefreshTimer = Timer.periodic(const Duration(minutes: 1), (timer) async {
-        if (!mounted) {
-          timer.cancel();
-          return;
-        }
-        final String cacheKey = 'order_list_last_index_time_$_index';
-        final String? lastIndexTime = await Cache().checkCache(cacheKey);
-        if (lastIndexTime == null && mounted) {
-          _onRefresh();
-        }
+        await _maybeForceRefreshIfStale();
       });
 
       // Also check immediately on first load
-      final String cacheKey = 'order_list_last_index_time_$_index';
-      final String? lastIndexTime = await Cache().checkCache(cacheKey);
-      if (lastIndexTime == null && mounted) {
-        _onRefresh();
-      }
+      await _maybeForceRefreshIfStale();
     });
   }
 
@@ -211,6 +202,37 @@ class _OrderListPageState extends State<OrderListPage>
 
   String _normalizeDigits(String value) {
     return value.replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
+  Future<void> _maybeForceRefreshIfStale() async {
+    if (!mounted) return;
+    if (_isCheckingStaleRefresh) return;
+    if(widget.index != 0) return;
+    _isCheckingStaleRefresh = true;
+    try {
+      final String cacheKey = 'order_list_last_index_time';
+      final String? lastIndexTime = await Cache().getString(cacheKey);
+      if (!mounted) return;
+
+      if (lastIndexTime == null || lastIndexTime.isEmpty) {
+        await _onRefresh();
+        return;
+      }
+
+      final DateTime? lastTime = DateTime.tryParse(lastIndexTime);
+      if (lastTime == null ||
+          DateTime.now().difference(lastTime) >= _staleDuration) {
+            if (kDebugMode) {
+              print('stale refresh: $_index');
+              print('lastTime: $lastTime');
+              print('DateTime.now().difference(lastTime!): ${DateTime.now().difference(lastTime!)}');
+              print('staleDuration: $_staleDuration');
+            }
+        await _onRefresh();
+      }
+    } finally {
+      _isCheckingStaleRefresh = false;
+    }
   }
 
   @override

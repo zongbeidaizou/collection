@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:bounty_hunter/order/presenter/order_list_page_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bounty_hunter/util/change_notifier_manage.dart';
+import 'package:bounty_hunter/util/cache.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/admin_entity.dart';
@@ -50,17 +53,54 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
   late OrderListPagePresenter _orderListPagePresenter;
   OrderListProvider provider2 = OrderListProvider();
   final ScrollController _scrollController = ScrollController();
+  static const String _kReceiveResultLastIndexTimeKey =
+      'order_receive_result_last_index_time';
+  bool _isCheckingStaleRefresh = false;
+  Timer? _staleCheckTimer;
 
   @override
   void initState() {
     super.initState();
     _index = widget.index;
     // Prevent soft keyboard from popping up when this page opens.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       FocusScope.of(context).unfocus();
       SystemChannels.textInput.invokeMethod('TextInput.hide');
+      await _maybeForceRefreshIfStale();
+    });
+    _staleCheckTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      _maybeForceRefreshIfStale();
     });
     // _onRefresh();
+  }
+
+  Future<void> _maybeForceRefreshIfStale() async {
+    if (_isCheckingStaleRefresh) return;
+    _isCheckingStaleRefresh = true;
+    final String? lastRequestAt = await Cache().getString(_kReceiveResultLastIndexTimeKey);
+    if (!mounted) {
+      _isCheckingStaleRefresh = false;
+      return;
+    }
+    try {
+      if (lastRequestAt == null || lastRequestAt.isEmpty) {
+        await _onRefresh();
+        return;
+      }
+      final DateTime? lastTime = DateTime.tryParse(lastRequestAt);
+      if (lastTime == null ||
+          DateTime.now().difference(lastTime) >= const Duration(hours: 1)) {
+        await _onRefresh();
+      }
+    } finally {
+      _isCheckingStaleRefresh = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _staleCheckTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -175,6 +215,10 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
     String keyword = widget.keyword.isNotEmpty ? widget.keyword : 'random';
     _list = await _orderListPagePresenter.index(1, widget.index, true,
         keyword2: keyword);
+    await Cache().setString(
+      _kReceiveResultLastIndexTimeKey,
+      DateTime.now().toIso8601String(),
+    );
     setState(() {
       // refresh list
     });

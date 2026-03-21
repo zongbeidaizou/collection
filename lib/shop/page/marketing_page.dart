@@ -113,6 +113,10 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
   // 定时器，每10秒请求一次 statistics
   Timer? _statisticsTimer;
+  Timer? _staleCheckTimer;
+  bool _isCheckingStaleRefresh = false;
+  static const String _kMarketingLastIndexTimeKey =
+      'marketing_last_index_time';
 
   @override
   MarketingPresenter createPresenter() {
@@ -125,12 +129,15 @@ class _AccountRecordListPageState extends State<MarketingPage>
     super.initState();
     _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _accountRecordListPresenter.index(1, true);
+      await _maybeForceRefreshIfStale();
     });
 
     // 启动定时器，每10秒调用一次 statistics
     _statisticsTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       _accountRecordListPresenter.statistics();
+    });
+    _staleCheckTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      _maybeForceRefreshIfStale();
     });
   }
 
@@ -138,7 +145,28 @@ class _AccountRecordListPageState extends State<MarketingPage>
   void dispose() {
     _searchController.dispose();
     _statisticsTimer?.cancel();
+    _staleCheckTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _maybeForceRefreshIfStale() async {
+    if (_isCheckingStaleRefresh || !mounted) return;
+    _isCheckingStaleRefresh = true;
+    try {
+      final String? lastRequestAt = await Cache().getString(_kMarketingLastIndexTimeKey);
+      if (!mounted) return;
+      if (lastRequestAt == null || lastRequestAt.isEmpty) {
+        _accountRecordListPresenter.index(1, true);
+        return;
+      }
+      final DateTime? lastTime = DateTime.tryParse(lastRequestAt);
+      if (lastTime == null ||
+          DateTime.now().difference(lastTime) >= const Duration(hours: 1)) {
+        _accountRecordListPresenter.index(1, true);
+      }
+    } finally {
+      _isCheckingStaleRefresh = false;
+    }
   }
 
   // 搜索相关方法
@@ -225,6 +253,10 @@ class _AccountRecordListPageState extends State<MarketingPage>
       _filterList(); // 更新数据时重新过滤
       _isLoading = false;
     });
+    Cache().setString(
+      _kMarketingLastIndexTimeKey,
+      DateTime.now().toIso8601String(),
+    );
   }
 
   @override

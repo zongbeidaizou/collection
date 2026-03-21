@@ -20,7 +20,7 @@ class _AccountSearchPageState extends State<AccountSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: 'Search by phone or sn',
+        hintText: 'Search by phone (Online)',
         onPressed: (text) =>           setState(() {
           _keyword = text;
         }),

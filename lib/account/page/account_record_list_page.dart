@@ -277,7 +277,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'Phone',
+                    hintText: 'Search by phone (Local)',
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.only(
                       left: -8.0,

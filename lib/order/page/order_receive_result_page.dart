@@ -144,7 +144,7 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                        'Receive by phone or contact phone or borrower name '),
+                        'Receive by phone or contact phone or borrower name (Online)'),
                   ],
                 ),
               ),

@@ -19,7 +19,7 @@ class _GoodsSearchPageState extends State<GoodsSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: 'Search by phone or log',
+        hintText: 'Search by phone (Online)',
         onPressed: (text) =>           setState(() {
           _keyword = text;
         }),

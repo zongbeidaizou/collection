@@ -295,7 +295,7 @@ class _OrderPageState extends State<OrderPage>
                         color: iconColor,
                       ),
                     ),
-                    hintText: 'Search for the case phone',
+                    hintText: 'Search by phone (Local)',
                     suffixIcon: _phoneFilterKeyword.isEmpty
                         ? null
                         : Padding(

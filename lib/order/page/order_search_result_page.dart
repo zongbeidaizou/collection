@@ -122,7 +122,7 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
               )
             : Center(
                 child:
-                    Text('Search by phone or contact phone or borrower name ')),
+                    Text('Search by phone or contact phone or borrower name (Online)')),
       ),
     );
   }

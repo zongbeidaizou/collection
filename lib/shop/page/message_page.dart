@@ -155,57 +155,29 @@ class _AccountRecordListPageState extends State<MessagePage>
     final Color? iconColor = ThemeUtils.getIconColor(context);
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: Colours.app_main,
-        flexibleSpace: isDark
-            ? Container(
-                height: 115.0,
-                color: Colours.dark_bg_color,
-              )
-            : LoadAssetImage(
-                'statistic/statistic_bg',
-                width: context.width,
-                height: 115.0,
-                fit: BoxFit.fill,
-              ),
-        // toolbarHeight: 30,
-        title: Text("News",
-            style: TextStyle(color: ThemeUtils.getTextColor(context))),
-        actions: <Widget>[
-          // IconButton(
-          //         tooltip: 'mark all as read',
-          //         onPressed: () {
-          //           _accountRecordListPresenter.markAsRead(true);
-          //         },
-          //         icon: Icon(
-          //           Icons.auto_awesome_outlined,
-          //           color: Colors.white,
-          //         ),
-          //       )
-        ],
-      ),
-      body: NotificationListener(
-        onNotification: (ScrollNotification note) {
-          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-            _loadMore();
-          }
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          displacement: 120.0,
-          child: Scrollbar(
-            // 加个滚动条
-            controller: _scrollController,
-            child: ListView.builder(
-              itemCount: _list.length,
+      
+      body: SafeArea(
+        child: NotificationListener(
+          onNotification: (ScrollNotification note) {
+            if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+              _loadMore();
+            }
+            return true;
+          },
+          child: RefreshIndicator(
+            onRefresh: _onRefresh,
+            displacement: 120.0,
+            child: Scrollbar(
+              // 加个滚动条
               controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
-              itemBuilder: (_, index) => _MessageItem(item: _list[index]),
+              child: ListView.builder(
+                itemCount: _list.length,
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 28.0),
+                itemBuilder: (_, index) => _MessageItem(item: _list[index]),
+              ),
             ),
           ),
         ),

@@ -46,7 +46,7 @@ class _OrderReceivePageState extends State<OrderReceivePage> {
     return Scaffold(
       appBar: MySearchBar(
         showBack: false,
-        hintText: 'phone or contact phone',
+        hintText: 'Search by phone (Online)',
         onPressed: (text) {
           if (text.isEmpty) {
             showToast('Receive keyword cannot be empty！');

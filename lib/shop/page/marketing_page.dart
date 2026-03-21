@@ -484,7 +484,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
             keyboardType: TextInputType.phone,
             inputFormatters: [PhoneNumberInputFormatter()],
             decoration: InputDecoration(
-              hintText: 'Phone',
+              hintText: 'Search by phone (Local)',
               border: InputBorder.none,
               contentPadding:
                   const EdgeInsets.only(left: -8.0, right: -16.0, bottom: 14.0),

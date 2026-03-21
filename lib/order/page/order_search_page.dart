@@ -45,7 +45,7 @@ class _OrderSearchPageState extends State<OrderSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MySearchBar(
-        hintText: 'phone or contact phone',
+        hintText: 'Search by phone (Online)',
         onPressed: (text) {
           if (text.isEmpty) {
             showToast('Search keyword cannot be empty！');

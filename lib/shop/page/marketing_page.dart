@@ -108,8 +108,6 @@ class _AccountRecordListPageState extends State<MarketingPage>
   late int _selectedIndex = 100000;
   late List<MarketingOtherTemplates2> _templates = [];
 
-  // 搜索相关状态
-  bool _isSearchVisible = false;
   final TextEditingController _searchController = TextEditingController();
   String _searchKeyword = '';
 
@@ -183,20 +181,6 @@ class _AccountRecordListPageState extends State<MarketingPage>
         }
       }
     }
-  }
-
-  void _toggleSearch() {
-    setState(() {
-      _isSearchVisible = !_isSearchVisible;
-      if (!_isSearchVisible) {
-        _searchController.clear();
-        _searchKeyword = '';
-        _filteredList.clear();
-        _filteredList.addAll(_list);
-      } else {
-        _selectedIndex = 100000;
-      }
-    });
   }
 
   @override
@@ -488,51 +472,66 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 fit: BoxFit.fill,
               ),
         // toolbarHeight: 30,
-        title: Text("Marketing",
-            style: TextStyle(color: ThemeUtils.getIconColor(context))),
-        actions: <Widget>[
-          InkWell(
-            onTap: _toggleSearch,
-            child: Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: Center(child: Text('Search',style: TextStyle(color: ThemeUtils.getIconColor(context))))),
-          )
-        ],
+        title: Container(
+          height: 32,
+          decoration: BoxDecoration(
+            color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          child: TextField(
+            autofocus: false,
+            controller: _searchController,
+            keyboardType: TextInputType.phone,
+            inputFormatters: [PhoneNumberInputFormatter()],
+            decoration: InputDecoration(
+              hintText: 'Phone',
+              border: InputBorder.none,
+              contentPadding:
+                  const EdgeInsets.only(left: -8.0, right: -16.0, bottom: 14.0),
+              icon: Padding(
+                padding: const EdgeInsets.only(
+                  top: 8.0,
+                  bottom: 8.0,
+                  left: 8.0,
+                ),
+                child: LoadAssetImage(
+                  'order/order_search',
+                  color: isDark ? Colours.dark_text_gray : Colours.text_gray_c,
+                  width: 18,
+                  height: 18,
+                ),
+              ),
+              suffixIcon: _searchKeyword.isEmpty
+                  ? null
+                  : GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16.0,
+                          top: 8.0,
+                          bottom: 8.0,
+                        ),
+                        child: LoadAssetImage(
+                          'order/order_delete',
+                          color: isDark
+                              ? Colours.dark_text_gray
+                              : Colours.text_gray_c,
+                          width: 18,
+                          height: 18,
+                        ),
+                      ),
+                      onTap: () {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _searchController.text = '';
+                        });
+                      },
+                    ),
+            ),
+          ),
+        ),
+        actions: const <Widget>[],
       ),
       body: Column(
         children: [
-          // 搜索框
-          if (_isSearchVisible)
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              color: isDark ? Colours.dark_bg_color : Colors.white,
-              child: TextField(
-                controller: _searchController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: [PhoneNumberInputFormatter()],
-                decoration: InputDecoration(
-                  hintText: 'Enter phone number (digits, +, space only)...',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: _searchKeyword.isNotEmpty
-                      ? IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                          },
-                        )
-                      : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  filled: true,
-                  fillColor:
-                      isDark ? Colours.dark_button_disabled : Colors.grey[100],
-                ),
-                style: TextStyle(
-                  color: isDark ? Colors.white : Colors.black,
-                ),
-              ),
-            ),
           // 列表内容
           Expanded(
             child: NotificationListener(

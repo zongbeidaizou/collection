@@ -6,6 +6,7 @@ import 'package:bounty_hunter/models/collection_notification_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
@@ -72,6 +73,8 @@ class _AccountRecordListPageState extends State<MessagePage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      FocusManager.instance.primaryFocus?.unfocus();
+      await SystemChannels.textInput.invokeMethod('TextInput.hide');
       _onRefresh();
     });
   }

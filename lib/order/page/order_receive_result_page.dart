@@ -76,6 +76,11 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
 
   Future<void> _maybeForceRefreshIfStale() async {
     if (_isCheckingStaleRefresh) return;
+       //如果当前时间为凌晨1点到5点，则不进行刷新
+    final now = DateTime.now();
+    if (now.hour >= 1 && now.hour <= 5) {
+      return;
+    }
     _isCheckingStaleRefresh = true;
     final String? lastRequestAt = await Cache().getString(_kReceiveResultLastIndexTimeKey);
     if (!mounted) {

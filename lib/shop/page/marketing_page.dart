@@ -152,6 +152,11 @@ class _AccountRecordListPageState extends State<MarketingPage>
   Future<void> _maybeForceRefreshIfStale() async {
     if (_isCheckingStaleRefresh || !mounted) return;
     _isCheckingStaleRefresh = true;
+    //如果当前时间为凌晨1点到5点，则不进行刷新
+    final now = DateTime.now();
+    if (now.hour >= 1 && now.hour <= 5) {
+      return;
+    }
     try {
       final String? lastRequestAt = await Cache().getString(_kMarketingLastIndexTimeKey);
       if (!mounted) return;
@@ -221,6 +226,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
   @override
   void onRefresh() {
+    _onRefresh();
     // TODO: implement onRefresh
   }
 

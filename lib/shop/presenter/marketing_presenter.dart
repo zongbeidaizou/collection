@@ -30,7 +30,9 @@ import '../iview/message_page_iview.dart';
 class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      view.onRefresh();
+    });
   }
 
   Future<void> index(int currentPage, bool isShowDialog,

@@ -208,6 +208,10 @@ class _OrderListPageState extends State<OrderListPage>
     if (!mounted) return;
     if (_isCheckingStaleRefresh) return;
     if(widget.index != 0) return;
+        final now = DateTime.now();
+    if (now.hour >= 1 && now.hour <= 5) {
+      return;
+    }
     _isCheckingStaleRefresh = true;
     try {
       final String cacheKey = 'order_list_last_index_time';

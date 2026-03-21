@@ -183,7 +183,7 @@ class _ShopPageState extends State<ShopPage>
             child: Consumer<UserProvider>(builder: (_, provider, __) {
               return Text(
                 'Hi ${provider.userEntity.profile!.aName!}',
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 24,color: Colors.white),
               );
             }),
           ),

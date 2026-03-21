@@ -13,6 +13,7 @@ import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import '../../goods/goods_router.dart';
 import '../../models/commission_entity.dart';
 import '../../mvp/base_page.dart';
@@ -112,6 +113,13 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Avoid keyboard auto-opening when this page is pushed from a search page.
+      FocusManager.instance.primaryFocus?.unfocus();
+      try {
+        await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
+      } catch (_) {
+        // Ignore if platform channel isn't available.
+      }
       _onRefresh();
       // _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
     });

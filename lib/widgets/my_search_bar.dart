@@ -118,6 +118,7 @@ class _MySearchBarState extends State<MySearchBar> {
           autofocus: true,
           controller: _controller,
           focusNode: _focus,
+          keyboardType: TextInputType.number,
           textInputAction: TextInputAction.search,
           onSubmitted: (String val) {
             _focus.unfocus();

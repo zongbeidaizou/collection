@@ -109,9 +109,7 @@ class _OrderItemState extends State<OrderItem> {
     // 根据包名状态设置不同的背景颜色
     backgroundColor = _getBackgroundColorByStatus(widget.item, isDark);
 
-    if (widget.item.tBorrowSn == 'QRSOSEDpZn') {
-      print('');
-    }
+
     return Padding(
         padding: widget.inList ? const EdgeInsets.only(top: 8.0) : EdgeInsets.zero,
         child: MyCard(
@@ -673,21 +671,13 @@ class _OrderItemState extends State<OrderItem> {
               child: InkWell(
                 child: Row(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 1.4),
-                      height: 8.0,
-                      width: 8.0,
-                      decoration: BoxDecoration(
-                        color: Colours.app_main.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                    ),
+                    Icon(Icons.polyline,size: 13,color: Colours.app_main.withOpacity(0.6)),
                     RichText(
                       text: TextSpan(
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.tBorrowSn,style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
+                          TextSpan(text: widget.item.tBorrowSn?.substring(5),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: isDark ? Colors.white : Colors.black)),
                           TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ],
                       ),

@@ -99,64 +99,14 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aBorrowId != null) {
     collectionOrderData.aBorrowId = aBorrowId;
   }
-  final int? bCollectionStageId = jsonConvert.convert<int>(
-      json['b_collection_stage_id']);
-  if (bCollectionStageId != null) {
-    collectionOrderData.bCollectionStageId = bCollectionStageId;
-  }
-  final int? cCollectionAgencyId = jsonConvert.convert<int>(
-      json['c_collection_agency_id']);
-  if (cCollectionAgencyId != null) {
-    collectionOrderData.cCollectionAgencyId = cCollectionAgencyId;
-  }
-  final int? dCollectionGroupId = jsonConvert.convert<int>(
-      json['d_collection_group_id']);
-  if (dCollectionGroupId != null) {
-    collectionOrderData.dCollectionGroupId = dCollectionGroupId;
-  }
   final int? eCollectionAdminId = jsonConvert.convert<int>(
       json['e_collection_admin_id']);
   if (eCollectionAdminId != null) {
     collectionOrderData.eCollectionAdminId = eCollectionAdminId;
   }
-  final int? fCollectionNewsId = jsonConvert.convert<int>(
-      json['f_collection_news_id']);
-  if (fCollectionNewsId != null) {
-    collectionOrderData.fCollectionNewsId = fCollectionNewsId;
-  }
-  final int? gCollectionOrderFlowHistoryCount = jsonConvert.convert<int>(
-      json['g_collection_order_flow_history_count']);
-  if (gCollectionOrderFlowHistoryCount != null) {
-    collectionOrderData.gCollectionOrderFlowHistoryCount =
-        gCollectionOrderFlowHistoryCount;
-  }
-  final int? hCollectionAdminLogCount = jsonConvert.convert<int>(
-      json['h_collection_admin_log_count']);
-  if (hCollectionAdminLogCount != null) {
-    collectionOrderData.hCollectionAdminLogCount = hCollectionAdminLogCount;
-  }
-  final int? iCollectionAdminCallCount = jsonConvert.convert<int>(
-      json['i_collection_admin_call_count']);
-  if (iCollectionAdminCallCount != null) {
-    collectionOrderData.iCollectionAdminCallCount = iCollectionAdminCallCount;
-  }
-  final int? jSystemSmsCount = jsonConvert.convert<int>(
-      json['j_system_sms_count']);
-  if (jSystemSmsCount != null) {
-    collectionOrderData.jSystemSmsCount = jSystemSmsCount;
-  }
   final int? kStatus = jsonConvert.convert<int>(json['k_status']);
   if (kStatus != null) {
     collectionOrderData.kStatus = kStatus;
-  }
-  final int? lCollectionAmount = jsonConvert.convert<int>(
-      json['l_collection_amount']);
-  if (lCollectionAmount != null) {
-    collectionOrderData.lCollectionAmount = lCollectionAmount;
-  }
-  final int? mPeriodId = jsonConvert.convert<int>(json['m_period_id']);
-  if (mPeriodId != null) {
-    collectionOrderData.mPeriodId = mPeriodId;
   }
   final int? nBorrowAmount = jsonConvert.convert<int>(json['n_borrow_amount']);
   if (nBorrowAmount != null) {
@@ -171,21 +121,6 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (pExpectRepayTime != null) {
     collectionOrderData.pExpectRepayTime = pExpectRepayTime;
   }
-  final int? qLockEndStageId = jsonConvert.convert<int>(
-      json['q_lock_end_stage_id']);
-  if (qLockEndStageId != null) {
-    collectionOrderData.qLockEndStageId = qLockEndStageId;
-  }
-  final String? rFlowInTime = jsonConvert.convert<String>(
-      json['r_flow_in_time']);
-  if (rFlowInTime != null) {
-    collectionOrderData.rFlowInTime = rFlowInTime;
-  }
-  final String? sFlowOutTime = jsonConvert.convert<String>(
-      json['s_flow_out_time']);
-  if (sFlowOutTime != null) {
-    collectionOrderData.sFlowOutTime = sFlowOutTime;
-  }
   final String? tBorrowSn = jsonConvert.convert<String>(json['t_borrow_sn']);
   if (tBorrowSn != null) {
     collectionOrderData.tBorrowSn = tBorrowSn;
@@ -198,75 +133,22 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (vName != null) {
     collectionOrderData.vName = vName;
   }
-  final int? wViewTimes = jsonConvert.convert<int>(json['w_view_times']);
-  if (wViewTimes != null) {
-    collectionOrderData.wViewTimes = wViewTimes;
+  final String? sFlowOutTime = jsonConvert.convert<String>(
+      json['s_flow_out_time']);
+  if (sFlowOutTime != null) {
+    collectionOrderData.sFlowOutTime = sFlowOutTime;
   }
-  final int? xCurrentViewTimes = jsonConvert.convert<int>(
-      json['x_current_view_times']);
-  if (xCurrentViewTimes != null) {
-    collectionOrderData.xCurrentViewTimes = xCurrentViewTimes;
-  }
-  final int? yCurrentLogCount = jsonConvert.convert<int>(
-      json['y_current_log_count']);
-  if (yCurrentLogCount != null) {
-    collectionOrderData.yCurrentLogCount = yCurrentLogCount;
-  }
-  final int? zCurrentCallCount = jsonConvert.convert<int>(
-      json['z_current_call_count']);
-  if (zCurrentCallCount != null) {
-    collectionOrderData.zCurrentCallCount = zCurrentCallCount;
-  }
-  final int? aACommission = jsonConvert.convert<int>(json['a_a_commission']);
-  if (aACommission != null) {
-    collectionOrderData.aACommission = aACommission;
-  }
-  final int? aBCurrentCommission = jsonConvert.convert<int>(
-      json['a_b_current_commission']);
-  if (aBCurrentCommission != null) {
-    collectionOrderData.aBCurrentCommission = aBCurrentCommission;
-  }
-  final int? aCExpectCurrentCommission = jsonConvert.convert<int>(
-      json['a_c_expect_current_commission']);
-  if (aCExpectCurrentCommission != null) {
-    collectionOrderData.aCExpectCurrentCommission = aCExpectCurrentCommission;
-  }
-  final String? aDLastLogTime = jsonConvert.convert<String>(
-      json['a_d_last_log_time']);
-  if (aDLastLogTime != null) {
-    collectionOrderData.aDLastLogTime = aDLastLogTime;
+  final String? aKNo = jsonConvert.convert<String>(json['a_k_no']);
+  if (aKNo != null) {
+    collectionOrderData.aKNo = aKNo;
   }
   final int? aEBorrowCount = jsonConvert.convert<int>(json['a_e_borrow_count']);
   if (aEBorrowCount != null) {
     collectionOrderData.aEBorrowCount = aEBorrowCount;
   }
-  final int? aFS0CollectionAmount = jsonConvert.convert<int>(
-      json['a_f_s0_collection_amount']);
-  if (aFS0CollectionAmount != null) {
-    collectionOrderData.aFS0CollectionAmount = aFS0CollectionAmount;
-  }
-  final int? aGS1CollectionAmount = jsonConvert.convert<int>(
-      json['a_g_s1_collection_amount']);
-  if (aGS1CollectionAmount != null) {
-    collectionOrderData.aGS1CollectionAmount = aGS1CollectionAmount;
-  }
-  final int? aHS2CollectionAmount = jsonConvert.convert<int>(
-      json['a_h_s2_collection_amount']);
-  if (aHS2CollectionAmount != null) {
-    collectionOrderData.aHS2CollectionAmount = aHS2CollectionAmount;
-  }
-  final int? aFS3CollectionAmount = jsonConvert.convert<int>(
-      json['a_f_s3_collection_amount']);
-  if (aFS3CollectionAmount != null) {
-    collectionOrderData.aFS3CollectionAmount = aFS3CollectionAmount;
-  }
   final int? aJProductId = jsonConvert.convert<int>(json['a_j_product_id']);
   if (aJProductId != null) {
     collectionOrderData.aJProductId = aJProductId;
-  }
-  final String? aKNo = jsonConvert.convert<String>(json['a_k_no']);
-  if (aKNo != null) {
-    collectionOrderData.aKNo = aKNo;
   }
   final String? aLLastLog = jsonConvert.convert<String>(json['a_l_last_log']);
   if (aLLastLog != null) {
@@ -291,12 +173,25 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aZPackage != null) {
     collectionOrderData.aZPackage = aZPackage;
   }
+  final String? aDLastLogTime = jsonConvert.convert<String>(
+      json['a_d_last_log_time']);
+  if (aDLastLogTime != null) {
+    collectionOrderData.aDLastLogTime = aDLastLogTime;
+  }
+  final int? bESourceType = jsonConvert.convert<int>(json['b_e_source_type']);
+  if (bESourceType != null) {
+    collectionOrderData.bESourceType = bESourceType;
+  }
+  final int? bDOverdueDays = jsonConvert.convert<int>(json['b_d_overdue_days']);
+  if (bDOverdueDays != null) {
+    collectionOrderData.bDOverdueDays = bDOverdueDays;
+  }
   final int? bBHasRetain = jsonConvert.convert<int>(json['b_b_has_retain']);
   if (bBHasRetain != null) {
     collectionOrderData.bBHasRetain = bBHasRetain;
   }
-  final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
-      CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
+  final CollectionOrderDataAAAAAQBPeriods? aAAAAQBPeriods = jsonConvert.convert<
+      CollectionOrderDataAAAAAQBPeriods>(json['a_a_a_a_a_q_b_periods']);
   if (aAAAAQBPeriods != null) {
     collectionOrderData.aAAAAQBPeriods = aAAAAQBPeriods;
   }
@@ -307,48 +202,26 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['id'] = entity.id;
   data['a_borrow_id'] = entity.aBorrowId;
-  data['b_collection_stage_id'] = entity.bCollectionStageId;
-  data['c_collection_agency_id'] = entity.cCollectionAgencyId;
-  data['d_collection_group_id'] = entity.dCollectionGroupId;
   data['e_collection_admin_id'] = entity.eCollectionAdminId;
-  data['f_collection_news_id'] = entity.fCollectionNewsId;
-  data['g_collection_order_flow_history_count'] =
-      entity.gCollectionOrderFlowHistoryCount;
-  data['h_collection_admin_log_count'] = entity.hCollectionAdminLogCount;
-  data['i_collection_admin_call_count'] = entity.iCollectionAdminCallCount;
-  data['j_system_sms_count'] = entity.jSystemSmsCount;
   data['k_status'] = entity.kStatus;
-  data['l_collection_amount'] = entity.lCollectionAmount;
-  data['m_period_id'] = entity.mPeriodId;
   data['n_borrow_amount'] = entity.nBorrowAmount;
   data['o_period_index'] = entity.oPeriodIndex;
   data['p_expect_repay_time'] = entity.pExpectRepayTime;
-  data['q_lock_end_stage_id'] = entity.qLockEndStageId;
-  data['r_flow_in_time'] = entity.rFlowInTime;
-  data['s_flow_out_time'] = entity.sFlowOutTime;
   data['t_borrow_sn'] = entity.tBorrowSn;
   data['u_phone'] = entity.uPhone;
   data['v_name'] = entity.vName;
-  data['w_view_times'] = entity.wViewTimes;
-  data['x_current_view_times'] = entity.xCurrentViewTimes;
-  data['y_current_log_count'] = entity.yCurrentLogCount;
-  data['z_current_call_count'] = entity.zCurrentCallCount;
-  data['a_a_commission'] = entity.aACommission;
-  data['a_b_current_commission'] = entity.aBCurrentCommission;
-  data['a_c_expect_current_commission'] = entity.aCExpectCurrentCommission;
-  data['a_d_last_log_time'] = entity.aDLastLogTime;
-  data['a_e_borrow_count'] = entity.aEBorrowCount;
-  data['a_f_s0_collection_amount'] = entity.aFS0CollectionAmount;
-  data['a_g_s1_collection_amount'] = entity.aGS1CollectionAmount;
-  data['a_h_s2_collection_amount'] = entity.aHS2CollectionAmount;
-  data['a_f_s3_collection_amount'] = entity.aFS3CollectionAmount;
-  data['a_j_product_id'] = entity.aJProductId;
+  data['s_flow_out_time'] = entity.sFlowOutTime;
   data['a_k_no'] = entity.aKNo;
+  data['a_e_borrow_count'] = entity.aEBorrowCount;
+  data['a_j_product_id'] = entity.aJProductId;
   data['a_l_last_log'] = entity.aLLastLog;
   data['a_n_current_day_log_count'] = entity.aNCurrentDayLogCount;
   data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
   data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['a_z_package'] = entity.aZPackage;
+  data['a_d_last_log_time'] = entity.aDLastLogTime;
+  data['b_e_source_type'] = entity.bESourceType;
+  data['b_d_overdue_days'] = entity.bDOverdueDays;
   data['b_b_has_retain'] = entity.bBHasRetain;
   data['a_a_a_a_a_q_b_periods'] = entity.aAAAAQBPeriods?.toJson();
   return data;
@@ -358,93 +231,44 @@ extension CollectionOrderDataExtension on CollectionOrderData {
   CollectionOrderData copyWith({
     int? id,
     int? aBorrowId,
-    int? bCollectionStageId,
-    int? cCollectionAgencyId,
-    int? dCollectionGroupId,
     int? eCollectionAdminId,
-    int? fCollectionNewsId,
-    int? gCollectionOrderFlowHistoryCount,
-    int? hCollectionAdminLogCount,
-    int? iCollectionAdminCallCount,
-    int? jSystemSmsCount,
     int? kStatus,
-    int? lCollectionAmount,
-    int? mPeriodId,
     int? nBorrowAmount,
     int? oPeriodIndex,
     String? pExpectRepayTime,
-    int? qLockEndStageId,
-    String? rFlowInTime,
-    String? sFlowOutTime,
     String? tBorrowSn,
     String? uPhone,
     String? vName,
-    int? wViewTimes,
-    int? xCurrentViewTimes,
-    int? yCurrentLogCount,
-    int? zCurrentCallCount,
-    int? aACommission,
-    int? aBCurrentCommission,
-    int? aCExpectCurrentCommission,
-    String? aDLastLogTime,
-    int? aEBorrowCount,
-    int? aFS0CollectionAmount,
-    int? aGS1CollectionAmount,
-    int? aHS2CollectionAmount,
-    int? aFS3CollectionAmount,
-    int? aJProductId,
+    String? sFlowOutTime,
     String? aKNo,
+    int? aEBorrowCount,
+    int? aJProductId,
     String? aLLastLog,
     int? aNCurrentDayLogCount,
     int? aOCurrentDayCallCount,
     int? aVTmpCollectionAdminId,
     String? aZPackage,
+    String? aDLastLogTime,
+    int? bESourceType,
+    int? bDOverdueDays,
     int? bBHasRetain,
-    CollectionLogOtherPeriod? aAAAAQBPeriods,
+    CollectionOrderDataAAAAAQBPeriods? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
       ..id = id ?? this.id
       ..aBorrowId = aBorrowId ?? this.aBorrowId
-      ..bCollectionStageId = bCollectionStageId ?? this.bCollectionStageId
-      ..cCollectionAgencyId = cCollectionAgencyId ?? this.cCollectionAgencyId
-      ..dCollectionGroupId = dCollectionGroupId ?? this.dCollectionGroupId
       ..eCollectionAdminId = eCollectionAdminId ?? this.eCollectionAdminId
-      ..fCollectionNewsId = fCollectionNewsId ?? this.fCollectionNewsId
-      ..gCollectionOrderFlowHistoryCount = gCollectionOrderFlowHistoryCount ??
-          this.gCollectionOrderFlowHistoryCount
-      ..hCollectionAdminLogCount = hCollectionAdminLogCount ??
-          this.hCollectionAdminLogCount
-      ..iCollectionAdminCallCount = iCollectionAdminCallCount ??
-          this.iCollectionAdminCallCount
-      ..jSystemSmsCount = jSystemSmsCount ?? this.jSystemSmsCount
       ..kStatus = kStatus ?? this.kStatus
-      ..lCollectionAmount = lCollectionAmount ?? this.lCollectionAmount
-      ..mPeriodId = mPeriodId ?? this.mPeriodId
       ..nBorrowAmount = nBorrowAmount ?? this.nBorrowAmount
       ..oPeriodIndex = oPeriodIndex ?? this.oPeriodIndex
       ..pExpectRepayTime = pExpectRepayTime ?? this.pExpectRepayTime
-      ..qLockEndStageId = qLockEndStageId ?? this.qLockEndStageId
-      ..rFlowInTime = rFlowInTime ?? this.rFlowInTime
-      ..sFlowOutTime = sFlowOutTime ?? this.sFlowOutTime
       ..tBorrowSn = tBorrowSn ?? this.tBorrowSn
       ..uPhone = uPhone ?? this.uPhone
       ..vName = vName ?? this.vName
-      ..wViewTimes = wViewTimes ?? this.wViewTimes
-      ..xCurrentViewTimes = xCurrentViewTimes ?? this.xCurrentViewTimes
-      ..yCurrentLogCount = yCurrentLogCount ?? this.yCurrentLogCount
-      ..zCurrentCallCount = zCurrentCallCount ?? this.zCurrentCallCount
-      ..aACommission = aACommission ?? this.aACommission
-      ..aBCurrentCommission = aBCurrentCommission ?? this.aBCurrentCommission
-      ..aCExpectCurrentCommission = aCExpectCurrentCommission ??
-          this.aCExpectCurrentCommission
-      ..aDLastLogTime = aDLastLogTime ?? this.aDLastLogTime
-      ..aEBorrowCount = aEBorrowCount ?? this.aEBorrowCount
-      ..aFS0CollectionAmount = aFS0CollectionAmount ?? this.aFS0CollectionAmount
-      ..aGS1CollectionAmount = aGS1CollectionAmount ?? this.aGS1CollectionAmount
-      ..aHS2CollectionAmount = aHS2CollectionAmount ?? this.aHS2CollectionAmount
-      ..aFS3CollectionAmount = aFS3CollectionAmount ?? this.aFS3CollectionAmount
-      ..aJProductId = aJProductId ?? this.aJProductId
+      ..sFlowOutTime = sFlowOutTime ?? this.sFlowOutTime
       ..aKNo = aKNo ?? this.aKNo
+      ..aEBorrowCount = aEBorrowCount ?? this.aEBorrowCount
+      ..aJProductId = aJProductId ?? this.aJProductId
       ..aLLastLog = aLLastLog ?? this.aLLastLog
       ..aNCurrentDayLogCount = aNCurrentDayLogCount ?? this.aNCurrentDayLogCount
       ..aOCurrentDayCallCount = aOCurrentDayCallCount ??
@@ -452,8 +276,215 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
           this.aVTmpCollectionAdminId
       ..aZPackage = aZPackage ?? this.aZPackage
+      ..aDLastLogTime = aDLastLogTime ?? this.aDLastLogTime
+      ..bESourceType = bESourceType ?? this.bESourceType
+      ..bDOverdueDays = bDOverdueDays ?? this.bDOverdueDays
       ..bBHasRetain = bBHasRetain ?? this.bBHasRetain
       ..aAAAAQBPeriods = aAAAAQBPeriods ?? this.aAAAAQBPeriods;
+  }
+}
+
+CollectionOrderDataAAAAAQBPeriods $CollectionOrderDataAAAAAQBPeriodsFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderDataAAAAAQBPeriods collectionOrderDataAAAAAQBPeriods = CollectionOrderDataAAAAAQBPeriods();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionOrderDataAAAAAQBPeriods.id = id;
+  }
+  final int? aBorrowId = jsonConvert.convert<int>(json['a_borrow_id']);
+  if (aBorrowId != null) {
+    collectionOrderDataAAAAAQBPeriods.aBorrowId = aBorrowId;
+  }
+  final int? fExpectRepayTotalAmount = jsonConvert.convert<int>(
+      json['f_expect_repay_total_amount']);
+  if (fExpectRepayTotalAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.fExpectRepayTotalAmount =
+        fExpectRepayTotalAmount;
+  }
+  final int? pPaidInterest = jsonConvert.convert<int>(json['p_paid_interest']);
+  if (pPaidInterest != null) {
+    collectionOrderDataAAAAAQBPeriods.pPaidInterest = pPaidInterest;
+  }
+  final int? qPaidServiceFee = jsonConvert.convert<int>(
+      json['q_paid_service_fee']);
+  if (qPaidServiceFee != null) {
+    collectionOrderDataAAAAAQBPeriods.qPaidServiceFee = qPaidServiceFee;
+  }
+  final int? sPaidOverdueAmount = jsonConvert.convert<int>(
+      json['s_paid_overdue_amount']);
+  if (sPaidOverdueAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.sPaidOverdueAmount = sPaidOverdueAmount;
+  }
+  final int? oPaidBorrowAmount = jsonConvert.convert<int>(
+      json['o_paid_borrow_amount']);
+  if (oPaidBorrowAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.oPaidBorrowAmount = oPaidBorrowAmount;
+  }
+  final int? gExpectBorrowAmount = jsonConvert.convert<int>(
+      json['g_expect_borrow_amount']);
+  if (gExpectBorrowAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.gExpectBorrowAmount = gExpectBorrowAmount;
+  }
+  final int? hExpectInterest = jsonConvert.convert<int>(
+      json['h_expect_interest']);
+  if (hExpectInterest != null) {
+    collectionOrderDataAAAAAQBPeriods.hExpectInterest = hExpectInterest;
+  }
+  final int? nPaidAmount = jsonConvert.convert<int>(json['n_paid_amount']);
+  if (nPaidAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.nPaidAmount = nPaidAmount;
+  }
+  final int? iExpectServiceFee = jsonConvert.convert<int>(
+      json['i_expect_service_fee']);
+  if (iExpectServiceFee != null) {
+    collectionOrderDataAAAAAQBPeriods.iExpectServiceFee = iExpectServiceFee;
+  }
+  final int? jExpectViolateFee = jsonConvert.convert<int>(
+      json['j_expect_violate_fee']);
+  if (jExpectViolateFee != null) {
+    collectionOrderDataAAAAAQBPeriods.jExpectViolateFee = jExpectViolateFee;
+  }
+  final int? kExpectOverdueAmount = jsonConvert.convert<int>(
+      json['k_expect_overdue_amount']);
+  if (kExpectOverdueAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.kExpectOverdueAmount =
+        kExpectOverdueAmount;
+  }
+  final int? lOverdueDays = jsonConvert.convert<int>(json['l_overdue_days']);
+  if (lOverdueDays != null) {
+    collectionOrderDataAAAAAQBPeriods.lOverdueDays = lOverdueDays;
+  }
+  final int? tDeductionTimes = jsonConvert.convert<int>(
+      json['t_deduction_times']);
+  if (tDeductionTimes != null) {
+    collectionOrderDataAAAAAQBPeriods.tDeductionTimes = tDeductionTimes;
+  }
+  final int? uDeductionTotalAmount = jsonConvert.convert<int>(
+      json['u_deduction_total_amount']);
+  if (uDeductionTotalAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.uDeductionTotalAmount =
+        uDeductionTotalAmount;
+  }
+  final int? aHPartTimes = jsonConvert.convert<int>(json['a_h_part_times']);
+  if (aHPartTimes != null) {
+    collectionOrderDataAAAAAQBPeriods.aHPartTimes = aHPartTimes;
+  }
+  final int? aNUserId = jsonConvert.convert<int>(json['a_n_user_id']);
+  if (aNUserId != null) {
+    collectionOrderDataAAAAAQBPeriods.aNUserId = aNUserId;
+  }
+  final String? aPExpectRepayTime = jsonConvert.convert<String>(
+      json['a_p_expect_repay_time']);
+  if (aPExpectRepayTime != null) {
+    collectionOrderDataAAAAAQBPeriods.aPExpectRepayTime = aPExpectRepayTime;
+  }
+  final int? aUCurrentDeductionFee = jsonConvert.convert<int>(
+      json['a_u_current_deduction_fee']);
+  if (aUCurrentDeductionFee != null) {
+    collectionOrderDataAAAAAQBPeriods.aUCurrentDeductionFee =
+        aUCurrentDeductionFee;
+  }
+  final int? aZLeftAmount = jsonConvert.convert<int>(json['a_z_left_amount']);
+  if (aZLeftAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.aZLeftAmount = aZLeftAmount;
+  }
+  final int? zDeductionTotalOverdueAmount = jsonConvert.convert<int>(
+      json['z_deduction_total_overdue_amount']);
+  if (zDeductionTotalOverdueAmount != null) {
+    collectionOrderDataAAAAAQBPeriods.zDeductionTotalOverdueAmount =
+        zDeductionTotalOverdueAmount;
+  }
+  final int? bCBorrowCount = jsonConvert.convert<int>(json['b_c_borrow_count']);
+  if (bCBorrowCount != null) {
+    collectionOrderDataAAAAAQBPeriods.bCBorrowCount = bCBorrowCount;
+  }
+  return collectionOrderDataAAAAAQBPeriods;
+}
+
+Map<String, dynamic> $CollectionOrderDataAAAAAQBPeriodsToJson(
+    CollectionOrderDataAAAAAQBPeriods entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['a_borrow_id'] = entity.aBorrowId;
+  data['f_expect_repay_total_amount'] = entity.fExpectRepayTotalAmount;
+  data['p_paid_interest'] = entity.pPaidInterest;
+  data['q_paid_service_fee'] = entity.qPaidServiceFee;
+  data['s_paid_overdue_amount'] = entity.sPaidOverdueAmount;
+  data['o_paid_borrow_amount'] = entity.oPaidBorrowAmount;
+  data['g_expect_borrow_amount'] = entity.gExpectBorrowAmount;
+  data['h_expect_interest'] = entity.hExpectInterest;
+  data['n_paid_amount'] = entity.nPaidAmount;
+  data['i_expect_service_fee'] = entity.iExpectServiceFee;
+  data['j_expect_violate_fee'] = entity.jExpectViolateFee;
+  data['k_expect_overdue_amount'] = entity.kExpectOverdueAmount;
+  data['l_overdue_days'] = entity.lOverdueDays;
+  data['t_deduction_times'] = entity.tDeductionTimes;
+  data['u_deduction_total_amount'] = entity.uDeductionTotalAmount;
+  data['a_h_part_times'] = entity.aHPartTimes;
+  data['a_n_user_id'] = entity.aNUserId;
+  data['a_p_expect_repay_time'] = entity.aPExpectRepayTime;
+  data['a_u_current_deduction_fee'] = entity.aUCurrentDeductionFee;
+  data['a_z_left_amount'] = entity.aZLeftAmount;
+  data['z_deduction_total_overdue_amount'] =
+      entity.zDeductionTotalOverdueAmount;
+  data['b_c_borrow_count'] = entity.bCBorrowCount;
+  return data;
+}
+
+extension CollectionOrderDataAAAAAQBPeriodsExtension on CollectionOrderDataAAAAAQBPeriods {
+  CollectionOrderDataAAAAAQBPeriods copyWith({
+    int? id,
+    int? aBorrowId,
+    int? fExpectRepayTotalAmount,
+    int? pPaidInterest,
+    int? qPaidServiceFee,
+    int? sPaidOverdueAmount,
+    int? oPaidBorrowAmount,
+    int? gExpectBorrowAmount,
+    int? hExpectInterest,
+    int? nPaidAmount,
+    int? iExpectServiceFee,
+    int? jExpectViolateFee,
+    int? kExpectOverdueAmount,
+    int? lOverdueDays,
+    int? tDeductionTimes,
+    int? uDeductionTotalAmount,
+    int? aHPartTimes,
+    int? aNUserId,
+    String? aPExpectRepayTime,
+    int? aUCurrentDeductionFee,
+    int? aZLeftAmount,
+    int? zDeductionTotalOverdueAmount,
+    int? bCBorrowCount,
+  }) {
+    return CollectionOrderDataAAAAAQBPeriods()
+      ..id = id ?? this.id
+      ..aBorrowId = aBorrowId ?? this.aBorrowId
+      ..fExpectRepayTotalAmount = fExpectRepayTotalAmount ??
+          this.fExpectRepayTotalAmount
+      ..pPaidInterest = pPaidInterest ?? this.pPaidInterest
+      ..qPaidServiceFee = qPaidServiceFee ?? this.qPaidServiceFee
+      ..sPaidOverdueAmount = sPaidOverdueAmount ?? this.sPaidOverdueAmount
+      ..oPaidBorrowAmount = oPaidBorrowAmount ?? this.oPaidBorrowAmount
+      ..gExpectBorrowAmount = gExpectBorrowAmount ?? this.gExpectBorrowAmount
+      ..hExpectInterest = hExpectInterest ?? this.hExpectInterest
+      ..nPaidAmount = nPaidAmount ?? this.nPaidAmount
+      ..iExpectServiceFee = iExpectServiceFee ?? this.iExpectServiceFee
+      ..jExpectViolateFee = jExpectViolateFee ?? this.jExpectViolateFee
+      ..kExpectOverdueAmount = kExpectOverdueAmount ?? this.kExpectOverdueAmount
+      ..lOverdueDays = lOverdueDays ?? this.lOverdueDays
+      ..tDeductionTimes = tDeductionTimes ?? this.tDeductionTimes
+      ..uDeductionTotalAmount = uDeductionTotalAmount ??
+          this.uDeductionTotalAmount
+      ..aHPartTimes = aHPartTimes ?? this.aHPartTimes
+      ..aNUserId = aNUserId ?? this.aNUserId
+      ..aPExpectRepayTime = aPExpectRepayTime ?? this.aPExpectRepayTime
+      ..aUCurrentDeductionFee = aUCurrentDeductionFee ??
+          this.aUCurrentDeductionFee
+      ..aZLeftAmount = aZLeftAmount ?? this.aZLeftAmount
+      ..zDeductionTotalOverdueAmount = zDeductionTotalOverdueAmount ??
+          this.zDeductionTotalOverdueAmount
+      ..bCBorrowCount = bCBorrowCount ?? this.bCBorrowCount;
   }
 }
 
@@ -469,6 +500,29 @@ CollectionOrderOther $CollectionOrderOtherFromJson(Map<String, dynamic> json) {
   if (profile != null) {
     collectionOrderOther.profile = profile;
   }
+  final List<dynamic>? monthAdditionData = (json['monthAdditionData'] as List<
+      dynamic>?)?.map(
+          (e) => e).toList();
+  if (monthAdditionData != null) {
+    collectionOrderOther.monthAdditionData = monthAdditionData;
+  }
+  final List<
+      CollectionOrderOtherAdditionBonus>? additionBonus = (json['additionBonus'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionOrderOtherAdditionBonus>(
+          e) as CollectionOrderOtherAdditionBonus).toList();
+  if (additionBonus != null) {
+    collectionOrderOther.additionBonus = additionBonus;
+  }
+  final List<CollectionOrderOtherFines>? fines = (json['fines'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionOrderOtherFines>(
+          e) as CollectionOrderOtherFines).toList();
+  if (fines != null) {
+    collectionOrderOther.fines = fines;
+  }
   return collectionOrderOther;
 }
 
@@ -476,6 +530,9 @@ Map<String, dynamic> $CollectionOrderOtherToJson(CollectionOrderOther entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['progress'] = entity.progress?.toJson();
   data['profile'] = entity.profile?.toJson();
+  data['monthAdditionData'] = entity.monthAdditionData;
+  data['additionBonus'] = entity.additionBonus?.map((v) => v.toJson()).toList();
+  data['fines'] = entity.fines?.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -483,10 +540,16 @@ extension CollectionOrderOtherExtension on CollectionOrderOther {
   CollectionOrderOther copyWith({
     CollectionOrderOtherProgress? progress,
     CollectionOrderOtherProfile? profile,
+    List<dynamic>? monthAdditionData,
+    List<CollectionOrderOtherAdditionBonus>? additionBonus,
+    List<CollectionOrderOtherFines>? fines,
   }) {
     return CollectionOrderOther()
       ..progress = progress ?? this.progress
-      ..profile = profile ?? this.profile;
+      ..profile = profile ?? this.profile
+      ..monthAdditionData = monthAdditionData ?? this.monthAdditionData
+      ..additionBonus = additionBonus ?? this.additionBonus
+      ..fines = fines ?? this.fines;
   }
 }
 
@@ -535,15 +598,15 @@ CollectionOrderOtherProgress $CollectionOrderOtherProgressFromJson(
   if (more != null) {
     collectionOrderOtherProgress.more = more;
   }
-  final int? nextAdditionBonus = jsonConvert.convert<int>(
-      json['nextAdditionBonus']);
-  if (nextAdditionBonus != null) {
-    collectionOrderOtherProgress.nextAdditionBonus = nextAdditionBonus;
-  }
   final double? currentPoint = jsonConvert.convert<double>(
       json['currentPoint']);
   if (currentPoint != null) {
     collectionOrderOtherProgress.currentPoint = currentPoint;
+  }
+  final int? nextAdditionBonus = jsonConvert.convert<int>(
+      json['nextAdditionBonus']);
+  if (nextAdditionBonus != null) {
+    collectionOrderOtherProgress.nextAdditionBonus = nextAdditionBonus;
   }
   return collectionOrderOtherProgress;
 }
@@ -560,8 +623,8 @@ Map<String, dynamic> $CollectionOrderOtherProgressToJson(
   data['nextGrade'] = entity.nextGrade;
   data['nextRate'] = entity.nextRate;
   data['more'] = entity.more;
-  data['nextAdditionBonus'] = entity.nextAdditionBonus;
   data['currentPoint'] = entity.currentPoint;
+  data['nextAdditionBonus'] = entity.nextAdditionBonus;
   return data;
 }
 
@@ -576,8 +639,8 @@ extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress 
     String? nextGrade,
     String? nextRate,
     int? more,
-    int? nextAdditionBonus,
     double? currentPoint,
+    int? nextAdditionBonus,
   }) {
     return CollectionOrderOtherProgress()
       ..points = points ?? this.points
@@ -589,74 +652,8 @@ extension CollectionOrderOtherProgressExtension on CollectionOrderOtherProgress 
       ..nextGrade = nextGrade ?? this.nextGrade
       ..nextRate = nextRate ?? this.nextRate
       ..more = more ?? this.more
-      ..nextAdditionBonus = nextAdditionBonus ?? this.nextAdditionBonus
-      ..currentPoint = currentPoint ?? this.currentPoint;
-  }
-}
-
-CollectionOrderOtherProgressLevelProgress $CollectionOrderOtherProgressLevelProgressFromJson(
-    Map<String, dynamic> json) {
-  final CollectionOrderOtherProgressLevelProgress collectionOrderOtherProgressLevelProgress = CollectionOrderOtherProgressLevelProgress();
-  final String? level = jsonConvert.convert<String>(json['level']);
-  if (level != null) {
-    collectionOrderOtherProgressLevelProgress.level = level;
-  }
-  final int? type = jsonConvert.convert<int>(json['type']);
-  if (type != null) {
-    collectionOrderOtherProgressLevelProgress.type = type;
-  }
-  return collectionOrderOtherProgressLevelProgress;
-}
-
-Map<String, dynamic> $CollectionOrderOtherProgressLevelProgressToJson(
-    CollectionOrderOtherProgressLevelProgress entity) {
-  final Map<String, dynamic> data = <String, dynamic>{};
-  data['level'] = entity.level;
-  data['type'] = entity.type;
-  return data;
-}
-
-extension CollectionOrderOtherProgressLevelProgressExtension on CollectionOrderOtherProgressLevelProgress {
-  CollectionOrderOtherProgressLevelProgress copyWith({
-    String? level,
-    int? type,
-  }) {
-    return CollectionOrderOtherProgressLevelProgress()
-      ..level = level ?? this.level
-      ..type = type ?? this.type;
-  }
-}
-
-CollectionOrderOtherProgressAmountProgress $CollectionOrderOtherProgressAmountProgressFromJson(
-    Map<String, dynamic> json) {
-  final CollectionOrderOtherProgressAmountProgress collectionOrderOtherProgressAmountProgress = CollectionOrderOtherProgressAmountProgress();
-  final int? amount = jsonConvert.convert<int>(json['amount']);
-  if (amount != null) {
-    collectionOrderOtherProgressAmountProgress.amount = amount;
-  }
-  final int? type = jsonConvert.convert<int>(json['type']);
-  if (type != null) {
-    collectionOrderOtherProgressAmountProgress.type = type;
-  }
-  return collectionOrderOtherProgressAmountProgress;
-}
-
-Map<String, dynamic> $CollectionOrderOtherProgressAmountProgressToJson(
-    CollectionOrderOtherProgressAmountProgress entity) {
-  final Map<String, dynamic> data = <String, dynamic>{};
-  data['amount'] = entity.amount;
-  data['type'] = entity.type;
-  return data;
-}
-
-extension CollectionOrderOtherProgressAmountProgressExtension on CollectionOrderOtherProgressAmountProgress {
-  CollectionOrderOtherProgressAmountProgress copyWith({
-    int? amount,
-    int? type,
-  }) {
-    return CollectionOrderOtherProgressAmountProgress()
-      ..amount = amount ?? this.amount
-      ..type = type ?? this.type;
+      ..currentPoint = currentPoint ?? this.currentPoint
+      ..nextAdditionBonus = nextAdditionBonus ?? this.nextAdditionBonus;
   }
 }
 
@@ -772,30 +769,49 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (wTodayLv4Commission != null) {
     collectionOrderOtherProfile.wTodayLv4Commission = wTodayLv4Commission;
   }
-  final int? aAMonthLv1Commission = jsonConvert.convert<int>(
-      json['a_a_month_lv1_commission']);
-  if (aAMonthLv1Commission != null) {
-    collectionOrderOtherProfile.aAMonthLv1Commission = aAMonthLv1Commission;
+  final int? xTodayInitCount = jsonConvert.convert<int>(
+      json['x_today_init_count']);
+  if (xTodayInitCount != null) {
+    collectionOrderOtherProfile.xTodayInitCount = xTodayInitCount;
   }
-  final int? aBMonthLv2Commission = jsonConvert.convert<int>(
-      json['a_b_month_lv2_commission']);
-  if (aBMonthLv2Commission != null) {
-    collectionOrderOtherProfile.aBMonthLv2Commission = aBMonthLv2Commission;
+  final String? yFirstLogAt = jsonConvert.convert<String>(
+      json['y_first_log_at']);
+  if (yFirstLogAt != null) {
+    collectionOrderOtherProfile.yFirstLogAt = yFirstLogAt;
   }
-  final int? aCMonthLv3Commission = jsonConvert.convert<int>(
-      json['a_c_month_lv3_commission']);
-  if (aCMonthLv3Commission != null) {
-    collectionOrderOtherProfile.aCMonthLv3Commission = aCMonthLv3Commission;
+  final String? zLastLogAt = jsonConvert.convert<String>(json['z_last_log_at']);
+  if (zLastLogAt != null) {
+    collectionOrderOtherProfile.zLastLogAt = zLastLogAt;
   }
-  final int? aDMonthLv4Commission = jsonConvert.convert<int>(
-      json['a_d_month_lv4_commission']);
-  if (aDMonthLv4Commission != null) {
-    collectionOrderOtherProfile.aDMonthLv4Commission = aDMonthLv4Commission;
+  final int? aAWeekLv1Commission = jsonConvert.convert<int>(
+      json['a_a_week_lv1_commission']);
+  if (aAWeekLv1Commission != null) {
+    collectionOrderOtherProfile.aAWeekLv1Commission = aAWeekLv1Commission;
   }
-  final double? aETodayCommissionRate = jsonConvert.convert<double>(
+  final int? aBWeekLv2Commission = jsonConvert.convert<int>(
+      json['a_b_week_lv2_commission']);
+  if (aBWeekLv2Commission != null) {
+    collectionOrderOtherProfile.aBWeekLv2Commission = aBWeekLv2Commission;
+  }
+  final int? aCWeekLv3Commission = jsonConvert.convert<int>(
+      json['a_c_week_lv3_commission']);
+  if (aCWeekLv3Commission != null) {
+    collectionOrderOtherProfile.aCWeekLv3Commission = aCWeekLv3Commission;
+  }
+  final int? aDWeekLv4Commission = jsonConvert.convert<int>(
+      json['a_d_week_lv4_commission']);
+  if (aDWeekLv4Commission != null) {
+    collectionOrderOtherProfile.aDWeekLv4Commission = aDWeekLv4Commission;
+  }
+  final int? aETodayCommissionRate = jsonConvert.convert<int>(
       json['a_e_today_commission_rate']);
   if (aETodayCommissionRate != null) {
     collectionOrderOtherProfile.aETodayCommissionRate = aETodayCommissionRate;
+  }
+  final String? aFLastCallAt = jsonConvert.convert<String>(
+      json['a_f_last_call_at']);
+  if (aFLastCallAt != null) {
+    collectionOrderOtherProfile.aFLastCallAt = aFLastCallAt;
   }
   final int? aGCollectionCommissionNewCount = jsonConvert.convert<int>(
       json['a_g_collection_commission_new_count']);
@@ -814,22 +830,118 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aIWeekRepayCount != null) {
     collectionOrderOtherProfile.aIWeekRepayCount = aIWeekRepayCount;
   }
-  final int? cCReviewingCount = jsonConvert.convert<int>(json['a_j_week_rank']);
+  final int? aJWeekCommission = jsonConvert.convert<int>(
+      json['a_j_week_commission']);
+  if (aJWeekCommission != null) {
+    collectionOrderOtherProfile.aJWeekCommission = aJWeekCommission;
+  }
+  final int? aKMonthRepayCount = jsonConvert.convert<int>(
+      json['a_k_month_repay_count']);
+  if (aKMonthRepayCount != null) {
+    collectionOrderOtherProfile.aKMonthRepayCount = aKMonthRepayCount;
+  }
+  final int? aLMonthCommission = jsonConvert.convert<int>(
+      json['a_l_month_commission']);
+  if (aLMonthCommission != null) {
+    collectionOrderOtherProfile.aLMonthCommission = aLMonthCommission;
+  }
+  final int? aMTodayCommission = jsonConvert.convert<int>(
+      json['a_m_today_commission']);
+  if (aMTodayCommission != null) {
+    collectionOrderOtherProfile.aMTodayCommission = aMTodayCommission;
+  }
+  final int? aNMonthLv1Days = jsonConvert.convert<int>(
+      json['a_n_month_lv1_days']);
+  if (aNMonthLv1Days != null) {
+    collectionOrderOtherProfile.aNMonthLv1Days = aNMonthLv1Days;
+  }
+  final int? aOMonthLv2Days = jsonConvert.convert<int>(
+      json['a_o_month_lv2_days']);
+  if (aOMonthLv2Days != null) {
+    collectionOrderOtherProfile.aOMonthLv2Days = aOMonthLv2Days;
+  }
+  final int? aPMonthLv3Days = jsonConvert.convert<int>(
+      json['a_p_month_lv3_days']);
+  if (aPMonthLv3Days != null) {
+    collectionOrderOtherProfile.aPMonthLv3Days = aPMonthLv3Days;
+  }
+  final int? aQMonthLv4Days = jsonConvert.convert<int>(
+      json['a_q_month_lv4_days']);
+  if (aQMonthLv4Days != null) {
+    collectionOrderOtherProfile.aQMonthLv4Days = aQMonthLv4Days;
+  }
+  final int? aRTodayPartCount = jsonConvert.convert<int>(
+      json['a_r_today_part_count']);
+  if (aRTodayPartCount != null) {
+    collectionOrderOtherProfile.aRTodayPartCount = aRTodayPartCount;
+  }
+  final int? aSTodayPartAmount = jsonConvert.convert<int>(
+      json['a_s_today_part_amount']);
+  if (aSTodayPartAmount != null) {
+    collectionOrderOtherProfile.aSTodayPartAmount = aSTodayPartAmount;
+  }
+  final int? aTTodaySmsCount = jsonConvert.convert<int>(
+      json['a_t_today_sms_count']);
+  if (aTTodaySmsCount != null) {
+    collectionOrderOtherProfile.aTTodaySmsCount = aTTodaySmsCount;
+  }
+  final int? aUTodayCallCount = jsonConvert.convert<int>(
+      json['a_u_today_call_count']);
+  if (aUTodayCallCount != null) {
+    collectionOrderOtherProfile.aUTodayCallCount = aUTodayCallCount;
+  }
+  final int? aVTodayLogCount = jsonConvert.convert<int>(
+      json['a_v_today_log_count']);
+  if (aVTodayLogCount != null) {
+    collectionOrderOtherProfile.aVTodayLogCount = aVTodayLogCount;
+  }
+  final int? aWWeekSmsCount = jsonConvert.convert<int>(
+      json['a_w_week_sms_count']);
+  if (aWWeekSmsCount != null) {
+    collectionOrderOtherProfile.aWWeekSmsCount = aWWeekSmsCount;
+  }
+  final int? aXWeekCallCount = jsonConvert.convert<int>(
+      json['a_x_week_call_count']);
+  if (aXWeekCallCount != null) {
+    collectionOrderOtherProfile.aXWeekCallCount = aXWeekCallCount;
+  }
+  final int? aYWeekLogCount = jsonConvert.convert<int>(
+      json['a_y_week_log_count']);
+  if (aYWeekLogCount != null) {
+    collectionOrderOtherProfile.aYWeekLogCount = aYWeekLogCount;
+  }
+  final String? bAAvatar = jsonConvert.convert<String>(json['b_a_avatar']);
+  if (bAAvatar != null) {
+    collectionOrderOtherProfile.bAAvatar = bAAvatar;
+  }
+  final int? aZTodayNoLogCount = jsonConvert.convert<int>(
+      json['a_z_today_no_log_count']);
+  if (aZTodayNoLogCount != null) {
+    collectionOrderOtherProfile.aZTodayNoLogCount = aZTodayNoLogCount;
+  }
+  final int? cATodayNoCallCount = jsonConvert.convert<int>(
+      json['c_a_today_no_call_count']);
+  if (cATodayNoCallCount != null) {
+    collectionOrderOtherProfile.cATodayNoCallCount = cATodayNoCallCount;
+  }
+  final String? cBLastCall = jsonConvert.convert<String>(json['c_b_last_call']);
+  if (cBLastCall != null) {
+    collectionOrderOtherProfile.cBLastCall = cBLastCall;
+  }
+  final int? cCReviewingCount = jsonConvert.convert<int>(
+      json['c_c_reviewing_count']);
   if (cCReviewingCount != null) {
     collectionOrderOtherProfile.cCReviewingCount = cCReviewingCount;
   }
-  final int? aJWeekRank = jsonConvert.convert<int>(json['c_c_reviewing_count']);
-  if (aJWeekRank != null) {
-    collectionOrderOtherProfile.aJWeekRank = aJWeekRank;
+  final int? cDTodayAdditionCount = jsonConvert.convert<int>(
+      json['c_d_today_addition_count']);
+  if (cDTodayAdditionCount != null) {
+    collectionOrderOtherProfile.cDTodayAdditionCount = cDTodayAdditionCount;
   }
-  final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
-  if (updatedAt != null) {
-    collectionOrderOtherProfile.updatedAt = updatedAt;
-  }
-  final String? aFLastCallAt = jsonConvert.convert<String>(
-      json['a_f_last_call_at']);
-  if (aFLastCallAt != null) {
-    collectionOrderOtherProfile.aFLastCallAt = aFLastCallAt;
+  final int? cETodayDeleteCount = jsonConvert.convert<int>(
+      json['c_e_today_delete_count']);
+  if (cETodayDeleteCount != null) {
+    collectionOrderOtherProfile.cETodayDeleteCount = cETodayDeleteCount;
   }
   final int? cFWeekRegCnt = jsonConvert.convert<int>(json['c_f_week_reg_cnt']);
   if (cFWeekRegCnt != null) {
@@ -849,6 +961,10 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
       json['c_i_week_block_left_cnt']);
   if (cIWeekBlockLeftCnt != null) {
     collectionOrderOtherProfile.cIWeekBlockLeftCnt = cIWeekBlockLeftCnt;
+  }
+  final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
+  if (updatedAt != null) {
+    collectionOrderOtherProfile.updatedAt = updatedAt;
   }
   final int? cJWeekWaLeftCnt = jsonConvert.convert<int>(
       json['c_j_week_wa_left_cnt']);
@@ -923,24 +1039,48 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['u_today_lv2_commission'] = entity.uTodayLv2Commission;
   data['v_today_lv3_commission'] = entity.vTodayLv3Commission;
   data['w_today_lv4_commission'] = entity.wTodayLv4Commission;
-  data['a_a_month_lv1_commission'] = entity.aAMonthLv1Commission;
-  data['a_b_month_lv2_commission'] = entity.aBMonthLv2Commission;
-  data['a_c_month_lv3_commission'] = entity.aCMonthLv3Commission;
-  data['a_d_month_lv4_commission'] = entity.aDMonthLv4Commission;
+  data['x_today_init_count'] = entity.xTodayInitCount;
+  data['y_first_log_at'] = entity.yFirstLogAt;
+  data['z_last_log_at'] = entity.zLastLogAt;
+  data['a_a_week_lv1_commission'] = entity.aAWeekLv1Commission;
+  data['a_b_week_lv2_commission'] = entity.aBWeekLv2Commission;
+  data['a_c_week_lv3_commission'] = entity.aCWeekLv3Commission;
+  data['a_d_week_lv4_commission'] = entity.aDWeekLv4Commission;
   data['a_e_today_commission_rate'] = entity.aETodayCommissionRate;
+  data['a_f_last_call_at'] = entity.aFLastCallAt;
   data['a_g_collection_commission_new_count'] =
       entity.aGCollectionCommissionNewCount;
   data['a_h_collection_notification_count'] =
       entity.aHCollectionNotificationCount;
   data['a_i_week_repay_count'] = entity.aIWeekRepayCount;
-  data['a_j_week_rank'] = entity.cCReviewingCount;
-  data['c_c_reviewing_count'] = entity.aJWeekRank;
-  data['updated_at'] = entity.updatedAt;
-  data['a_f_last_call_at'] = entity.aFLastCallAt;
+  data['a_j_week_commission'] = entity.aJWeekCommission;
+  data['a_k_month_repay_count'] = entity.aKMonthRepayCount;
+  data['a_l_month_commission'] = entity.aLMonthCommission;
+  data['a_m_today_commission'] = entity.aMTodayCommission;
+  data['a_n_month_lv1_days'] = entity.aNMonthLv1Days;
+  data['a_o_month_lv2_days'] = entity.aOMonthLv2Days;
+  data['a_p_month_lv3_days'] = entity.aPMonthLv3Days;
+  data['a_q_month_lv4_days'] = entity.aQMonthLv4Days;
+  data['a_r_today_part_count'] = entity.aRTodayPartCount;
+  data['a_s_today_part_amount'] = entity.aSTodayPartAmount;
+  data['a_t_today_sms_count'] = entity.aTTodaySmsCount;
+  data['a_u_today_call_count'] = entity.aUTodayCallCount;
+  data['a_v_today_log_count'] = entity.aVTodayLogCount;
+  data['a_w_week_sms_count'] = entity.aWWeekSmsCount;
+  data['a_x_week_call_count'] = entity.aXWeekCallCount;
+  data['a_y_week_log_count'] = entity.aYWeekLogCount;
+  data['b_a_avatar'] = entity.bAAvatar;
+  data['a_z_today_no_log_count'] = entity.aZTodayNoLogCount;
+  data['c_a_today_no_call_count'] = entity.cATodayNoCallCount;
+  data['c_b_last_call'] = entity.cBLastCall;
+  data['c_c_reviewing_count'] = entity.cCReviewingCount;
+  data['c_d_today_addition_count'] = entity.cDTodayAdditionCount;
+  data['c_e_today_delete_count'] = entity.cETodayDeleteCount;
   data['c_f_week_reg_cnt'] = entity.cFWeekRegCnt;
   data['c_g_week_apply_cnt'] = entity.cGWeekApplyCnt;
   data['c_h_week_waive_left_cnt'] = entity.cHWeekWaiveLeftCnt;
   data['c_i_week_block_left_cnt'] = entity.cIWeekBlockLeftCnt;
+  data['updated_at'] = entity.updatedAt;
   data['c_j_week_wa_left_cnt'] = entity.cJWeekWaLeftCnt;
   data['c_k_day_wa_left_cnt'] = entity.cKDayWaLeftCnt;
   data['c_l_week_coupon_left_cnt'] = entity.cLWeekCouponLeftCnt;
@@ -977,22 +1117,46 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? uTodayLv2Commission,
     int? vTodayLv3Commission,
     int? wTodayLv4Commission,
-    int? aAMonthLv1Commission,
-    int? aBMonthLv2Commission,
-    int? aCMonthLv3Commission,
-    int? aDMonthLv4Commission,
-    double? aETodayCommissionRate,
+    int? xTodayInitCount,
+    String? yFirstLogAt,
+    String? zLastLogAt,
+    int? aAWeekLv1Commission,
+    int? aBWeekLv2Commission,
+    int? aCWeekLv3Commission,
+    int? aDWeekLv4Commission,
+    int? aETodayCommissionRate,
+    String? aFLastCallAt,
     int? aGCollectionCommissionNewCount,
     int? aHCollectionNotificationCount,
     int? aIWeekRepayCount,
+    int? aJWeekCommission,
+    int? aKMonthRepayCount,
+    int? aLMonthCommission,
+    int? aMTodayCommission,
+    int? aNMonthLv1Days,
+    int? aOMonthLv2Days,
+    int? aPMonthLv3Days,
+    int? aQMonthLv4Days,
+    int? aRTodayPartCount,
+    int? aSTodayPartAmount,
+    int? aTTodaySmsCount,
+    int? aUTodayCallCount,
+    int? aVTodayLogCount,
+    int? aWWeekSmsCount,
+    int? aXWeekCallCount,
+    int? aYWeekLogCount,
+    String? bAAvatar,
+    int? aZTodayNoLogCount,
+    int? cATodayNoCallCount,
+    String? cBLastCall,
     int? cCReviewingCount,
-    int? aJWeekRank,
-    String? updatedAt,
-    String? aFLastCallAt,
+    int? cDTodayAdditionCount,
+    int? cETodayDeleteCount,
     int? cFWeekRegCnt,
     int? cGWeekApplyCnt,
     int? cHWeekWaiveLeftCnt,
     int? cIWeekBlockLeftCnt,
+    String? updatedAt,
     int? cJWeekWaLeftCnt,
     int? cKDayWaLeftCnt,
     int? cLWeekCouponLeftCnt,
@@ -1032,25 +1196,49 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..uTodayLv2Commission = uTodayLv2Commission ?? this.uTodayLv2Commission
       ..vTodayLv3Commission = vTodayLv3Commission ?? this.vTodayLv3Commission
       ..wTodayLv4Commission = wTodayLv4Commission ?? this.wTodayLv4Commission
-      ..aAMonthLv1Commission = aAMonthLv1Commission ?? this.aAMonthLv1Commission
-      ..aBMonthLv2Commission = aBMonthLv2Commission ?? this.aBMonthLv2Commission
-      ..aCMonthLv3Commission = aCMonthLv3Commission ?? this.aCMonthLv3Commission
-      ..aDMonthLv4Commission = aDMonthLv4Commission ?? this.aDMonthLv4Commission
+      ..xTodayInitCount = xTodayInitCount ?? this.xTodayInitCount
+      ..yFirstLogAt = yFirstLogAt ?? this.yFirstLogAt
+      ..zLastLogAt = zLastLogAt ?? this.zLastLogAt
+      ..aAWeekLv1Commission = aAWeekLv1Commission ?? this.aAWeekLv1Commission
+      ..aBWeekLv2Commission = aBWeekLv2Commission ?? this.aBWeekLv2Commission
+      ..aCWeekLv3Commission = aCWeekLv3Commission ?? this.aCWeekLv3Commission
+      ..aDWeekLv4Commission = aDWeekLv4Commission ?? this.aDWeekLv4Commission
       ..aETodayCommissionRate = aETodayCommissionRate ??
           this.aETodayCommissionRate
+      ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt
       ..aGCollectionCommissionNewCount = aGCollectionCommissionNewCount ??
           this.aGCollectionCommissionNewCount
       ..aHCollectionNotificationCount = aHCollectionNotificationCount ??
           this.aHCollectionNotificationCount
       ..aIWeekRepayCount = aIWeekRepayCount ?? this.aIWeekRepayCount
+      ..aJWeekCommission = aJWeekCommission ?? this.aJWeekCommission
+      ..aKMonthRepayCount = aKMonthRepayCount ?? this.aKMonthRepayCount
+      ..aLMonthCommission = aLMonthCommission ?? this.aLMonthCommission
+      ..aMTodayCommission = aMTodayCommission ?? this.aMTodayCommission
+      ..aNMonthLv1Days = aNMonthLv1Days ?? this.aNMonthLv1Days
+      ..aOMonthLv2Days = aOMonthLv2Days ?? this.aOMonthLv2Days
+      ..aPMonthLv3Days = aPMonthLv3Days ?? this.aPMonthLv3Days
+      ..aQMonthLv4Days = aQMonthLv4Days ?? this.aQMonthLv4Days
+      ..aRTodayPartCount = aRTodayPartCount ?? this.aRTodayPartCount
+      ..aSTodayPartAmount = aSTodayPartAmount ?? this.aSTodayPartAmount
+      ..aTTodaySmsCount = aTTodaySmsCount ?? this.aTTodaySmsCount
+      ..aUTodayCallCount = aUTodayCallCount ?? this.aUTodayCallCount
+      ..aVTodayLogCount = aVTodayLogCount ?? this.aVTodayLogCount
+      ..aWWeekSmsCount = aWWeekSmsCount ?? this.aWWeekSmsCount
+      ..aXWeekCallCount = aXWeekCallCount ?? this.aXWeekCallCount
+      ..aYWeekLogCount = aYWeekLogCount ?? this.aYWeekLogCount
+      ..bAAvatar = bAAvatar ?? this.bAAvatar
+      ..aZTodayNoLogCount = aZTodayNoLogCount ?? this.aZTodayNoLogCount
+      ..cATodayNoCallCount = cATodayNoCallCount ?? this.cATodayNoCallCount
+      ..cBLastCall = cBLastCall ?? this.cBLastCall
       ..cCReviewingCount = cCReviewingCount ?? this.cCReviewingCount
-      ..aJWeekRank = aJWeekRank ?? this.aJWeekRank
-      ..updatedAt = updatedAt ?? this.updatedAt
-      ..aFLastCallAt = aFLastCallAt ?? this.aFLastCallAt
+      ..cDTodayAdditionCount = cDTodayAdditionCount ?? this.cDTodayAdditionCount
+      ..cETodayDeleteCount = cETodayDeleteCount ?? this.cETodayDeleteCount
       ..cFWeekRegCnt = cFWeekRegCnt ?? this.cFWeekRegCnt
       ..cGWeekApplyCnt = cGWeekApplyCnt ?? this.cGWeekApplyCnt
       ..cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt ?? this.cHWeekWaiveLeftCnt
       ..cIWeekBlockLeftCnt = cIWeekBlockLeftCnt ?? this.cIWeekBlockLeftCnt
+      ..updatedAt = updatedAt ?? this.updatedAt
       ..cJWeekWaLeftCnt = cJWeekWaLeftCnt ?? this.cJWeekWaLeftCnt
       ..cKDayWaLeftCnt = cKDayWaLeftCnt ?? this.cKDayWaLeftCnt
       ..cLWeekCouponLeftCnt = cLWeekCouponLeftCnt ?? this.cLWeekCouponLeftCnt
@@ -1060,5 +1248,74 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cPWeekRetainLeftCnt = cPWeekRetainLeftCnt ?? this.cPWeekRetainLeftCnt
       ..cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt ?? this.cQWeekReceiveLeftCnt
       ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt;
+  }
+}
+
+CollectionOrderOtherAdditionBonus $CollectionOrderOtherAdditionBonusFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherAdditionBonus collectionOrderOtherAdditionBonus = CollectionOrderOtherAdditionBonus();
+  final List<int>? overdueDays = (json['overdue_days'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (overdueDays != null) {
+    collectionOrderOtherAdditionBonus.overdueDays = overdueDays;
+  }
+  final int? rate = jsonConvert.convert<int>(json['rate']);
+  if (rate != null) {
+    collectionOrderOtherAdditionBonus.rate = rate;
+  }
+  return collectionOrderOtherAdditionBonus;
+}
+
+Map<String, dynamic> $CollectionOrderOtherAdditionBonusToJson(
+    CollectionOrderOtherAdditionBonus entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['overdue_days'] = entity.overdueDays;
+  data['rate'] = entity.rate;
+  return data;
+}
+
+extension CollectionOrderOtherAdditionBonusExtension on CollectionOrderOtherAdditionBonus {
+  CollectionOrderOtherAdditionBonus copyWith({
+    List<int>? overdueDays,
+    int? rate,
+  }) {
+    return CollectionOrderOtherAdditionBonus()
+      ..overdueDays = overdueDays ?? this.overdueDays
+      ..rate = rate ?? this.rate;
+  }
+}
+
+CollectionOrderOtherFines $CollectionOrderOtherFinesFromJson(
+    Map<String, dynamic> json) {
+  final CollectionOrderOtherFines collectionOrderOtherFines = CollectionOrderOtherFines();
+  final List<int>? borrowCount = (json['borrow_count'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (borrowCount != null) {
+    collectionOrderOtherFines.borrowCount = borrowCount;
+  }
+  final List<int>? fines = (json['fines'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (fines != null) {
+    collectionOrderOtherFines.fines = fines;
+  }
+  return collectionOrderOtherFines;
+}
+
+Map<String, dynamic> $CollectionOrderOtherFinesToJson(
+    CollectionOrderOtherFines entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['borrow_count'] = entity.borrowCount;
+  data['fines'] = entity.fines;
+  return data;
+}
+
+extension CollectionOrderOtherFinesExtension on CollectionOrderOtherFines {
+  CollectionOrderOtherFines copyWith({
+    List<int>? borrowCount,
+    List<int>? fines,
+  }) {
+    return CollectionOrderOtherFines()
+      ..borrowCount = borrowCount ?? this.borrowCount
+      ..fines = fines ?? this.fines;
   }
 }

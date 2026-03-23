@@ -1,5 +1,6 @@
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
+import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
@@ -33,6 +35,7 @@ class ContactDialog extends StatefulWidget {
     this.period,
     required this.showContactDays,
     required this.isAllContacts,
+    required this.borrowCount,
   });
   final int collectionOrderId;
   final List<CollectionLogOtherContactInfo2Data> contactList;
@@ -41,6 +44,7 @@ class ContactDialog extends StatefulWidget {
   final CollectionLogOtherPeriod? period;
   final int showContactDays;
   final bool isAllContacts;
+  final int borrowCount;
   @override
   State<ContactDialog> createState() => _ContactDialogState();
 }
@@ -49,6 +53,15 @@ class _ContactDialogState extends State<ContactDialog> {
   int _selectedIndex = -1;
   bool _isSelectionMode = false;
   Set<int> _selectedContactIndices = <int>{};
+  int _finesAmount = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showFinesDialog(context);
+    });
+  }
   
   void _showSmsDialog(BuildContext context, int contactId, String phone) {
     showDialog<void>(
@@ -64,6 +77,18 @@ class _ContactDialogState extends State<ContactDialog> {
         );
       },
     );
+  }
+  void _showFinesDialog(BuildContext context) {
+    int finesAmount = 0;
+    context.read<UserProvider>().userEntity.fines!.forEach((fine) {
+      if(widget.borrowCount >= fine.borrowCount![0] && widget.borrowCount <= fine.borrowCount![1] && widget.repayInfo?.overdueDays != null && widget.repayInfo!.overdueDays! < 10) {
+        finesAmount = fine.fines![widget.repayInfo?.overdueDays ?? 0] ?? 0;
+        setState(() {
+          _finesAmount = finesAmount;
+        });
+      }
+    });
+    
   }
 
   @override
@@ -81,6 +106,14 @@ class _ContactDialogState extends State<ContactDialog> {
         ),
         child: Column(
           children: [
+            if(_finesAmount > 0)
+              Container(
+                color: Colors.orange,
+                width: double.infinity,
+                height: 20,
+                alignment: Alignment.center,
+                child: Text('Severe threat or insult, Fines: $_finesAmount',style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),),
+              ),
             if (widget.period != null &&
                 widget.period!.lOverdueDays! < widget.showContactDays)
               Container(

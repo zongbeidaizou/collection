@@ -190,8 +190,8 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (bBHasRetain != null) {
     collectionOrderData.bBHasRetain = bBHasRetain;
   }
-  final CollectionOrderDataAAAAAQBPeriods? aAAAAQBPeriods = jsonConvert.convert<
-      CollectionOrderDataAAAAAQBPeriods>(json['a_a_a_a_a_q_b_periods']);
+  final CollectionLogOtherPeriod? aAAAAQBPeriods = jsonConvert.convert<
+      CollectionLogOtherPeriod>(json['a_a_a_a_a_q_b_periods']);
   if (aAAAAQBPeriods != null) {
     collectionOrderData.aAAAAQBPeriods = aAAAAQBPeriods;
   }
@@ -252,7 +252,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     int? bESourceType,
     int? bDOverdueDays,
     int? bBHasRetain,
-    CollectionOrderDataAAAAAQBPeriods? aAAAAQBPeriods,
+    CollectionLogOtherPeriod? aAAAAQBPeriods,
   }) {
     return CollectionOrderData()
       ..id = id ?? this.id
@@ -788,7 +788,7 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aAWeekLv1Commission != null) {
     collectionOrderOtherProfile.aAWeekLv1Commission = aAWeekLv1Commission;
   }
-  final int? aBWeekLv2Commission = jsonConvert.convert<int>(
+  final double? aBWeekLv2Commission = jsonConvert.convert<double>(
       json['a_b_week_lv2_commission']);
   if (aBWeekLv2Commission != null) {
     collectionOrderOtherProfile.aBWeekLv2Commission = aBWeekLv2Commission;
@@ -803,7 +803,7 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (aDWeekLv4Commission != null) {
     collectionOrderOtherProfile.aDWeekLv4Commission = aDWeekLv4Commission;
   }
-  final int? aETodayCommissionRate = jsonConvert.convert<int>(
+  final double? aETodayCommissionRate = jsonConvert.convert<double>(
       json['a_e_today_commission_rate']);
   if (aETodayCommissionRate != null) {
     collectionOrderOtherProfile.aETodayCommissionRate = aETodayCommissionRate;
@@ -1121,10 +1121,10 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     String? yFirstLogAt,
     String? zLastLogAt,
     int? aAWeekLv1Commission,
-    int? aBWeekLv2Commission,
+    double? aBWeekLv2Commission,
     int? aCWeekLv3Commission,
     int? aDWeekLv4Commission,
-    int? aETodayCommissionRate,
+    double? aETodayCommissionRate,
     String? aFLastCallAt,
     int? aGCollectionCommissionNewCount,
     int? aHCollectionNotificationCount,

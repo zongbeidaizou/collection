@@ -4,148 +4,239 @@
   "message": "messages.retrieved",
   "data": [
     {
-      "id": 15,
-      "a_borrow_id": 15,
-      "b_collection_stage_id": 92,
-      "c_collection_agency_id": 94,
-      "d_collection_group_id": 23,
-      "e_collection_admin_id": 13,
-      "f_collection_news_id": 0,
-      "g_collection_order_flow_history_count": 0,
-      "h_collection_admin_log_count": 0,
-      "i_collection_admin_call_count": 0,
-      "j_system_sms_count": 0,
-      "k_status": 13,
-      "l_collection_amount": 0,
-      "m_period_id": 15,
-      "n_borrow_amount": 470,
-      "o_period_index": 917,
-      "p_expect_repay_time": "2025-02-06T16:00:00.000000Z",
-      "q_lock_end_stage_id": 0,
-      "r_flow_in_time": "2025-02-06T07:07:00.000000Z",
-      "s_flow_out_time": "2025-02-06T16:00:00.000000Z",
-      "t_borrow_sn": "TMmpmXYFh9",
-      "u_phone": "312-542-7999",
-      "v_name": "Song Lan",
-      "w_view_times": 0,
-      "x_current_view_times": 0,
-      "y_current_log_count": 0,
-      "z_current_call_count": 0,
-      "a_a_commission": 0,
-      "a_b_current_commission": 0,
-      "a_c_expect_current_commission": 0,
-      "a_d_last_log_time": "2025-02-06T16:00:00.000000Z",
-      "a_e_borrow_count": 499,
-      "a_f_s0_collection_amount": 0,
-      "a_g_s1_collection_amount": 0,
-      "a_h_s2_collection_amount": 0,
-      "a_f_s3_collection_amount": 0.8,
-      "a_j_product_id": 0,
-      "a_k_no": "1dfs",
-      "a_l_last_log": "asjdfi",
-      "a_z_package": "asjdfi",
+      "id": 8164,
+      "a_borrow_id": 7606,
+      "e_collection_admin_id": 20,
+      "k_status": 0,
+      "n_borrow_amount": 45500,
+      "o_period_index": 1,
+      "p_expect_repay_time": "2026-03-07T11:00:00.000000Z",
+      "t_borrow_sn": "5dd1e2343c",
+      "u_phone": "7033837289",
+      "v_name": "Bello Yahaya",
+      "s_flow_out_time": "2026-03-22T22:59:59.000000Z",
+      "a_k_no": "0226002",
+      "a_e_borrow_count": 10,
+      "a_j_product_id": 1,
+      "a_l_last_log": "",
+      "a_n_current_day_log_count": 0,
+      "a_o_current_day_call_count": 0,
+      "a_v_tmp_collection_admin_id": 1,
+      "a_z_package": "leading",
+      "a_d_last_log_time": "",
+      "b_e_source_type": 0,
+      "b_d_overdue_days": 12,
+      "b_b_has_retain": 1,
       "a_a_a_a_a_q_b_periods": {
-        "id": 1065,
-        "a_borrow_id": 1095,
-        "f_expect_repay_total_amount": 24750,
-        "p_paid_interest": 5250,
-        "q_paid_service_fee": 4500,
+        "id": 7812,
+        "a_borrow_id": 7606,
+        "f_expect_repay_total_amount": 61250,
+        "p_paid_interest": 0,
+        "q_paid_service_fee": 10500,
         "s_paid_overdue_amount": 0,
         "o_paid_borrow_amount": 0,
-        "g_expect_borrow_amount": 15000,
-        "h_expect_interest": 5250,
-        "n_paid_amount": 5250,
-        "i_expect_service_fee": 4500,
+        "g_expect_borrow_amount": 35000,
+        "h_expect_interest": 0,
+        "n_paid_amount": 0,
+        "i_expect_service_fee": 10500,
         "j_expect_violate_fee": 0,
-        "k_expect_overdue_amount": 0,
-        "l_overdue_days": -6,
+        "k_expect_overdue_amount": 15750,
+        "l_overdue_days": 15,
         "t_deduction_times": 0,
         "u_deduction_total_amount": 0,
         "a_h_part_times": 0,
+        "a_n_user_id": 1238,
+        "a_p_expect_repay_time": "2026-03-07T11:00:00.000000Z",
         "a_u_current_deduction_fee": 0,
-        "a_z_left_amount": 0,
-        "a_p_expect_repay_time": "2025-02-06T07:06:28.000000Z"
+        "a_z_left_amount": 50750,
+        "z_deduction_total_overdue_amount": 0,
+        "b_c_borrow_count": 10
       }
     }
+
   ],
   "other": {
     "progress": {
-      "points": [0, 0.2, 0.4, 0.5, 1],
-      "levelProgress": [{
-        "level": "",
-        "type": 0
-      }, {
-        "level": 1,
-        "type": 1
-      }, {
-        "level": 2,
-        "type": 1
-      }, {
-        "level": 3,
-        "type": 1
-      }, {
-        "level": 4,
-        "type": 1
-      }],
-      "amountProgress": [{
-        "amount": 0,
-        "type": 0
-      }, {
-        "amount": 1200,
-        "type": 1
-      }, {
-        "amount": 3600,
-        "type": 1
-      }, {
-        "amount": 6000,
-        "type": 1
-      }, {
-        "amount": 24000,
-        "type": 1
-      }],
-      "amountProgress2": [0, 60000, 60000, 30000, 150000],
-      "currentLevel": 1,
-      "nextAmount": 60000,
-      "nextLevel": 1,
-      "currentKey": 0
+      "points": [
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.2
+      ],
+      "counts": [
+        0,
+        5,
+        11,
+        17,
+        27
+      ],
+      "grades": [
+        "BB",
+        "B",
+        "A",
+        "AA",
+        ""
+      ],
+      "commissionRates": [
+        "(1%)",
+        "(1% + \\u20a6\\u200c 300)",
+        "(1.5% + \\u20a6\\u200c 1,600)",
+        "(2% + \\u20a6\\u200c 400)",
+        ""
+      ],
+      "currentGrade": "B",
+      "currentRate": "1%",
+      "nextGrade": "A",
+      "nextRate": "1.5%",
+      "more": 5,
+      "currentPoint": 0.29,
+      "nextAdditionBonus": 1600
     },
     "profile": {
-      "a_name": "4\u98de\u817e\u50ac\u6536\u7ec4(\u5185)",
-      "id": 1,
-      "b_admin_id": 1,
-      "c_collection_agency_id": 92,
-      "d_collection_group_id": 22,
+      "id": 20,
+      "a_name": "S120",
+      "b_admin_id": 20,
+      "c_collection_agency_id": 1,
+      "d_collection_group_id": 103,
       "e_collection_stages": "93",
       "f_status": 1,
-      "g_comment": "123",
+      "g_comment": "2",
       "h_collection_ing_order_count": 0,
-      "i_today_current_kpi_level": 0,
-      "j_today_init_amount": 300000,
-      "k_current_new_count": 0,
+      "i_today_current_kpi_level": 2,
+      "j_today_init_amount": 896380,
+      "k_current_new_count": 24,
       "l_current_negotiating_count": 0,
-      "m_currrent_promised_count": 0,
+      "m_currrent_promised_count": 2,
       "n_current_broken_count": 0,
       "o_current_refused_count": 0,
-      "p_today_current_repay_count": 0,
-      "r_today_current_repay_amount": 0,
-      "t_today_lv1_commission": 0,
-      "u_today_lv2_commission": 0,
-      "v_today_lv3_commission": 0,
+      "p_today_current_repay_count": 6,
+      "r_today_current_repay_amount": 255000,
+      "t_today_lv1_commission": 27,
+      "u_today_lv2_commission": 1,
+      "v_today_lv3_commission": 6,
       "w_today_lv4_commission": 0,
-      "a_a_month_lv1_commission": 0,
-      "a_b_month_lv2_commission": 0,
-      "a_c_month_lv3_commission": 0,
-      "a_d_month_lv4_commission": 0,
-      "a_e_today_commission_rate": 0,
-      "a_f_last_call_at": "2025-02-06T16:00:00.000000Z",
+      "x_today_init_count": 27,
+      "y_first_log_at": "2026-03-22T07:48:30.000000Z",
+      "z_last_log_at": "2026-03-22T07:48:46.000000Z",
+      "a_a_week_lv1_commission": 10111,
+      "a_b_week_lv2_commission": 10694,
+      "a_c_week_lv3_commission": 2065,
+      "a_d_week_lv4_commission": 0,
+      "a_e_today_commission_rate": 1,
+      "a_f_last_call_at": "2025-09-06T13:39:57.000000Z",
       "a_g_collection_commission_new_count": 0,
       "a_h_collection_notification_count": 0,
-      "a_i_week_repay_count": 0,
-      "a_j_week_rank": 0,
-      "updated_at": "2025-02-06T16:00:00.000000Z"
-    }
+      "a_i_week_repay_count": 55,
+      "a_j_week_commission": 22870,
+      "a_k_month_repay_count": 132,
+      "a_l_month_commission": 66975,
+      "a_m_today_commission": 3150,
+      "a_n_month_lv1_days": 0,
+      "a_o_month_lv2_days": 19,
+      "a_p_month_lv3_days": 6,
+      "a_q_month_lv4_days": 0,
+      "a_r_today_part_count": 0,
+      "a_s_today_part_amount": 0,
+      "a_t_today_sms_count": 0,
+      "a_u_today_call_count": 0,
+      "a_v_today_log_count": 0,
+      "a_w_week_sms_count": 0,
+      "a_x_week_call_count": 0,
+      "a_y_week_log_count": 14,
+      "b_a_avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/fatusa.png",
+      "a_z_today_no_log_count": 30,
+      "c_a_today_no_call_count": 32,
+      "c_b_last_call": "phone_20250906-143957_9043501406.amr",
+      "c_c_reviewing_count": 0,
+      "c_d_today_addition_count": 0,
+      "c_e_today_delete_count": 0,
+      "c_f_week_reg_cnt": 7,
+      "c_g_week_apply_cnt": 6,
+      "c_h_week_waive_left_cnt": 20,
+      "c_i_week_block_left_cnt": 10,
+      "updated_at": "2026-03-22T13:41:49.000000Z",
+      "c_j_week_wa_left_cnt": 12,
+      "c_k_day_wa_left_cnt": 1,
+      "c_l_week_coupon_left_cnt": 5,
+      "c_m_week_extend_left_cnt": 5,
+      "c_n_week_extend_cnt": 29,
+      "c_o_month_extend_cnt": 29,
+      "c_p_week_retain_left_cnt": 6,
+      "c_q_week_receive_left_cnt": 11,
+      "c_r_today_marketing_cnt": 0
+    },
+    "monthAdditionData": [],
+    "additionBonus": [
+      {
+        "overdue_days": [
+          7,
+          9
+        ],
+        "rate": 5
+      },
+      {
+        "overdue_days": [
+          10,
+          19
+        ],
+        "rate": 10
+      },
+      {
+        "overdue_days": [
+          20,
+          29
+        ],
+        "rate": 20
+      },
+      {
+        "overdue_days": [
+          30,
+          999
+        ],
+        "rate": 30
+      }
+    ],
+    "fines": [
+      {
+        "borrow_count": [
+          0,
+          4
+        ],
+        "fines": [
+          200,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "borrow_count": [
+          5,
+          10
+        ],
+        "fines": [
+          800,
+          200,
+          0,
+          0
+        ]
+      },
+      {
+        "borrow_count": [
+          10,
+          999
+        ],
+        "fines": [
+          1000,
+          400,
+          100,
+          0
+        ]
+      }
+    ]
   },
-  "total": 96,
+  "total": 0,
   "currentPage": 1,
   "perPage": 40,
   "hasMorePages": false

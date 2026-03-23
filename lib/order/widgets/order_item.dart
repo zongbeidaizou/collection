@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
-import 'package:bounty_hunter/shop/widgets/send_type_dialog.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
@@ -33,6 +32,8 @@ import 'repayment_bill_dialog.dart';
 import 'contact_dialog.dart';
 
 const MethodChannel _contactChannel = MethodChannel('contact_channel');
+const List<IconData> sourceIcon = [Icons.miscellaneous_services,Icons.loupe, Icons.repeat_one,Icons.move_up];
+const List<Color> sourceColor = [Colors.blue,Colors.red, Colors.green,Colors.purple];
 
 class OrderItem extends StatefulWidget {
   const OrderItem({
@@ -81,11 +82,14 @@ class OrderItem extends StatefulWidget {
 
 class _OrderItemState extends State<OrderItem> {
   bool _isRetained = false;
-
+  int _additionBonus = 0;
   @override
   void initState() {
     super.initState();
     _isRetained = (widget.item.bBHasRetain ?? 0) == 1;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+        _getAdditionBonus(context);
+    });
   }
 
   @override
@@ -138,6 +142,18 @@ class _OrderItemState extends State<OrderItem> {
 
     // 默认背景颜色
   }
+  _getAdditionBonus(BuildContext context) {
+    if(widget.item.eCollectionAdminId == widget.item.aVTmpCollectionAdminId && widget.source != 'receive'){
+      return ;
+    }
+    for (final bonus in context.read<UserProvider>().userEntity.additionBonus!) {
+      if(widget.item.aAAAAQBPeriods!.lOverdueDays! >= bonus.overdueDays![0] && widget.item.aAAAAQBPeriods!.lOverdueDays! <= bonus.overdueDays![1]) {
+        setState(() {
+          _additionBonus = bonus.rate ?? 0;
+        });
+      }
+    }
+  }
 
   Widget _buildContent(BuildContext context, Color buttonColor) {
     final bool isDark = context.isDark;
@@ -183,6 +199,7 @@ class _OrderItemState extends State<OrderItem> {
                 collectionOrderId: widget.item.id!,
                 period: widget.period!,
                 showContactDays: widget.showContactDays,
+                borrowCount: widget.item.aAAAAQBPeriods?.bCBorrowCount ?? 0,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
                   widget.onSendSms?.call(templateId, smsContent,
@@ -290,11 +307,11 @@ class _OrderItemState extends State<OrderItem> {
     Future<void> _addContactToPhone() async {
       final phone = widget.item.uPhone ?? '';
       if (phone.isEmpty) {
-        showToast('Phone number is empty');
+        showToast('Phone number is empty',backgroundColor: Colors.red);
         return;
       }
       if (!Platform.isAndroid) {
-        showToast('Adding to contacts is supported on Android only');
+        showToast('Adding to contacts is supported on Android only',backgroundColor: Colors.red);
         return;
       }
 
@@ -345,7 +362,7 @@ class _OrderItemState extends State<OrderItem> {
 
       final PermissionStatus status = await Permission.contacts.request();
       if (!status.isGranted) {
-        showToast('Please grant contacts permission first');
+        showToast('Please grant contacts permission first',backgroundColor: Colors.red);
         return;
       }
 
@@ -358,13 +375,13 @@ class _OrderItemState extends State<OrderItem> {
         });
         showToast('Added to contacts');
       } catch (e) {
-        showToast('Failed to add to contacts');
+        showToast('Failed to add to contacts',backgroundColor: Colors.red);
       }
     }
 
     Future<void> _retainOrder() async {
       if (widget.item.id == null) {
-        showToast('Order ID is missing');
+        showToast('Order ID is missing',backgroundColor: Colors.red);
         return;
       }
 
@@ -382,23 +399,23 @@ class _OrderItemState extends State<OrderItem> {
               _isRetained = true;
             });
             if (data != null && data.containsKey('message')) {
-              showToast(data['message'] as String);
+              showToast(data['message'] as String,backgroundColor: Colors.green);
             } else {
-              showToast('Order receive successfully');
+              showToast('Order receive successfully',backgroundColor: Colors.green);
             }
           },
           onError: (code, msg) {
-            showToast(msg);
+            showToast(msg,backgroundColor: Colors.red);
           },
         );
       } catch (e) {
-        showToast('Failed to receive order');
+        showToast('Failed to receive order',backgroundColor: Colors.red);
       }
     }
 
     Future<void> _receiveOrder() async {
       if (widget.item.id == null) {
-        showToast('Order ID is missing');
+        showToast('Order ID is missing',backgroundColor: Colors.red);
         return;
       }
 
@@ -416,17 +433,17 @@ class _OrderItemState extends State<OrderItem> {
               _isRetained = true;
             });
             if (data != null && data.containsKey('message')) {
-              showToast(data['message'] as String);
+              showToast(data['message'] as String,backgroundColor: Colors.green);
             } else {
-              showToast('Order receive successfully');
+              showToast('Order receive successfully',backgroundColor: Colors.green);
             }
           },
           onError: (code, msg) {
-            showToast(msg);
+            showToast(msg,backgroundColor: Colors.red);
           },
         );
       } catch (e) {
-        showToast('Failed to retain order');
+        showToast('Failed to retain order',backgroundColor: Colors.red);
       }
     }
 
@@ -579,10 +596,10 @@ class _OrderItemState extends State<OrderItem> {
               )
             else
               Gaps.empty,
-            if (widget.item.eCollectionAdminId != widget.item.aVTmpCollectionAdminId)
+            if ( _additionBonus > 0)
               InkWell(
                 onTap: () {
-                    showToast("This case is a transferred case and will receive an additional ${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! &&  (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) > 8 ? '+10' : '')}% bonus.");
+                    showToast("This case is a transferred case and will receive an additional $_additionBonus% bonus.");
                     return;
                   },
                 child: Row(
@@ -594,7 +611,7 @@ class _OrderItemState extends State<OrderItem> {
                     ),
                     Gaps.hGap2,
                     Text(
-                        "${widget.item.eCollectionAdminId! != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) >= 10 ? '+10' : '')}% ",
+                        '${_additionBonus}% ',
                         style: TextStyle(color: Colors.red, fontSize: 14)),
                   ],
                 ),
@@ -611,15 +628,15 @@ class _OrderItemState extends State<OrderItem> {
                   },
                 child: Row(
                   children: [
+                    if(!widget.inList)
                     Icon(
-                      widget.inList? Icons.tag : Icons.login,
+                       Icons.login,
                       color: Theme.of(context).colorScheme.tertiary,
                       size: 14,
                     ),
+                    if(!widget.inList)
                     Text(
-                widget.inList
-                    ? widget.item.aKNo!
-                    : (DateTime.now()
+                    (DateTime.now()
                                 .difference(DateTime.parse(
                                     widget.track?.lastActiveTime ??
                                         '2000-07-10T18:58:39.000000Z'))
@@ -671,14 +688,15 @@ class _OrderItemState extends State<OrderItem> {
               child: InkWell(
                 child: Row(
                   children: [
-                    Icon(Icons.polyline,size: 13,color: Colours.app_main.withOpacity(0.6)),
+                    Icon(sourceIcon[widget.item.bESourceType ?? 0],size: 14,color: sourceColor[widget.item.bESourceType ?? 0]),
+                    Gaps.hGap2,
                     RichText(
                       text: TextSpan(
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.tBorrowSn?.substring(5),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: isDark ? Colors.white : Colors.black)),
-                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                          TextSpan(text: widget.item.aKNo,style: Theme.of(context).textTheme.titleSmall?.copyWith( color: isDark ? Colors.white : Colors.grey.shade500)),
+                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: TextStyle(color: isDark ? Colors.white : Colours.app_main)),
                         ],
                       ),
                     ),
@@ -977,7 +995,7 @@ class _OrderItemState extends State<OrderItem> {
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${provider.userEntity.profile!.id != widget.item.aVTmpCollectionAdminId! && (widget.period?.lOverdueDays ?? 0) >= 20 ? '+20' : ((widget.period?.lOverdueDays ?? 0) >= 10 ? '+10' : '')}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${ _additionBonus >= 0 ? '+$_additionBonus' :  ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall
@@ -1012,9 +1030,10 @@ class _OrderItemState extends State<OrderItem> {
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained && widget.source == 'order')
               OrderItemButton(
                 key: Key('order_button_4_${widget.index}'),
+                icon: Icon(Icons.repeat_one,size: 16,color: Colors.white),
                 text: 'Retain',
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: buttonColor,
+                bgColor: Colors.green,
                 onTap: () {
                   _retainOrder();
                 },
@@ -1025,7 +1044,7 @@ class _OrderItemState extends State<OrderItem> {
                   key: Key('order_button_3_${widget.index}'),
                   text: 'Detail',
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  bgColor: buttonColor,
+                  bgColor: Colours.app_main,
                   onTap: () {
                     _showModalBottomSheet();
                   },
@@ -1033,9 +1052,10 @@ class _OrderItemState extends State<OrderItem> {
                 if(widget.source == 'receive')
                 OrderItemButton(
                   key: Key('order_button_4_${widget.index}'),
+                  icon: Icon(Icons.move_up,size: 16,color: Colors.white),
                   text: 'Receive',
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  bgColor: buttonColor,
+                  bgColor: Colors.purple,
                   onTap: () {
                     _receiveOrder();
                   },
@@ -1211,21 +1231,9 @@ class _OrderItemState extends State<OrderItem> {
     final double baseCommissionRate =
         provider.userEntity.profile!.aETodayCommissionRate!;
 
-    // 计算额外佣金率
-    final int overdueDays = period?.lOverdueDays ?? 0;
-    final bool isDifferentAdmin =
-        item.eCollectionAdminId! != item.aVTmpCollectionAdminId! || provider.userEntity.profile!.id != item.aVTmpCollectionAdminId!;
 
-    double additionalRate = 0.0;
-    if (isDifferentAdmin) {
-      if (overdueDays < 10) {
-        additionalRate = 5.0;
-      } else if (overdueDays >= 10) {
-        additionalRate = 10.0;
-      } else if (overdueDays >= 20) {
-        additionalRate = 20.0;
-      }
-    }
+    double additionalRate = _additionBonus.toDouble();
+
 
     // 总佣金率
     final double totalCommissionRate = baseCommissionRate + additionalRate;

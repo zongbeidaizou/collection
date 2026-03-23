@@ -1,7 +1,8 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_order_entity.g.dart';
 import 'dart:convert';
-export 'package:bounty_hunter/generated/json/collection_order_entity.g.dart';
+import 'collection_log_entity.dart';
+export 'package:bounty_hunter/models/collection_log_entity.dart';
 
 @JsonSerializable()
 class CollectionOrderEntity {
@@ -75,7 +76,7 @@ class CollectionOrderData {
 	@JSONField(name: 'b_b_has_retain')
 	int? bBHasRetain = 0;
 	@JSONField(name: 'a_a_a_a_a_q_b_periods')
-	CollectionOrderDataAAAAAQBPeriods? aAAAAQBPeriods;
+	CollectionLogOtherPeriod? aAAAAQBPeriods;
 
 	CollectionOrderData();
 
@@ -249,13 +250,13 @@ class CollectionOrderOtherProfile {
 	@JSONField(name: 'a_a_week_lv1_commission')
 	int? aAWeekLv1Commission = 0;
 	@JSONField(name: 'a_b_week_lv2_commission')
-	int? aBWeekLv2Commission = 0;
+	double? aBWeekLv2Commission = 0;
 	@JSONField(name: 'a_c_week_lv3_commission')
 	int? aCWeekLv3Commission = 0;
 	@JSONField(name: 'a_d_week_lv4_commission')
 	int? aDWeekLv4Commission = 0;
 	@JSONField(name: 'a_e_today_commission_rate')
-	int? aETodayCommissionRate = 0;
+	double? aETodayCommissionRate = 0;
 	@JSONField(name: 'a_f_last_call_at')
 	String? aFLastCallAt = '';
 	@JSONField(name: 'a_g_collection_commission_new_count')

@@ -331,6 +331,11 @@ class JsonConvert {
       return data.map<CollectionOrderData>((Map<String, dynamic> e) =>
           CollectionOrderData.fromJson(e)).toList() as M;
     }
+    if (<CollectionOrderDataAAAAAQBPeriods>[] is M) {
+      return data.map<CollectionOrderDataAAAAAQBPeriods>((
+          Map<String, dynamic> e) =>
+          CollectionOrderDataAAAAAQBPeriods.fromJson(e)).toList() as M;
+    }
     if (<CollectionOrderOther>[] is M) {
       return data.map<CollectionOrderOther>((Map<String, dynamic> e) =>
           CollectionOrderOther.fromJson(e)).toList() as M;
@@ -339,19 +344,18 @@ class JsonConvert {
       return data.map<CollectionOrderOtherProgress>((Map<String, dynamic> e) =>
           CollectionOrderOtherProgress.fromJson(e)).toList() as M;
     }
-    if (<CollectionOrderOtherProgressLevelProgress>[] is M) {
-      return data.map<CollectionOrderOtherProgressLevelProgress>((
-          Map<String, dynamic> e) =>
-          CollectionOrderOtherProgressLevelProgress.fromJson(e)).toList() as M;
-    }
-    if (<CollectionOrderOtherProgressAmountProgress>[] is M) {
-      return data.map<CollectionOrderOtherProgressAmountProgress>((
-          Map<String, dynamic> e) =>
-          CollectionOrderOtherProgressAmountProgress.fromJson(e)).toList() as M;
-    }
     if (<CollectionOrderOtherProfile>[] is M) {
       return data.map<CollectionOrderOtherProfile>((Map<String, dynamic> e) =>
           CollectionOrderOtherProfile.fromJson(e)).toList() as M;
+    }
+    if (<CollectionOrderOtherAdditionBonus>[] is M) {
+      return data.map<CollectionOrderOtherAdditionBonus>((
+          Map<String, dynamic> e) =>
+          CollectionOrderOtherAdditionBonus.fromJson(e)).toList() as M;
+    }
+    if (<CollectionOrderOtherFines>[] is M) {
+      return data.map<CollectionOrderOtherFines>((Map<String, dynamic> e) =>
+          CollectionOrderOtherFines.fromJson(e)).toList() as M;
     }
     if (<CommissionEntity>[] is M) {
       return data.map<CommissionEntity>((Map<String, dynamic> e) =>
@@ -593,15 +597,16 @@ class JsonConvertClassCollection {
         .toString(): CollectionNotificationOtherProfile.fromJson,
     (CollectionOrderEntity).toString(): CollectionOrderEntity.fromJson,
     (CollectionOrderData).toString(): CollectionOrderData.fromJson,
+    (CollectionOrderDataAAAAAQBPeriods)
+        .toString(): CollectionOrderDataAAAAAQBPeriods.fromJson,
     (CollectionOrderOther).toString(): CollectionOrderOther.fromJson,
     (CollectionOrderOtherProgress).toString(): CollectionOrderOtherProgress
         .fromJson,
-    (CollectionOrderOtherProgressLevelProgress)
-        .toString(): CollectionOrderOtherProgressLevelProgress.fromJson,
-    (CollectionOrderOtherProgressAmountProgress)
-        .toString(): CollectionOrderOtherProgressAmountProgress.fromJson,
     (CollectionOrderOtherProfile).toString(): CollectionOrderOtherProfile
         .fromJson,
+    (CollectionOrderOtherAdditionBonus)
+        .toString(): CollectionOrderOtherAdditionBonus.fromJson,
+    (CollectionOrderOtherFines).toString(): CollectionOrderOtherFines.fromJson,
     (CommissionEntity).toString(): CommissionEntity.fromJson,
     (CommissionData).toString(): CommissionData.fromJson,
     (HKContactSmsEntity).toString(): HKContactSmsEntity.fromJson,

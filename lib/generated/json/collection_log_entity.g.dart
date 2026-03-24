@@ -1,7 +1,5 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
-import 'package:bounty_hunter/models/collection_order_entity.dart';
-
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -255,11 +253,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
     collectionLogOther.repayInfo = repayInfo;
   }
   final List<
-      CollectionLogOtherContactInfo2Data>? contactInfo = (json['contact_info'] as List<
+      CollectionLogOtherContactInfo>? contactInfo = (json['contact_info'] as List<
       dynamic>?)?.map(
           (e) =>
-      jsonConvert.convert<CollectionLogOtherContactInfo2Data>(
-          e) as CollectionLogOtherContactInfo2Data).toList();
+      jsonConvert.convert<CollectionLogOtherContactInfo>(
+          e) as CollectionLogOtherContactInfo).toList();
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
@@ -301,8 +299,8 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (hJSmsTemplate != null) {
     collectionLogOther.hJSmsTemplate = hJSmsTemplate;
   }
-  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
-      json['other']);
+  final CollectionLogOtherOther? other = jsonConvert.convert<
+      CollectionLogOtherOther>(json['other']);
   if (other != null) {
     collectionLogOther.other = other;
   }
@@ -341,13 +339,13 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    List<CollectionLogOtherContactInfo2Data>? contactInfo,
+    List<CollectionLogOtherContactInfo>? contactInfo,
     CollectionLogOtherContactInfo2? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     List<CollectionLogOtherCouponList>? couponList,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
-    CollectionOrderOther? other,
+    CollectionLogOtherOther? other,
     String? lastContactFetchTime,
   }) {
     return CollectionLogOther()
@@ -767,19 +765,19 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
   if (var2 != null) {
     collectionLogOtherRepayInfo.var2 = var2;
   }
-  final String? var3 = jsonConvert.convert<String>(json['var3']);
+  final int? var3 = jsonConvert.convert<int>(json['var3']);
   if (var3 != null) {
     collectionLogOtherRepayInfo.var3 = var3;
   }
-  final String? var4 = jsonConvert.convert<String>(json['var4']);
+  final int? var4 = jsonConvert.convert<int>(json['var4']);
   if (var4 != null) {
     collectionLogOtherRepayInfo.var4 = var4;
   }
-  final String? var5 = jsonConvert.convert<String>(json['var5']);
+  final int? var5 = jsonConvert.convert<int>(json['var5']);
   if (var5 != null) {
     collectionLogOtherRepayInfo.var5 = var5;
   }
-  final String? var6 = jsonConvert.convert<String>(json['var6']);
+  final int? var6 = jsonConvert.convert<int>(json['var6']);
   if (var6 != null) {
     collectionLogOtherRepayInfo.var6 = var6;
   }
@@ -872,10 +870,10 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
     String? changeCreditFraction,
     String? var1,
     String? var2,
-    String? var3,
-    String? var4,
-    String? var5,
-    String? var6,
+    int? var3,
+    int? var4,
+    int? var5,
+    int? var6,
     String? var7,
     String? var8,
     String? var9,
@@ -917,6 +915,222 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
       ..var8 = var8 ?? this.var8
       ..var9 = var9 ?? this.var9
       ..var10 = var10 ?? this.var10;
+  }
+}
+
+CollectionLogOtherContactInfo $CollectionLogOtherContactInfoFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherContactInfo collectionLogOtherContactInfo = CollectionLogOtherContactInfo();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherContactInfo.id = id;
+  }
+  final String? cRelation = jsonConvert.convert<String>(json['c_relation']);
+  if (cRelation != null) {
+    collectionLogOtherContactInfo.cRelation = cRelation;
+  }
+  final String? fName = jsonConvert.convert<String>(json['f_name']);
+  if (fName != null) {
+    collectionLogOtherContactInfo.fName = fName;
+  }
+  final String? gPhone = jsonConvert.convert<String>(json['g_phone']);
+  if (gPhone != null) {
+    collectionLogOtherContactInfo.gPhone = gPhone;
+  }
+  final int? lSmsCount = jsonConvert.convert<int>(json['l_sms_count']);
+  if (lSmsCount != null) {
+    collectionLogOtherContactInfo.lSmsCount = lSmsCount;
+  }
+  final int? mRelationLevel = jsonConvert.convert<int>(
+      json['m_relation_level']);
+  if (mRelationLevel != null) {
+    collectionLogOtherContactInfo.mRelationLevel = mRelationLevel;
+  }
+  final int? qPhoneStatus = jsonConvert.convert<int>(json['q_phone_status']);
+  if (qPhoneStatus != null) {
+    collectionLogOtherContactInfo.qPhoneStatus = qPhoneStatus;
+  }
+  final int? rWaStatus = jsonConvert.convert<int>(json['r_wa_status']);
+  if (rWaStatus != null) {
+    collectionLogOtherContactInfo.rWaStatus = rWaStatus;
+  }
+  final int? tWaWeight = jsonConvert.convert<int>(json['t_wa_weight']);
+  if (tWaWeight != null) {
+    collectionLogOtherContactInfo.tWaWeight = tWaWeight;
+  }
+  final CollectionLogOtherContactInfoAAAAAHLContactWeights? aAAAAHLContactWeights = jsonConvert
+      .convert<CollectionLogOtherContactInfoAAAAAHLContactWeights>(
+      json['a_a_a_a_a_h_l_contact_weights']);
+  if (aAAAAHLContactWeights != null) {
+    collectionLogOtherContactInfo.aAAAAHLContactWeights = aAAAAHLContactWeights;
+  }
+  return collectionLogOtherContactInfo;
+}
+
+Map<String, dynamic> $CollectionLogOtherContactInfoToJson(
+    CollectionLogOtherContactInfo entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['c_relation'] = entity.cRelation;
+  data['f_name'] = entity.fName;
+  data['g_phone'] = entity.gPhone;
+  data['l_sms_count'] = entity.lSmsCount;
+  data['m_relation_level'] = entity.mRelationLevel;
+  data['q_phone_status'] = entity.qPhoneStatus;
+  data['r_wa_status'] = entity.rWaStatus;
+  data['t_wa_weight'] = entity.tWaWeight;
+  data['a_a_a_a_a_h_l_contact_weights'] =
+      entity.aAAAAHLContactWeights?.toJson();
+  return data;
+}
+
+extension CollectionLogOtherContactInfoExtension on CollectionLogOtherContactInfo {
+  CollectionLogOtherContactInfo copyWith({
+    int? id,
+    String? cRelation,
+    String? fName,
+    String? gPhone,
+    int? lSmsCount,
+    int? mRelationLevel,
+    int? qPhoneStatus,
+    int? rWaStatus,
+    int? tWaWeight,
+    CollectionLogOtherContactInfoAAAAAHLContactWeights? aAAAAHLContactWeights,
+  }) {
+    return CollectionLogOtherContactInfo()
+      ..id = id ?? this.id
+      ..cRelation = cRelation ?? this.cRelation
+      ..fName = fName ?? this.fName
+      ..gPhone = gPhone ?? this.gPhone
+      ..lSmsCount = lSmsCount ?? this.lSmsCount
+      ..mRelationLevel = mRelationLevel ?? this.mRelationLevel
+      ..qPhoneStatus = qPhoneStatus ?? this.qPhoneStatus
+      ..rWaStatus = rWaStatus ?? this.rWaStatus
+      ..tWaWeight = tWaWeight ?? this.tWaWeight
+      ..aAAAAHLContactWeights = aAAAAHLContactWeights ??
+          this.aAAAAHLContactWeights;
+  }
+}
+
+CollectionLogOtherContactInfoAAAAAHLContactWeights $CollectionLogOtherContactInfoAAAAAHLContactWeightsFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherContactInfoAAAAAHLContactWeights collectionLogOtherContactInfoAAAAAHLContactWeights = CollectionLogOtherContactInfoAAAAAHLContactWeights();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.id = id;
+  }
+  final int? aContactId = jsonConvert.convert<int>(json['a_contact_id']);
+  if (aContactId != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.aContactId = aContactId;
+  }
+  final int? cCollectionAdminId = jsonConvert.convert<int>(
+      json['c_collection_admin_id']);
+  if (cCollectionAdminId != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.cCollectionAdminId =
+        cCollectionAdminId;
+  }
+  final int? dCallTimes = jsonConvert.convert<int>(json['d_call_times']);
+  if (dCallTimes != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.dCallTimes = dCallTimes;
+  }
+  final int? eLastCallTime = jsonConvert.convert<int>(json['e_last_call_time']);
+  if (eLastCallTime != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.eLastCallTime =
+        eLastCallTime;
+  }
+  final int? lSmsCount = jsonConvert.convert<int>(json['l_sms_count']);
+  if (lSmsCount != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.lSmsCount = lSmsCount;
+  }
+  final int? qPhoneStatus = jsonConvert.convert<int>(json['q_phone_status']);
+  if (qPhoneStatus != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.qPhoneStatus =
+        qPhoneStatus;
+  }
+  final int? rWaStatus = jsonConvert.convert<int>(json['r_wa_status']);
+  if (rWaStatus != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.rWaStatus = rWaStatus;
+  }
+  final int? sPhoneWeight = jsonConvert.convert<int>(json['s_phone_weight']);
+  if (sPhoneWeight != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.sPhoneWeight =
+        sPhoneWeight;
+  }
+  final int? tWaWeight = jsonConvert.convert<int>(json['t_wa_weight']);
+  if (tWaWeight != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.tWaWeight = tWaWeight;
+  }
+  final String? uSmsLastAt = jsonConvert.convert<String>(json['u_sms_last_at']);
+  if (uSmsLastAt != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.uSmsLastAt = uSmsLastAt;
+  }
+  final String? vWaLastAt = jsonConvert.convert<String>(json['v_wa_last_at']);
+  if (vWaLastAt != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.vWaLastAt = vWaLastAt;
+  }
+  final String? wWaCt = jsonConvert.convert<String>(json['w_wa_ct']);
+  if (wWaCt != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.wWaCt = wWaCt;
+  }
+  final String? xComment = jsonConvert.convert<String>(json['x_comment']);
+  if (xComment != null) {
+    collectionLogOtherContactInfoAAAAAHLContactWeights.xComment = xComment;
+  }
+  return collectionLogOtherContactInfoAAAAAHLContactWeights;
+}
+
+Map<String, dynamic> $CollectionLogOtherContactInfoAAAAAHLContactWeightsToJson(
+    CollectionLogOtherContactInfoAAAAAHLContactWeights entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['a_contact_id'] = entity.aContactId;
+  data['c_collection_admin_id'] = entity.cCollectionAdminId;
+  data['d_call_times'] = entity.dCallTimes;
+  data['e_last_call_time'] = entity.eLastCallTime;
+  data['l_sms_count'] = entity.lSmsCount;
+  data['q_phone_status'] = entity.qPhoneStatus;
+  data['r_wa_status'] = entity.rWaStatus;
+  data['s_phone_weight'] = entity.sPhoneWeight;
+  data['t_wa_weight'] = entity.tWaWeight;
+  data['u_sms_last_at'] = entity.uSmsLastAt;
+  data['v_wa_last_at'] = entity.vWaLastAt;
+  data['w_wa_ct'] = entity.wWaCt;
+  data['x_comment'] = entity.xComment;
+  return data;
+}
+
+extension CollectionLogOtherContactInfoAAAAAHLContactWeightsExtension on CollectionLogOtherContactInfoAAAAAHLContactWeights {
+  CollectionLogOtherContactInfoAAAAAHLContactWeights copyWith({
+    int? id,
+    int? aContactId,
+    int? cCollectionAdminId,
+    int? dCallTimes,
+    int? eLastCallTime,
+    int? lSmsCount,
+    int? qPhoneStatus,
+    int? rWaStatus,
+    int? sPhoneWeight,
+    int? tWaWeight,
+    String? uSmsLastAt,
+    String? vWaLastAt,
+    String? wWaCt,
+    String? xComment,
+  }) {
+    return CollectionLogOtherContactInfoAAAAAHLContactWeights()
+      ..id = id ?? this.id
+      ..aContactId = aContactId ?? this.aContactId
+      ..cCollectionAdminId = cCollectionAdminId ?? this.cCollectionAdminId
+      ..dCallTimes = dCallTimes ?? this.dCallTimes
+      ..eLastCallTime = eLastCallTime ?? this.eLastCallTime
+      ..lSmsCount = lSmsCount ?? this.lSmsCount
+      ..qPhoneStatus = qPhoneStatus ?? this.qPhoneStatus
+      ..rWaStatus = rWaStatus ?? this.rWaStatus
+      ..sPhoneWeight = sPhoneWeight ?? this.sPhoneWeight
+      ..tWaWeight = tWaWeight ?? this.tWaWeight
+      ..uSmsLastAt = uSmsLastAt ?? this.uSmsLastAt
+      ..vWaLastAt = vWaLastAt ?? this.vWaLastAt
+      ..wWaCt = wWaCt ?? this.wWaCt
+      ..xComment = xComment ?? this.xComment;
   }
 }
 
@@ -1088,6 +1302,16 @@ CollectionLogOtherContactInfo2Data $CollectionLogOtherContactInfo2DataFromJson(
     collectionLogOtherContactInfo2Data.aAAAAHLContactWeights =
         aAAAAHLContactWeights;
   }
+  final List<
+      CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>? aAAAAHKContactSmss = (json['a_a_a_a_a_h_k_contact_smss'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<
+          CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>(
+          e) as CollectionLogOtherContactInfo2DataAAAAAHKContactSmss).toList();
+  if (aAAAAHKContactSmss != null) {
+    collectionLogOtherContactInfo2Data.aAAAAHKContactSmss = aAAAAHKContactSmss;
+  }
   return collectionLogOtherContactInfo2Data;
 }
 
@@ -1105,6 +1329,8 @@ Map<String, dynamic> $CollectionLogOtherContactInfo2DataToJson(
   data['t_wa_weight'] = entity.tWaWeight;
   data['a_a_a_a_a_h_l_contact_weights'] =
       entity.aAAAAHLContactWeights?.toJson();
+  data['a_a_a_a_a_h_k_contact_smss'] =
+      entity.aAAAAHKContactSmss?.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -1120,6 +1346,8 @@ extension CollectionLogOtherContactInfo2DataExtension on CollectionLogOtherConta
     int? rWaStatus,
     int? tWaWeight,
     CollectionLogOtherContactInfo2DataAAAAAHLContactWeights? aAAAAHLContactWeights,
+    List<
+        CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>? aAAAAHKContactSmss,
   }) {
     return CollectionLogOtherContactInfo2Data()
       ..id = id ?? this.id
@@ -1132,7 +1360,8 @@ extension CollectionLogOtherContactInfo2DataExtension on CollectionLogOtherConta
       ..rWaStatus = rWaStatus ?? this.rWaStatus
       ..tWaWeight = tWaWeight ?? this.tWaWeight
       ..aAAAAHLContactWeights = aAAAAHLContactWeights ??
-          this.aAAAAHLContactWeights;
+          this.aAAAAHLContactWeights
+      ..aAAAAHKContactSmss = aAAAAHKContactSmss ?? this.aAAAAHKContactSmss;
   }
 }
 
@@ -1154,7 +1383,7 @@ CollectionLogOtherContactInfo2DataAAAAAHLContactWeights $CollectionLogOtherConta
     collectionLogOtherContactInfo2DataAAAAAHLContactWeights.cCollectionAdminId =
         cCollectionAdminId;
   }
-  final int? dCallTimes = jsonConvert.convert<int>(json['d_call_times']);
+  final String? dCallTimes = jsonConvert.convert<String>(json['d_call_times']);
   if (dCallTimes != null) {
     collectionLogOtherContactInfo2DataAAAAAHLContactWeights.dCallTimes =
         dCallTimes;
@@ -1237,7 +1466,7 @@ extension CollectionLogOtherContactInfo2DataAAAAAHLContactWeightsExtension on Co
     int? id,
     int? aContactId,
     int? cCollectionAdminId,
-    int? dCallTimes,
+    String? dCallTimes,
     String? eLastCallTime,
     int? lSmsCount,
     int? qPhoneStatus,
@@ -1264,6 +1493,184 @@ extension CollectionLogOtherContactInfo2DataAAAAAHLContactWeightsExtension on Co
       ..vWaLastAt = vWaLastAt ?? this.vWaLastAt
       ..wWaCt = wWaCt ?? this.wWaCt
       ..xComment = xComment ?? this.xComment;
+  }
+}
+
+CollectionLogOtherContactInfo2DataAAAAAHKContactSmss $CollectionLogOtherContactInfo2DataAAAAAHKContactSmssFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherContactInfo2DataAAAAAHKContactSmss collectionLogOtherContactInfo2DataAAAAAHKContactSmss = CollectionLogOtherContactInfo2DataAAAAAHKContactSmss();
+  final int? id = jsonConvert.convert<int>(json['id']);
+  if (id != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.id = id;
+  }
+  final int? aUserId = jsonConvert.convert<int>(json['a_user_id']);
+  if (aUserId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aUserId = aUserId;
+  }
+  final int? date = jsonConvert.convert<int>(json['date']);
+  if (date != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.date = date;
+  }
+  final int? dateSent = jsonConvert.convert<int>(json['date_sent']);
+  if (dateSent != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.dateSent = dateSent;
+  }
+  final int? threadId = jsonConvert.convert<int>(json['thread_id']);
+  if (threadId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.threadId = threadId;
+  }
+  final int? read = jsonConvert.convert<int>(json['read']);
+  if (read != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.read = read;
+  }
+  final int? seen = jsonConvert.convert<int>(json['seen']);
+  if (seen != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.seen = seen;
+  }
+  final int? status = jsonConvert.convert<int>(json['status']);
+  if (status != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.status = status;
+  }
+  final int? type = jsonConvert.convert<int>(json['type']);
+  if (type != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.type = type;
+  }
+  final String? address = jsonConvert.convert<String>(json['address']);
+  if (address != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.address = address;
+  }
+  final String? body = jsonConvert.convert<String>(json['body']);
+  if (body != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.body = body;
+  }
+  final int? uDeviceId = jsonConvert.convert<int>(json['u_device_id']);
+  if (uDeviceId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.uDeviceId = uDeviceId;
+  }
+  final int? vBlackUserId = jsonConvert.convert<int>(json['v_black_user_id']);
+  if (vBlackUserId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.vBlackUserId =
+        vBlackUserId;
+  }
+  final int? wWhiteUserId = jsonConvert.convert<int>(json['w_white_user_id']);
+  if (wWhiteUserId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.wWhiteUserId =
+        wWhiteUserId;
+  }
+  final int? xRegisteredUserId = jsonConvert.convert<int>(
+      json['x_registered_user_id']);
+  if (xRegisteredUserId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.xRegisteredUserId =
+        xRegisteredUserId;
+  }
+  final int? yOverdueUserId = jsonConvert.convert<int>(
+      json['y_overdue_user_id']);
+  if (yOverdueUserId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.yOverdueUserId =
+        yOverdueUserId;
+  }
+  final int? aAContactId = jsonConvert.convert<int>(json['a_a_contact_id']);
+  if (aAContactId != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aAContactId =
+        aAContactId;
+  }
+  final String? aBContactName = jsonConvert.convert<String>(
+      json['a_b_contact_name']);
+  if (aBContactName != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aBContactName =
+        aBContactName;
+  }
+  final int? aCCallCount = jsonConvert.convert<int>(json['a_c_call_count']);
+  if (aCCallCount != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aCCallCount =
+        aCCallCount;
+  }
+  final int? aDSmsCount = jsonConvert.convert<int>(json['a_d_sms_count']);
+  if (aDSmsCount != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aDSmsCount =
+        aDSmsCount;
+  }
+  final int? aEWaCount = jsonConvert.convert<int>(json['a_e_wa_count']);
+  if (aEWaCount != null) {
+    collectionLogOtherContactInfo2DataAAAAAHKContactSmss.aEWaCount = aEWaCount;
+  }
+  return collectionLogOtherContactInfo2DataAAAAAHKContactSmss;
+}
+
+Map<String,
+    dynamic> $CollectionLogOtherContactInfo2DataAAAAAHKContactSmssToJson(
+    CollectionLogOtherContactInfo2DataAAAAAHKContactSmss entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['id'] = entity.id;
+  data['a_user_id'] = entity.aUserId;
+  data['date'] = entity.date;
+  data['date_sent'] = entity.dateSent;
+  data['thread_id'] = entity.threadId;
+  data['read'] = entity.read;
+  data['seen'] = entity.seen;
+  data['status'] = entity.status;
+  data['type'] = entity.type;
+  data['address'] = entity.address;
+  data['body'] = entity.body;
+  data['u_device_id'] = entity.uDeviceId;
+  data['v_black_user_id'] = entity.vBlackUserId;
+  data['w_white_user_id'] = entity.wWhiteUserId;
+  data['x_registered_user_id'] = entity.xRegisteredUserId;
+  data['y_overdue_user_id'] = entity.yOverdueUserId;
+  data['a_a_contact_id'] = entity.aAContactId;
+  data['a_b_contact_name'] = entity.aBContactName;
+  data['a_c_call_count'] = entity.aCCallCount;
+  data['a_d_sms_count'] = entity.aDSmsCount;
+  data['a_e_wa_count'] = entity.aEWaCount;
+  return data;
+}
+
+extension CollectionLogOtherContactInfo2DataAAAAAHKContactSmssExtension on CollectionLogOtherContactInfo2DataAAAAAHKContactSmss {
+  CollectionLogOtherContactInfo2DataAAAAAHKContactSmss copyWith({
+    int? id,
+    int? aUserId,
+    int? date,
+    int? dateSent,
+    int? threadId,
+    int? read,
+    int? seen,
+    int? status,
+    int? type,
+    String? address,
+    String? body,
+    int? uDeviceId,
+    int? vBlackUserId,
+    int? wWhiteUserId,
+    int? xRegisteredUserId,
+    int? yOverdueUserId,
+    int? aAContactId,
+    String? aBContactName,
+    int? aCCallCount,
+    int? aDSmsCount,
+    int? aEWaCount,
+  }) {
+    return CollectionLogOtherContactInfo2DataAAAAAHKContactSmss()
+      ..id = id ?? this.id
+      ..aUserId = aUserId ?? this.aUserId
+      ..date = date ?? this.date
+      ..dateSent = dateSent ?? this.dateSent
+      ..threadId = threadId ?? this.threadId
+      ..read = read ?? this.read
+      ..seen = seen ?? this.seen
+      ..status = status ?? this.status
+      ..type = type ?? this.type
+      ..address = address ?? this.address
+      ..body = body ?? this.body
+      ..uDeviceId = uDeviceId ?? this.uDeviceId
+      ..vBlackUserId = vBlackUserId ?? this.vBlackUserId
+      ..wWhiteUserId = wWhiteUserId ?? this.wWhiteUserId
+      ..xRegisteredUserId = xRegisteredUserId ?? this.xRegisteredUserId
+      ..yOverdueUserId = yOverdueUserId ?? this.yOverdueUserId
+      ..aAContactId = aAContactId ?? this.aAContactId
+      ..aBContactName = aBContactName ?? this.aBContactName
+      ..aCCallCount = aCCallCount ?? this.aCCallCount
+      ..aDSmsCount = aDSmsCount ?? this.aDSmsCount
+      ..aEWaCount = aEWaCount ?? this.aEWaCount;
   }
 }
 
@@ -1561,6 +1968,23 @@ CollectionLogOtherOther $CollectionLogOtherOtherFromJson(
   if (monthAdditionData != null) {
     collectionLogOtherOther.monthAdditionData = monthAdditionData;
   }
+  final List<
+      CollectionLogOtherOtherAdditionBonus>? additionBonus = (json['additionBonus'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherOtherAdditionBonus>(
+          e) as CollectionLogOtherOtherAdditionBonus).toList();
+  if (additionBonus != null) {
+    collectionLogOtherOther.additionBonus = additionBonus;
+  }
+  final List<CollectionLogOtherOtherFines>? fines = (json['fines'] as List<
+      dynamic>?)?.map(
+          (e) =>
+      jsonConvert.convert<CollectionLogOtherOtherFines>(
+          e) as CollectionLogOtherOtherFines).toList();
+  if (fines != null) {
+    collectionLogOtherOther.fines = fines;
+  }
   return collectionLogOtherOther;
 }
 
@@ -1570,6 +1994,8 @@ Map<String, dynamic> $CollectionLogOtherOtherToJson(
   data['progress'] = entity.progress?.toJson();
   data['profile'] = entity.profile?.toJson();
   data['monthAdditionData'] = entity.monthAdditionData;
+  data['additionBonus'] = entity.additionBonus?.map((v) => v.toJson()).toList();
+  data['fines'] = entity.fines?.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -1578,11 +2004,15 @@ extension CollectionLogOtherOtherExtension on CollectionLogOtherOther {
     CollectionLogOtherOtherProgress? progress,
     CollectionLogOtherOtherProfile? profile,
     List<dynamic>? monthAdditionData,
+    List<CollectionLogOtherOtherAdditionBonus>? additionBonus,
+    List<CollectionLogOtherOtherFines>? fines,
   }) {
     return CollectionLogOtherOther()
       ..progress = progress ?? this.progress
       ..profile = profile ?? this.profile
-      ..monthAdditionData = monthAdditionData ?? this.monthAdditionData;
+      ..monthAdditionData = monthAdditionData ?? this.monthAdditionData
+      ..additionBonus = additionBonus ?? this.additionBonus
+      ..fines = fines ?? this.fines;
   }
 }
 
@@ -1631,7 +2061,8 @@ CollectionLogOtherOtherProgress $CollectionLogOtherOtherProgressFromJson(
   if (more != null) {
     collectionLogOtherOtherProgress.more = more;
   }
-  final int? currentPoint = jsonConvert.convert<int>(json['currentPoint']);
+  final double? currentPoint = jsonConvert.convert<double>(
+      json['currentPoint']);
   if (currentPoint != null) {
     collectionLogOtherOtherProgress.currentPoint = currentPoint;
   }
@@ -1671,7 +2102,7 @@ extension CollectionLogOtherOtherProgressExtension on CollectionLogOtherOtherPro
     String? nextGrade,
     String? nextRate,
     int? more,
-    int? currentPoint,
+    double? currentPoint,
     int? nextAdditionBonus,
   }) {
     return CollectionLogOtherOtherProgress()
@@ -1808,12 +2239,11 @@ CollectionLogOtherOtherProfile $CollectionLogOtherOtherProfileFromJson(
   if (xTodayInitCount != null) {
     collectionLogOtherOtherProfile.xTodayInitCount = xTodayInitCount;
   }
-  final String? yFirstLogAt = jsonConvert.convert<String>(
-      json['y_first_log_at']);
+  final dynamic yFirstLogAt = json['y_first_log_at'];
   if (yFirstLogAt != null) {
     collectionLogOtherOtherProfile.yFirstLogAt = yFirstLogAt;
   }
-  final String? zLastLogAt = jsonConvert.convert<String>(json['z_last_log_at']);
+  final dynamic zLastLogAt = json['z_last_log_at'];
   if (zLastLogAt != null) {
     collectionLogOtherOtherProfile.zLastLogAt = zLastLogAt;
   }
@@ -1977,9 +2407,73 @@ CollectionLogOtherOtherProfile $CollectionLogOtherOtherProfileFromJson(
   if (cETodayDeleteCount != null) {
     collectionLogOtherOtherProfile.cETodayDeleteCount = cETodayDeleteCount;
   }
+  final int? cFWeekRegCnt = jsonConvert.convert<int>(json['c_f_week_reg_cnt']);
+  if (cFWeekRegCnt != null) {
+    collectionLogOtherOtherProfile.cFWeekRegCnt = cFWeekRegCnt;
+  }
+  final int? cGWeekApplyCnt = jsonConvert.convert<int>(
+      json['c_g_week_apply_cnt']);
+  if (cGWeekApplyCnt != null) {
+    collectionLogOtherOtherProfile.cGWeekApplyCnt = cGWeekApplyCnt;
+  }
+  final int? cHWeekWaiveLeftCnt = jsonConvert.convert<int>(
+      json['c_h_week_waive_left_cnt']);
+  if (cHWeekWaiveLeftCnt != null) {
+    collectionLogOtherOtherProfile.cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt;
+  }
+  final int? cIWeekBlockLeftCnt = jsonConvert.convert<int>(
+      json['c_i_week_block_left_cnt']);
+  if (cIWeekBlockLeftCnt != null) {
+    collectionLogOtherOtherProfile.cIWeekBlockLeftCnt = cIWeekBlockLeftCnt;
+  }
   final String? updatedAt = jsonConvert.convert<String>(json['updated_at']);
   if (updatedAt != null) {
     collectionLogOtherOtherProfile.updatedAt = updatedAt;
+  }
+  final int? cJWeekWaLeftCnt = jsonConvert.convert<int>(
+      json['c_j_week_wa_left_cnt']);
+  if (cJWeekWaLeftCnt != null) {
+    collectionLogOtherOtherProfile.cJWeekWaLeftCnt = cJWeekWaLeftCnt;
+  }
+  final int? cKDayWaLeftCnt = jsonConvert.convert<int>(
+      json['c_k_day_wa_left_cnt']);
+  if (cKDayWaLeftCnt != null) {
+    collectionLogOtherOtherProfile.cKDayWaLeftCnt = cKDayWaLeftCnt;
+  }
+  final int? cLWeekCouponLeftCnt = jsonConvert.convert<int>(
+      json['c_l_week_coupon_left_cnt']);
+  if (cLWeekCouponLeftCnt != null) {
+    collectionLogOtherOtherProfile.cLWeekCouponLeftCnt = cLWeekCouponLeftCnt;
+  }
+  final int? cMWeekExtendLeftCnt = jsonConvert.convert<int>(
+      json['c_m_week_extend_left_cnt']);
+  if (cMWeekExtendLeftCnt != null) {
+    collectionLogOtherOtherProfile.cMWeekExtendLeftCnt = cMWeekExtendLeftCnt;
+  }
+  final int? cNWeekExtendCnt = jsonConvert.convert<int>(
+      json['c_n_week_extend_cnt']);
+  if (cNWeekExtendCnt != null) {
+    collectionLogOtherOtherProfile.cNWeekExtendCnt = cNWeekExtendCnt;
+  }
+  final int? cOMonthExtendCnt = jsonConvert.convert<int>(
+      json['c_o_month_extend_cnt']);
+  if (cOMonthExtendCnt != null) {
+    collectionLogOtherOtherProfile.cOMonthExtendCnt = cOMonthExtendCnt;
+  }
+  final int? cPWeekRetainLeftCnt = jsonConvert.convert<int>(
+      json['c_p_week_retain_left_cnt']);
+  if (cPWeekRetainLeftCnt != null) {
+    collectionLogOtherOtherProfile.cPWeekRetainLeftCnt = cPWeekRetainLeftCnt;
+  }
+  final int? cQWeekReceiveLeftCnt = jsonConvert.convert<int>(
+      json['c_q_week_receive_left_cnt']);
+  if (cQWeekReceiveLeftCnt != null) {
+    collectionLogOtherOtherProfile.cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt;
+  }
+  final int? cRTodayMarketingCnt = jsonConvert.convert<int>(
+      json['c_r_today_marketing_cnt']);
+  if (cRTodayMarketingCnt != null) {
+    collectionLogOtherOtherProfile.cRTodayMarketingCnt = cRTodayMarketingCnt;
   }
   return collectionLogOtherOtherProfile;
 }
@@ -2046,7 +2540,20 @@ Map<String, dynamic> $CollectionLogOtherOtherProfileToJson(
   data['c_c_reviewing_count'] = entity.cCReviewingCount;
   data['c_d_today_addition_count'] = entity.cDTodayAdditionCount;
   data['c_e_today_delete_count'] = entity.cETodayDeleteCount;
+  data['c_f_week_reg_cnt'] = entity.cFWeekRegCnt;
+  data['c_g_week_apply_cnt'] = entity.cGWeekApplyCnt;
+  data['c_h_week_waive_left_cnt'] = entity.cHWeekWaiveLeftCnt;
+  data['c_i_week_block_left_cnt'] = entity.cIWeekBlockLeftCnt;
   data['updated_at'] = entity.updatedAt;
+  data['c_j_week_wa_left_cnt'] = entity.cJWeekWaLeftCnt;
+  data['c_k_day_wa_left_cnt'] = entity.cKDayWaLeftCnt;
+  data['c_l_week_coupon_left_cnt'] = entity.cLWeekCouponLeftCnt;
+  data['c_m_week_extend_left_cnt'] = entity.cMWeekExtendLeftCnt;
+  data['c_n_week_extend_cnt'] = entity.cNWeekExtendCnt;
+  data['c_o_month_extend_cnt'] = entity.cOMonthExtendCnt;
+  data['c_p_week_retain_left_cnt'] = entity.cPWeekRetainLeftCnt;
+  data['c_q_week_receive_left_cnt'] = entity.cQWeekReceiveLeftCnt;
+  data['c_r_today_marketing_cnt'] = entity.cRTodayMarketingCnt;
   return data;
 }
 
@@ -2075,8 +2582,8 @@ extension CollectionLogOtherOtherProfileExtension on CollectionLogOtherOtherProf
     int? vTodayLv3Commission,
     int? wTodayLv4Commission,
     int? xTodayInitCount,
-    String? yFirstLogAt,
-    String? zLastLogAt,
+    dynamic yFirstLogAt,
+    dynamic zLastLogAt,
     int? aAWeekLv1Commission,
     int? aBWeekLv2Commission,
     int? aCWeekLv3Commission,
@@ -2109,7 +2616,20 @@ extension CollectionLogOtherOtherProfileExtension on CollectionLogOtherOtherProf
     dynamic cCReviewingCount,
     int? cDTodayAdditionCount,
     int? cETodayDeleteCount,
+    int? cFWeekRegCnt,
+    int? cGWeekApplyCnt,
+    int? cHWeekWaiveLeftCnt,
+    int? cIWeekBlockLeftCnt,
     String? updatedAt,
+    int? cJWeekWaLeftCnt,
+    int? cKDayWaLeftCnt,
+    int? cLWeekCouponLeftCnt,
+    int? cMWeekExtendLeftCnt,
+    int? cNWeekExtendCnt,
+    int? cOMonthExtendCnt,
+    int? cPWeekRetainLeftCnt,
+    int? cQWeekReceiveLeftCnt,
+    int? cRTodayMarketingCnt,
   }) {
     return CollectionLogOtherOtherProfile()
       ..id = id ?? this.id
@@ -2178,6 +2698,88 @@ extension CollectionLogOtherOtherProfileExtension on CollectionLogOtherOtherProf
       ..cCReviewingCount = cCReviewingCount ?? this.cCReviewingCount
       ..cDTodayAdditionCount = cDTodayAdditionCount ?? this.cDTodayAdditionCount
       ..cETodayDeleteCount = cETodayDeleteCount ?? this.cETodayDeleteCount
-      ..updatedAt = updatedAt ?? this.updatedAt;
+      ..cFWeekRegCnt = cFWeekRegCnt ?? this.cFWeekRegCnt
+      ..cGWeekApplyCnt = cGWeekApplyCnt ?? this.cGWeekApplyCnt
+      ..cHWeekWaiveLeftCnt = cHWeekWaiveLeftCnt ?? this.cHWeekWaiveLeftCnt
+      ..cIWeekBlockLeftCnt = cIWeekBlockLeftCnt ?? this.cIWeekBlockLeftCnt
+      ..updatedAt = updatedAt ?? this.updatedAt
+      ..cJWeekWaLeftCnt = cJWeekWaLeftCnt ?? this.cJWeekWaLeftCnt
+      ..cKDayWaLeftCnt = cKDayWaLeftCnt ?? this.cKDayWaLeftCnt
+      ..cLWeekCouponLeftCnt = cLWeekCouponLeftCnt ?? this.cLWeekCouponLeftCnt
+      ..cMWeekExtendLeftCnt = cMWeekExtendLeftCnt ?? this.cMWeekExtendLeftCnt
+      ..cNWeekExtendCnt = cNWeekExtendCnt ?? this.cNWeekExtendCnt
+      ..cOMonthExtendCnt = cOMonthExtendCnt ?? this.cOMonthExtendCnt
+      ..cPWeekRetainLeftCnt = cPWeekRetainLeftCnt ?? this.cPWeekRetainLeftCnt
+      ..cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt ?? this.cQWeekReceiveLeftCnt
+      ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt;
+  }
+}
+
+CollectionLogOtherOtherAdditionBonus $CollectionLogOtherOtherAdditionBonusFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherOtherAdditionBonus collectionLogOtherOtherAdditionBonus = CollectionLogOtherOtherAdditionBonus();
+  final List<int>? overdueDays = (json['overdue_days'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (overdueDays != null) {
+    collectionLogOtherOtherAdditionBonus.overdueDays = overdueDays;
+  }
+  final int? rate = jsonConvert.convert<int>(json['rate']);
+  if (rate != null) {
+    collectionLogOtherOtherAdditionBonus.rate = rate;
+  }
+  return collectionLogOtherOtherAdditionBonus;
+}
+
+Map<String, dynamic> $CollectionLogOtherOtherAdditionBonusToJson(
+    CollectionLogOtherOtherAdditionBonus entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['overdue_days'] = entity.overdueDays;
+  data['rate'] = entity.rate;
+  return data;
+}
+
+extension CollectionLogOtherOtherAdditionBonusExtension on CollectionLogOtherOtherAdditionBonus {
+  CollectionLogOtherOtherAdditionBonus copyWith({
+    List<int>? overdueDays,
+    int? rate,
+  }) {
+    return CollectionLogOtherOtherAdditionBonus()
+      ..overdueDays = overdueDays ?? this.overdueDays
+      ..rate = rate ?? this.rate;
+  }
+}
+
+CollectionLogOtherOtherFines $CollectionLogOtherOtherFinesFromJson(
+    Map<String, dynamic> json) {
+  final CollectionLogOtherOtherFines collectionLogOtherOtherFines = CollectionLogOtherOtherFines();
+  final List<int>? borrowCount = (json['borrow_count'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (borrowCount != null) {
+    collectionLogOtherOtherFines.borrowCount = borrowCount;
+  }
+  final List<int>? fines = (json['fines'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (fines != null) {
+    collectionLogOtherOtherFines.fines = fines;
+  }
+  return collectionLogOtherOtherFines;
+}
+
+Map<String, dynamic> $CollectionLogOtherOtherFinesToJson(
+    CollectionLogOtherOtherFines entity) {
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['borrow_count'] = entity.borrowCount;
+  data['fines'] = entity.fines;
+  return data;
+}
+
+extension CollectionLogOtherOtherFinesExtension on CollectionLogOtherOtherFines {
+  CollectionLogOtherOtherFines copyWith({
+    List<int>? borrowCount,
+    List<int>? fines,
+  }) {
+    return CollectionLogOtherOtherFines()
+      ..borrowCount = borrowCount ?? this.borrowCount
+      ..fines = fines ?? this.fines;
   }
 }

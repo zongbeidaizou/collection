@@ -1,9 +1,6 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 import 'dart:convert';
-
-// import 'collection_order_entity.dart';
-import 'package:bounty_hunter/models/collection_order_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 
 @JsonSerializable()
@@ -88,7 +85,7 @@ class CollectionLogOther {
 	@JSONField(name: 'repay_info')
 	CollectionLogOtherRepayInfo? repayInfo;
 	@JSONField(name: 'contact_info')
-  List<CollectionLogOtherContactInfo2Data>? contactInfo = [];
+	List<CollectionLogOtherContactInfo>? contactInfo = [];
 	@JSONField(name: 'contact_info2')
 	CollectionLogOtherContactInfo2? contactInfo2;
 	@JSONField(name: 'sms_history')
@@ -99,7 +96,7 @@ class CollectionLogOther {
 	String? hJSmsTemplateNewestUpdatedAt = '';
 	@JSONField(name: 'h_j_sms_template')
 	List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate = [];
-  CollectionOrderOther? other;
+	CollectionLogOtherOther? other;
 	@JSONField(name: 'last_contact_fetch_time')
 	String? lastContactFetchTime = '';
 
@@ -255,10 +252,10 @@ class CollectionLogOtherRepayInfo {
 	String? changeCreditFraction = '';
 	String? var1 = '';
 	String? var2 = '';
-	String? var3 = '';
-	String? var4 = '';
-	String? var5 = '';
-	String? var6 = '';
+	int? var3 = 0;
+	int? var4 = 0;
+	int? var5 = 0;
+	int? var6 = 0;
 	String? var7 = '';
 	String? var8 = '';
 	String? var9 = '';
@@ -269,6 +266,82 @@ class CollectionLogOtherRepayInfo {
 	factory CollectionLogOtherRepayInfo.fromJson(Map<String, dynamic> json) => $CollectionLogOtherRepayInfoFromJson(json);
 
 	Map<String, dynamic> toJson() => $CollectionLogOtherRepayInfoToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class CollectionLogOtherContactInfo {
+	int? id = 0;
+	@JSONField(name: 'c_relation')
+	String? cRelation = '';
+	@JSONField(name: 'f_name')
+	String? fName = '';
+	@JSONField(name: 'g_phone')
+	String? gPhone = '';
+	@JSONField(name: 'l_sms_count')
+	int? lSmsCount = 0;
+	@JSONField(name: 'm_relation_level')
+	int? mRelationLevel = 0;
+	@JSONField(name: 'q_phone_status')
+	int? qPhoneStatus = 0;
+	@JSONField(name: 'r_wa_status')
+	int? rWaStatus = 0;
+	@JSONField(name: 't_wa_weight')
+	int? tWaWeight = 0;
+	@JSONField(name: 'a_a_a_a_a_h_l_contact_weights')
+	CollectionLogOtherContactInfoAAAAAHLContactWeights? aAAAAHLContactWeights;
+
+	CollectionLogOtherContactInfo();
+
+	factory CollectionLogOtherContactInfo.fromJson(Map<String, dynamic> json) => $CollectionLogOtherContactInfoFromJson(json);
+
+	Map<String, dynamic> toJson() => $CollectionLogOtherContactInfoToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class CollectionLogOtherContactInfoAAAAAHLContactWeights {
+	int? id = 0;
+	@JSONField(name: 'a_contact_id')
+	int? aContactId = 0;
+	@JSONField(name: 'c_collection_admin_id')
+	int? cCollectionAdminId = 0;
+	@JSONField(name: 'd_call_times')
+	int? dCallTimes = 0;
+	@JSONField(name: 'e_last_call_time')
+	int? eLastCallTime = 0;
+	@JSONField(name: 'l_sms_count')
+	int? lSmsCount = 0;
+	@JSONField(name: 'q_phone_status')
+	int? qPhoneStatus = 0;
+	@JSONField(name: 'r_wa_status')
+	int? rWaStatus = 0;
+	@JSONField(name: 's_phone_weight')
+	int? sPhoneWeight = 0;
+	@JSONField(name: 't_wa_weight')
+	int? tWaWeight = 0;
+	@JSONField(name: 'u_sms_last_at')
+	String? uSmsLastAt = '';
+	@JSONField(name: 'v_wa_last_at')
+	String? vWaLastAt = '';
+	@JSONField(name: 'w_wa_ct')
+	String? wWaCt = '';
+	@JSONField(name: 'x_comment')
+	String? xComment = '';
+
+	CollectionLogOtherContactInfoAAAAAHLContactWeights();
+
+	factory CollectionLogOtherContactInfoAAAAAHLContactWeights.fromJson(Map<String, dynamic> json) => $CollectionLogOtherContactInfoAAAAAHLContactWeightsFromJson(json);
+
+	Map<String, dynamic> toJson() => $CollectionLogOtherContactInfoAAAAAHLContactWeightsToJson(this);
 
 	@override
 	String toString() {
@@ -332,6 +405,8 @@ class CollectionLogOtherContactInfo2Data {
 	int? tWaWeight = 0;
 	@JSONField(name: 'a_a_a_a_a_h_l_contact_weights')
 	CollectionLogOtherContactInfo2DataAAAAAHLContactWeights? aAAAAHLContactWeights;
+	@JSONField(name: 'a_a_a_a_a_h_k_contact_smss')
+	List<CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>? aAAAAHKContactSmss = [];
 
 	CollectionLogOtherContactInfo2Data();
 
@@ -353,7 +428,7 @@ class CollectionLogOtherContactInfo2DataAAAAAHLContactWeights {
 	@JSONField(name: 'c_collection_admin_id')
 	int? cCollectionAdminId = 0;
 	@JSONField(name: 'd_call_times')
-	int? dCallTimes = 0;
+	String? dCallTimes = '';
 	@JSONField(name: 'e_last_call_time')
 	String? eLastCallTime = '';
 	@JSONField(name: 'l_sms_count')
@@ -380,6 +455,55 @@ class CollectionLogOtherContactInfo2DataAAAAAHLContactWeights {
 	factory CollectionLogOtherContactInfo2DataAAAAAHLContactWeights.fromJson(Map<String, dynamic> json) => $CollectionLogOtherContactInfo2DataAAAAAHLContactWeightsFromJson(json);
 
 	Map<String, dynamic> toJson() => $CollectionLogOtherContactInfo2DataAAAAAHLContactWeightsToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class CollectionLogOtherContactInfo2DataAAAAAHKContactSmss {
+	int? id = 0;
+	@JSONField(name: 'a_user_id')
+	int? aUserId = 0;
+	int? date = 0;
+	@JSONField(name: 'date_sent')
+	int? dateSent = 0;
+	@JSONField(name: 'thread_id')
+	int? threadId = 0;
+	int? read = 0;
+	int? seen = 0;
+	int? status = 0;
+	int? type = 0;
+	String? address = '';
+	String? body = '';
+	@JSONField(name: 'u_device_id')
+	int? uDeviceId = 0;
+	@JSONField(name: 'v_black_user_id')
+	int? vBlackUserId = 0;
+	@JSONField(name: 'w_white_user_id')
+	int? wWhiteUserId = 0;
+	@JSONField(name: 'x_registered_user_id')
+	int? xRegisteredUserId = 0;
+	@JSONField(name: 'y_overdue_user_id')
+	int? yOverdueUserId = 0;
+	@JSONField(name: 'a_a_contact_id')
+	int? aAContactId = 0;
+	@JSONField(name: 'a_b_contact_name')
+	String? aBContactName = '';
+	@JSONField(name: 'a_c_call_count')
+	int? aCCallCount = 0;
+	@JSONField(name: 'a_d_sms_count')
+	int? aDSmsCount = 0;
+	@JSONField(name: 'a_e_wa_count')
+	int? aEWaCount = 0;
+
+	CollectionLogOtherContactInfo2DataAAAAAHKContactSmss();
+
+	factory CollectionLogOtherContactInfo2DataAAAAAHKContactSmss.fromJson(Map<String, dynamic> json) => $CollectionLogOtherContactInfo2DataAAAAAHKContactSmssFromJson(json);
+
+	Map<String, dynamic> toJson() => $CollectionLogOtherContactInfo2DataAAAAAHKContactSmssToJson(this);
 
 	@override
 	String toString() {
@@ -503,6 +627,8 @@ class CollectionLogOtherOther {
 	CollectionLogOtherOtherProgress? progress;
 	CollectionLogOtherOtherProfile? profile;
 	List<dynamic>? monthAdditionData = [];
+	List<CollectionLogOtherOtherAdditionBonus>? additionBonus = [];
+	List<CollectionLogOtherOtherFines>? fines = [];
 
 	CollectionLogOtherOther();
 
@@ -527,7 +653,7 @@ class CollectionLogOtherOtherProgress {
 	String? nextGrade = '';
 	String? nextRate = '';
 	int? more = 0;
-	int? currentPoint = 0;
+	double? currentPoint;
 	int? nextAdditionBonus = 0;
 
 	CollectionLogOtherOtherProgress();
@@ -590,9 +716,9 @@ class CollectionLogOtherOtherProfile {
 	@JSONField(name: 'x_today_init_count')
 	int? xTodayInitCount = 0;
 	@JSONField(name: 'y_first_log_at')
-	String? yFirstLogAt = '';
+	dynamic yFirstLogAt;
 	@JSONField(name: 'z_last_log_at')
-	String? zLastLogAt = '';
+	dynamic zLastLogAt;
 	@JSONField(name: 'a_a_week_lv1_commission')
 	int? aAWeekLv1Commission = 0;
 	@JSONField(name: 'a_b_week_lv2_commission')
@@ -657,14 +783,76 @@ class CollectionLogOtherOtherProfile {
 	int? cDTodayAdditionCount = 0;
 	@JSONField(name: 'c_e_today_delete_count')
 	int? cETodayDeleteCount = 0;
+	@JSONField(name: 'c_f_week_reg_cnt')
+	int? cFWeekRegCnt = 0;
+	@JSONField(name: 'c_g_week_apply_cnt')
+	int? cGWeekApplyCnt = 0;
+	@JSONField(name: 'c_h_week_waive_left_cnt')
+	int? cHWeekWaiveLeftCnt = 0;
+	@JSONField(name: 'c_i_week_block_left_cnt')
+	int? cIWeekBlockLeftCnt = 0;
 	@JSONField(name: 'updated_at')
 	String? updatedAt = '';
+	@JSONField(name: 'c_j_week_wa_left_cnt')
+	int? cJWeekWaLeftCnt = 0;
+	@JSONField(name: 'c_k_day_wa_left_cnt')
+	int? cKDayWaLeftCnt = 0;
+	@JSONField(name: 'c_l_week_coupon_left_cnt')
+	int? cLWeekCouponLeftCnt = 0;
+	@JSONField(name: 'c_m_week_extend_left_cnt')
+	int? cMWeekExtendLeftCnt = 0;
+	@JSONField(name: 'c_n_week_extend_cnt')
+	int? cNWeekExtendCnt = 0;
+	@JSONField(name: 'c_o_month_extend_cnt')
+	int? cOMonthExtendCnt = 0;
+	@JSONField(name: 'c_p_week_retain_left_cnt')
+	int? cPWeekRetainLeftCnt = 0;
+	@JSONField(name: 'c_q_week_receive_left_cnt')
+	int? cQWeekReceiveLeftCnt = 0;
+	@JSONField(name: 'c_r_today_marketing_cnt')
+	int? cRTodayMarketingCnt = 0;
 
 	CollectionLogOtherOtherProfile();
 
 	factory CollectionLogOtherOtherProfile.fromJson(Map<String, dynamic> json) => $CollectionLogOtherOtherProfileFromJson(json);
 
 	Map<String, dynamic> toJson() => $CollectionLogOtherOtherProfileToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class CollectionLogOtherOtherAdditionBonus {
+	@JSONField(name: 'overdue_days')
+	List<int>? overdueDays = [];
+	int? rate = 0;
+
+	CollectionLogOtherOtherAdditionBonus();
+
+	factory CollectionLogOtherOtherAdditionBonus.fromJson(Map<String, dynamic> json) => $CollectionLogOtherOtherAdditionBonusFromJson(json);
+
+	Map<String, dynamic> toJson() => $CollectionLogOtherOtherAdditionBonusToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class CollectionLogOtherOtherFines {
+	@JSONField(name: 'borrow_count')
+	List<int>? borrowCount = [];
+	List<int>? fines = [];
+
+	CollectionLogOtherOtherFines();
+
+	factory CollectionLogOtherOtherFines.fromJson(Map<String, dynamic> json) => $CollectionLogOtherOtherFinesFromJson(json);
+
+	Map<String, dynamic> toJson() => $CollectionLogOtherOtherFinesToJson(this);
 
 	@override
 	String toString() {

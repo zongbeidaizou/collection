@@ -494,7 +494,7 @@ class _OrderItemState extends State<OrderItem> {
               Gaps.empty,
             if (!widget.inList &&
                 widget.repayInfo != null &&
-                int.parse(widget.repayInfo!.var5!) > 0)
+                widget.repayInfo!.var5!.toInt() > 0)
               InkWell(
                 onTap: () {
                     showToast('This customer has ${widget.repayInfo!.var5!} lottery draw chances.');
@@ -508,7 +508,7 @@ class _OrderItemState extends State<OrderItem> {
                       size: 14,
                     ),
                     Text(
-                      "${int.parse(widget.repayInfo!.var5!)}",
+                      "${widget.repayInfo!.var5!.toInt()}",
                       style: TextStyle(color: Colors.orange, fontSize: 14),
                     ),
                     Gaps.hGap12,
@@ -519,7 +519,7 @@ class _OrderItemState extends State<OrderItem> {
               Gaps.empty,
             if (!widget.inList &&
                 widget.repayInfo != null &&
-                int.parse(widget.repayInfo!.var6!) > 0)
+                widget.repayInfo!.var6!.toInt() > 0)
               InkWell(
                 onTap: () {
                   if (widget.couponList.isEmpty) {
@@ -564,7 +564,7 @@ class _OrderItemState extends State<OrderItem> {
                       size: 14,
                     ),
                     Text(
-                      "${int.parse(widget.repayInfo!.var6!)}",
+                      "${widget.repayInfo!.var6!.toInt()}",
                       style: TextStyle(color: Colors.green, fontSize: 14),
                     ),
                     Gaps.hGap12,
@@ -573,7 +573,7 @@ class _OrderItemState extends State<OrderItem> {
               )
             else
               Gaps.empty,
-            if (!widget.inList && widget.repayInfo != null && int.parse(widget.repayInfo!.var3!) > 0)
+            if (!widget.inList && widget.repayInfo != null && widget.repayInfo!.var3!.toInt() > 0)
               InkWell(
                 onTap: () {
                     showToast('This customer has ${widget.repayInfo!.var3!} opportunities to extend..');
@@ -587,7 +587,7 @@ class _OrderItemState extends State<OrderItem> {
                       size: 14,
                     ),
                     Text(
-                      "${int.parse(widget.repayInfo!.var3!)}",
+                      "${widget.repayInfo!.var3!.toInt()}",
                       style: TextStyle(color: Color.fromARGB(255, 128, 188, 225), fontSize: 14),
                     ),
                     Gaps.hGap12,

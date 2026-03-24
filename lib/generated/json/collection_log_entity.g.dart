@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 CollectionLogEntity $CollectionLogEntityFromJson(Map<String, dynamic> json) {
   final CollectionLogEntity collectionLogEntity = CollectionLogEntity();
@@ -253,11 +255,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
     collectionLogOther.repayInfo = repayInfo;
   }
   final List<
-      CollectionLogOtherContactInfo>? contactInfo = (json['contact_info'] as List<
+      CollectionLogOtherContactInfo2Data>? contactInfo = (json['contact_info'] as List<
       dynamic>?)?.map(
           (e) =>
-      jsonConvert.convert<CollectionLogOtherContactInfo>(
-          e) as CollectionLogOtherContactInfo).toList();
+      jsonConvert.convert<CollectionLogOtherContactInfo2Data>(
+          e) as CollectionLogOtherContactInfo2Data).toList();
   if (contactInfo != null) {
     collectionLogOther.contactInfo = contactInfo;
   }
@@ -299,8 +301,8 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (hJSmsTemplate != null) {
     collectionLogOther.hJSmsTemplate = hJSmsTemplate;
   }
-  final CollectionLogOtherOther? other = jsonConvert.convert<
-      CollectionLogOtherOther>(json['other']);
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     collectionLogOther.other = other;
   }
@@ -339,13 +341,13 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     CollectionLogOtherTrack? track,
     CollectionLogOtherPeriod? period,
     CollectionLogOtherRepayInfo? repayInfo,
-    List<CollectionLogOtherContactInfo>? contactInfo,
+    List<CollectionLogOtherContactInfo2Data>? contactInfo,
     CollectionLogOtherContactInfo2? contactInfo2,
     List<CollectionLogOtherSmsHistory>? smsHistory,
     List<CollectionLogOtherCouponList>? couponList,
     String? hJSmsTemplateNewestUpdatedAt,
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
-    CollectionLogOtherOther? other,
+    CollectionOrderOther? other,
     String? lastContactFetchTime,
   }) {
     return CollectionLogOther()
@@ -1383,7 +1385,7 @@ CollectionLogOtherContactInfo2DataAAAAAHLContactWeights $CollectionLogOtherConta
     collectionLogOtherContactInfo2DataAAAAAHLContactWeights.cCollectionAdminId =
         cCollectionAdminId;
   }
-  final String? dCallTimes = jsonConvert.convert<String>(json['d_call_times']);
+  final int? dCallTimes = jsonConvert.convert<int>(json['d_call_times']);
   if (dCallTimes != null) {
     collectionLogOtherContactInfo2DataAAAAAHLContactWeights.dCallTimes =
         dCallTimes;
@@ -1466,7 +1468,7 @@ extension CollectionLogOtherContactInfo2DataAAAAAHLContactWeightsExtension on Co
     int? id,
     int? aContactId,
     int? cCollectionAdminId,
-    String? dCallTimes,
+    int? dCallTimes,
     String? eLastCallTime,
     int? lSmsCount,
     int? qPhoneStatus,
@@ -2239,11 +2241,12 @@ CollectionLogOtherOtherProfile $CollectionLogOtherOtherProfileFromJson(
   if (xTodayInitCount != null) {
     collectionLogOtherOtherProfile.xTodayInitCount = xTodayInitCount;
   }
-  final dynamic yFirstLogAt = json['y_first_log_at'];
+  final String? yFirstLogAt = jsonConvert.convert<String>(
+      json['y_first_log_at']);
   if (yFirstLogAt != null) {
     collectionLogOtherOtherProfile.yFirstLogAt = yFirstLogAt;
   }
-  final dynamic zLastLogAt = json['z_last_log_at'];
+  final String? zLastLogAt = jsonConvert.convert<String>(json['z_last_log_at']);
   if (zLastLogAt != null) {
     collectionLogOtherOtherProfile.zLastLogAt = zLastLogAt;
   }
@@ -2582,8 +2585,8 @@ extension CollectionLogOtherOtherProfileExtension on CollectionLogOtherOtherProf
     int? vTodayLv3Commission,
     int? wTodayLv4Commission,
     int? xTodayInitCount,
-    dynamic yFirstLogAt,
-    dynamic zLastLogAt,
+    String? yFirstLogAt,
+    String? zLastLogAt,
     int? aAWeekLv1Commission,
     int? aBWeekLv2Commission,
     int? aCWeekLv3Commission,

@@ -236,6 +236,17 @@ class JsonConvert {
       return data.map<CollectionLogOtherRepayInfo>((Map<String, dynamic> e) =>
           CollectionLogOtherRepayInfo.fromJson(e)).toList() as M;
     }
+    if (<CollectionLogOtherContactInfo>[] is M) {
+      return data.map<CollectionLogOtherContactInfo>((Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfo.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherContactInfoAAAAAHLContactWeights>[] is M) {
+      return data
+          .map<CollectionLogOtherContactInfoAAAAAHLContactWeights>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfoAAAAAHLContactWeights.fromJson(e))
+          .toList() as M;
+    }
     if (<CollectionLogOtherContactInfo2>[] is M) {
       return data
           .map<CollectionLogOtherContactInfo2>((
@@ -252,6 +263,13 @@ class JsonConvert {
           .map<CollectionLogOtherContactInfo2DataAAAAAHLContactWeights>((
           Map<String, dynamic> e) =>
           CollectionLogOtherContactInfo2DataAAAAAHLContactWeights.fromJson(e))
+          .toList() as M;
+    }
+    if (<CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>[] is M) {
+      return data
+          .map<CollectionLogOtherContactInfo2DataAAAAAHKContactSmss>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherContactInfo2DataAAAAAHKContactSmss.fromJson(e))
           .toList() as M;
     }
     if (<CollectionLogOtherContactInfo2Links>[] is M) {
@@ -286,6 +304,15 @@ class JsonConvert {
           .map<CollectionLogOtherOtherProfile>((
           Map<String, dynamic> e) => CollectionLogOtherOtherProfile.fromJson(e))
           .toList() as M;
+    }
+    if (<CollectionLogOtherOtherAdditionBonus>[] is M) {
+      return data.map<CollectionLogOtherOtherAdditionBonus>((
+          Map<String, dynamic> e) =>
+          CollectionLogOtherOtherAdditionBonus.fromJson(e)).toList() as M;
+    }
+    if (<CollectionLogOtherOtherFines>[] is M) {
+      return data.map<CollectionLogOtherOtherFines>((Map<String, dynamic> e) =>
+          CollectionLogOtherOtherFines.fromJson(e)).toList() as M;
     }
     if (<CollectionNotificationEntity>[] is M) {
       return data.map<CollectionNotificationEntity>((Map<String, dynamic> e) =>
@@ -561,12 +588,20 @@ class JsonConvertClassCollection {
     (CollectionLogOtherPeriod).toString(): CollectionLogOtherPeriod.fromJson,
     (CollectionLogOtherRepayInfo).toString(): CollectionLogOtherRepayInfo
         .fromJson,
+    (CollectionLogOtherContactInfo).toString(): CollectionLogOtherContactInfo
+        .fromJson,
+    (CollectionLogOtherContactInfoAAAAAHLContactWeights)
+        .toString(): CollectionLogOtherContactInfoAAAAAHLContactWeights
+        .fromJson,
     (CollectionLogOtherContactInfo2).toString(): CollectionLogOtherContactInfo2
         .fromJson,
     (CollectionLogOtherContactInfo2Data)
         .toString(): CollectionLogOtherContactInfo2Data.fromJson,
     (CollectionLogOtherContactInfo2DataAAAAAHLContactWeights)
         .toString(): CollectionLogOtherContactInfo2DataAAAAAHLContactWeights
+        .fromJson,
+    (CollectionLogOtherContactInfo2DataAAAAAHKContactSmss)
+        .toString(): CollectionLogOtherContactInfo2DataAAAAAHKContactSmss
         .fromJson,
     (CollectionLogOtherContactInfo2Links)
         .toString(): CollectionLogOtherContactInfo2Links.fromJson,
@@ -580,6 +615,10 @@ class JsonConvertClassCollection {
     (CollectionLogOtherOtherProgress)
         .toString(): CollectionLogOtherOtherProgress.fromJson,
     (CollectionLogOtherOtherProfile).toString(): CollectionLogOtherOtherProfile
+        .fromJson,
+    (CollectionLogOtherOtherAdditionBonus)
+        .toString(): CollectionLogOtherOtherAdditionBonus.fromJson,
+    (CollectionLogOtherOtherFines).toString(): CollectionLogOtherOtherFines
         .fromJson,
     (CollectionNotificationEntity).toString(): CollectionNotificationEntity
         .fromJson,

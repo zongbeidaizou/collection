@@ -1,6 +1,9 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 import 'dart:convert';
+
+// import 'collection_order_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 export 'package:bounty_hunter/generated/json/collection_log_entity.g.dart';
 
 @JsonSerializable()
@@ -85,7 +88,7 @@ class CollectionLogOther {
 	@JSONField(name: 'repay_info')
 	CollectionLogOtherRepayInfo? repayInfo;
 	@JSONField(name: 'contact_info')
-	List<CollectionLogOtherContactInfo>? contactInfo = [];
+  List<CollectionLogOtherContactInfo2Data>? contactInfo = [];
 	@JSONField(name: 'contact_info2')
 	CollectionLogOtherContactInfo2? contactInfo2;
 	@JSONField(name: 'sms_history')
@@ -96,7 +99,7 @@ class CollectionLogOther {
 	String? hJSmsTemplateNewestUpdatedAt = '';
 	@JSONField(name: 'h_j_sms_template')
 	List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate = [];
-	CollectionLogOtherOther? other;
+  CollectionOrderOther? other;
 	@JSONField(name: 'last_contact_fetch_time')
 	String? lastContactFetchTime = '';
 
@@ -428,7 +431,7 @@ class CollectionLogOtherContactInfo2DataAAAAAHLContactWeights {
 	@JSONField(name: 'c_collection_admin_id')
 	int? cCollectionAdminId = 0;
 	@JSONField(name: 'd_call_times')
-	String? dCallTimes = '';
+	int? dCallTimes = 0;
 	@JSONField(name: 'e_last_call_time')
 	String? eLastCallTime = '';
 	@JSONField(name: 'l_sms_count')
@@ -716,9 +719,9 @@ class CollectionLogOtherOtherProfile {
 	@JSONField(name: 'x_today_init_count')
 	int? xTodayInitCount = 0;
 	@JSONField(name: 'y_first_log_at')
-	dynamic yFirstLogAt;
+	String? yFirstLogAt = '';
 	@JSONField(name: 'z_last_log_at')
-	dynamic zLastLogAt;
+	String? zLastLogAt = '';
 	@JSONField(name: 'a_a_week_lv1_commission')
 	int? aAWeekLv1Commission = 0;
 	@JSONField(name: 'a_b_week_lv2_commission')

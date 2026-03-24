@@ -1283,18 +1283,35 @@ class _OrderItemState extends State<OrderItem> {
         List.from(contactList);
 
     sortedList.sort((a, b) {
-      // 最高优先级：l_sms_count = 999 的记录始终排在第一位
-      final aIsPriority = a.lSmsCount == 999;
-      final bIsPriority = b.lSmsCount == 999;
-
-      if (aIsPriority && !bIsPriority) {
-        return -1; // a是优先级记录，b不是，a排在前面
-      } else if (!aIsPriority && bIsPriority) {
-        return 1; // b是优先级记录，a不是，b排在前面
-      } else if (aIsPriority && bIsPriority) {
-        // 两个都是优先级记录，保持原有顺序
-        return 0;
+      // 第二级排序：按照 CollectionLogOtherContactInfo2Data 的属性排序
+      // 比较 t_wa_weight (降序)
+      if (a.tWaWeight != b.tWaWeight) {
+        return (b.tWaWeight ?? 0).compareTo(a.tWaWeight ?? 0);
       }
+
+      // 比较 r_wa_status (降序)
+      if (a.rWaStatus != b.rWaStatus) {
+        return (b.rWaStatus ?? 0).compareTo(a.rWaStatus ?? 0);
+      }
+
+      // 如果所有属性都相等，保持原有顺序
+      return 0;
+    });
+
+    
+    sortedList.sort((a, b) {
+      
+      final aSmsCount = a.lSmsCount;
+      final bSmsCount = b.lSmsCount;
+      if (aSmsCount != bSmsCount) {
+        return (bSmsCount ?? 0).compareTo(aSmsCount ?? 0);
+      }
+      return 0;
+      
+    });
+
+    sortedList.sort((a, b) {
+      
 
       // 非优先级记录的排序逻辑
       // 第一级排序：按照 aAAAAHLContactWeights 中的属性排序
@@ -1324,32 +1341,38 @@ class _OrderItemState extends State<OrderItem> {
         // b有权重，a没有权重，b排在前面
         return 1;
       }
+      return 0;
+    });
 
-      // 第二级排序：按照 CollectionLogOtherContactInfo2Data 的属性排序
-      // 比较 t_wa_weight (降序)
-      if (a.tWaWeight != b.tWaWeight) {
-        return (b.tWaWeight ?? 0).compareTo(a.tWaWeight ?? 0);
+
+    sortedList.sort((a, b) {
+      // 最高优先级：l_sms_count = 999 的记录始终排在第一位
+      final aIsPriority = a.lSmsCount == 999;
+      final bIsPriority = b.lSmsCount == 999;
+
+      if (aIsPriority && !bIsPriority) {
+        return -1; // a是优先级记录，b不是，a排在前面
+      } else if (!aIsPriority && bIsPriority) {
+        return 1; // b是优先级记录，a不是，b排在前面
+      } else if (aIsPriority && bIsPriority) {
+        // 两个都是优先级记录，保持原有顺序
+        return 0;
       }
-
-      // 比较 r_wa_status (降序)
-      if (a.rWaStatus != b.rWaStatus) {
-        return (b.rWaStatus ?? 0).compareTo(a.rWaStatus ?? 0);
-      }
-
       // 如果所有属性都相等，保持原有顺序
       return 0;
     });
+    
     //把sortedList中存在aAAAAHLContactWeights的并且aAAAAHLContactWeights.rWaStatus == 20的取出来，并且放到最后面
     final List<CollectionLogOtherContactInfo2Data> waStatus20List = [];
     for (var item in sortedList) {
       if (item.aAAAAHLContactWeights != null &&
-          item.aAAAAHLContactWeights!.rWaStatus == 20) {
+          item.aAAAAHLContactWeights!.rWaStatus == 20 && item.lSmsCount != 999) {
         waStatus20List.add(item);
       }
     }
     sortedList.removeWhere((element) =>
         element.aAAAAHLContactWeights != null &&
-        element.aAAAAHLContactWeights!.rWaStatus == 20);
+        element.aAAAAHLContactWeights!.rWaStatus == 20 && element.lSmsCount != 999);
     sortedList.addAll(waStatus20List);
 
     return sortedList;

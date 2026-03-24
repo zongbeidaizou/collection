@@ -864,7 +864,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     })).toList();
     templates2.sort((a, b) => b.eDays!.compareTo(a.eDays!));
 
-    Future<void> launchAction(int type) async {
+    Future<void> launchAction(int type, {bool doubleTap = false}) async {
       //type 1:whatsapp 2:call 3:sms
       widget.onCallOrSms(widget.contactIndex, 1);
       setState(() {
@@ -882,110 +882,125 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
       // 显示模板选择对话框
       if (type != 2) {
-        // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
-        // 默认展开第一条模板
-        Set<int> expandedIndices = {0};
-        final CollectionLogOtherHJSmsTemplate? selectedTemplate =
-            await showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
-          context: context,
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          ),
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.9,
-                    minHeight: MediaQuery.of(context).size.height * 0.86,
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: 16,
-                      left: 16,
-                      right: 16,
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        CollectionLogOtherHJSmsTemplate? selectedTemplate;
+
+        // Double-tap shortcut: directly use the template whose dTemplate is empty.
+        if (doubleTap) {
+          try {
+            selectedTemplate = templates2.firstWhere(
+              (t) => (t.dTemplate ?? '').trim().isEmpty,
+            );
+          } catch (_) {
+            selectedTemplate = null;
+          }
+        }
+
+        // Fallback to template picker if shortcut isn't used or not found.
+        selectedTemplate ??= await (() async {
+          // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
+          // 默认展开第一条模板
+          Set<int> expandedIndices = {0};
+          return showModalBottomSheet<CollectionLogOtherHJSmsTemplate>(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.9,
+                      minHeight: MediaQuery.of(context).size.height * 0.86,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // 全部展开/收缩按钮
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    expandedIndices.clear();
-                                  });
-                                },
-                                icon: const Icon(Icons.unfold_less, size: 18),
-                                label: const Text('Collapse All'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 2),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    expandedIndices = {
-                                      for (int i = 0; i < templates2.length; i++) i
-                                    };
-                                  });
-                                },
-                                icon: const Icon(Icons.unfold_more, size: 18),
-                                label: const Text('Expand All'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 2),
-                                ),
-                              ),
-                            ),
-                            
-                          ],
-                        ),
-                        Flexible(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: templates2.asMap().entries.map((entry) {
-                                final int index = entry.key;
-                                final template = entry.value;
-                                final bool isExpanded = expandedIndices.contains(index);
-                                return _TemplateItem(
-                                  template: template,
-                                  isExpanded: isExpanded,
-                                  onSelect: () => Navigator.pop(context, template),
-                                  onToggleExpand: () {
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        top: 16,
+                        left: 16,
+                        right: 16,
+                        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // 全部展开/收缩按钮
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
                                     setState(() {
-                                      if (expandedIndices.contains(index)) {
-                                        expandedIndices.remove(index);
-                                      } else {
-                                        expandedIndices.add(index);
-                                      }
+                                      expandedIndices.clear();
                                     });
                                   },
-                                );
-                              }).toList(),
+                                  icon: const Icon(Icons.unfold_less, size: 18),
+                                  label: const Text('Collapse All'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 2),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      expandedIndices = {
+                                        for (int i = 0; i < templates2.length; i++) i
+                                      };
+                                    });
+                                  },
+                                  icon: const Icon(Icons.unfold_more, size: 18),
+                                  label: const Text('Expand All'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(vertical: 2),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Flexible(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: templates2.asMap().entries.map((entry) {
+                                  final int index = entry.key;
+                                  final template = entry.value;
+                                  final bool isExpanded = expandedIndices.contains(index);
+                                  return _TemplateItem(
+                                    template: template,
+                                    isExpanded: isExpanded,
+                                    onSelect: () => Navigator.pop(context, template),
+                                    onToggleExpand: () {
+                                      setState(() {
+                                        if (expandedIndices.contains(index)) {
+                                          expandedIndices.remove(index);
+                                        } else {
+                                          expandedIndices.add(index);
+                                        }
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
-        );
+                  );
+                },
+              );
+            },
+          );
+        })();
+
         if (selectedTemplate != null) {
           if (type == 1) {
             // 启动WhatsApp
@@ -1137,6 +1152,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     ),
                     InkWell(
                       onTap: () => launchAction(3),
+                      onDoubleTap: () => launchAction(3, doubleTap: true),
+                      onLongPress: () => launchAction(3, doubleTap: true),
                       child: Column(
                         children: [
                           Stack(
@@ -1278,6 +1295,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                     ),
                     InkWell(
                       onTap: () => launchAction(1),
+                      onDoubleTap: () => launchAction(1, doubleTap: true),
+                      onLongPress: () => launchAction(1, doubleTap: true),
                       child: Column(
                         children: [
                           Stack(

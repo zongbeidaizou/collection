@@ -1396,11 +1396,11 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                       children: [
                         Icon(
                           (sms.type ?? 0) == 1
-                              ? Icons.call_made
-                              : Icons.call_received,
+                              ? Icons.call_received
+                              : Icons.call_made,
                           color: (sms.type ?? 0) == 1
-                              ? Colors.blueAccent
-                              : Colors.green,
+                              ? Colors.green
+                              : Colors.blueAccent,
                           size: 16,
                         ),
                         const SizedBox(width: 8),

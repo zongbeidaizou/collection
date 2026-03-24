@@ -1377,64 +1377,64 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       return const SizedBox.shrink();
     }
 
-    return ColoredBox(
-      color: const Color(0xB34D4D4D),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          constraints: const BoxConstraints(maxHeight: 140),
-          color: Colors.white,
-          child: ListView.separated(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  itemCount: smsList.length,
-                  separatorBuilder: (_, __) => const Divider(height: 10),
-                  itemBuilder: (context, index) {
-                    final sms = smsList[index];
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          (sms.type ?? 0) == 1
-                              ? Icons.call_received
-                              : Icons.call_made,
-                          color: (sms.type ?? 0) == 1
-                              ? Colors.green
-                              : Colors.blueAccent,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                sms.body?.trim().isNotEmpty == true
-                                    ? sms.body!
-                                    : '-',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black87,
-                                ),
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        constraints: const BoxConstraints(maxHeight: 140),
+        color: const Color.fromARGB(255, 244, 247, 232),
+        child: ListView.separated(
+              // Let the list height shrink to its content, but don't exceed maxHeight.
+              shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                itemCount: smsList.length,
+                separatorBuilder: (_, __) => const Divider(height: 10),
+                itemBuilder: (context, index) {
+                  final sms = smsList[index];
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        (sms.type ?? 0) == 1
+                            ? Icons.call_received
+                            : Icons.call_made,
+                        color: (sms.type ?? 0) == 1
+                            ? Colors.green
+                            : Colors.blueAccent,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              sms.body?.trim().isNotEmpty == true
+                                  ? sms.body!
+                                  : '-',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black87,
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                _formatSmsTime(sms),
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey,
-                                ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              _formatSmsTime(sms),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                ),
-        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
       ),
     );
   }

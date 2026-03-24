@@ -1069,286 +1069,372 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       color: widget.selected
                 ? const Color.fromARGB(255, 245, 151, 151)
                 : ThemeUtils.getBackgroundColor(context),
-      child: Stack(
+      child: Column(
         children: [
-          // ColoredBox(
-          //   color: widget.selected
-          //       ? const Color.fromARGB(255, 210, 234, 253)
-          //       : Colors.transparent,
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(3.4),
-            child: Row(
-              children: [
-                if (widget.isSelectionMode)
-                  Checkbox(
-                    value: widget.isSelectedForCopy,
-                    onChanged: (bool? value) {
-                      widget.onSelectionChanged?.call(widget.contactIndex, value ?? false);
-                    },
-                  ),
-                Expanded(
-                  child: InkWell(
-                        onTap: widget.isSelectionMode
-                            ? () {
-                                widget.onSelectionChanged?.call(
-                                    widget.contactIndex, !widget.isSelectedForCopy);
-                              }
-                            : () => _addContactToPhone(),
-                        child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          '${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          overflow: TextOverflow.ellipsis),
-                      Gaps.vGap4,
-                      Row(
-                          children: [
-                            Icon(
-                              widget.contactIndex == 0 && !widget.isAllContacts
-                                  ? Icons.radio_button_on
-                                  : Icons.group_outlined,
-                              size: 16,
-                              color: widget.contactIndex == 0 &&
-                                      !widget.isAllContacts
-                                  ? Colors.redAccent
-                                  : Colors.grey,
-                            ),
-                            Gaps.hGap4,
-                            Text(
-                              maskPhoneNumber(widget.contact.gPhone ?? ''),
+          Stack(
+            children: [
+              // ColoredBox(
+              //   color: widget.selected
+              //       ? const Color.fromARGB(255, 210, 234, 253)
+              //       : Colors.transparent,
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(3.4),
+                child: Row(
+                  children: [
+                    if (widget.isSelectionMode)
+                      Checkbox(
+                        value: widget.isSelectedForCopy,
+                        onChanged: (bool? value) {
+                          widget.onSelectionChanged?.call(widget.contactIndex, value ?? false);
+                        },
+                      ),
+                    Expanded(
+                      child: InkWell(
+                            onTap: widget.isSelectionMode
+                                ? () {
+                                    widget.onSelectionChanged?.call(
+                                        widget.contactIndex, !widget.isSelectedForCopy);
+                                  }
+                                : () => _addContactToPhone(),
+                            child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${widget.contact.cRelation ?? ''} ${widget.contact.fName ?? ''}',
                               style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.blueAccent,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
                               ),
+                              overflow: TextOverflow.ellipsis),
+                          Gaps.vGap4,
+                          Row(
+                              children: [
+                                Icon(
+                                  widget.contactIndex == 0 && !widget.isAllContacts
+                                      ? Icons.radio_button_on
+                                      : Icons.group_outlined,
+                                  size: 16,
+                                  color: widget.contactIndex == 0 &&
+                                          !widget.isAllContacts
+                                      ? Colors.redAccent
+                                      : Colors.grey,
+                                ),
+                                Gaps.hGap4,
+                                Text(
+                                  maskPhoneNumber(widget.contact.gPhone ?? ''),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      
-                    ],
-                  ),),
-                ),
-                InkWell(
-                  onTap: () => launchAction(3),
-                  child: Column(
-                    children: [
-                      Stack(
+                          
+                        ],
+                      ),),
+                    ),
+                    InkWell(
+                      onTap: () => launchAction(3),
+                      child: Column(
                         children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 3, vertical: 1),
-                              decoration: BoxDecoration(
-                                color: widget.contact.aAAAAHLContactWeights
-                                                ?.lSmsCount !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .lSmsCount! >
-                                            0
-                                    ? const Color.fromARGB(255, 236, 182, 180)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                widget.contact.aAAAAHLContactWeights
-                                                ?.lSmsCount !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .lSmsCount! >
-                                            0
-                                    ? getDisplayText(widget.contact
-                                        .aAAAAHLContactWeights!.lSmsCount!)
-                                    : '',
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.white,
+                          Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                    ?.lSmsCount !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .lSmsCount! >
+                                                0
+                                        ? const Color.fromARGB(255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    widget.contact.aAAAAHLContactWeights
+                                                    ?.lSmsCount !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .lSmsCount! >
+                                                0
+                                        ? getDisplayText(widget.contact
+                                            .aAAAAHLContactWeights!.lSmsCount!)
+                                        : '',
+                                    style: const TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 7, bottom: 0, left: 14, right: 13),
+                                child: const Icon(
+                                  Icons.message,
+                                  size: 16,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              Positioned(
+                                top: -1,
+                                right: -1,
+                                child: getIcon(''),
+                              ),
+                            ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                top: 7, bottom: 0, left: 14, right: 13),
-                            child: const Icon(
-                              Icons.message,
-                              size: 16,
-                              color: Colors.blue,
+                          SizedBox(
+                            width: 60,
+                            child: Text(
+                              getLastClickTime('sms'),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          Positioned(
-                            top: -1,
-                            right: -1,
-                            child: getIcon(''),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 60,
-                        child: Text(
-                          getLastClickTime('sms'),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () => launchAction(2),
-                  child: Column(
-                    children: [
-                      Gaps.hGap8,
-                      Stack(
+                    ),
+                    InkWell(
+                      onTap: () => launchAction(2),
+                      child: Column(
                         children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 3, vertical: 1),
-                              decoration: BoxDecoration(
-                                color: widget.contact.aAAAAHLContactWeights
-                                                ?.dCallTimes !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .dCallTimes! >
-                                            0
-                                    ? const Color.fromARGB(255, 236, 182, 180)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                widget.contact.aAAAAHLContactWeights
-                                                ?.dCallTimes !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .dCallTimes! >
-                                            0
-                                    ? getDisplayText(widget.contact
-                                        .aAAAAHLContactWeights!.dCallTimes!)
-                                    : '',
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.white,
+                          Gaps.hGap8,
+                          Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                    ?.dCallTimes !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .dCallTimes! >
+                                                0
+                                        ? const Color.fromARGB(255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    widget.contact.aAAAAHLContactWeights
+                                                    ?.dCallTimes !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .dCallTimes! >
+                                                0
+                                        ? getDisplayText(widget.contact
+                                            .aAAAAHLContactWeights!.dCallTimes!)
+                                        : '',
+                                    style: const TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 7, bottom: 0, left: 14, right: 13),
+                                child: const Icon(
+                                  Icons.call,
+                                  size: 16,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: getIcon('call'),
+                              ),
+                            ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                top: 7, bottom: 0, left: 14, right: 13),
-                            child: const Icon(
-                              Icons.call,
-                              size: 16,
-                              color: Colors.blue,
+                          SizedBox(
+                            width: 60,
+                            child: Text(
+                              getLastClickTime('call'),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: getIcon('call'),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 60,
-                        child: Text(
-                          getLastClickTime('call'),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () => launchAction(1),
-                  child: Column(
-                    children: [
-                      Stack(
+                    ),
+                    InkWell(
+                      onTap: () => launchAction(1),
+                      child: Column(
                         children: [
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 3, vertical: 1),
-                              decoration: BoxDecoration(
-                                color: widget.contact.aAAAAHLContactWeights
-                                                ?.wWaCt !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .wWaCt! >
-                                            0
-                                    ? const Color.fromARGB(255, 236, 182, 180)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                widget.contact.aAAAAHLContactWeights?.wWaCt !=
-                                            null &&
-                                        widget.contact.aAAAAHLContactWeights!
-                                                .wWaCt! >
-                                            0
-                                    ? getDisplayText(widget
-                                        .contact.aAAAAHLContactWeights!.wWaCt!)
-                                    : '',
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.white,
+                          Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 1),
+                                  decoration: BoxDecoration(
+                                    color: widget.contact.aAAAAHLContactWeights
+                                                    ?.wWaCt !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .wWaCt! >
+                                                0
+                                        ? const Color.fromARGB(255, 236, 182, 180)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    widget.contact.aAAAAHLContactWeights?.wWaCt !=
+                                                null &&
+                                            widget.contact.aAAAAHLContactWeights!
+                                                    .wWaCt! >
+                                                0
+                                        ? getDisplayText(widget
+                                            .contact.aAAAAHLContactWeights!.wWaCt!)
+                                        : '',
+                                    style: const TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    top: 7, bottom: 0, left: 14, right: 13),
+                                child: const Icon(
+                                  FontAwesomeIcons.whatsapp,
+                                  size: 16,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: getIcon('whatsapp'),
+                              ),
+                            ],
                           ),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                top: 7, bottom: 0, left: 14, right: 13),
-                            child: const Icon(
-                              FontAwesomeIcons.whatsapp,
-                              size: 16,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: getIcon('whatsapp'),
-                          ),
+                          SizedBox(
+                              width: 60,
+                              child: Text(
+                                getLastClickTime('whatsapp'),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey,
+                                ),
+                                textAlign: TextAlign.center,
+                              ))
                         ],
                       ),
-                      SizedBox(
-                          width: 60,
-                          child: Text(
-                            getLastClickTime('whatsapp'),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
-                          ))
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              widget.selected && method != 3
+                  ? _buildGoodsMenu(context)
+                  : Gaps.empty,
+            ],
           ),
-          widget.selected && method != 3
-              ? _buildGoodsMenu(context)
-              : Gaps.empty,
+          _buildContactSmsList(context),
         ],
+      ),
+    );
+  }
+
+  String _formatSmsTime(
+      CollectionLogOtherContactInfo2DataAAAAAHKContactSmss sms) {
+    final int timestamp = (sms.dateSent ?? 0) > 0 ? sms.dateSent! : (sms.date ?? 0);
+    if (timestamp <= 0) {
+      return '--';
+    }
+    // Android SMS timestamp is typically milliseconds, but some sources provide seconds.
+    final int milliseconds = timestamp < 1000000000000 ? timestamp * 1000 : timestamp;
+    return DateFormat('MMM d, hh:mm a', 'en_US')
+        .format(DateTime.fromMillisecondsSinceEpoch(milliseconds));
+  }
+
+  Widget _buildContactSmsList(BuildContext context) {
+    final List<CollectionLogOtherContactInfo2DataAAAAAHKContactSmss> smsList =
+        widget.contact.aAAAAHKContactSmss ?? [];
+    if (smsList.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return ColoredBox(
+      color: const Color(0xB34D4D4D),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 140),
+          color: Colors.white,
+          child: ListView.separated(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  itemCount: smsList.length,
+                  separatorBuilder: (_, __) => const Divider(height: 10),
+                  itemBuilder: (context, index) {
+                    final sms = smsList[index];
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          (sms.type ?? 0) == 1
+                              ? Icons.call_made
+                              : Icons.call_received,
+                          color: (sms.type ?? 0) == 1
+                              ? Colors.blueAccent
+                              : Colors.green,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                sms.body?.trim().isNotEmpty == true
+                                    ? sms.body!
+                                    : '-',
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                _formatSmsTime(sms),
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

@@ -1271,9 +1271,10 @@ class _OrderItemState extends State<OrderItem> {
   /// 对联系人列表进行排序
   ///
   /// 排序规则：
-  /// 0. 最高优先级：l_sms_count = 999 的记录始终排在第一位
-  /// 1. 然后按照 aAAAAHLContactWeights 中的 t_wa_weight desc, r_wa_status desc, q_phone_status desc 排序
-  /// 2. 最后按照 CollectionLogOtherContactInfo2Data 的属性 t_wa_weight desc, r_wa_status desc 排序
+  /// 0. lSmsCount == 999 的记录始终排在最前
+  /// 1. 然后按 rWaStatus 优先级排序：40 最前；30/20 最后；其他居中
+  /// 2. 然后按 aAAAAHKContactSmss 的短信条数降序
+  /// 3. 最后按 tWaWeight 降序
   ///
   /// [contactList] 需要排序的联系人列表
   /// 返回排序后的联系人列表
@@ -1283,97 +1284,70 @@ class _OrderItemState extends State<OrderItem> {
         List.from(contactList);
 
     sortedList.sort((a, b) {
-      // 第二级排序：按照 CollectionLogOtherContactInfo2Data 的属性排序
-      // 比较 t_wa_weight (降序)
-      if (a.tWaWeight != b.tWaWeight) {
-        return (b.tWaWeight ?? 0).compareTo(a.tWaWeight ?? 0);
-      }
-
-      // 比较 r_wa_status (降序)
-      if (a.rWaStatus != b.rWaStatus) {
-        return (b.rWaStatus ?? 0).compareTo(a.rWaStatus ?? 0);
-      }
-
-      // 如果所有属性都相等，保持原有顺序
-      return 0;
-    });
-
-    
-    sortedList.sort((a, b) {
-      
-      final aSmsCount = a.lSmsCount;
-      final bSmsCount = b.lSmsCount;
-      if (aSmsCount != bSmsCount) {
-        return (bSmsCount ?? 0).compareTo(aSmsCount ?? 0);
-      }
-      return 0;
-      
-    });
-
-    sortedList.sort((a, b) {
-      
-
-      // 非优先级记录的排序逻辑
-      // 第一级排序：按照 aAAAAHLContactWeights 中的属性排序
-      final aWeights = a.aAAAAHLContactWeights;
-      final bWeights = b.aAAAAHLContactWeights;
-
-      if (aWeights != null && bWeights != null) {
-        // 比较 t_wa_weight (降序)
-        if (aWeights.tWaWeight != bWeights.tWaWeight) {
-          return (bWeights.tWaWeight ?? 0).compareTo(aWeights.tWaWeight ?? 0);
-        }
-
-        // 比较 r_wa_status (降序)
-        if (aWeights.rWaStatus != bWeights.rWaStatus) {
-          return (bWeights.rWaStatus ?? 25).compareTo(aWeights.rWaStatus ?? 25);
-        }
-
-        // 比较 q_phone_status (降序)
-        if (aWeights.qPhoneStatus != bWeights.qPhoneStatus) {
-          return (bWeights.qPhoneStatus ?? 0)
-              .compareTo(aWeights.qPhoneStatus ?? 0);
-        }
-      } else if (aWeights != null) {
-        // a有权重，b没有权重，a排在前面
-        return -1;
-      } else if (bWeights != null) {
-        // b有权重，a没有权重，b排在前面
-        return 1;
-      }
-      return 0;
-    });
-
-
-    sortedList.sort((a, b) {
-      // 最高优先级：l_sms_count = 999 的记录始终排在第一位
       final aIsPriority = a.lSmsCount == 999;
       final bIsPriority = b.lSmsCount == 999;
-
       if (aIsPriority && !bIsPriority) {
-        return -1; // a是优先级记录，b不是，a排在前面
-      } else if (!aIsPriority && bIsPriority) {
-        return 1; // b是优先级记录，a不是，b排在前面
-      } else if (aIsPriority && bIsPriority) {
-        // 两个都是优先级记录，保持原有顺序
+        return -1;
+      }
+      if (!aIsPriority && bIsPriority) {
+        return 1;
+      }
+
+      final int aStatus = a.aAAAAHLContactWeights?.rWaStatus ?? a.rWaStatus ?? 0;
+      final int bStatus = b.aAAAAHLContactWeights?.rWaStatus ?? b.rWaStatus ?? 0;
+
+      int statusRank(int status) {
+        if (status == 40) {
+          return 0;
+        }
+        if (status == 30 || status == 20) {
+          return 2;
+        }
+        return 1;
+      }
+
+      final int aStatusRank = statusRank(aStatus);
+      final int bStatusRank = statusRank(bStatus);
+      if (aStatusRank != bStatusRank) {
+        return aStatusRank.compareTo(bStatusRank);
+      }
+      if (aStatus != bStatus) {
+        return bStatus.compareTo(aStatus);
+      }
+
+      final int aSmsCount = a.aAAAAHKContactSmss?.length ?? 0;
+      final int bSmsCount = b.aAAAAHKContactSmss?.length ?? 0;
+      if (aSmsCount != bSmsCount) {
+        return bSmsCount.compareTo(aSmsCount);
+      }
+
+      final int aWaWeight = a.aAAAAHLContactWeights?.tWaWeight ?? a.tWaWeight ?? 0;
+      final int bWaWeight = b.aAAAAHLContactWeights?.tWaWeight ?? b.tWaWeight ?? 0;
+      if (aWaWeight != bWaWeight) {
+        return bWaWeight.compareTo(aWaWeight);
+      }
+
+      // Lowest priority:
+      // empty cRelation -> last, "other" -> second last.
+      int relationRank(String? relation) {
+        final String value = (relation ?? '').trim().toLowerCase();
+        if (value.isEmpty) {
+          return 2;
+        }
+        if (value == 'other') {
+          return 1;
+        }
         return 0;
       }
-      // 如果所有属性都相等，保持原有顺序
+
+      final int aRelationRank = relationRank(a.cRelation);
+      final int bRelationRank = relationRank(b.cRelation);
+      if (aRelationRank != bRelationRank) {
+        return aRelationRank.compareTo(bRelationRank);
+      }
+
       return 0;
     });
-    
-    //把sortedList中存在aAAAAHLContactWeights的并且aAAAAHLContactWeights.rWaStatus == 20的取出来，并且放到最后面
-    final List<CollectionLogOtherContactInfo2Data> waStatus20List = [];
-    for (var item in sortedList) {
-      if (item.aAAAAHLContactWeights != null &&
-          item.aAAAAHLContactWeights!.rWaStatus == 20 && item.lSmsCount != 999) {
-        waStatus20List.add(item);
-      }
-    }
-    sortedList.removeWhere((element) =>
-        element.aAAAAHLContactWeights != null &&
-        element.aAAAAHLContactWeights!.rWaStatus == 20 && element.lSmsCount != 999);
-    sortedList.addAll(waStatus20List);
 
     return sortedList;
   }

@@ -91,10 +91,10 @@ class Bar2State extends State<Bar2> {
                   widget.isShowingMainData
                       ? LegendsListWidget(
                           legends: [
-                            Legend('B', Colors.blue[100]!),
-                            Legend('A', Colors.blue[200]!),
-                            Legend('A+', Colors.blue[400]!),
-                            Legend('A++', Colors.blue[600]!),
+                            Legend('BB', Colors.blue[100]!),
+                            Legend('B', Colors.blue[200]!),
+                            Legend('A', Colors.blue[400]!),
+                            Legend('AA', Colors.blue[600]!),
                           ],
                         )
                       : Gaps.empty,

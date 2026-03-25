@@ -55,7 +55,19 @@ class BarChartSample6 extends StatelessWidget {
       ],
     );
   }
+  String formatNumberToK(int number) {
+    if (number < 1000) {
+      return number.toString(); // 小于1000直接返回原数字
+    }
 
+    double result = number / 1000;
+    // 处理小数部分（避免四舍五入后显示.0时仍保留一位小数）
+    if (result == result.truncate()) {
+      return '${result.truncate()}K'; // 无小数的情况
+    } else {
+      return '${result.toStringAsFixed(1)}K'; // 保留一位小数
+    }
+  }
   Widget bottomTitles(double value, TitleMeta meta) {
     final style = TextStyle(
       color: AppColors.contentColorBlue,
@@ -65,7 +77,14 @@ class BarChartSample6 extends StatelessWidget {
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
-      child: Text(data[value.toInt()].name!, style: style),
+      // child: Text(data[value.toInt()].name!, style: style),
+      child: RichText(text: TextSpan(children: [
+        TextSpan(text: data[value.toInt()].name!, style: style),
+        if (data[value.toInt()].addition! > 0)
+          const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),
+        if (data[value.toInt()].addition! > 0)
+          TextSpan(text: formatNumberToK(data[value.toInt()].addition!), style: const TextStyle(color:  Colors.green)),
+      ]),),
     );
   }
 

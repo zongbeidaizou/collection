@@ -394,8 +394,8 @@ class _ShopPageState extends State<ShopPage>
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: isDark
-                ? [Colors.black, Colors.grey]
-                : [Colors.indigoAccent, Colors.indigoAccent.withOpacity(0.1)],
+                ? [Colors.black, Colors.black]
+                : [Colors.indigoAccent,Colors.indigoAccent.withOpacity(0.1)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -885,7 +885,7 @@ class _ShopPageState extends State<ShopPage>
         ),
         child: Text(
           text,
-          style: TextStyle(fontWeight: FontWeight.w400),
+          style: TextStyle(fontWeight: FontWeight.w400,color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),
@@ -903,7 +903,7 @@ class _ShopPageState extends State<ShopPage>
             right: BorderSide(color: Colors.white70), // 单元格右侧边框
           ),
         ),
-        child: Text(text, style: TextStyle(fontSize: 11)),
+        child: Text(text, style: TextStyle(fontSize: 11,color: Colors.white)),
       ),
     );
   }

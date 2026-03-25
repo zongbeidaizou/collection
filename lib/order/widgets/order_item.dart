@@ -695,8 +695,8 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.aKNo,style: Theme.of(context).textTheme.titleSmall?.copyWith( color: isDark ? Colors.white : Colors.grey.shade500)),
-                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: TextStyle(color: isDark ? Colors.white : Colours.app_main)),
+                          TextSpan(text: widget.item.aKNo!.substring(widget.item.aKNo!.length - 6),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colors.grey.shade500)),
+                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colours.app_main)),
                         ],
                       ),
                     ),

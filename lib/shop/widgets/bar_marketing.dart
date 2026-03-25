@@ -49,7 +49,7 @@ class BarMarketingState extends State<BarMarketing> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: widget.isRegister ? 1.43 : 1.83,
+      aspectRatio: widget.isRegister ? 2.63 : 2.63,
       child: Stack(
         children: <Widget>[
           Column(

@@ -34,6 +34,22 @@ class ShopData {
 	bool? showMonthData = false;
 	@JSONField(name: 'month_data')
 	List<ShopDataMonthData>? monthData = [];
+
+	@JSONField(name: 'show_month_repay_data')
+	bool? showMonthRepayData = false;
+	@JSONField(name: 'month_repay_data')
+	List<ShopDataMonthData>? monthRepayData = [];
+
+  @JSONField(name: 'show_month_reg_bonus_data')
+	bool? showMonthRegBonusData = false;
+	@JSONField(name: 'month_reg_bonus_data')
+	List<ShopDataMonthData>? monthRegBonusData = [];
+
+  @JSONField(name: 'show_month_apply_bonus_data')
+	bool? showMonthApplyBonusData = false;
+	@JSONField(name: 'month_apply_bonus_data')
+	List<ShopDataMonthData>? monthApplyBonusData = [];
+
 	@JSONField(name: 'show_week_case_data')
 	bool? showWeekCaseData = false;
 	@JSONField(name: 'week_case_data')
@@ -240,6 +256,7 @@ class ShopDataMonthData {
 	String? avatar = '';
 	String? name = '';
 	int? value = 0;
+  int? addition = 0;
 
 	ShopDataMonthData();
 
@@ -257,6 +274,7 @@ class ShopDataMonthData {
 class ShopDataWeekCaseData {
 	String? name = '';
 	int? value = 0;
+  int? addition = 0;
 
 	ShopDataWeekCaseData();
 
@@ -275,6 +293,7 @@ class ShopDataWeekBonusData {
 	String? name = '';
 	int? value = 0;
 	List<int>? gradeValues = [];
+  int? addition = 0;
 
 	ShopDataWeekBonusData();
 

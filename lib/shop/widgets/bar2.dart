@@ -60,7 +60,7 @@ class Bar2State extends State<Bar2> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: widget.isShowingMainData ? 1.53 : 1.83,
+      aspectRatio: widget.isShowingMainData ? 1.53 : 2.63,
       child: Stack(
         children: <Widget>[
           Column(

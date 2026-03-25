@@ -132,8 +132,170 @@ class _ShopPageState extends State<ShopPage>
     _shopPagePresenter.show(true);
   }
 
-  void _showExitDialog() {
-    showDialog<void>(context: context, builder: (_) => const ExitDialog());
+
+  Widget _buildMonthHallOfFame(List<ShopDataMonthData> monthData, String title) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white70),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           MergeSemantics(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyles.textBold14,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 88,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: monthData.length,
+              itemBuilder: (BuildContext context, int index) {
+                Color iconColor = Colors.transparent;
+                if (index == 0) {
+                  iconColor = Colors.yellow.withOpacity(0.8);
+                } else if (index == 1) {
+                  iconColor = const Color(0xFFC0C0C0).withOpacity(0.8);
+                } else if (index == 2) {
+                  iconColor = const Color(0xFFB87333).withOpacity(0.8);
+                }
+                return index < 1
+                    ? AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, child) {
+                          return Container(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Column(
+                              children: <Widget>[
+                                Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: <Widget>[
+                                    /*                                Animate(
+                              effects: [MoveEffect(), ScaleEffect()],
+                              child: flashingBorder,
+                            ),*/
+                                    Animate(
+                                      effects: const [
+                                        FadeEffect(),
+                                        ScaleEffect()
+                                      ],
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: Colors.transparent
+                                              /*color: _colorAnimation.value!,
+                                    width: 4.0,*/
+                                              ),
+                                        ),
+                                        child: CircleAvatar(
+                                          radius: 26.0,
+                                          backgroundColor: Colors.transparent,
+                                          // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                          backgroundImage: ImageUtils
+                                              .getImageProvider(
+                                                  monthData[index].avatar,
+                                                  holderImg: 'store/icon_zj'),
+                                          // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
+                                        ),
+                                      )
+                                          .animate(
+                                              onPlay: (controller) =>
+                                                  controller.repeat())
+                                          .shimmer(
+                                              duration: 2200.ms,
+                                              color:
+                                                  Colors.white.withOpacity(0.5))
+                                          .animate() // this wraps the previous Animate in another Animate
+                                          .fadeIn(
+                                              duration: 2200.ms,
+                                              curve: Curves.easeOutQuad)
+                                          .slide(),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      child: Icon(
+                                        Icons.emoji_events_rounded,
+                                        color: iconColor,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 2.0),
+                                  RichText(text: TextSpan(children: [
+                                    TextSpan(text: formatNumberToK(monthData[index].value!)),
+                                    if (monthData[index].addition! > 0)
+                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),
+                                    if (monthData[index].addition! > 0)
+                                      TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green)),
+                                  ]))
+                              ],
+                            ),
+                          );
+                        })
+                    : Container(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Column(
+                          children: <Widget>[
+                            Stack(
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 4.0,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 26.0,
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage: ImageUtils.getImageProvider(
+                                        monthData[index].avatar,
+                                        holderImg: 'store/icon_zj'),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Icon(
+                                    Icons.emoji_events_rounded,
+                                    color: iconColor,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2.0),
+                            RichText(text: TextSpan(children: [
+                              TextSpan(text: formatNumberToK(monthData[index].value!)),
+                              if (monthData[index].addition! > 0)
+                                TextSpan(text: '+', style: const TextStyle(color:  Colors.green)),
+                              if (monthData[index].addition! > 0)
+                                TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green)),
+                            ])),
+                          ],
+                        ),
+                      );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -255,154 +417,7 @@ class _ShopPageState extends State<ShopPage>
                   }),
                 ),
                 Gaps.vGap8,
-                // 名人堂
-                const MergeSemantics(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "This Month's Collector Hall of Fame",
-                          style: TextStyles.textBold16,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 110,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _data.monthData!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Color iconColor = Colors.transparent;
-                      if (index == 0) {
-                        iconColor = Colors.yellow.withOpacity(0.8);
-                      } else if (index == 1) {
-                        iconColor = const Color(0xFFC0C0C0).withOpacity(0.8);
-                      } else if (index == 2) {
-                        iconColor = const Color(0xFFB87333).withOpacity(0.8);
-                      }
-                      return index < 3
-                          ? AnimatedBuilder(
-                              animation: _controller,
-                              builder: (context, child) {
-                                return Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Stack(
-                                        alignment: AlignmentDirectional.center,
-                                        children: <Widget>[
-                                          /*                                Animate(
-                                    effects: [MoveEffect(), ScaleEffect()],
-                                    child: flashingBorder,
-                                  ),*/
-                                          Animate(
-                                            effects: const [
-                                              FadeEffect(),
-                                              ScaleEffect()
-                                            ],
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: Colors.transparent
-                                                    /*color: _colorAnimation.value!,
-                                          width: 4.0,*/
-                                                    ),
-                                              ),
-                                              child: CircleAvatar(
-                                                radius: 28.0,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
-                                                backgroundImage:
-                                                    ImageUtils.getImageProvider(
-                                                        _data.monthData![index]
-                                                            .avatar,
-                                                        holderImg:
-                                                            'store/icon_zj'),
-                                                // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
-                                              ),
-                                            )
-                                                .animate(
-                                                    onPlay: (controller) =>
-                                                        controller.repeat())
-                                                .shimmer(
-                                                    duration: 2200.ms,
-                                                    color: Colors.white
-                                                        .withOpacity(0.5))
-                                                .animate() // this wraps the previous Animate in another Animate
-                                                .fadeIn(
-                                                    duration: 2200.ms,
-                                                    curve: Curves.easeOutQuad)
-                                                .slide(),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            child: Icon(
-                                              Icons.emoji_events_rounded,
-                                              color: iconColor,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8.0),
-                                      Text(formatNumberToK(
-                                          _data.monthData![index].value!)),
-                                    ],
-                                  ),
-                                );
-                              })
-                          : Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.transparent,
-                                            width: 4.0,
-                                          ),
-                                        ),
-                                        child: CircleAvatar(
-                                          radius: 28.0,
-                                          backgroundColor: Colors.transparent,
-                                          backgroundImage:
-                                              ImageUtils.getImageProvider(
-                                                  _data
-                                                      .monthData![index].avatar,
-                                                  holderImg: 'store/icon_zj'),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        child: Icon(
-                                          Icons.emoji_events_rounded,
-                                          color: iconColor,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8.0),
-                                  Text(formatNumberToK(
-                                      _data.monthData![index].value!)),
-                                ],
-                              ),
-                            );
-                    },
-                  ),
-                ),
-
+                
                 if (_data.showWeekBonusData!)
                   Container(
                     margin: const EdgeInsets.all(2),
@@ -456,6 +471,15 @@ class _ShopPageState extends State<ShopPage>
                   )
                 else
                   Gaps.empty,
+                  // 名人堂
+                _buildMonthHallOfFame(_data.monthData!, 'Monthly Bonus Ranking'),
+                Gaps.vGap4,
+                _buildMonthHallOfFame(_data.monthRepayData!, 'Monthly Repayment Ranking'),
+                Gaps.vGap4,
+                _buildMonthHallOfFame(_data.monthRegBonusData!, 'Monthly Registration Bonus Ranking'),
+                Gaps.vGap4,
+                _buildMonthHallOfFame(_data.monthApplyBonusData!, 'Monthly Application Bonus Ranking'),
+                Gaps.vGap4,
                 if (_data.showMonthAdditionData!)
                   Column(
                     children: [

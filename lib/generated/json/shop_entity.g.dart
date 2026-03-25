@@ -73,6 +73,48 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
   if (monthData != null) {
     shopData.monthData = monthData;
   }
+  final bool? showMonthRepayData = jsonConvert.convert<bool>(
+      json['show_month_repay_data']);
+  if (showMonthRepayData != null) {
+    shopData.showMonthRepayData = showMonthRepayData;
+  }
+  final List<
+      ShopDataMonthData>? monthRepayData = (json['month_repay_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
+  if (monthRepayData != null) {
+    shopData.monthRepayData = monthRepayData;
+  }
+  final bool? showMonthRegBonusData = jsonConvert.convert<bool>(
+      json['show_month_reg_bonus_data']);
+  if (showMonthRegBonusData != null) {
+    shopData.showMonthRegBonusData = showMonthRegBonusData;
+  }
+  final List<
+      ShopDataMonthData>? monthRegBonusData = (json['month_reg_bonus_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
+  if (monthRegBonusData != null) {
+    shopData.monthRegBonusData = monthRegBonusData;
+  }
+  final bool? showMonthApplyBonusData = jsonConvert.convert<bool>(
+      json['show_month_apply_bonus_data']);
+  if (showMonthApplyBonusData != null) {
+    shopData.showMonthApplyBonusData = showMonthApplyBonusData;
+  }
+  final List<
+      ShopDataMonthData>? monthApplyBonusData = (json['month_apply_bonus_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
+  if (monthApplyBonusData != null) {
+    shopData.monthApplyBonusData = monthApplyBonusData;
+  }
   final bool? showWeekCaseData = jsonConvert.convert<bool>(
       json['show_week_case_data']);
   if (showWeekCaseData != null) {
@@ -186,6 +228,15 @@ Map<String, dynamic> $ShopDataToJson(ShopData entity) {
   data['other'] = entity.other?.toJson();
   data['show_month_data'] = entity.showMonthData;
   data['month_data'] = entity.monthData?.map((v) => v.toJson()).toList();
+  data['show_month_repay_data'] = entity.showMonthRepayData;
+  data['month_repay_data'] =
+      entity.monthRepayData?.map((v) => v.toJson()).toList();
+  data['show_month_reg_bonus_data'] = entity.showMonthRegBonusData;
+  data['month_reg_bonus_data'] =
+      entity.monthRegBonusData?.map((v) => v.toJson()).toList();
+  data['show_month_apply_bonus_data'] = entity.showMonthApplyBonusData;
+  data['month_apply_bonus_data'] =
+      entity.monthApplyBonusData?.map((v) => v.toJson()).toList();
   data['show_week_case_data'] = entity.showWeekCaseData;
   data['week_case_data'] = entity.weekCaseData?.map((v) => v.toJson()).toList();
   data['show_week_register_data'] = entity.showWeekRegisterData;
@@ -215,6 +266,12 @@ extension ShopDataExtension on ShopData {
     ShopDataOther? other,
     bool? showMonthData,
     List<ShopDataMonthData>? monthData,
+    bool? showMonthRepayData,
+    List<ShopDataMonthData>? monthRepayData,
+    bool? showMonthRegBonusData,
+    List<ShopDataMonthData>? monthRegBonusData,
+    bool? showMonthApplyBonusData,
+    List<ShopDataMonthData>? monthApplyBonusData,
     bool? showWeekCaseData,
     List<ShopDataWeekCaseData>? weekCaseData,
     bool? showWeekRegisterData,
@@ -235,6 +292,14 @@ extension ShopDataExtension on ShopData {
       ..other = other ?? this.other
       ..showMonthData = showMonthData ?? this.showMonthData
       ..monthData = monthData ?? this.monthData
+      ..showMonthRepayData = showMonthRepayData ?? this.showMonthRepayData
+      ..monthRepayData = monthRepayData ?? this.monthRepayData
+      ..showMonthRegBonusData = showMonthRegBonusData ??
+          this.showMonthRegBonusData
+      ..monthRegBonusData = monthRegBonusData ?? this.monthRegBonusData
+      ..showMonthApplyBonusData = showMonthApplyBonusData ??
+          this.showMonthApplyBonusData
+      ..monthApplyBonusData = monthApplyBonusData ?? this.monthApplyBonusData
       ..showWeekCaseData = showWeekCaseData ?? this.showWeekCaseData
       ..weekCaseData = weekCaseData ?? this.weekCaseData
       ..showWeekRegisterData = showWeekRegisterData ?? this.showWeekRegisterData
@@ -759,6 +824,10 @@ ShopDataMonthData $ShopDataMonthDataFromJson(Map<String, dynamic> json) {
   if (value != null) {
     shopDataMonthData.value = value;
   }
+  final int? addition = jsonConvert.convert<int>(json['addition']);
+  if (addition != null) {
+    shopDataMonthData.addition = addition;
+  }
   return shopDataMonthData;
 }
 
@@ -767,6 +836,7 @@ Map<String, dynamic> $ShopDataMonthDataToJson(ShopDataMonthData entity) {
   data['avatar'] = entity.avatar;
   data['name'] = entity.name;
   data['value'] = entity.value;
+  data['addition'] = entity.addition;
   return data;
 }
 
@@ -775,11 +845,13 @@ extension ShopDataMonthDataExtension on ShopDataMonthData {
     String? avatar,
     String? name,
     int? value,
+    int? addition,
   }) {
     return ShopDataMonthData()
       ..avatar = avatar ?? this.avatar
       ..name = name ?? this.name
-      ..value = value ?? this.value;
+      ..value = value ?? this.value
+      ..addition = addition ?? this.addition;
   }
 }
 
@@ -793,6 +865,10 @@ ShopDataWeekCaseData $ShopDataWeekCaseDataFromJson(Map<String, dynamic> json) {
   if (value != null) {
     shopDataWeekCaseData.value = value;
   }
+  final int? addition = jsonConvert.convert<int>(json['addition']);
+  if (addition != null) {
+    shopDataWeekCaseData.addition = addition;
+  }
   return shopDataWeekCaseData;
 }
 
@@ -800,6 +876,7 @@ Map<String, dynamic> $ShopDataWeekCaseDataToJson(ShopDataWeekCaseData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['name'] = entity.name;
   data['value'] = entity.value;
+  data['addition'] = entity.addition;
   return data;
 }
 
@@ -807,10 +884,12 @@ extension ShopDataWeekCaseDataExtension on ShopDataWeekCaseData {
   ShopDataWeekCaseData copyWith({
     String? name,
     int? value,
+    int? addition,
   }) {
     return ShopDataWeekCaseData()
       ..name = name ?? this.name
-      ..value = value ?? this.value;
+      ..value = value ?? this.value
+      ..addition = addition ?? this.addition;
   }
 }
 
@@ -830,6 +909,10 @@ ShopDataWeekBonusData $ShopDataWeekBonusDataFromJson(
   if (gradeValues != null) {
     shopDataWeekBonusData.gradeValues = gradeValues;
   }
+  final int? addition = jsonConvert.convert<int>(json['addition']);
+  if (addition != null) {
+    shopDataWeekBonusData.addition = addition;
+  }
   return shopDataWeekBonusData;
 }
 
@@ -839,6 +922,7 @@ Map<String, dynamic> $ShopDataWeekBonusDataToJson(
   data['name'] = entity.name;
   data['value'] = entity.value;
   data['gradeValues'] = entity.gradeValues;
+  data['addition'] = entity.addition;
   return data;
 }
 
@@ -847,11 +931,13 @@ extension ShopDataWeekBonusDataExtension on ShopDataWeekBonusData {
     String? name,
     int? value,
     List<int>? gradeValues,
+    int? addition,
   }) {
     return ShopDataWeekBonusData()
       ..name = name ?? this.name
       ..value = value ?? this.value
-      ..gradeValues = gradeValues ?? this.gradeValues;
+      ..gradeValues = gradeValues ?? this.gradeValues
+      ..addition = addition ?? this.addition;
   }
 }
 

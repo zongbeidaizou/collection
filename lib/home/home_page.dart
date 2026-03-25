@@ -373,18 +373,18 @@ class _HomeState extends State<Home> with RestorationMixin {
           color: Colours.app_main,
         ),
       ],
-      const [
-        Icon(
-          Icons.fact_check,
-          size: _imageSize,
-          color: Colours.unselected_item_color,
-        ),
-        Icon(
-          Icons.fact_check,
-          size: _imageSize,
-          color: Colours.app_main,
-        ),
-      ],
+      // const [
+      //   Icon(
+      //     Icons.fact_check,
+      //     size: _imageSize,
+      //     color: Colours.unselected_item_color,
+      //   ),
+      //   Icon(
+      //     Icons.fact_check,
+      //     size: _imageSize,
+      //     color: Colours.app_main,
+      //   ),
+      // ],
       [
         SizedBox(
           width: 56,
@@ -459,18 +459,18 @@ class _HomeState extends State<Home> with RestorationMixin {
           ),
         ),
       ],
-      // const [
-      //   Icon(
-      //     Icons.flag_circle_rounded,
-      //     size: _imageSize,
-      //     color: Colours.unselected_item_color,
-      //   ),
-      //   Icon(
-      //     Icons.flag_circle_rounded,
-      //     size: _imageSize,
-      //     color: Colours.app_main,
-      //   ),
-      // ],
+      const [
+        Icon(
+          Icons.move_up,
+          size: _imageSize,
+          color: Colours.unselected_item_color,
+        ),
+        Icon(
+          Icons.move_up,
+          size: _imageSize,
+          color: Colours.app_main,
+        ),
+      ],
       [
         SizedBox(
           width: 56,

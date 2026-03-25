@@ -256,21 +256,21 @@ class _ShopPageState extends State<ShopPage>
                 ),
                 Gaps.vGap8,
                 // 名人堂
-                MergeSemantics(
+                const MergeSemantics(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'This Month\'s Collector Hall of Fame',
+                          "This Month's Collector Hall of Fame",
                           style: TextStyles.textBold16,
                         ),
                       ],
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 110,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -280,16 +280,16 @@ class _ShopPageState extends State<ShopPage>
                       if (index == 0) {
                         iconColor = Colors.yellow.withOpacity(0.8);
                       } else if (index == 1) {
-                        iconColor = Color(0xFFC0C0C0).withOpacity(0.8);
+                        iconColor = const Color(0xFFC0C0C0).withOpacity(0.8);
                       } else if (index == 2) {
-                        iconColor = Color(0xFFB87333).withOpacity(0.8);
+                        iconColor = const Color(0xFFB87333).withOpacity(0.8);
                       }
                       return index < 3
                           ? AnimatedBuilder(
                               animation: _controller,
                               builder: (context, child) {
                                 return Container(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: <Widget>[
                                       Stack(
@@ -300,7 +300,7 @@ class _ShopPageState extends State<ShopPage>
                                     child: flashingBorder,
                                   ),*/
                                           Animate(
-                                            effects: [
+                                            effects: const [
                                               FadeEffect(),
                                               ScaleEffect()
                                             ],
@@ -351,7 +351,7 @@ class _ShopPageState extends State<ShopPage>
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 8.0),
+                                      const SizedBox(height: 8.0),
                                       Text(formatNumberToK(
                                           _data.monthData![index].value!)),
                                     ],
@@ -359,7 +359,7 @@ class _ShopPageState extends State<ShopPage>
                                 );
                               })
                           : Container(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: <Widget>[
                                   Stack(
@@ -368,7 +368,7 @@ class _ShopPageState extends State<ShopPage>
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                            color: Colors.transparent!,
+                                            color: Colors.transparent,
                                             width: 4.0,
                                           ),
                                         ),
@@ -393,7 +393,7 @@ class _ShopPageState extends State<ShopPage>
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 8.0),
+                                  const SizedBox(height: 8.0),
                                   Text(formatNumberToK(
                                       _data.monthData![index].value!)),
                                 ],

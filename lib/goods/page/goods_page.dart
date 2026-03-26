@@ -14,7 +14,26 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/my_search_bar.dart';
 
-final List<IconData> _iconList = [Icons.all_inclusive,Icons.sync, Icons.more_time, Icons.hourglass_disabled, Icons.phone_disabled, Icons.transfer_within_a_station, Icons.payment, Icons.check_circle, Icons.sms_outlined];
+final List<IconData> _iconList = [
+  Icons.miscellaneous_services, //0 系统自动分配
+  Icons.sync, //1 协商中
+  Icons.more_time, //2 承诺还款
+  Icons.hourglass_disabled, //3 承诺未还
+  Icons.hourglass_disabled, //4 
+  Icons.phone_disabled, //5 
+  Icons.nightlight, //6 部分支付
+  Icons.payment, //7 
+  Icons.check_circle, //8 
+  Icons.sms_outlined, //9 
+  Icons.extension_outlined, //10 展期成功
+  Icons.repeat_one, //11 保留
+  Icons.move_up, //12 接收
+  Icons.loupe, //13 管理员分配
+  Icons.sms_outlined, //14 
+  Icons.sms_outlined, //15 
+  Icons.sms_outlined, //16 
+  Icons.sms_outlined, //17 
+];
 /// design/4商品/index.html
 class GoodsPage extends StatefulWidget {
 
@@ -40,7 +59,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 7);
+    _tabController = TabController(vsync: this, length: 8);
   }
 
   @override
@@ -125,13 +144,15 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                 },
                 ),
                 tabs: const <Widget>[
-                  _TabView('All', 0),
-                  _TabView('Negotiation', 1),
-                  _TabView('Promise', 2),
-                  _TabView('Broken Promise', 3),
-                  _TabView('No Answer', 4),
-                  _TabView('Fraud', 5),
-                  _TabView('SMS', 8),
+                  _TabView('Retain', 11), //保留
+                  _TabView('Receive', 12), //接收
+                  _TabView('Admin', 13), //管理员分配
+                  _TabView('Part Pay', 6), //部分支付
+                  _TabView('Extension', 10), //展期成功
+                  _TabView('Negotiation', 1), //协商中
+                  _TabView('PTP', 2),//承诺还款
+                  _TabView('BP', 3),//承诺未还
+                  // _TabView('System', 0),//系统自动分配
                 ],
               ),
             ),
@@ -139,7 +160,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
             Expanded(
               child: PageView.builder(
                   key: const Key('pageView'),
-                  itemCount: 7,
+                  itemCount: 8,
                   onPageChanged: _onPageChange,
                   controller: _pageController,
                   itemBuilder: (_, int index) => GoodsListPage(index: index, searchKeyword: _searchKeyword,)

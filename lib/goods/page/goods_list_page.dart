@@ -1,13 +1,17 @@
 import 'package:bounty_hunter/goods/iview/goods_list_iview.dart';
 import 'package:bounty_hunter/goods/presenter/goods_list_presenter.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
+import 'package:bounty_hunter/net/dio_utils.dart';
+import 'package:bounty_hunter/net/http_api.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/goods/models/goods_item_entity.dart';
 import 'package:bounty_hunter/goods/provider/goods_page_provider.dart';
 import 'package:bounty_hunter/res/constant.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/my_refresh_list.dart';
 import 'package:bounty_hunter/widgets/state_layout.dart';
@@ -51,7 +55,7 @@ final List<Color> _colorList = [
   const Color(0xFF1B5E20),
   Colors.blueGrey,
 ];
-final List<int> _typeList = [0, 1, 2, 3, 4, 5, 8];
+final List<int> _typeList = [11, 12, 13, 6, 10, 1, 2, 3, 0];
 
 class GoodsListPage extends StatefulWidget {
   const GoodsListPage(
@@ -194,6 +198,37 @@ class _GoodsListPageState extends State<GoodsListPage>
     //   },
     // );
   }
+  Future<void> _receiveOrder(CollectionOrderData item) async {
+      if (item.id == null) {
+        showToast('Order ID is missing');
+        return;
+      }
+
+      try {
+        final formData = FormData.fromMap({
+          'collection_order_id': item.id,
+        });
+
+        await DioUtils.instance.requestNetwork<Map<String, dynamic>>(
+          Method.post,
+          HttpApi.receives,
+          params: formData,
+          onSuccess: (data) {
+   
+            if (data != null && data.containsKey('message')) {
+              showToast(data['message'] as String);
+            } else {
+              showToast('Order receive successfully');
+            }
+          },
+          onError: (code, msg) {
+            showToast(msg);
+          },
+        );
+      } catch (e) {
+        showToast('Failed to retain order');
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -267,6 +302,22 @@ class _GoodsListPageState extends State<GoodsListPage>
       );
     }).toList();
   }
+      String maskPhoneNumber(String phone) {
+      if (phone.isEmpty || phone.length < 6) {
+        return phone;
+      }
+
+      // 将手机号码转换为字符数组
+      List<String> phoneChars = phone.split('');
+
+      // 隐藏第3、4、5位数字（索引为2、3、4）
+      // 注意：索引从0开始，所以第3位是索引2，第4位是索引3，第5位是索引4
+      if (phoneChars.length > 2) phoneChars[2] = '*';
+      if (phoneChars.length > 3) phoneChars[3] = '*';
+      if (phoneChars.length > 4) phoneChars[4] = '*';
+
+      return phoneChars.join();
+    }
 
   Widget _buildItem(CollectionLog2Data log) {
     final TextStyle? textTextStyle = Theme.of(context)
@@ -329,8 +380,8 @@ class _GoodsListPageState extends State<GoodsListPage>
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
                           children: <TextSpan>[
-                            TextSpan(
-                                text: log.aAAAAABLCollectionOrder!.tBorrowSn),
+                                TextSpan(
+                                text: maskPhoneNumber(log.aAAAAABLCollectionOrder!.uPhone!)),
                           ],
                         ),
                       ),
@@ -345,60 +396,35 @@ class _GoodsListPageState extends State<GoodsListPage>
                   ),
                   onTap: () {
                     FlutterClipboard.copy(
-                        log.aAAAAABLCollectionOrder!.tBorrowSn!);
+                        log.aAAAAABLCollectionOrder!.uPhone!);
                   },
                 ),
-                InkWell(
-                  onTap: () {
-                    _showModalBottomSheet(log.aAAAAABLCollectionOrder!);
-                  },
-                  child: Row(
-                    children: [
-                      Gaps.hGap4,
-                      RichText(
-                        text: TextSpan(
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: (DateTime.parse(log
-                                                .aAAAAABLCollectionOrder!
-                                                .sFlowOutTime!)
-                                            .difference(DateTime.now())
-                                            .inHours >=
-                                        24)
-                                    ? DateTime.parse(log
-                                                .aAAAAABLCollectionOrder!
-                                                .sFlowOutTime!)
-                                            .difference(DateTime.now())
-                                            .inDays
-                                            .toString() +
-                                        'd left'
-                                    : DateTime.parse(log
-                                                .aAAAAABLCollectionOrder!
-                                                .sFlowOutTime!)
-                                            .difference(DateTime.now())
-                                            .inHours
-                                            .toString() +
-                                        'h left'),
-                          ],
-                        ),
-                      ),
-                      Gaps.hGap2,
-                      Icon(
-                        Icons.edit,
-                        size: 14,
-                        color: Colours.app_main.withOpacity(0.6),
-                      ),
-                    ],
-                  ),
-                ),
+                
               ],
             ),
             Gaps.vGap4,
-            Text(log.jContent!),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(log.jContent!),
+                ),
+                if(log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && (log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 || log.aAAAAABLCollectionOrder!.eCollectionAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId))
+                  OrderItemButton(
+                    key: Key('order_button_3_${widget.index}'),
+                    text: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? 'Receive' : 'Detail',
+                    textColor: context.isDark ? Colours.dark_button_text : Colors.white,
+                    icon: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? Icon(Icons.move_up,size: 16,color: Colors.white) : null,
+                    bgColor: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? Colors.purple : Colours.app_main,
+                    onTap: () {
+                      if(log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1){
+                        _receiveOrder(log.aAAAAABLCollectionOrder!);
+                      }else{
+                        _showModalBottomSheet(log.aAAAAABLCollectionOrder!);
+                      }
+                    },
+                  ),
+              ],
+            ),
           ],
         ));
   }
@@ -425,5 +451,54 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(SliverAppBarDelegate oldDelegate) {
     return oldDelegate.child != child || oldDelegate.height != height;
+  }
+}
+class OrderItemButton extends StatelessWidget {
+  const OrderItemButton(
+      {super.key,
+      this.bgColor,
+      this.textColor,
+      required this.text,
+      this.onTap,
+      this.icon});
+
+  final Color? bgColor;
+  final Color? textColor;
+  final GestureTapCallback? onTap;
+  final String text;
+  final Widget? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        constraints: BoxConstraints(
+          minWidth: icon != null ? 56 : 44,
+          maxHeight: 30.0,
+          minHeight: 30.0,
+        ),
+        child: icon != null
+            ? Row(
+                children: [
+                  Text(text,
+                      style: TextStyle(
+                          fontSize: 12, color: textColor)),
+                  Gaps.hGap1,
+                  icon!,
+                ],
+              )
+            : Text(
+                text,
+                style: TextStyle(fontSize: Dimens.font_sp14, color: textColor),
+              ),
+      ),
+    );
   }
 }

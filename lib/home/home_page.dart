@@ -1,7 +1,5 @@
 import 'package:bounty_hunter/shop/page/marketing_page.dart';
-import 'package:bounty_hunter/shop/page/review_page.dart';
 import 'package:flutter/material.dart';
-import 'package:bounty_hunter/goods/page/goods_page.dart';
 import 'package:bounty_hunter/home/provider/home_provider.dart';
 import 'package:bounty_hunter/order/page/order_page.dart';
 import 'package:bounty_hunter/res/resources.dart';
@@ -68,7 +66,8 @@ class _HomeState extends State<Home> with RestorationMixin {
   List<BottomNavigationBarItem> _buildBottomNavigationBarItem(
       int aGCollectionCommissionNewCount,
       int aHCollectionNotificationCount,
-      int cRTodayMarketingCnt) {
+      int cRTodayMarketingCnt,
+      int cYTodayReceiveCount) {
     // if (_list == null) {
     var tabImages = [
       const [
@@ -158,16 +157,58 @@ class _HomeState extends State<Home> with RestorationMixin {
           ),
         ),
       ],
-      const [
-        Icon(
-          Icons.move_up,
-          size: _imageSize,
-          color: Colours.unselected_item_color,
+      [
+        SizedBox(
+          width: 56,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Icon(
+                  Icons.move_up,
+                  size: _imageSize,
+                  color: Colours.unselected_item_color,
+                ),
+              ),
+              if (cYTodayReceiveCount == 0)
+                Positioned(
+                  right: 9.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const SizedBox(width: 8, height: 8),
+                  ),
+                ),
+            ],
+          ),
         ),
-        Icon(
-          Icons.move_up,
-          size: _imageSize,
-          color: Colours.app_main,
+        SizedBox(
+          width: 56,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Icon(
+                  Icons.move_up,
+                  size: _imageSize,
+                  color: Colours.app_main,
+                ),
+              ),
+              if (cYTodayReceiveCount == 0)
+                Positioned(
+                  right: 9.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const SizedBox(width: 16, height: 16),
+                  ),
+                ),
+            ],
+          ),
         ),
       ],
       // const [
@@ -358,7 +399,8 @@ class _HomeState extends State<Home> with RestorationMixin {
   List<BottomNavigationBarItem> _buildDarkBottomNavigationBarItem(
       int aGCollectionCommissionNewCount,
       int aHCollectionNotificationCount,
-      int cRTodayMarketingCnt) {
+      int cRTodayMarketingCnt,
+      int cYTodayReceiveCount) {
     // if (_list == null) {
     var tabImages = [
       const [
@@ -459,16 +501,58 @@ class _HomeState extends State<Home> with RestorationMixin {
           ),
         ),
       ],
-      const [
-        Icon(
-          Icons.move_up,
-          size: _imageSize,
-          color: Colours.unselected_item_color,
+      [
+        SizedBox(
+          width: 56,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Icon(
+                  Icons.move_up,
+                  size: _imageSize,
+                  color: Colours.unselected_item_color,
+                ),
+              ),
+                if (cYTodayReceiveCount == 0)
+                Positioned(
+                  right: 4.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const SizedBox(width: 16, height: 16),
+                  ),
+                ),
+            ],
+          ),
         ),
-        Icon(
-          Icons.move_up,
-          size: _imageSize,
-          color: Colours.app_main,
+        SizedBox(
+          width: 56,
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Icon(
+                  Icons.move_up,
+                  size: _imageSize,
+                  color: Colours.app_main,
+                ),
+              ),
+              if (cYTodayReceiveCount == 0)
+                Positioned(
+                  right: 4.2,
+                  top: 0.2,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.redAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const SizedBox(width: 8, height: 8),
+                  ),
+                ),
+            ],
+          ),
         ),
       ],
       [
@@ -663,7 +747,10 @@ class _HomeState extends State<Home> with RestorationMixin {
                           provider2.userEntity.profile
                                   ?.aHCollectionNotificationCount ??
                               0,
-                          provider2.userEntity.profile?.cRTodayMarketingCnt ?? 0)
+                          provider2.userEntity.profile?.cRTodayMarketingCnt ?? 0,
+                          provider2.userEntity.profile
+                                  ?.cYTodayReceiveCount ??
+                              0)
                       : _buildBottomNavigationBarItem(
                           provider2.userEntity.profile
                                   ?.aGCollectionCommissionNewCount ??
@@ -671,7 +758,8 @@ class _HomeState extends State<Home> with RestorationMixin {
                           provider2.userEntity.profile
                                   ?.aHCollectionNotificationCount ??
                               0,
-                          provider2.userEntity.profile?.cRTodayMarketingCnt ?? 0),
+                          provider2.userEntity.profile?.cRTodayMarketingCnt ?? 0,
+                          provider2.userEntity.profile?.cYTodayReceiveCount ?? 0),
                   type: BottomNavigationBarType.fixed,
                   currentIndex: provider.value,
                   elevation: 5.0,

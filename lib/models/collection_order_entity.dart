@@ -339,6 +339,8 @@ class CollectionOrderOtherProfile {
 	int? cQWeekReceiveLeftCnt = 0;
 	@JSONField(name: 'c_r_today_marketing_cnt')
 	int? cRTodayMarketingCnt = 0;
+  	@JSONField(name: 'c_y_today_receive_count')
+	int? cYTodayReceiveCount = 0;
 
 	CollectionOrderOtherProfile();
 

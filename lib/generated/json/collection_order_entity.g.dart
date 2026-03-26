@@ -1011,6 +1011,11 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (cRTodayMarketingCnt != null) {
     collectionOrderOtherProfile.cRTodayMarketingCnt = cRTodayMarketingCnt;
   }
+  final int? cYTodayReceiveCount = jsonConvert.convert<int>(
+      json['c_y_today_receive_count']);
+  if (cYTodayReceiveCount != null) {
+    collectionOrderOtherProfile.cYTodayReceiveCount = cYTodayReceiveCount;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -1090,6 +1095,7 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['c_p_week_retain_left_cnt'] = entity.cPWeekRetainLeftCnt;
   data['c_q_week_receive_left_cnt'] = entity.cQWeekReceiveLeftCnt;
   data['c_r_today_marketing_cnt'] = entity.cRTodayMarketingCnt;
+  data['c_y_today_receive_count'] = entity.cYTodayReceiveCount;
   return data;
 }
 
@@ -1166,6 +1172,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? cPWeekRetainLeftCnt,
     int? cQWeekReceiveLeftCnt,
     int? cRTodayMarketingCnt,
+    int? cYTodayReceiveCount,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -1247,7 +1254,8 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cOMonthExtendCnt = cOMonthExtendCnt ?? this.cOMonthExtendCnt
       ..cPWeekRetainLeftCnt = cPWeekRetainLeftCnt ?? this.cPWeekRetainLeftCnt
       ..cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt ?? this.cQWeekReceiveLeftCnt
-      ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt;
+      ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt
+      ..cYTodayReceiveCount = cYTodayReceiveCount ?? this.cYTodayReceiveCount;
   }
 }
 

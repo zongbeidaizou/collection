@@ -76,26 +76,36 @@ class _AddNoteState extends State<AddNote>
   CollectionLogOtherTrack? _track;
   CollectionLogOtherPeriod? _period;
   final List<IconData> _iconList = [
-    Icons.input,
-    Icons.sync,
-    Icons.more_time,
-    Icons.hourglass_disabled,
-    Icons.phone_disabled,
+    Icons.miscellaneous_services, //系统分配
+    Icons.sync, //协商中
+    Icons.more_time, //承诺还款
+    Icons.hourglass_disabled, //承诺未还
+    Icons.phone_disabled, //无法联系
     Icons.transfer_within_a_station,
-    Icons.payment,
-    Icons.check_circle,
-    Icons.sms_outlined
+    Icons.nightlight, //部分还款
+    Icons.lens, //已还款
+    Icons.sms_outlined, //短信
+    Icons.add_call, //外呼
+    Icons.extension_outlined, //展期
+    Icons.repeat_one,// 保留
+    Icons.move_up, //领取
+    Icons.loupe, //管理员
   ];
   final List<Color> _colorList = [
-    Colors.brown,
+    Colors.blue,
     Colors.grey,
     Colors.green,
     Colors.orange,
-    Colors.purpleAccent,
     Colors.red,
+    Colors.red,
+    const Color.fromARGB(255, 137, 139, 141),
     Colors.green,
-    const Color(0xFF1B5E20),
     Colors.blueGrey,
+    Colors.blueGrey,
+    const Color.fromARGB(255, 128, 188, 225),
+    Colors.green,
+    Colors.purple,
+    Colors.red,
   ];
   late AddNotePresenter _addNotePresenter;
   late CollectionOrderData item;
@@ -366,7 +376,7 @@ class _AddNoteState extends State<AddNote>
             child: Column(
               children: [
                 OrderItem(
-                  key: Key('order_item_'),
+                  key: Key('order_item_${item.id}'),
                   index: 1,
                   tabIndex: 1,
                   inList: false,

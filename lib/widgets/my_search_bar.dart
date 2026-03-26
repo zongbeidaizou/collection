@@ -160,6 +160,9 @@ class _MySearchBarState extends State<MySearchBar> {
                 SchedulerBinding.instance.addPostFrameCallback((_) {
                   _controller.text = '';
                 });
+                widget.onPressed?.call('');
+                _focus.unfocus();
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
               },
             ),
           ),

@@ -54,6 +54,7 @@ const typeColors = [
   Color.fromARGB(255, 128, 188, 225),//7展期奖金·
   Color.fromARGB(255, 244, 234, 52),//8注册奖金
   Color.fromARGB(255, 187, 230, 118),//9申请奖金
+  Color.fromARGB(255, 180, 182, 177),//10人工发放
 ];
 const typeIcons = [
   Icons.money_off_csred_outlined, //0 罚款
@@ -66,6 +67,8 @@ const typeIcons = [
   Icons.extension_outlined, //7展期奖金
   Icons.person_outline_outlined, //8注册奖金
   Icons.how_to_reg_outlined, //9申请奖金
+  Icons.build_outlined, //10人工发放
+
 
 ];
 
@@ -690,8 +693,14 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       ),
                       TextSpan(
                         text: ' - ${log.nBorrowSn}',
-                        style: TextStyle(color: ThemeUtils.getTextColor(context)),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
+                      if((log.oType == 1 || log.oType == 7 || log.oType == 3) && log.aAComment != null && log.aAComment!.isNotEmpty)
+                      TextSpan(
+                        text: ' - ${log.aAComment}',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      
                     ],
                   ),
                 ),

@@ -48,10 +48,10 @@ class _OrderReceivePageState extends State<OrderReceivePage> {
         showBack: false,
         hintText: 'Search by phone (Online)',
         onPressed: (text) {
-          if (text.isEmpty) {
-            showToast('Receive keyword cannot be empty！');
-            return;
-          }
+          // if (text.isEmpty) {
+          //   showToast('Receive keyword cannot be empty！');
+          //   return;
+          // }
           setState(() {
             _keyword = text;
           });

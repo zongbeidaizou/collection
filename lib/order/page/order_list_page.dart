@@ -173,7 +173,7 @@ class _OrderListPageState extends State<OrderListPage>
                         (BuildContext context, int index) {
                           return index < filteredList.length
                               ? OrderItem(
-                                  key: Key('order_item_$index'),
+                                  key: Key('order_item_${filteredList[index].id}'),
                                   index: index,
                                   tabIndex: _index,
                                   showContactDays: 0,

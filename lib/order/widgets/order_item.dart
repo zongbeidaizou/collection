@@ -695,7 +695,7 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.aKNo!.substring(widget.item.aKNo!.length - 6),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colors.grey.shade500)),
+                          TextSpan(text: widget.item.aKNo!.substring(widget.item.aKNo!.length > 6 ? widget.item.aKNo!.length - 6 : 0),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colors.grey.shade500)),
                           TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colours.app_main)),
                         ],
                       ),
@@ -704,7 +704,9 @@ class _OrderItemState extends State<OrderItem> {
                   ],
                 ),
                 onTap: () {
-                  FlutterClipboard.copy('${widget.item.uPhone!}-${widget.item.tBorrowSn!}');
+                  if(widget.source == 'order'){
+                    FlutterClipboard.copy('${widget.item.uPhone!}-${widget.item.tBorrowSn!}');
+                  }
                 },
               ),
             ),

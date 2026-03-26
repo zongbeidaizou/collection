@@ -159,7 +159,7 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
                   }
                   final item = _list[index - 1];
                   return OrderItem(
-                    key: Key('order_item_${index - 1}'),
+                    key: Key('order_item_${item.id}'),
                     index: index - 1,
                     showContactDays: 0,
                     tabIndex: _index,
@@ -190,6 +190,8 @@ class _OrderReceiveResultPageState extends State<OrderReceiveResultPage>
                     const SizedBox(height: 8),
                     const Text(
                         'Receive by phone or contact phone or borrower name (Online)'),
+                        if(widget.keyword.isNotEmpty && _list.isEmpty)
+                    Text('No data found by the keyword: ${widget.keyword}',style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600,color: Colors.red),),
                   ],
                 ),
               ),

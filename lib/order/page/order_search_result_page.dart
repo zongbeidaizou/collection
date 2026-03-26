@@ -104,7 +104,7 @@ class _OrderSearchResultPageState extends State<OrderSearchResultPage>
                 padding: const EdgeInsets.only(
                     left: 16.0, right: 16.0, bottom: 28.0),
                 itemBuilder: (_, index) => OrderItem(
-                  key: Key('order_item_$index'),
+                  key: Key('order_item_${_list[index].id}'),
                   index: index,
                   showContactDays: 0,
                   tabIndex: _index,

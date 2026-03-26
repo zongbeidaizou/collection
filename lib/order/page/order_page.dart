@@ -343,7 +343,7 @@ class _OrderPageState extends State<OrderPage>
               onPressed: () {
                 NavigatorUtils.push(context, GoodsRouter.goodsPage);
               },
-              tooltip: 'Receive',
+              tooltip: 'Log',
               icon: Icon(Icons.description_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),
             ),
           ],

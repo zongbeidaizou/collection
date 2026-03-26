@@ -997,7 +997,7 @@ class _OrderItemState extends State<OrderItem> {
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
                             Text(
-                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${ _additionBonus >= 0 ? '+$_additionBonus' :  ''}% of amount",
+                                "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${ _additionBonus > 0 ? '+$_additionBonus' :  ''}% of amount",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall

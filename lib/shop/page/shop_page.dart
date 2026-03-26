@@ -142,6 +142,7 @@ class _ShopPageState extends State<ShopPage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Gaps.vGap4,
            MergeSemantics(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -150,7 +151,7 @@ class _ShopPageState extends State<ShopPage>
                 children: [
                   Text(
                     title,
-                    style: TextStyles.textBold14,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
@@ -176,6 +177,7 @@ class _ShopPageState extends State<ShopPage>
                         builder: (context, child) {
                           return Container(
                             padding: const EdgeInsets.all(2.0),
+                            width: 88,
                             child: Column(
                               children: <Widget>[
                                 Stack(
@@ -194,9 +196,9 @@ class _ShopPageState extends State<ShopPage>
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                              color: Colors.transparent
-                                              /*color: _colorAnimation.value!,
-                                    width: 4.0,*/
+                                              color: Colors.transparent,
+                                              /*color: _colorAnimation.value!,*/
+                                      width: 4.0,
                                               ),
                                         ),
                                         child: CircleAvatar(
@@ -238,9 +240,9 @@ class _ShopPageState extends State<ShopPage>
                                   RichText(text: TextSpan(children: [
                                     TextSpan(text: formatNumberToK(monthData[index].value!)),
                                     if (monthData[index].addition! > 0)
-                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),
+                                      const TextSpan(text: ' + ', style: TextStyle(color:  Colors.green)),
                                     if (monthData[index].addition! > 0)
-                                      TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green)),
+                                      TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
                                   ]))
                               ],
                             ),
@@ -248,6 +250,7 @@ class _ShopPageState extends State<ShopPage>
                         })
                     : Container(
                         padding: const EdgeInsets.all(2.0),
+                        width: 88,
                         child: Column(
                           children: <Widget>[
                             Stack(
@@ -283,9 +286,9 @@ class _ShopPageState extends State<ShopPage>
                             RichText(text: TextSpan(children: [
                               TextSpan(text: formatNumberToK(monthData[index].value!)),
                               if (monthData[index].addition! > 0)
-                                TextSpan(text: '+', style: const TextStyle(color:  Colors.green)),
+                                TextSpan(text: ' + ', style: const TextStyle(color:  Colors.green)),
                               if (monthData[index].addition! > 0)
-                                TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green)),
+                                TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
                             ])),
                           ],
                         ),
@@ -484,16 +487,6 @@ class _ShopPageState extends State<ShopPage>
                   Column(
                     children: [
                       Gaps.vGap15,
-                      Text(
-                        'My Monthly Bonus',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 1,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -502,6 +495,12 @@ class _ShopPageState extends State<ShopPage>
                           ),
                           child: Column(
                             children: [
+                              Container(
+                                width: double.infinity,
+                                color: Color(0xFF50E4FF), // 表头背景色
+                                child: _buildHeaderCell('My Monthly Target Bonus'),
+                              ),
+                              Gaps.line,
                               // 表头 - 带背景色
                               Container(
                                 color: Color(0xFF50E4FF), // 表头背景色

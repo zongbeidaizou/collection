@@ -181,8 +181,7 @@ class _GoodsListPageState extends State<GoodsListPage>
 
   void _showModalBottomSheet(CollectionOrderData item) {
     print('${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
-    NavigatorUtils.push(context,
-        '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
+    // NavigatorUtils.push(context,'${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
     // return showModalBottomSheet<int>(
     //   context: context,
     //   isScrollControlled: true,

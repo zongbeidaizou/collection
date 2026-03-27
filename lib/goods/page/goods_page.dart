@@ -232,7 +232,7 @@ class _TabView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(tabName, style: TextStyle(fontSize: 10, color: color)),
-            Icon(_iconList[index], size: 12, color: color)
+            Icon(_iconList[index], size: 14, color: color)
           ],
         ),
       ),

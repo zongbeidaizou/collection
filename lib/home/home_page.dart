@@ -515,14 +515,14 @@ class _HomeState extends State<Home> with RestorationMixin {
               ),
                 if (cYTodayReceiveCount == 0)
                 Positioned(
-                  right: 4.2,
+                  right: 9.2,
                   top: 0.2,
                   child: DecoratedBox(
                     decoration: const BoxDecoration(
                       color: Colors.redAccent,
                       shape: BoxShape.circle,
                     ),
-                    child: const SizedBox(width: 16, height: 16),
+                    child: const SizedBox(width: 10, height: 10),
                   ),
                 ),
             ],
@@ -541,14 +541,14 @@ class _HomeState extends State<Home> with RestorationMixin {
               ),
               if (cYTodayReceiveCount == 0)
                 Positioned(
-                  right: 4.2,
+                  right: 9.2,
                   top: 0.2,
                   child: DecoratedBox(
                     decoration: const BoxDecoration(
                       color: Colors.redAccent,
                       shape: BoxShape.circle,
                     ),
-                    child: const SizedBox(width: 8, height: 8),
+                    child: const SizedBox(width: 10, height: 10),
                   ),
                 ),
             ],

@@ -343,6 +343,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                   flex: 1,
                   child: Row(
                     children: [
+                      
                       RichText(
                         text: TextSpan(
                           style: textTextStyle,
@@ -359,6 +360,13 @@ class _GoodsListPageState extends State<GoodsListPage>
                           ],
                         ),
                       ),
+                      Gaps.hGap4,
+                      if(log.aAAAAABLCollectionOrder?.kStatus == 7)
+                      Icon(Icons.lens,color: Colors.green,size: 10,),
+                      if(log.aAAAAABLCollectionOrder?.kStatus != 7 && log.aAAAAABLCollectionOrder?.eCollectionAdminId != context.read<UserProvider>().userEntity.profile!.bAdminId)
+                      Icon(Icons.delete_forever_outlined,color: Colors.red,size: 12,),
+                      if(log.aAAAAABLCollectionOrder?.kStatus == 10)
+                      Icon(Icons.extension_outlined,color: const Color.fromARGB(255, 128, 188, 225),size: 10,),
                     ],
                   ),
                 ),
@@ -406,7 +414,7 @@ class _GoodsListPageState extends State<GoodsListPage>
             Row(
               children: [
                 Expanded(
-                  child: Text(log.jContent!),
+                  child: Text(log.jContent!,style: TextStyle(color: log.aAAAAABLCollectionOrder?.kStatus == 7 || (log.aAAAAABLCollectionOrder?.kStatus != 7 && log.aAAAAABLCollectionOrder?.eCollectionAdminId != context.read<UserProvider>().userEntity.profile!.bAdminId) ? Colors.grey.withOpacity(0.7): ThemeUtils.getTextColor(context)),),
                 ),
                 //详情按钮
                 if(log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && log.aAAAAABLCollectionOrder!.eCollectionAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId)

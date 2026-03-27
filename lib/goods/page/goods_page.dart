@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:bounty_hunter/goods/goods_router.dart';
 import 'package:bounty_hunter/goods/page/goods_list_page.dart';
 import 'package:bounty_hunter/goods/provider/goods_page_provider.dart';
-import 'package:bounty_hunter/goods/widgets/goods_add_menu.dart';
-import 'package:bounty_hunter/goods/widgets/goods_sort_menu.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
-import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
-import 'package:bounty_hunter/widgets/popup_window.dart';
 import 'package:provider/provider.dart';
-
-import '../../widgets/my_search_bar.dart';
 
 final List<IconData> _iconList = [
   Icons.miscellaneous_services, //0 系统自动分配
@@ -34,6 +28,22 @@ final List<IconData> _iconList = [
   Icons.sms_outlined, //16 
   Icons.sms_outlined, //17 
 ];
+  final List<Color> _colorList = [
+    Colors.blue, //0系统分配
+    Colors.grey, //1协商中
+    Colors.green, //2承诺还款
+    Colors.orange, //3承诺未还
+    Colors.red, //4无法联系
+    Colors.red, //5部分还款
+    const Color.fromARGB(255, 137, 139, 141), //6部分还款
+    Colors.green, //7已还款
+    Colors.grey, //8短信
+    Colors.grey, //9外呼
+    const Color.fromARGB(255, 128, 188, 225), //10展期
+    Colors.green, //11保留
+    Colors.purple, //12领取
+    Colors.blue, //13管理员
+  ];
 /// design/4商品/index.html
 class GoodsPage extends StatefulWidget {
 
@@ -48,9 +58,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   TabController? _tabController;
   final PageController _pageController = PageController();
 
-  final GlobalKey _addKey = GlobalKey();
   final GlobalKey _bodyKey = GlobalKey();
-  final GlobalKey _buttonKey = GlobalKey();
   String _searchKeyword = ''; // 管理搜索关键词的状态
   final TextEditingController _controller = TextEditingController();
 
@@ -117,13 +125,14 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
         //
         //   ],
         // ),
-        body: Column(
-          key: _bodyKey,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 6.0),
-              child: TabBar(
+        body: Consumer<GoodsPageProvider>(
+          builder: (context, pageProvider, _) => Column(
+            key: _bodyKey,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 6.0),
+                child: TabBar(
                 onTap: (index) {
                   if (!mounted) {
                     return;
@@ -135,38 +144,51 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                 labelStyle: TextStyles.textBold18,
                 indicatorSize: TabBarIndicatorSize.label,
                 labelPadding: EdgeInsets.zero,
-                unselectedLabelColor: context.isDark ? Colours.text_gray : Colours.text,
-                labelColor: Theme.of(context).primaryColor,
+                // 选中颜色改为每个 Tab 自己控制（见 _TabView），这里不再用全局 labelColor
                 indicatorPadding: const EdgeInsets.only(right: 1, left: 1),
                 // 隐藏点击效果
                 overlayColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
                   return Colors.transparent;
                 },
                 ),
-                tabs: const <Widget>[
-                  _TabView('BP', 3),//承诺未还
-                  _TabView('Part Pay', 6), //部分支付
-                  _TabView('PTP', 2),//承诺还款
-                  _TabView('Extension', 10), //展期成功
-                  _TabView('Retain', 11), //保留
-                  _TabView('Receive', 12), //接收
-                  _TabView('Admin', 13), //管理员分配
-                  _TabView('Negotiation', 1), //协商中
-                  // _TabView('System', 0),//系统自动分配
-                ],
+                tabs: List<Widget>.generate(8, (tabIndex) {
+                  final selected = pageProvider.index == tabIndex;
+                  final unselectedColor = context.isDark ? Colours.text_gray : Colours.text;
+
+                  switch (tabIndex) {
+                    case 0:
+                      return _TabView('BP', 3, selected: selected, unselectedColor: unselectedColor); // 承诺未还
+                    case 1:
+                      return _TabView('Part Pay', 6, selected: selected, unselectedColor: unselectedColor); // 部分支付
+                    case 2:
+                      return _TabView('PTP', 2, selected: selected, unselectedColor: unselectedColor); // 承诺还款
+                    case 3:
+                      return _TabView('Extension', 10, selected: selected, unselectedColor: unselectedColor); // 展期成功
+                    case 4:
+                      return _TabView('Retain', 11, selected: selected, unselectedColor: unselectedColor); // 保留
+                    case 5:
+                      return _TabView('Receive', 12, selected: selected, unselectedColor: unselectedColor); // 接收
+                    case 6:
+                      return _TabView('Admin', 13, selected: selected, unselectedColor: unselectedColor); // 管理员分配
+                    case 7:
+                    default:
+                      return _TabView('Negotiation', 1, selected: selected, unselectedColor: unselectedColor); // 协商中
+                  }
+                }),
+                ),
               ),
-            ),
-            Gaps.line,
-            Expanded(
-              child: PageView.builder(
-                  key: const Key('pageView'),
-                  itemCount: 8,
-                  onPageChanged: _onPageChange,
-                  controller: _pageController,
-                  itemBuilder: (_, int index) => GoodsListPage(index: index, searchKeyword: _searchKeyword,)
-              ),
-            )
-          ],
+              Gaps.line,
+              Expanded(
+                child: PageView.builder(
+                    key: const Key('pageView'),
+                    itemCount: 8,
+                    onPageChanged: _onPageChange,
+                    controller: _pageController,
+                    itemBuilder: (_, int index) => GoodsListPage(index: index, searchKeyword: _searchKeyword,)
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -186,21 +208,31 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
 
 class _TabView extends StatelessWidget {
 
-  const _TabView(this.tabName, this.index);
+  const _TabView(
+    this.tabName,
+    this.index, {
+    required this.selected,
+    required this.unselectedColor,
+  });
 
   final String tabName;
   final int index;
+  final bool selected;
+  final Color unselectedColor;
 
   @override
   Widget build(BuildContext context) {
+    final Color selectedColor = _colorList[index];
+    final Color color = selected ? selectedColor : unselectedColor;
+
     return Tab(
       child: SizedBox(
         width: 70.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(tabName, style: TextStyle(fontSize: 10)),
-            Icon(_iconList[index], size: 12)
+            Text(tabName, style: TextStyle(fontSize: 10, color: color)),
+            Icon(_iconList[index], size: 12, color: color)
           ],
         ),
       ),

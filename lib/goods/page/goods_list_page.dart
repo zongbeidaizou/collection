@@ -55,7 +55,7 @@ final List<Color> _colorList = [
   const Color(0xFF1B5E20),
   Colors.blueGrey,
 ];
-final List<int> _typeList = [11, 12, 13, 6, 10, 1, 2, 3, 0];
+final List<int> _typeList = [3, 6, 2, 10, 11, 12, 13, 1, 0];
 
 class GoodsListPage extends StatefulWidget {
   const GoodsListPage(
@@ -163,7 +163,6 @@ class _GoodsListPageState extends State<GoodsListPage>
   }
 
   Future<void> _loadMore() async {
-    Toast.show(widget.index.toString());
     if (_isLoading) {
       return;
     }
@@ -181,6 +180,7 @@ class _GoodsListPageState extends State<GoodsListPage>
   bool get wantKeepAlive => true;
 
   void _showModalBottomSheet(CollectionOrderData item) {
+    print('${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
     NavigatorUtils.push(context,
         '${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
     // return showModalBottomSheet<int>(
@@ -408,21 +408,29 @@ class _GoodsListPageState extends State<GoodsListPage>
                 Expanded(
                   child: Text(log.jContent!),
                 ),
-                if(log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && (log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 || log.aAAAAABLCollectionOrder!.eCollectionAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId))
+                //详情按钮
+                if(log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && log.aAAAAABLCollectionOrder!.eCollectionAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId)
                   OrderItemButton(
-                    key: Key('order_button_3_${widget.index}'),
-                    text: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? 'Receive' : 'Detail',
+                    key: Key('order_button_3_${log.id}'),
+                    text: 'Detail',
                     textColor: context.isDark ? Colours.dark_button_text : Colors.white,
-                    icon: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? Icon(Icons.move_up,size: 16,color: Colors.white) : null,
-                    bgColor: log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1 ? Colors.purple : Colours.app_main,
+                    bgColor: Colours.app_main,
                     onTap: () {
-                      if(log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1){
-                        _receiveOrder(log.aAAAAABLCollectionOrder!);
-                      }else{
                         _showModalBottomSheet(log.aAAAAABLCollectionOrder!);
-                      }
                     },
                   ),
+                //保留
+                if((widget.index == 3 || widget.index ==6) && log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1)
+                  OrderItemButton(
+                    key: Key('order_button_4_${log.id}'),
+                    text: 'Receive',
+                    textColor: context.isDark ? Colours.dark_button_text : Colors.white,
+                    icon: Icon(Icons.move_up,size: 16,color: Colors.white),
+                    bgColor: Colors.purple,
+                    onTap: () {
+                      _receiveOrder(log.aAAAAABLCollectionOrder!);
+                    },
+                  ),  
               ],
             ),
           ],

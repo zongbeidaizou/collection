@@ -29,6 +29,7 @@ import '../widgets/bar.dart';
 import '../widgets/bar2.dart';
 import '../widgets/level_bar.dart';
 import '../widgets/line.dart';
+import 'manual_page.dart';
 import '../widgets/pie.dart';
 import '../widgets/resources/bar_chart_sample6.dart';
 
@@ -358,6 +359,11 @@ class _ShopPageState extends State<ShopPage>
           IconButton(
             tooltip: 'Manual',
             onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ManualPage(),
+                ),
+              );
             },
             icon: Icon(
               Icons.menu_book,

@@ -428,7 +428,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                     },
                   ),
                 //保留
-                if((widget.index == 3 || widget.index ==6) && log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1)
+                if((widget.index == 0 || widget.index ==1) && log.aAAAAABLCollectionOrder!.kStatus! != 7 && log.aAAAAABLCollectionOrder!.kStatus! != 10 && log.aAAAAABLCollectionOrder!.eCollectionAdminId == 1)
                   OrderItemButton(
                     key: Key('order_button_4_${log.id}'),
                     text: 'Receive',

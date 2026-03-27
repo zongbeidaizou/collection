@@ -122,7 +122,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 6.0),
               child: TabBar(
                 onTap: (index) {
                   if (!mounted) {
@@ -137,21 +137,21 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                 labelPadding: EdgeInsets.zero,
                 unselectedLabelColor: context.isDark ? Colours.text_gray : Colours.text,
                 labelColor: Theme.of(context).primaryColor,
-                indicatorPadding: const EdgeInsets.only(right: 4, left: 4),
+                indicatorPadding: const EdgeInsets.only(right: 1, left: 1),
                 // 隐藏点击效果
                 overlayColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
                   return Colors.transparent;
                 },
                 ),
                 tabs: const <Widget>[
+                  _TabView('BP', 3),//承诺未还
+                  _TabView('Part Pay', 6), //部分支付
+                  _TabView('PTP', 2),//承诺还款
+                  _TabView('Extension', 10), //展期成功
                   _TabView('Retain', 11), //保留
                   _TabView('Receive', 12), //接收
                   _TabView('Admin', 13), //管理员分配
-                  _TabView('Part Pay', 6), //部分支付
-                  _TabView('Extension', 10), //展期成功
                   _TabView('Negotiation', 1), //协商中
-                  _TabView('PTP', 2),//承诺还款
-                  _TabView('BP', 3),//承诺未还
                   // _TabView('System', 0),//系统自动分配
                 ],
               ),
@@ -195,7 +195,7 @@ class _TabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tab(
       child: SizedBox(
-        width: 98.0,
+        width: 70.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[

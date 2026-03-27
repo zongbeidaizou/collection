@@ -76,36 +76,36 @@ class _AddNoteState extends State<AddNote>
   CollectionLogOtherTrack? _track;
   CollectionLogOtherPeriod? _period;
   final List<IconData> _iconList = [
-    Icons.miscellaneous_services, //系统分配
-    Icons.sync, //协商中
-    Icons.more_time, //承诺还款
-    Icons.hourglass_disabled, //承诺未还
-    Icons.phone_disabled, //无法联系
-    Icons.transfer_within_a_station,
-    Icons.nightlight, //部分还款
-    Icons.lens, //已还款
-    Icons.sms_outlined, //短信
-    Icons.add_call, //外呼
-    Icons.extension_outlined, //展期
-    Icons.repeat_one,// 保留
-    Icons.move_up, //领取
-    Icons.loupe, //管理员
+    Icons.miscellaneous_services, //0系统分配
+    Icons.sync, //1协商中
+    Icons.more_time, //2承诺还款
+    Icons.hourglass_disabled, //3承诺未还
+    Icons.phone_disabled, //4无法联系
+    Icons.transfer_within_a_station, //5部分还款
+    Icons.nightlight, //6部分还款
+    Icons.lens, //7已还款
+    Icons.sms_outlined, //8短信
+    Icons.add_call, //9外呼
+    Icons.extension_outlined, //10展期
+    Icons.repeat_one,// 11保留
+    Icons.move_up, //12领取
+    Icons.loupe, //13管理员
   ];
   final List<Color> _colorList = [
-    Colors.blue,
-    Colors.grey,
-    Colors.green,
-    Colors.orange,
-    Colors.red,
-    Colors.red,
-    const Color.fromARGB(255, 137, 139, 141),
-    Colors.green,
-    Colors.blueGrey,
-    Colors.blueGrey,
-    const Color.fromARGB(255, 128, 188, 225),
-    Colors.green,
-    Colors.purple,
-    Colors.red,
+    Colors.blue, //0系统分配
+    Colors.grey, //1协商中
+    Colors.green, //2承诺还款
+    Colors.orange, //3承诺未还
+    Colors.red, //4无法联系
+    Colors.red, //5部分还款
+    const Color.fromARGB(255, 137, 139, 141), //6部分还款
+    Colors.green, //7已还款
+    Colors.grey, //8短信
+    Colors.grey, //9外呼
+    const Color.fromARGB(255, 128, 188, 225), //10展期
+    Colors.green, //11保留
+    Colors.purple, //12领取
+    Colors.blue, //13管理员
   ];
   late AddNotePresenter _addNotePresenter;
   late CollectionOrderData item;

@@ -397,9 +397,7 @@ class _MessageTemplateItem extends StatelessWidget {
     if (placeholderMatches.isEmpty) {
       return Text(
         previewMessage,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colours.text,
-            ),
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
 
@@ -416,9 +414,7 @@ class _MessageTemplateItem extends StatelessWidget {
     if (replacements.isEmpty) {
       return Text(
         previewMessage,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colours.text,
-            ),
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
 
@@ -435,9 +431,7 @@ class _MessageTemplateItem extends StatelessWidget {
         if (foundIndex > lastIndex) {
           spans.add(TextSpan(
             text: previewMessage.substring(lastIndex, foundIndex),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colours.text,
-                ),
+            style: Theme.of(context).textTheme.bodySmall,
           ));
         }
 
@@ -458,9 +452,7 @@ class _MessageTemplateItem extends StatelessWidget {
     if (lastIndex < previewMessage.length) {
       spans.add(TextSpan(
         text: previewMessage.substring(lastIndex),
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colours.text,
-            ),
+        style: Theme.of(context).textTheme.bodySmall,
       ));
     }
 
@@ -468,9 +460,7 @@ class _MessageTemplateItem extends StatelessWidget {
     if (spans.isEmpty) {
       return Text(
         previewMessage,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colours.text,
-            ),
+        style: Theme.of(context).textTheme.bodySmall,
       );
     }
 

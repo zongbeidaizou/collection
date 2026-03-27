@@ -180,8 +180,9 @@ class _GoodsListPageState extends State<GoodsListPage>
   bool get wantKeepAlive => true;
 
   void _showModalBottomSheet(CollectionOrderData item) {
-    print('${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
-    // NavigatorUtils.push(context,'${OrderRouter.notePage}?id=${item.id}&item=${item.toString()}');
+    final encodedItem = Uri.encodeComponent(item.toString());
+    print('${OrderRouter.notePage}?id=${item.id}&item=$encodedItem');
+    NavigatorUtils.push(context, '${OrderRouter.notePage}?id=${item.id}&item=$encodedItem');
     // return showModalBottomSheet<int>(
     //   context: context,
     //   isScrollControlled: true,

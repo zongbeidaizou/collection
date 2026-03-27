@@ -163,8 +163,9 @@ class _OrderItemState extends State<OrderItem> {
         ?.copyWith(fontSize: Dimens.font_sp12,color: isDark ? Colors.white : Colors.black);
     void _showModalBottomSheet() {
       widget.item.aLLastLog = '';
+      final encodedItem = Uri.encodeComponent(widget.item.toString());
       NavigatorUtils.push(context,
-          '${OrderRouter.notePage}?id=${widget.item.id}&item=${widget.item.toString()}');
+          '${OrderRouter.notePage}?id=${widget.item.id}&item=$encodedItem');
       // return showModalBottomSheet<int>(
       //   context: context,
       //   isScrollControlled: true,
@@ -199,7 +200,7 @@ class _OrderItemState extends State<OrderItem> {
                 collectionOrderId: widget.item.id!,
                 period: widget.period!,
                 showContactDays: widget.showContactDays,
-                borrowCount: widget.item.aAAAAQBPeriods?.bCBorrowCount ?? 0,
+                borrowCount: widget.item.aEBorrowCount ?? 0,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
                   widget.onSendSms?.call(templateId, smsContent,
@@ -696,7 +697,7 @@ class _OrderItemState extends State<OrderItem> {
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(text: widget.item.aKNo!.substring(widget.item.aKNo!.length > 6 ? widget.item.aKNo!.length - 6 : 0),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colors.grey.shade500)),
-                          TextSpan(text: '(${widget.item.aAAAAQBPeriods?.bCBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colours.app_main)),
+                          TextSpan(text: '(${widget.item.aEBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colours.app_main)),
                         ],
                       ),
                     ),

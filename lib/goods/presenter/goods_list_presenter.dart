@@ -38,7 +38,7 @@ class GoodsListPresenter extends BasePagePresenter<GoodsListMvpView> {
       return ;
     }
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
-    await requestNetwork<CollectionLog2Entity>(Method.get, url: HttpApi.collectionLogs2, queryParameters:{"page": currentPage, 'g_type': type, 'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
+    await requestNetwork<CollectionLog2Entity>(Method.get, url: HttpApi.collectionLogs2, queryParameters:{'page': currentPage, 'g_type': keyword.isNotEmpty ? -999: type, 'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
       if (data != null) {
         view.getContext().read<UserProvider>().setUserEntity(data!.other!);
         view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);

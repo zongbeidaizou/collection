@@ -356,6 +356,16 @@ class _ShopPageState extends State<ShopPage>
         leadingWidth: 300,
         actions: <Widget>[
           IconButton(
+            tooltip: 'Manual',
+            onPressed: () {
+            },
+            icon: Icon(
+              Icons.menu_book,
+              color: iconColor,
+              size: 20,
+            ),
+          ),
+          IconButton(
             tooltip: 'Day details',
             onPressed: () {
               _showAdminInfoDialog();

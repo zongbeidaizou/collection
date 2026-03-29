@@ -56,54 +56,83 @@ class ManualPage extends StatelessWidget {
                   'The Cases module is the daily operation center for collection tasks. Use it to filter by status, contact borrowers, update outcomes, and check processing history.',
               screenshotTitle: 'Example Screenshot - Cases Main Workflow',
               screenshotHint:
-                  'Replace this placeholder with a real screenshot that has markers 1, 2, 3, and 4.',
+                  'This screenshot marks steps 1~8. See the list below for detailed meanings.',
               markerIcons: <IconData>[
                 Icons.app_registration_rounded,
                 Icons.search,
                 Icons.assignment_turned_in_outlined,
                 Icons.description_outlined,
               ],
+              imageAsset: 'assets/images/manual/case_list.png',
+              imageFirst: true,
               steps: <_ManualStep>[
                 _ManualStep(
                   no: 1,
-                  title: 'Select case status tab',
-                  description:
-                      'Switch between New / Negotiating / PTP / BP / No Answer to focus on the right queue.',
+                  title: 'Header and segment indicator',
+                  description: 'Shows leading segment or priority label of the case list item.',
                   icons: <_IconExplain>[
-                    _IconExplain(icon: Icon(Icons.app_registration_rounded), text: 'Cases module entry'),
-                    _IconExplain(icon: Icon(Icons.miscellaneous_services), text: 'New'),
-                    _IconExplain(icon: Icon(Icons.sync), text: 'Negotiating'),
-                    _IconExplain(icon: Icon(Icons.more_time), text: 'PTP'),
-                    _IconExplain(icon: Icon(Icons.hourglass_disabled), text: 'BP'),
+                    _IconExplain(icon: Icon(Icons.label_important_outline), text: 'Segment/priority badge'),
                   ],
                 ),
                 _ManualStep(
                   no: 2,
-                  title: 'Search target borrower',
-                  description:
-                      'Use keyword/phone search to locate one case quickly before taking action.',
+                  title: 'Commission/Rate indicator',
+                  description: 'Shows current applicable rate or commission percentage.',
                   icons: <_IconExplain>[
-                    _IconExplain(icon: Icon(Icons.search), text: 'Search case list'),
+                    _IconExplain(icon: Icon(Icons.percent), text: 'Rate'),
                   ],
                 ),
                 _ManualStep(
                   no: 3,
-                  title: 'Update case action',
-                  description:
-                      'Open an item and perform follow-up actions such as call, SMS, and note update.',
+                  title: 'Tag and count area',
+                  description: 'Displays tags such as attempts or group labels with counts.',
                   icons: <_IconExplain>[
-                    _IconExplain(icon: Icon(Icons.call), text: 'Call borrower'),
-                    _IconExplain(icon: Icon(Icons.sms_outlined), text: 'Send SMS'),
-                    _IconExplain(icon: Icon(Icons.edit_note), text: 'Add or edit note'),
+                    _IconExplain(icon: Icon(Icons.sell_outlined), text: 'Tag'),
+                    _IconExplain(icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
                   ],
                 ),
                 _ManualStep(
                   no: 4,
-                  title: 'Review logs',
-                  description:
-                      'Open the Log page to verify timeline, owner, and final action result.',
+                  title: 'Borrower basic info',
+                  description: 'Includes masked name and masked phone number.',
                   icons: <_IconExplain>[
-                    _IconExplain(icon: Icon(Icons.description_outlined), text: 'Open Log page'),
+                    _IconExplain(icon: Icon(Icons.person_outline), text: 'Masked name'),
+                    _IconExplain(icon: Icon(Icons.phone_android), text: 'Masked phone'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 5,
+                  title: 'Last record and countdown',
+                  description: 'Shows remaining time and last record timestamp for the case.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.timer), text: 'Remaining time'),
+                    _IconExplain(icon: Icon(Icons.history), text: 'Last record'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 6,
+                  title: 'Bonus panel',
+                  description: 'Displays expected bonus summary with level and amount.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.attach_money), text: 'Bonus'),
+                    _IconExplain(icon: Icon(Icons.star_border), text: 'Level'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 7,
+                  title: 'Latest note preview',
+                  description: 'Shows the latest communication note content inline.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.notes), text: 'Note'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 8,
+                  title: 'Action buttons',
+                  description: 'Perform quick actions such as Retain or open Detail page.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.repeat_one), text: 'Retain'),
+                    _IconExplain(icon: Icon(Icons.info_outline), text: 'Detail'),
                   ],
                 ),
               ],
@@ -302,6 +331,8 @@ class _ManualTabView extends StatelessWidget {
     required this.screenshotHint,
     required this.markerIcons,
     required this.steps,
+    this.imageAsset,
+    this.imageFirst = false,
   });
 
   final String moduleName;
@@ -310,30 +341,45 @@ class _ManualTabView extends StatelessWidget {
   final String screenshotHint;
   final List<IconData> markerIcons;
   final List<_ManualStep> steps;
+  final String? imageAsset;
+  final bool imageFirst;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        _SectionCard(
+        if (!imageFirst) _SectionCard(
           title: '$moduleName Overview',
           child: Text(overview),
         ),
-        const SizedBox(height: 12),
+        if (!imageFirst) const SizedBox(height: 12),
         _SectionCard(
           title: screenshotTitle,
-          child: _ScreenshotPlaceholder(
-            markerIcons: markerIcons,
-            hint: screenshotHint,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (imageAsset == null)
+                _ScreenshotPlaceholder(
+                  markerIcons: markerIcons,
+                  hint: screenshotHint,
+                )
+              else
+                _ScreenshotImage(asset: imageAsset!, hint: screenshotHint),
+              const SizedBox(height: 12),
+              const Text(
+                'Step-by-Step Instructions',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 8),
+              ...steps,
+            ],
           ),
         ),
         const SizedBox(height: 12),
-        _SectionCard(
-          title: 'Step-by-Step Instructions',
-          child: Column(
-            children: steps,
-          ),
+        if (imageFirst) _SectionCard(
+          title: '$moduleName Overview',
+          child: Text(overview),
         ),
         const SizedBox(height: 12),
       ],
@@ -421,6 +467,47 @@ class _ScreenshotPlaceholder extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          hint,
+          style: TextStyle(
+            color: Colors.grey.shade700,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ScreenshotImage extends StatelessWidget {
+  const _ScreenshotImage({
+    required this.asset,
+    required this.hint,
+  });
+
+  final String asset;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blueGrey.withOpacity(0.25)),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: LoadAssetImage(
+              asset,
+              fit: BoxFit.contain,
             ),
           ),
         ),

@@ -145,6 +145,7 @@ flutter:
     - assets/images/login/
     - assets/images/goods/
     - assets/images/shop/
+    - assets/images/manual/
     - assets/images/account/
     - assets/images/statistic/
     - assets/lottie/

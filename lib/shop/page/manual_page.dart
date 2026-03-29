@@ -51,28 +51,9 @@ class ManualPage extends StatelessWidget {
           children: <Widget>[
             ListView(
               padding: const EdgeInsets.all(16),
-              children: List<Widget>.generate(3, (int index) {
-                return _SectionCard(
-                  title: 'Example Screenshot - Cases Main Workflow',
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const _ScreenshotImage(
-                        asset: 'assets/images/manual/case_list.png',
-                        hint:
-                            'This screenshot marks steps 1~8. See the list below for detailed meanings.',
-                      ),
-                      const SizedBox(height: 12),
-                      const Text(
-                        'Step-by-Step Instructions',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 8),
-                      ..._buildCaseSteps(),
-                    ],
-                  ),
-                );
-              }),
+              children: _buildCaseEntities()
+                  .map((e) => _StepSectionCard(entity: e))
+                  .toList(),
             ),
             
             
@@ -130,7 +111,7 @@ class _ScreenshotImage extends StatelessWidget {
     return Column(
       children: <Widget>[
         AspectRatio(
-          aspectRatio: 16 / 9,
+          aspectRatio: 12 / 9,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.04),
@@ -140,7 +121,7 @@ class _ScreenshotImage extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: LoadAssetImage(
               asset,
-              fit: BoxFit.contain,
+              fit: BoxFit.fitHeight,
             ),
           ),
         ),
@@ -311,6 +292,257 @@ List<_ManualStep> _buildCaseSteps() {
       icons: <_IconExplain>[
         _IconExplain(icon: Icon(Icons.repeat_one), text: 'Retain'),
         _IconExplain(icon: Icon(Icons.info_outline), text: 'Detail'),
+      ],
+    ),
+  ];
+}
+
+/// Data models the user asked for:
+/// stepEntity: title, image, instruction, steps[]
+/// steps[]: no, title, description, icons[]
+/// icons[]: icon, text
+class _StepIcon {
+  const _StepIcon({required this.icon, required this.text});
+  final Widget icon;
+  final String text;
+}
+
+class _StepItem {
+  const _StepItem({
+    required this.no,
+    required this.title,
+    required this.description,
+    required this.icons,
+  });
+  final int no;
+  final String title;
+  final String description;
+  final List<_StepIcon> icons;
+}
+
+class _StepEntity {
+  const _StepEntity({
+    required this.title,
+    required this.image,
+    required this.instruction,
+    required this.steps,
+  });
+  final String title;
+  final String image;
+  final String instruction;
+  final List<_StepItem> steps;
+}
+
+class _StepSectionCard extends StatelessWidget {
+  const _StepSectionCard({required this.entity});
+  final _StepEntity entity;
+
+  @override
+  Widget build(BuildContext context) {
+    return _SectionCard(
+      title: entity.title,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _ScreenshotImage(asset: entity.image, hint: entity.instruction),
+          const SizedBox(height: 12),
+          const Text(
+            'Step-by-Step Instructions',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          ...entity.steps.map(_toManualStep),
+        ],
+      ),
+    );
+  }
+}
+
+_ManualStep _toManualStep(_StepItem item) {
+  return _ManualStep(
+    no: item.no,
+    title: item.title,
+    description: item.description,
+    icons: item.icons
+        .map((e) => _IconExplain(icon: e.icon, text: e.text))
+        .toList(),
+  );
+}
+
+List<_StepEntity> _buildCaseEntities() {
+  // Example with one entity using the current screenshot and steps.
+  // You can append more _StepEntity to this list for multiple images + explanations.
+  return <_StepEntity>[
+    _StepEntity(
+      title: 'Example Screenshot - Cases Main Workflow',
+      image: 'manual/case_search',
+      instruction:
+          'This screenshot marks steps 1~8. See the list below for detailed meanings.',
+      steps: const <_StepItem>[
+        _StepItem(
+          no: 1,
+          title: 'Header and segment indicator',
+          description:
+              'Shows leading segment or priority label of the case list item.',
+          icons: <_StepIcon>[
+            _StepIcon(
+              icon: Icon(Icons.label_important_outline),
+              text: 'Segment/priority badge',
+            ),
+          ],
+        ),
+        _StepItem(
+          no: 2,
+          title: 'Commission/Rate indicator',
+          description:
+              'Shows current applicable rate or commission percentage.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.percent), text: 'Rate'),
+          ],
+        ),
+        _StepItem(
+          no: 3,
+          title: 'Tag and count area',
+          description:
+              'Displays tags such as attempts or group labels with counts.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.sell_outlined), text: 'Tag'),
+            _StepIcon(
+                icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
+          ],
+        ),
+        _StepItem(
+          no: 4,
+          title: 'Borrower basic info',
+          description: 'Includes masked name and masked phone number.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.person_outline), text: 'Masked name'),
+            _StepIcon(icon: Icon(Icons.phone_android), text: 'Masked phone'),
+          ],
+        ),
+        _StepItem(
+          no: 5,
+          title: 'Last record and countdown',
+          description:
+              'Shows remaining time and last record timestamp for the case.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.timer), text: 'Remaining time'),
+            _StepIcon(icon: Icon(Icons.history), text: 'Last record'),
+          ],
+        ),
+        _StepItem(
+          no: 6,
+          title: 'Bonus panel',
+          description: 'Displays expected bonus summary with level and amount.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.attach_money), text: 'Bonus'),
+            _StepIcon(icon: Icon(Icons.star_border), text: 'Level'),
+          ],
+        ),
+        _StepItem(
+          no: 7,
+          title: 'Latest note preview',
+          description: 'Shows the latest communication note content inline.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.notes), text: 'Note'),
+          ],
+        ),
+        _StepItem(
+          no: 8,
+          title: 'Action buttons',
+          description:
+              'Perform quick actions such as Retain or open Detail page.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.repeat_one), text: 'Retain'),
+            _StepIcon(icon: Icon(Icons.info_outline), text: 'Detail'),
+          ],
+        ),
+      ],
+    ),
+    _StepEntity(
+      title: 'Example Screenshot - Cases Main Workflow',
+      image: 'manual/case_search',
+      instruction:
+          'This screenshot marks steps 1~8. See the list below for detailed meanings.',
+      steps: const <_StepItem>[
+        _StepItem(
+          no: 1,
+          title: 'Header and segment indicator',
+          description:
+              'Shows leading segment or priority label of the case list item.',
+          icons: <_StepIcon>[
+            _StepIcon(
+              icon: Icon(Icons.label_important_outline),
+              text: 'Segment/priority badge',
+            ),
+          ],
+        ),
+        _StepItem(
+          no: 2,
+          title: 'Commission/Rate indicator',
+          description:
+              'Shows current applicable rate or commission percentage.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.percent), text: 'Rate'),
+          ],
+        ),
+        _StepItem(
+          no: 3,
+          title: 'Tag and count area',
+          description:
+              'Displays tags such as attempts or group labels with counts.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.sell_outlined), text: 'Tag'),
+            _StepIcon(
+                icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
+          ],
+        ),
+        _StepItem(
+          no: 4,
+          title: 'Borrower basic info',
+          description: 'Includes masked name and masked phone number.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.person_outline), text: 'Masked name'),
+            _StepIcon(icon: Icon(Icons.phone_android), text: 'Masked phone'),
+          ],
+        ),
+        _StepItem(
+          no: 5,
+          title: 'Last record and countdown',
+          description:
+              'Shows remaining time and last record timestamp for the case.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.timer), text: 'Remaining time'),
+            _StepIcon(icon: Icon(Icons.history), text: 'Last record'),
+          ],
+        ),
+        _StepItem(
+          no: 6,
+          title: 'Bonus panel',
+          description: 'Displays expected bonus summary with level and amount.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.attach_money), text: 'Bonus'),
+            _StepIcon(icon: Icon(Icons.star_border), text: 'Level'),
+          ],
+        ),
+        _StepItem(
+          no: 7,
+          title: 'Latest note preview',
+          description: 'Shows the latest communication note content inline.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.notes), text: 'Note'),
+          ],
+        ),
+        _StepItem(
+          no: 8,
+          title: 'Action buttons',
+          description:
+              'Perform quick actions such as Retain or open Detail page.',
+          icons: <_StepIcon>[
+            _StepIcon(icon: Icon(Icons.repeat_one), text: 'Retain'),
+            _StepIcon(icon: Icon(Icons.info_outline), text: 'Detail'),
+          ],
+        ),
       ],
     ),
   ];

@@ -119,9 +119,12 @@ class _ScreenshotImage extends StatelessWidget {
               border: Border.all(color: Colors.blueGrey.withOpacity(0.25)),
             ),
             clipBehavior: Clip.antiAlias,
-            child: LoadAssetImage(
-              asset,
-              fit: BoxFit.fitHeight,
+            child: GestureDetector(
+              onTap: () => _openPreview(context),
+              child: LoadAssetImage(
+                asset,
+                fit: BoxFit.fitHeight,
+              ),
             ),
           ),
         ),
@@ -134,6 +137,29 @@ class _ScreenshotImage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  void _openPreview(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.9),
+      builder: (BuildContext dialogCtx) {
+        return GestureDetector(
+          onTap: () => Navigator.of(dialogCtx).pop(),
+          behavior: HitTestBehavior.opaque,
+          child: Center(
+            child: InteractiveViewer(
+              minScale: 0.5,
+              maxScale: 5.0,
+              child: LoadAssetImage(
+                asset,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

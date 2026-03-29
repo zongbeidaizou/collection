@@ -1,4 +1,8 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'package:bounty_hunter/res/colors.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ManualPage extends StatelessWidget {
@@ -6,13 +10,35 @@ class ManualPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color? iconColor = ThemeUtils.getIconColor(context);
+    final bool isDark = context.isDark;
     return DefaultTabController(
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('User Manual'),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            tooltip: 'Back',
+            onPressed: () => NavigatorUtils.goBack(context),
+            icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
+          ),
+          centerTitle: true,
+          title: Text('Help Center', style: TextStyle(color: ThemeUtils.getIconColor(context))),
+          flexibleSpace:  isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
           bottom: const TabBar(
             isScrollable: true,
+            labelColor: Colours.app_main,
+            unselectedLabelColor: Colours.text_gray,
+            indicatorColor: Colours.app_main,
             tabs: <Tab>[
               Tab(text: 'Cases'),
               Tab(text: 'Marketing'),

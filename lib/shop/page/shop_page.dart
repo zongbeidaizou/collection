@@ -116,7 +116,7 @@ class _ShopPageState extends State<ShopPage>
   }
 
   String formatNumberToK(int number) {
-    if (number < 1000) {
+    if (number>0 && number < 1000) {
       return number.toString(); // 小于1000直接返回原数字
     }
 
@@ -125,7 +125,7 @@ class _ShopPageState extends State<ShopPage>
     if (result == result.truncate()) {
       return '${result.truncate()}K'; // 无小数的情况
     } else {
-      return '${result.toStringAsFixed(1)}K'; // 保留一位小数
+      return '${result.toStringAsFixed(0)}K'; // 保留一位小数
     }
   }
 
@@ -178,7 +178,7 @@ class _ShopPageState extends State<ShopPage>
                         builder: (context, child) {
                           return Container(
                             padding: const EdgeInsets.all(2.0),
-                            width: 88,
+                            width: 112,
                             child: Column(
                               children: <Widget>[
                                 Stack(
@@ -241,9 +241,15 @@ class _ShopPageState extends State<ShopPage>
                                   RichText(text: TextSpan(children: [
                                     TextSpan(text: formatNumberToK(monthData[index].value!)),
                                     if (monthData[index].addition! > 0)
-                                      const TextSpan(text: ' + ', style: TextStyle(color:  Colors.green)),
+                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),
                                     if (monthData[index].addition! > 0)
                                       TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
+                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
+                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),  
+                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
+                                      TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),       
+                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! < 0)
+                                      TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.red,fontWeight: FontWeight.bold)),       
                                   ]))
                               ],
                             ),
@@ -290,6 +296,12 @@ class _ShopPageState extends State<ShopPage>
                                 TextSpan(text: ' + ', style: const TextStyle(color:  Colors.green)),
                               if (monthData[index].addition! > 0)
                                 TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
+                              if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
+                                  const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),  
+                              if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
+                                TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),       
+                              if (monthData[index].addition2 != null &&  monthData[index].addition2! < 0)
+                                TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.red,fontWeight: FontWeight.bold)),       
                             ])),
                           ],
                         ),
@@ -828,7 +840,12 @@ class _ShopPageState extends State<ShopPage>
     final profile = ctx.read<UserProvider>().userEntity.profile;
 
     final name = profile?.aName ?? '--';
-    final marketing = profile?.cRTodayMarketingCnt ?? 0;
+    final todayReceiveCount = profile?.cYTodayReceiveCount ?? 0; //今日领取案件数
+    final todayRetainCount = profile?.cZTodayRetainCount ?? 0; //今日留存数
+    final todaySystemCount = profile?.dATodaySystemCount ?? 0; //今日系统分配数
+    final todayMarketingCount = profile?.dCTodayMarketingCount ?? 0; //今日营销案件数
+    final todayOutCount = profile?.dBTodayOutCount ?? 0; //今日移走案件数
+    final todayAdditionCount = profile?.cDTodayAdditionCount ?? 0; //今日管理员新增案件数
     final weekCouponLeft = profile?.cLWeekCouponLeftCnt ?? 0;
     final weekExtendCnt = profile?.cNWeekExtendCnt ?? 0;
     final weekRetainLeft = profile?.cPWeekRetainLeftCnt ?? 0;
@@ -844,12 +861,16 @@ class _ShopPageState extends State<ShopPage>
       barrierDismissible: true,
       builder: (BuildContext dialogCtx) {
         final textStyle = Theme.of(dialogCtx).textTheme.bodyMedium;
-        Widget row(String label, String value) {
+        Widget row(String label, String value, {Widget? icon}) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
+                if (icon != null)
+                  icon,
+                Gaps.hGap4,
                 Expanded(child: Text(label, style: textStyle)),
+                
                 Text(value, style: textStyle),
               ],
             ),
@@ -857,15 +878,25 @@ class _ShopPageState extends State<ShopPage>
         }
 
         return AlertDialog(
-          title: Text('Admin Info ($todayStr)'),
+          title: Text(todayStr),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                row('Admin', name),
-                const Divider(height: 16),
-                row('New marketing cases today', marketing.toString()),
+                Divider(height: 16,color: Theme.of(dialogCtx).textTheme.bodyMedium?.color),
+                row('Today:', ''),
+                Divider(height: 16,color: Theme.of(dialogCtx).textTheme.bodyMedium?.color?.withOpacity(0.3)),
+                row('System cases', todaySystemCount.toString(), icon: const Icon(Icons.miscellaneous_services, size: 16, color: Colors.blue)),
+                row('Retain cases', todayRetainCount.toString(), icon: const Icon(Icons.repeat_one, size: 16, color: Colors.green)),
+                row('Receive cases', todayReceiveCount.toString(), icon: const Icon(Icons.move_up, size: 16, color: Colors.purple)),
+                row('Admin cases', todayAdditionCount.toString(), icon: const Icon(Icons.loupe, size: 16, color: Colors.red)),
+                row('Out cases', todayOutCount.toString(), icon: const Icon(Icons.delete_forever_outlined, size: 16, color: Colors.orange)),
+                row('Marketing cases', todayMarketingCount.toString(), icon: const Icon(Icons.tty, size: 16, color: Colors.blue)),
+                Gaps.vGap16,
+                Divider(height: 16,color: Theme.of(dialogCtx).textTheme.bodyMedium?.color),
+                row('This week:', ''),
+                Divider(height: 16,color: Theme.of(dialogCtx).textTheme.bodyMedium?.color?.withOpacity(0.3)),
                 row('Discount coupons remaining this week',
                     weekCouponLeft.toString()),
                 row('Extensions remaining this week', weekExtendCnt.toString()),

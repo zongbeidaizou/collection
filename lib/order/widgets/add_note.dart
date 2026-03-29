@@ -495,7 +495,7 @@ class _DeliveryProcesses extends StatelessWidget {
           theme: TimelineThemeData(
             nodePosition: 0,
             indicatorPosition: 0,
-            color: Colors.white,
+            color: Colors.transparent,
             indicatorTheme: const IndicatorThemeData(
               position: 0,
               size: 0.01,

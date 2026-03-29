@@ -1,11 +1,14 @@
 import 'package:bounty_hunter/mvp/base_page.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/setting/iview/message_template_page_iview.dart';
 import 'package:bounty_hunter/setting/presenter/message_template_presenter.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/res/resources.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'add_message_template_page.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
 
 /// 消息模板页面
 class MessageTemplatePage extends StatefulWidget {
@@ -99,16 +102,33 @@ class _MessageTemplatePageState extends State<MessageTemplatePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final bool isDark = context.isDark;
+    final Color? iconColor = ThemeUtils.getIconColor(context);
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.black,
-        ),
-        title: const Text('Message Template'),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            tooltip: 'Back',
+            onPressed: () => NavigatorUtils.goBack(context),
+            icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
+          ),
+        title: Text('Message Template', style: TextStyle(color: ThemeUtils.getIconColor(context))),
+        backgroundColor: ThemeUtils.getBackgroundColor(context),
+        flexibleSpace:  isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
         actions: [
-          TextButton(
+          IconButton(
+            tooltip: 'Add',
             onPressed: _addTemplate,
-            child: const Text('Add'),
+            icon: Icon(Icons.add, color: Colors.white),
           ),
         ],
         bottom: TabBar(

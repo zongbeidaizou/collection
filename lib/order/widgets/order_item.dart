@@ -689,7 +689,9 @@ class _OrderItemState extends State<OrderItem> {
               child: InkWell(
                 child: Row(
                   children: [
+                    if(widget.source != 'receive')
                     Icon(sourceIcon[widget.item.bESourceType ?? 0],size: 14,color: sourceColor[widget.item.bESourceType ?? 0]),
+                    if(widget.source != 'receive')
                     Gaps.hGap2,
                     RichText(
                       text: TextSpan(
@@ -697,7 +699,7 @@ class _OrderItemState extends State<OrderItem> {
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
                           TextSpan(text: widget.item.aKNo!.substring(widget.item.aKNo!.length > 6 ? widget.item.aKNo!.length - 6 : 0),style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colors.grey.shade500)),
-                          TextSpan(text: '(${widget.item.aEBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleSmall?.copyWith( color: Colours.app_main)),
+                          TextSpan(text: '(${widget.item.aEBorrowCount?.toString() ?? ''})', style: Theme.of(context).textTheme.titleMedium?.copyWith( color: Colours.app_main)),
                         ],
                       ),
                     ),
@@ -958,10 +960,11 @@ class _OrderItemState extends State<OrderItem> {
                                   24)
                               ? '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inDays} days left'
                               : '${DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours} hours left') : ' ----',style: textTextStyle,),
+                              Gaps.vGap4,
                           Text(
-                              widget.item.aDLastLogTime != null &&
-                                      widget.item.aDLastLogTime!.isNotEmpty
-                                  ? 'Last record: ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.aDLastLogTime!))}'
+                              widget.item.rFlowInTime != null &&
+                                      widget.item.rFlowInTime!.isNotEmpty && widget.source == 'order'
+                                  ? ' ${DateFormat('MMM d, hh:mm', 'en_US').format(DateTime.parse(widget.item.rFlowInTime!))}'
                                   : '',
                               style: Theme.of(context)
                                   .textTheme
@@ -997,6 +1000,7 @@ class _OrderItemState extends State<OrderItem> {
                             Text(
                                 // ignore: unnecessary_parenthesis
                                 '${_calculateBonus(provider, widget.item, widget.period)} bonus',style: textTextStyle,),
+                                Gaps.vGap4,
                             Text(
                                 "${_getKpiLevelDisplay(provider.userEntity.profile!.iTodayCurrentKpiLevel!)} with ${provider.userEntity.profile!.aETodayCommissionRate!}${ _additionBonus > 0 ? '+$_additionBonus' :  ''}% of amount",
                                 style: Theme.of(context)
@@ -1021,11 +1025,32 @@ class _OrderItemState extends State<OrderItem> {
           Row(
             children: <Widget>[
               Expanded(
-                child: Text(
-                  widget.item.aLLastLog!,
-                  style: TextStyle(color: isDark ? Colors.white : Colors.black, fontSize: 11),
-                  maxLines: 2, // 设置最大行数为2
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                                  widget.item.aDLastLogTime != null &&
+                                          widget.item.aDLastLogTime!.isNotEmpty
+                                      ? ' ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.aDLastLogTime!))}'
+                                      : '',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(fontSize: 8,color:isDark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.7))),
+                        Expanded(child: Gaps.hGap4),
+
+                      ],
+                    ),
+                    Text(
+                      widget.item.aLLastLog!,
+                      style: TextStyle(color: isDark ? Colors.white.withOpacity(0.7) : Colors.black.withOpacity(0.7), fontSize: 11),
+                      maxLines: 2, // 设置最大行数为2
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    
+                  ],
                 ),
               ),
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)

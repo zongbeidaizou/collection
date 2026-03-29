@@ -13,10 +13,10 @@ final List<IconData> _iconList = [
   Icons.sync, //1 协商中
   Icons.more_time, //2 承诺还款
   Icons.hourglass_disabled, //3 承诺未还
-  Icons.hourglass_disabled, //4 
+  Icons.phone_disabled, //4 
   Icons.phone_disabled, //5 
   Icons.nightlight, //6 部分支付
-  Icons.payment, //7 
+  Icons.lens, //7 
   Icons.check_circle, //8 
   Icons.sms_outlined, //9 
   Icons.extension_outlined, //10 展期成功
@@ -42,7 +42,7 @@ final List<IconData> _iconList = [
     const Color.fromARGB(255, 128, 188, 225), //10展期
     Colors.green, //11保留
     Colors.purple, //12领取
-    Colors.blue, //13管理员
+    Colors.red, //13管理员
   ];
 /// design/4商品/index.html
 class GoodsPage extends StatefulWidget {
@@ -67,7 +67,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 8);
+    _tabController = TabController(vsync: this, length: 10);
   }
 
   @override
@@ -91,6 +91,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     super.build(context);
     final Color? iconColor = ThemeUtils.getIconColor(context);
+    final bool isDark = context.isDark;
     return ChangeNotifierProvider<GoodsPageProvider>(
       create: (_) => provider,
       child: Scaffold(
@@ -104,10 +105,16 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
           ),
           centerTitle: true,
           backgroundColor: Colours.app_main,
-          flexibleSpace:  LoadAssetImage('statistic/statistic_bg',
-            height: 115.0,
-            fit: BoxFit.fill,
-          ),
+          flexibleSpace:  isDark
+            ? Container(
+                height: 115.0,
+                color: Colours.dark_bg_color,
+              )
+            : LoadAssetImage(
+                'statistic/statistic_bg',
+                height: 115.0,
+                fit: BoxFit.fill,
+              ),
           // toolbarHeight: 30,
           title: Text("Logs",style: TextStyle(color: ThemeUtils.getIconColor(context))),
           actions: <Widget>[
@@ -151,7 +158,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                   return Colors.transparent;
                 },
                 ),
-                tabs: List<Widget>.generate(8, (tabIndex) {
+                tabs: List<Widget>.generate(10, (tabIndex) {
                   final selected = pageProvider.index == tabIndex;
                   final unselectedColor = context.isDark ? Colours.text_gray : Colours.text;
 
@@ -170,6 +177,10 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
                       return _TabView('Receive', 12, selected: selected, unselectedColor: unselectedColor); // 接收
                     case 6:
                       return _TabView('Admin', 13, selected: selected, unselectedColor: unselectedColor); // 管理员分配
+                    case 8:
+                    return _TabView('Settled', 7, selected: selected, unselectedColor: unselectedColor); 
+                    case 9:
+                    return _TabView('No Answer', 4, selected: selected, unselectedColor: unselectedColor);// 外呼
                     case 7:
                     default:
                       return _TabView('Negotiation', 1, selected: selected, unselectedColor: unselectedColor); // 协商中
@@ -181,7 +192,7 @@ class _GoodsPageState extends State<GoodsPage> with SingleTickerProviderStateMix
               Expanded(
                 child: PageView.builder(
                     key: const Key('pageView'),
-                    itemCount: 8,
+                    itemCount: 10,
                     onPageChanged: _onPageChange,
                     controller: _pageController,
                     itemBuilder: (_, int index) => GoodsListPage(index: index, searchKeyword: _searchKeyword,)

@@ -133,6 +133,11 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (vName != null) {
     collectionOrderData.vName = vName;
   }
+  final String? rFlowInTime = jsonConvert.convert<String>(
+      json['r_flow_in_time']);
+  if (rFlowInTime != null) {
+    collectionOrderData.rFlowInTime = rFlowInTime;
+  }
   final String? sFlowOutTime = jsonConvert.convert<String>(
       json['s_flow_out_time']);
   if (sFlowOutTime != null) {
@@ -210,6 +215,7 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['t_borrow_sn'] = entity.tBorrowSn;
   data['u_phone'] = entity.uPhone;
   data['v_name'] = entity.vName;
+  data['r_flow_in_time'] = entity.rFlowInTime;
   data['s_flow_out_time'] = entity.sFlowOutTime;
   data['a_k_no'] = entity.aKNo;
   data['a_e_borrow_count'] = entity.aEBorrowCount;
@@ -239,6 +245,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     String? tBorrowSn,
     String? uPhone,
     String? vName,
+    String? rFlowInTime,
     String? sFlowOutTime,
     String? aKNo,
     int? aEBorrowCount,
@@ -265,6 +272,7 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..tBorrowSn = tBorrowSn ?? this.tBorrowSn
       ..uPhone = uPhone ?? this.uPhone
       ..vName = vName ?? this.vName
+      ..rFlowInTime = rFlowInTime ?? this.rFlowInTime
       ..sFlowOutTime = sFlowOutTime ?? this.sFlowOutTime
       ..aKNo = aKNo ?? this.aKNo
       ..aEBorrowCount = aEBorrowCount ?? this.aEBorrowCount
@@ -1016,6 +1024,26 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (cYTodayReceiveCount != null) {
     collectionOrderOtherProfile.cYTodayReceiveCount = cYTodayReceiveCount;
   }
+  final int? cZTodayRetainCount = jsonConvert.convert<int>(
+      json['c_z_today_retain_count']);
+  if (cZTodayRetainCount != null) {
+    collectionOrderOtherProfile.cZTodayRetainCount = cZTodayRetainCount;
+  }
+  final int? dATodaySystemCount = jsonConvert.convert<int>(
+      json['d_a_today_system_count']);
+  if (dATodaySystemCount != null) {
+    collectionOrderOtherProfile.dATodaySystemCount = dATodaySystemCount;
+  }
+  final int? dBTodayOutCount = jsonConvert.convert<int>(
+      json['d_b_today_out_count']);
+  if (dBTodayOutCount != null) {
+    collectionOrderOtherProfile.dBTodayOutCount = dBTodayOutCount;
+  }
+  final int? dCTodayMarketingCount = jsonConvert.convert<int>(
+      json['d_c_today_marketing_count']);
+  if (dCTodayMarketingCount != null) {
+    collectionOrderOtherProfile.dCTodayMarketingCount = dCTodayMarketingCount;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -1096,6 +1124,10 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['c_q_week_receive_left_cnt'] = entity.cQWeekReceiveLeftCnt;
   data['c_r_today_marketing_cnt'] = entity.cRTodayMarketingCnt;
   data['c_y_today_receive_count'] = entity.cYTodayReceiveCount;
+  data['c_z_today_retain_count'] = entity.cZTodayRetainCount;
+  data['d_a_today_system_count'] = entity.dATodaySystemCount;
+  data['d_b_today_out_count'] = entity.dBTodayOutCount;
+  data['d_c_today_marketing_count'] = entity.dCTodayMarketingCount;
   return data;
 }
 
@@ -1173,6 +1205,10 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? cQWeekReceiveLeftCnt,
     int? cRTodayMarketingCnt,
     int? cYTodayReceiveCount,
+    int? cZTodayRetainCount,
+    int? dATodaySystemCount,
+    int? dBTodayOutCount,
+    int? dCTodayMarketingCount,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -1255,7 +1291,12 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..cPWeekRetainLeftCnt = cPWeekRetainLeftCnt ?? this.cPWeekRetainLeftCnt
       ..cQWeekReceiveLeftCnt = cQWeekReceiveLeftCnt ?? this.cQWeekReceiveLeftCnt
       ..cRTodayMarketingCnt = cRTodayMarketingCnt ?? this.cRTodayMarketingCnt
-      ..cYTodayReceiveCount = cYTodayReceiveCount ?? this.cYTodayReceiveCount;
+      ..cYTodayReceiveCount = cYTodayReceiveCount ?? this.cYTodayReceiveCount
+      ..cZTodayRetainCount = cZTodayRetainCount ?? this.cZTodayRetainCount
+      ..dATodaySystemCount = dATodaySystemCount ?? this.dATodaySystemCount
+      ..dBTodayOutCount = dBTodayOutCount ?? this.dBTodayOutCount
+      ..dCTodayMarketingCount = dCTodayMarketingCount ??
+          this.dCTodayMarketingCount;
   }
 }
 

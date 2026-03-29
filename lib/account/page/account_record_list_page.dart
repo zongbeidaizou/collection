@@ -75,7 +75,7 @@ const typeIcons = [
 const typeDescriptions = [
   'Penalty', //0 罚款
   'Settled', //1结清
-  'Achievement', //达标佣金
+  'Achievement', //2达标佣金
   'Partial Repayment', //3部分还款
   'Weekly Ranking Bonus', //4周排名奖金
   'Monthly Bonus', //5月度奖金
@@ -83,6 +83,7 @@ const typeDescriptions = [
   'Extension Bonus', //7展期奖金
   'Registration Bonus', //8注册奖金
   'Application Bonus', //9申请奖金
+  'Manual Bonus', //10人工发放
 ];
 
 /// design/6店铺-账户/index.html#artboard1
@@ -423,7 +424,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 alignment: Alignment.centerLeft,
                 width: double.infinity,
                 color: Colors.blue[100],
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 2.0),
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -434,7 +435,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                       ),
                       if (totalBonus > 0) ...[
                         TextSpan(
-                          text: '$totalBonus',
+                          text: '₦$totalBonus',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -443,7 +444,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         // Display type statistics with icons (sorted by type)
                         ...() {
                           final sortedEntries = typeStats.entries
-                              .where((entry) => (entry.value['sum'] ?? 0) >= 0)
+                              // .where((entry) => (entry.value['sum'] ?? 0) >= 0)
                               .toList()
                             ..sort((a, b) => a.key.compareTo(b.key));
                           return sortedEntries;
@@ -472,7 +473,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        'Total: ₦$sum\n'
+                                                        'Total: $sum\n'
                                                         'Count: $count',
                                                         style: const TextStyle(
                                                           fontWeight: FontWeight.bold,
@@ -499,7 +500,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                                           txt = 'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
                                                         } else if (log.oType == 2) {
                                                           txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
-                                                        } else if (log.oType == 0 || log.oType == 4 || log.oType == 5) {
+                                                        } else if (log.oType == 0 || log.oType == 4 || log.oType == 5|| log.oType == 10) {
                                                           txt = log.aAComment!;
                                                         } else if (log.oType == 7) {
                                                           txt = 'Extension Bonus';
@@ -518,7 +519,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      '${maskPhoneNumber(log.pPhone!)} - ${log.nBorrowSn}',
+                                                                      '${maskPhoneNumber(log.pPhone!)} ${log.nBorrowSn != null && log.nBorrowSn!.isNotEmpty ? '- ${log.nBorrowSn}' : ''}',
                                                                       style: const TextStyle(
                                                                         fontWeight: FontWeight.w500,
                                                                         fontSize: 14,
@@ -526,7 +527,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    '+₦${log.hCommissionAmount}',
+                                                                    log.hCommissionAmount!= null && log.hCommissionAmount! >= 0 ? '+${log.hCommissionAmount}' : '${log.hCommissionAmount}',
                                                                     style: TextStyle(
                                                                       color: typeColors[type],
                                                                       fontWeight: FontWeight.bold,
@@ -572,11 +573,11 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                                               color: typeColors[type],
                                             ),
                                             Text(
-                                              '₦$sum($count) ',
+                                              '$sum($count) ',
                                               style: TextStyle(
                                                 color: typeColors[type],
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 14,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ],
@@ -639,7 +640,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
           'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
     } else if (log.oType == 2) {
       txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
-    } else if (log.oType == 0 || log.oType == 4 || log.oType == 5) {
+    } else if (log.oType == 0 || log.oType == 4 || log.oType == 5 || log.oType == 10) {
       txt = log.aAComment!;
     } else if (log.oType == 7) {
       txt = 'Extension Bonus  ';
@@ -691,6 +692,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                         text: maskPhoneNumber(log.pPhone!),
                         style: TextStyle(color: ThemeUtils.getTextColor(context)),
                       ),
+                      if(log.nBorrowSn != null && log.nBorrowSn!.isNotEmpty)
                       TextSpan(
                         text: ' - ${log.nBorrowSn}',
                         style: Theme.of(context).textTheme.titleSmall,
@@ -780,7 +782,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   //   Gaps.empty,
                   // Gaps.hGap4,
                   Text(
-                    "+${log.hCommissionAmount}",
+                    log.hCommissionAmount!= null && log.hCommissionAmount! >= 0 ? "+${log.hCommissionAmount}" : "${log.hCommissionAmount}",
                     style: TextStyle(
                       color: typeColors[log.oType!],
                       fontWeight: FontWeight.bold,

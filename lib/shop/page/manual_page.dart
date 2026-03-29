@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ManualPage extends StatelessWidget {
@@ -6,188 +6,260 @@ class ManualPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Manual'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          const _IntroSection(),
-          const SizedBox(height: 12),
-          const _GlobalIconSection(),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Case',
-            purpose:
-                'Manage daily collection cases and follow each borrower status from new assignment to promise-to-pay.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.app_registration_rounded), text: 'Cases menu entry'),
-              _IconMeaning(icon: Icon(Icons.group_add), text: 'Add All Cases Contacts to Phone'),
-              _IconMeaning(icon: Icon(Icons.search), text: 'Search cases'),
-              _IconMeaning(icon: Icon(Icons.description_outlined), text: 'Open Log page'),
-              _IconMeaning(icon: Icon(Icons.miscellaneous_services), text: 'New'),
-              _IconMeaning(icon: Icon(Icons.sync), text: 'Negotiating'),
-              _IconMeaning(icon: Icon(Icons.more_time), text: 'PTP (Promise to Pay)'),
-              _IconMeaning(icon: Icon(Icons.hourglass_disabled), text: 'BP / overdue promise state'),
-              _IconMeaning(icon: Icon(Icons.phone_disabled), text: 'No Answer'),
-            ],
-            operations: <String>[
-              'Switch tabs to focus on one workflow stage.',
-              'Use the search field to find target borrowers quickly.',
-              'Open a case item and update communication results in time.',
-              'Use "Log" to review actions and history across statuses.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Marketing',
-            purpose:
-                'Track marketing leads, apply templates, and monitor engagement/response results.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.tty), text: 'Marketing menu entry'),
-              _IconMeaning(icon: Icon(Icons.looks_one), text: 'Red number badge means today pending/updated count'),
-              _IconMeaning(icon: Icon(Icons.label_important_outline), text: 'Category marker in list card'),
-            ],
-            operations: <String>[
-              'Pull to refresh latest marketing leads.',
-              'Search by phone (normalized digits) to locate a lead.',
-              'Use template-based outreach where available.',
-              'Review updates periodically because page data auto-refreshes.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Receive',
-            purpose:
-                'Search and receive online assignments/orders for further processing.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.move_up), text: 'Receive menu entry'),
-              _IconMeaning(icon: Icon(Icons.circle, color: Colors.red, size: 10), text: 'Red dot means pending attention'),
-              _IconMeaning(icon: Icon(Icons.manage_search), text: 'Search by online phone number'),
-            ],
-            operations: <String>[
-              'Input phone keyword and submit search.',
-              'Open matched results and claim/receive available records.',
-              'Follow up in Case/Log workflow after receiving.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Bonus',
-            purpose:
-                'Review commission/bonus records and monitor payout-related activities.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.iso), text: 'Bonus menu entry'),
-              _IconMeaning(icon: Icon(Icons.looks_one), text: 'Red number badge = new bonus records'),
-              _IconMeaning(icon: Icon(Icons.money_off_csred_outlined), text: 'Penalty'),
-              _IconMeaning(icon: Icon(Icons.lens), text: 'Settled'),
-              _IconMeaning(icon: Icon(Icons.my_location), text: 'Achievement'),
-              _IconMeaning(icon: Icon(Icons.nightlight), text: 'Partial Repayment'),
-              _IconMeaning(icon: Icon(Icons.bar_chart_rounded), text: 'Weekly Ranking Bonus'),
-              _IconMeaning(icon: Icon(Icons.golf_course), text: 'Monthly Bonus'),
-              _IconMeaning(icon: Icon(Icons.transfer_within_a_station), text: 'Transfer Bonus'),
-              _IconMeaning(icon: Icon(Icons.extension_outlined), text: 'Extension Bonus'),
-              _IconMeaning(icon: Icon(Icons.person_outline_outlined), text: 'Registration Bonus'),
-              _IconMeaning(icon: Icon(Icons.how_to_reg_outlined), text: 'Application Bonus'),
-              _IconMeaning(icon: Icon(Icons.build_outlined), text: 'Manual payout/adjustment'),
-            ],
-            operations: <String>[
-              'Pull to refresh latest bonus records.',
-              'Filter records by phone to validate target transactions.',
-              'Scroll to load more historical records.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'News',
-            purpose:
-                'Read platform notifications, category alerts, and operational reminders.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.campaign_sharp), text: 'News menu entry'),
-              _IconMeaning(icon: Icon(Icons.looks_one), text: 'Red number badge = unread notifications'),
-              _IconMeaning(icon: Icon(Icons.circle, size: 10), text: 'Category color dot in each notification card'),
-            ],
-            operations: <String>[
-              'Pull to refresh latest notifications.',
-              'Scroll for historical messages.',
-              'Prioritize unread cards with stronger visual highlight.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Account',
-            purpose:
-                'View personal dashboard, rankings, progress, and account-related settings.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.emoji_events_rounded), text: 'Account menu entry'),
-              _IconMeaning(icon: Icon(Icons.menu_book), text: 'Open this user manual'),
-              _IconMeaning(icon: Icon(Icons.calendar_month), text: 'Day details'),
-              _IconMeaning(icon: Icon(Icons.edit_note), text: 'Edit message template'),
-              _IconMeaning(icon: FaIcon(FontAwesomeIcons.squareWhatsapp), text: 'WhatsApp activation'),
-              _IconMeaning(icon: Icon(Icons.settings), text: 'General settings'),
-            ],
-            operations: <String>[
-              'Review dashboard charts for weekly and monthly trends.',
-              'Use rankings to compare team/person performance.',
-              'Maintain templates and channel settings from top actions.',
-            ],
-
-          ),
-          const SizedBox(height: 12),
-          _MenuSection(
-            title: 'Log',
-            purpose:
-                'Audit communication and operation history by outcome type for traceability.',
-            iconNotes: <_IconMeaning>[
-              _IconMeaning(icon: Icon(Icons.description_outlined), text: 'Entry icon from Case page'),
-              _IconMeaning(icon: Icon(Icons.content_paste_search_outlined), text: 'Search logs'),
-              _IconMeaning(icon: Icon(Icons.hourglass_disabled), text: 'BP'),
-              _IconMeaning(icon: Icon(Icons.nightlight), text: 'Part Pay'),
-              _IconMeaning(icon: Icon(Icons.more_time), text: 'PTP'),
-              _IconMeaning(icon: Icon(Icons.extension_outlined), text: 'Extension'),
-              _IconMeaning(icon: Icon(Icons.repeat_one), text: 'Retain'),
-              _IconMeaning(icon: Icon(Icons.move_up), text: 'Receive'),
-              _IconMeaning(icon: Icon(Icons.loupe), text: 'Admin'),
-              _IconMeaning(icon: Icon(Icons.sync), text: 'Negotiation'),
-            ],
-            operations: <String>[
-              'Switch tabs to inspect one log type at a time.',
-              'Use search to locate specific phone/order traces.',
-              'Open items to validate chronology and responsibility.',
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('User Manual'),
+          bottom: const TabBar(
+            isScrollable: true,
+            tabs: <Tab>[
+              Tab(text: 'Cases'),
+              Tab(text: 'Marketing'),
+              Tab(text: 'Receive'),
+              Tab(text: 'Bonus'),
+              Tab(text: 'Account'),
             ],
           ),
-          const SizedBox(height: 20),
-          const _FooterNote(),
-        ],
-      ),
-    );
-  }
-}
-
-class _IntroSection extends StatelessWidget {
-  const _IntroSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const <Widget>[
-            Text(
-              'Collection App Manual',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        body: const TabBarView(
+          children: <Widget>[
+            _ManualTabView(
+              moduleName: 'Cases',
+              overview:
+                  'The Cases module is the daily operation center for collection tasks. Use it to filter by status, contact borrowers, update outcomes, and check processing history.',
+              screenshotTitle: 'Example Screenshot - Cases Main Workflow',
+              screenshotHint:
+                  'Replace this placeholder with a real screenshot that has markers 1, 2, 3, and 4.',
+              markerIcons: <IconData>[
+                Icons.app_registration_rounded,
+                Icons.search,
+                Icons.assignment_turned_in_outlined,
+                Icons.description_outlined,
+              ],
+              steps: <_ManualStep>[
+                _ManualStep(
+                  no: 1,
+                  title: 'Select case status tab',
+                  description:
+                      'Switch between New / Negotiating / PTP / BP / No Answer to focus on the right queue.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.app_registration_rounded), text: 'Cases module entry'),
+                    _IconExplain(icon: Icon(Icons.miscellaneous_services), text: 'New'),
+                    _IconExplain(icon: Icon(Icons.sync), text: 'Negotiating'),
+                    _IconExplain(icon: Icon(Icons.more_time), text: 'PTP'),
+                    _IconExplain(icon: Icon(Icons.hourglass_disabled), text: 'BP'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 2,
+                  title: 'Search target borrower',
+                  description:
+                      'Use keyword/phone search to locate one case quickly before taking action.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.search), text: 'Search case list'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 3,
+                  title: 'Update case action',
+                  description:
+                      'Open an item and perform follow-up actions such as call, SMS, and note update.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.call), text: 'Call borrower'),
+                    _IconExplain(icon: Icon(Icons.sms_outlined), text: 'Send SMS'),
+                    _IconExplain(icon: Icon(Icons.edit_note), text: 'Add or edit note'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 4,
+                  title: 'Review logs',
+                  description:
+                      'Open the Log page to verify timeline, owner, and final action result.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.description_outlined), text: 'Open Log page'),
+                  ],
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Text(
-              'This page explains major menus, icon meanings, and common actions. '
+            _ManualTabView(
+              moduleName: 'Marketing',
+              overview:
+                  'The Marketing module tracks lead outreach and communication templates. It helps teams follow campaign execution and response updates.',
+              screenshotTitle: 'Example Screenshot - Marketing List',
+              screenshotHint:
+                  'Replace this with a real screenshot containing markers 1, 2, and 3.',
+              markerIcons: <IconData>[
+                Icons.tty,
+                Icons.manage_search,
+                Icons.message,
+              ],
+              steps: <_ManualStep>[
+                _ManualStep(
+                  no: 1,
+                  title: 'Open lead queue',
+                  description: 'Check today lead updates and unread counts first.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.tty), text: 'Marketing module entry'),
+                    _IconExplain(icon: Icon(Icons.looks_one), text: 'Red badge = pending updates'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 2,
+                  title: 'Search by phone',
+                  description: 'Filter records quickly using normalized phone input.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.manage_search), text: 'Search leads'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 3,
+                  title: 'Execute outreach',
+                  description: 'Send messages with templates and record campaign progress.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.message), text: 'Message interaction'),
+                  ],
+                ),
+              ],
+            ),
+            _ManualTabView(
+              moduleName: 'Receive',
+              overview:
+                  'The Receive module is used to find and claim online assignments. Teams can search, open results, and receive eligible records.',
+              screenshotTitle: 'Example Screenshot - Receive Search',
+              screenshotHint:
+                  'Replace this with a screenshot that shows markers 1, 2, and 3.',
+              markerIcons: <IconData>[
+                Icons.move_up,
+                Icons.manage_search,
+                Icons.assignment_turned_in_outlined,
+              ],
+              steps: <_ManualStep>[
+                _ManualStep(
+                  no: 1,
+                  title: 'Enter Receive module',
+                  description: 'Open Receive from bottom tab before searching.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.move_up), text: 'Receive entry'),
+                    _IconExplain(icon: Icon(Icons.circle, color: Colors.red, size: 10), text: 'Red dot = pending attention'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 2,
+                  title: 'Search online records',
+                  description: 'Input phone keyword and submit search.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.manage_search), text: 'Search online records'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 3,
+                  title: 'Receive assignment',
+                  description: 'Open results and claim records for follow-up.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.assignment_turned_in_outlined), text: 'Confirm receive'),
+                  ],
+                ),
+              ],
+            ),
+            _ManualTabView(
+              moduleName: 'Bonus',
+              overview:
+                  'The Bonus module displays commission records and payout types. It is used for verification and historical review of bonus activities.',
+              screenshotTitle: 'Example Screenshot - Bonus Records',
+              screenshotHint:
+                  'Replace this with a screenshot that shows markers 1, 2, and 3.',
+              markerIcons: <IconData>[
+                Icons.iso,
+                Icons.manage_search,
+                Icons.bar_chart_rounded,
+              ],
+              steps: <_ManualStep>[
+                _ManualStep(
+                  no: 1,
+                  title: 'Open bonus list',
+                  description: 'Review new bonus items and recent transactions.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.iso), text: 'Bonus module entry'),
+                    _IconExplain(icon: Icon(Icons.looks_one), text: 'Red badge = new bonus records'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 2,
+                  title: 'Filter target record',
+                  description: 'Use search/filter by phone to locate payout details.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.manage_search), text: 'Search bonus record'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 3,
+                  title: 'Interpret bonus type',
+                  description: 'Read icon type to understand settlement, penalty, or ranking bonus.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.lens), text: 'Settled'),
+                    _IconExplain(icon: Icon(Icons.money_off_csred_outlined), text: 'Penalty'),
+                    _IconExplain(icon: Icon(Icons.bar_chart_rounded), text: 'Weekly ranking bonus'),
+                  ],
+                ),
+              ],
+            ),
+            _ManualTabView(
+              moduleName: 'Account',
+              overview:
+                  'The Account module is the personal dashboard for rankings, progress, and quick tools like templates, WhatsApp activation, and settings.',
+              screenshotTitle: 'Example Screenshot - Account Dashboard',
+              screenshotHint:
+                  'Replace this with a screenshot that shows markers 1, 2, 3, 4, and 5.',
+              markerIcons: <IconData>[
+                Icons.menu_book,
+                Icons.calendar_month,
+                Icons.edit_note,
+                FontAwesomeIcons.squareWhatsapp,
+                Icons.settings,
+              ],
+              steps: <_ManualStep>[
+                _ManualStep(
+                  no: 1,
+                  title: 'Open manual',
+                  description: 'Use manual icon to open this guide page.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.menu_book), text: 'Manual'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 2,
+                  title: 'Check day details',
+                  description: 'Open day details dialog for quick status overview.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.calendar_month), text: 'Day details'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 3,
+                  title: 'Edit message templates',
+                  description: 'Maintain predefined note or messaging templates.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.edit_note), text: 'Message templates'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 4,
+                  title: 'Activate WhatsApp',
+                  description: 'Open WA activation page for channel setup.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: FaIcon(FontAwesomeIcons.squareWhatsapp), text: 'WA activation'),
+                  ],
+                ),
+                _ManualStep(
+                  no: 5,
+                  title: 'Open settings',
+                  description: 'Configure general account and app options.',
+                  icons: <_IconExplain>[
+                    _IconExplain(icon: Icon(Icons.settings), text: 'Settings'),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -196,45 +268,61 @@ class _IntroSection extends StatelessWidget {
   }
 }
 
-class _GlobalIconSection extends StatelessWidget {
-  const _GlobalIconSection();
+class _ManualTabView extends StatelessWidget {
+  const _ManualTabView({
+    required this.moduleName,
+    required this.overview,
+    required this.screenshotTitle,
+    required this.screenshotHint,
+    required this.markerIcons,
+    required this.steps,
+  });
+
+  final String moduleName;
+  final String overview;
+  final String screenshotTitle;
+  final String screenshotHint;
+  final List<IconData> markerIcons;
+  final List<_ManualStep> steps;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const <Widget>[
-            Text(
-              'Global Visual Rules',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 8),
-            Text('- Red number badge: new/unread/newly assigned count'),
-            Text('- Red dot badge: pending attention indicator'),
-            Text('- Pull-to-refresh: manually reload latest data'),
-            Text('- Infinite scroll: load more records when reaching list bottom'),
-          ],
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: <Widget>[
+        _SectionCard(
+          title: '$moduleName Overview',
+          child: Text(overview),
         ),
-      ),
+        const SizedBox(height: 12),
+        _SectionCard(
+          title: screenshotTitle,
+          child: _ScreenshotPlaceholder(
+            markerIcons: markerIcons,
+            hint: screenshotHint,
+          ),
+        ),
+        const SizedBox(height: 12),
+        _SectionCard(
+          title: 'Step-by-Step Instructions',
+          child: Column(
+            children: steps,
+          ),
+        ),
+        const SizedBox(height: 12),
+      ],
     );
   }
 }
 
-class _MenuSection extends StatelessWidget {
-  const _MenuSection({
+class _SectionCard extends StatelessWidget {
+  const _SectionCard({
     required this.title,
-    required this.purpose,
-    required this.iconNotes,
-    required this.operations,
+    required this.child,
   });
 
   final String title;
-  final String purpose;
-  final List<_IconMeaning> iconNotes;
-  final List<String> operations;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -246,38 +334,10 @@ class _MenuSection extends StatelessWidget {
           children: <Widget>[
             Text(
               title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 6),
-            Text('Purpose: $purpose'),
-            const SizedBox(height: 10),
-            const Text(
-              'Icon meanings',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 4),
-            ...iconNotes.map(
-              (e) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(width: 24, child: Center(child: e.icon)),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(e.text)),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'How to operate',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 4),
-            ...operations.map((e) => Text('- $e')),
-            const SizedBox(height: 10),
-
+            const SizedBox(height: 8),
+            child,
           ],
         ),
       ),
@@ -285,25 +345,189 @@ class _MenuSection extends StatelessWidget {
   }
 }
 
-class _IconMeaning {
-  const _IconMeaning({
+class _ScreenshotPlaceholder extends StatelessWidget {
+  const _ScreenshotPlaceholder({
+    required this.markerIcons,
+    required this.hint,
+  });
+
+  final List<IconData> markerIcons;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blueGrey.withOpacity(0.25)),
+            ),
+            child: Stack(
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    'Screenshot Area',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.blueGrey.shade400,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      alignment: WrapAlignment.start,
+                      children: List<Widget>.generate(markerIcons.length, (index) {
+                        return _MarkerBubble(
+                          no: index + 1,
+                          icon: markerIcons[index],
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          hint,
+          style: TextStyle(
+            color: Colors.grey.shade700,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MarkerBubble extends StatelessWidget {
+  const _MarkerBubble({
+    required this.no,
+    required this.icon,
+  });
+
+  final int no;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CircleAvatar(
+            radius: 9,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: Text(
+              '$no',
+              style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Icon(icon, size: 14),
+        ],
+      ),
+    );
+  }
+}
+
+class _ManualStep extends StatelessWidget {
+  const _ManualStep({
+    required this.no,
+    required this.title,
+    required this.description,
+    required this.icons,
+  });
+
+  final int no;
+  final String title;
+  final String description;
+  final List<_IconExplain> icons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              CircleAvatar(
+                radius: 11,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: Text(
+                  '$no',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(description),
+          if (icons.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 8),
+            const Text(
+              'Icon explanations',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+            ),
+            const SizedBox(height: 4),
+            ...icons,
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _IconExplain extends StatelessWidget {
+  const _IconExplain({
     required this.icon,
     required this.text,
   });
 
   final Widget icon;
   final String text;
-}
-
-class _FooterNote extends StatelessWidget {
-  const _FooterNote();
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Last update: ${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}',
-        style: Theme.of(context).textTheme.bodySmall,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 22, child: Center(child: icon)),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 12))),
+        ],
       ),
     );
   }

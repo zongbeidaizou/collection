@@ -828,6 +828,10 @@ ShopDataMonthData $ShopDataMonthDataFromJson(Map<String, dynamic> json) {
   if (addition != null) {
     shopDataMonthData.addition = addition;
   }
+  final int? addition2 = jsonConvert.convert<int>(json['addition2']);
+  if (addition2 != null) {
+    shopDataMonthData.addition2 = addition2;
+  }
   return shopDataMonthData;
 }
 
@@ -837,6 +841,7 @@ Map<String, dynamic> $ShopDataMonthDataToJson(ShopDataMonthData entity) {
   data['name'] = entity.name;
   data['value'] = entity.value;
   data['addition'] = entity.addition;
+  data['addition2'] = entity.addition2;
   return data;
 }
 
@@ -846,12 +851,14 @@ extension ShopDataMonthDataExtension on ShopDataMonthData {
     String? name,
     int? value,
     int? addition,
+    int? addition2,
   }) {
     return ShopDataMonthData()
       ..avatar = avatar ?? this.avatar
       ..name = name ?? this.name
       ..value = value ?? this.value
-      ..addition = addition ?? this.addition;
+      ..addition = addition ?? this.addition
+      ..addition2 = addition2 ?? this.addition2;
   }
 }
 

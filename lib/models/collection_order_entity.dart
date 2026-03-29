@@ -49,6 +49,8 @@ class CollectionOrderData {
 	String? uPhone = '';
 	@JSONField(name: 'v_name')
 	String? vName = '';
+	@JSONField(name: 'r_flow_in_time')
+	String? rFlowInTime = '';  
 	@JSONField(name: 's_flow_out_time')
 	String? sFlowOutTime = '';
 	@JSONField(name: 'a_k_no')
@@ -339,8 +341,17 @@ class CollectionOrderOtherProfile {
 	int? cQWeekReceiveLeftCnt = 0;
 	@JSONField(name: 'c_r_today_marketing_cnt')
 	int? cRTodayMarketingCnt = 0;
-  	@JSONField(name: 'c_y_today_receive_count')
+  @JSONField(name: 'c_y_today_receive_count')
 	int? cYTodayReceiveCount = 0;
+  @JSONField(name: 'c_z_today_retain_count')
+	int? cZTodayRetainCount = 0;
+  @JSONField(name: 'd_a_today_system_count')
+	int? dATodaySystemCount = 0;
+  @JSONField(name: 'd_b_today_out_count')
+	int? dBTodayOutCount = 0;
+  @JSONField(name: 'd_c_today_marketing_count')
+	int? dCTodayMarketingCount = 0;
+         
 
 	CollectionOrderOtherProfile();
 

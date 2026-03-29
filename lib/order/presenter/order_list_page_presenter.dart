@@ -260,7 +260,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
             '${now2.year}-${now2.month.toString().padLeft(2, '0')}-${now2.day.toString().padLeft(2, '0')}';
 
         return AlertDialog(
-          title: Text('Admin Info ($todayStr)'),
+          title: Text('Admin Info ($todayStr)-${name}'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

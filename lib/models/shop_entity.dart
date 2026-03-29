@@ -257,6 +257,7 @@ class ShopDataMonthData {
 	String? name = '';
 	int? value = 0;
   int? addition = 0;
+  int? addition2 = 0;
 
 	ShopDataMonthData();
 

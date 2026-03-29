@@ -55,7 +55,7 @@ final List<Color> _colorList = [
   const Color(0xFF1B5E20),
   Colors.blueGrey,
 ];
-final List<int> _typeList = [3, 6, 2, 10, 11, 12, 13, 1, 0];
+final List<int> _typeList = [3, 6, 2, 10, 11, 12, 13, 1, 7, 4];
 
 class GoodsListPage extends StatefulWidget {
   const GoodsListPage(
@@ -364,7 +364,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                       if(log.aAAAAABLCollectionOrder?.kStatus == 7)
                       Icon(Icons.lens,color: Colors.green,size: 10,),
                       if(log.aAAAAABLCollectionOrder?.kStatus != 7 && log.aAAAAABLCollectionOrder?.eCollectionAdminId != context.read<UserProvider>().userEntity.profile!.bAdminId)
-                      Icon(Icons.delete_forever_outlined,color: Colors.red,size: 12,),
+                      Icon(Icons.delete_forever_outlined,color: Colors.orange,size: 12,),
                       if(log.aAAAAABLCollectionOrder?.kStatus == 10)
                       Icon(Icons.extension_outlined,color: const Color.fromARGB(255, 128, 188, 225),size: 10,),
                     ],

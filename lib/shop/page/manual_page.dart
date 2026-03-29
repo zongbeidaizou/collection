@@ -1,5 +1,7 @@
 ﻿import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +9,20 @@ import 'package:flutter/material.dart';
 class ManualPage extends StatelessWidget {
   const ManualPage({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+
     final Color? iconColor = ThemeUtils.getIconColor(context);
     final bool isDark = context.isDark;
+    void _launchWebURL(String title, String url) {
+      if (Device.isMobile) {
+        NavigatorUtils.goWebViewPage(context, title, url);
+      } else {
+        Utils.launchWebURL(url);
+      }
+    }
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -33,6 +45,13 @@ class ManualPage extends StatelessWidget {
                 height: 115.0,
                 fit: BoxFit.fill,
               ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {_launchWebURL('Help Center',
+                                    'https://api.dasewan.cn/collection_h5/help.html');},
+                  icon: Icon(Icons.question_mark_outlined,color: Colors.white,),
+                ),
+              ],
           bottom: const TabBar(
             isScrollable: true,
             labelColor: Colours.app_main,

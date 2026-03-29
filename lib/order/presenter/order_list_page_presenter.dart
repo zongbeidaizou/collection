@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
 import 'package:bounty_hunter/net/net.dart';
+import 'package:bounty_hunter/res/gaps.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -230,7 +231,13 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
 
     await Cache().setString(_kAdminInfoDialogLastShownKey, today);
 
-    final name = profile?.aName ?? '--';
+        final name = profile?.aName ?? '--';
+    final todayReceiveCount = profile?.cYTodayReceiveCount ?? 0; //今日领取案件数
+    final todayRetainCount = profile?.cZTodayRetainCount ?? 0; //今日留存数
+    final todaySystemCount = profile?.dATodaySystemCount ?? 0; //今日系统分配数
+    final todayMarketingCount = profile?.dCTodayMarketingCount ?? 0; //今日营销案件数
+    final todayOutCount = profile?.dBTodayOutCount ?? 0; //今日移走案件数
+    final todayAdditionCount = profile?.cDTodayAdditionCount ?? 0; //今日管理员新增案件数
     final marketing = profile?.cRTodayMarketingCnt ?? 0;
     final weekCouponLeft = profile?.cLWeekCouponLeftCnt ?? 0;
     final weekExtendCnt = profile?.cNWeekExtendCnt ?? 0;
@@ -243,12 +250,16 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
       barrierDismissible: false,
       builder: (BuildContext ctx) {
         final textStyle = Theme.of(ctx).textTheme.bodyMedium;
-        Widget row(String label, String value) {
+        Widget row(String label, String value, {Widget? icon}) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
+                if (icon != null)
+                  icon,
+                Gaps.hGap4,
                 Expanded(child: Text(label, style: textStyle)),
+                
                 Text(value, style: textStyle),
               ],
             ),
@@ -260,15 +271,25 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
             '${now2.year}-${now2.month.toString().padLeft(2, '0')}-${now2.day.toString().padLeft(2, '0')}';
 
         return AlertDialog(
-          title: Text('Admin Info ($todayStr)-${name}'),
+          title: Text(todayStr),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                row('Admin', name),
-                const Divider(height: 16),
-                row('New marketing cases today', marketing.toString()),
+                Divider(height: 16,color: Theme.of(ctx).textTheme.bodyMedium?.color),
+                row('Today:', ''),
+                Divider(height: 16,color: Theme.of(ctx).textTheme.bodyMedium?.color?.withOpacity(0.3)),
+                row('System cases', todaySystemCount.toString(), icon: const Icon(Icons.miscellaneous_services, size: 16, color: Colors.blue)),
+                row('Retain cases', todayRetainCount.toString(), icon: const Icon(Icons.repeat_one, size: 16, color: Colors.green)),
+                row('Receive cases', todayReceiveCount.toString(), icon: const Icon(Icons.move_up, size: 16, color: Colors.purple)),
+                row('Admin cases', todayAdditionCount.toString(), icon: const Icon(Icons.loupe, size: 16, color: Colors.red)),
+                row('Out cases', todayOutCount.toString(), icon: const Icon(Icons.delete_forever_outlined, size: 16, color: Colors.orange)),
+                row('Marketing cases', todayMarketingCount.toString(), icon: const Icon(Icons.tty, size: 16, color: Colors.blue)),
+                Gaps.vGap16,
+                Divider(height: 16,color: Theme.of(ctx).textTheme.bodyMedium?.color),
+                row('This week:', ''),
+                Divider(height: 16,color: Theme.of(ctx).textTheme.bodyMedium?.color?.withOpacity(0.3)),
                 row('Discount coupons remaining this week',
                     weekCouponLeft.toString()),
                 row('Extensions remaining this week', weekExtendCnt.toString()),

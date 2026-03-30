@@ -1,3 +1,4 @@
+import 'package:bounty_hunter/models/countrys_entity.dart';
 import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
 import 'package:bounty_hunter/mvp/base_page_presenter.dart';
@@ -8,7 +9,9 @@ import 'package:flutter/cupertino.dart';
 class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getWaCountry();
+    });
   }
 
   /// 获取 WhatsApp 号码
@@ -28,6 +31,23 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
           view.setWaData(data.data);
         } else {
           view.showToast(data?.errorMessage ?? 'Failed to get WhatsApp number');
+        }
+      },
+      onError: (_, __) async {
+        view.showToast(__);
+      },
+    );
+  }
+  Future<void> getWaCountry() async {
+    await requestNetwork<CountrysEntity>(
+      Method.get,
+      url: HttpApi.waCountry,
+      isShow: true,
+      onSuccess: (data) async {
+        if (data != null && data.success == true) {
+          view.setCountryData(data.data ?? []);
+        } else {
+          view.showToast(data?.errorMessage ?? 'Failed to get WhatsApp country');
         }
       },
       onError: (_, __) async {

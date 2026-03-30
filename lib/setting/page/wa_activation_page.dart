@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bounty_hunter/models/countrys_entity.dart';
 import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
@@ -29,24 +30,7 @@ class _WaActivationPageState extends State<WaActivationPage>
   static const String _waDataKey = 'wa_activation_last_data';
   static const String _selectedCountryKey = 'wa_activation_selected_country';
   
-  // 国家列表
-  static const List<String> _countries = [
-    'Nigeria',
-    'Indonesia',
-    'Canada',
-    'Colombia',
-    'Philippines',
-    'Chile',
-  ];
 
-  static const Map<String, String> _countryCodes = <String, String>{
-    'Nigeria': '+234',
-    'Indonesia': '+62',
-    'Canada': '+1',
-    'Colombia': '+57',
-    'Philippines': '+63',
-    'Chile': '+56',
-  };
   
   late WaActivationPresenter _waActivationPresenter;
   WaData? _waData;
@@ -55,7 +39,13 @@ class _WaActivationPageState extends State<WaActivationPage>
   bool _isPolling = false;
   DateTime? _nextWaRequestTime;
   Timer? _waCooldownTimer;
-  String _selectedCountry = 'Nigeria'; // 默认尼日利亚
+  String _selectedCountry = '';
+
+  // 国家列表（后续由后台接口填充）
+  List<String> _countries = <String>[];
+
+  // 国家名 -> 国家区号（后续由后台接口填充）
+  Map<String, String> _countryCodes = <String, String>{};
 
   @override
   WaActivationPresenter createPresenter() {
@@ -68,9 +58,32 @@ class _WaActivationPageState extends State<WaActivationPage>
     super.initState();
     _loadWaCooldown();
     _loadStoredWaData();
+  }
+
+  @override
+  void setCountryData(List<CountrysData>? data) {
+    final List<CountrysData> list = data ?? <CountrysData>[];
+    if (list.isEmpty) return;
+
+    final List<String> names = list
+        .map((CountrysData e) => e.name ?? '')
+        .where((String name) => name.isNotEmpty)
+        .toList();
+
+    final Map<String, String> codes = <String, String>{
+      for (final CountrysData e in list)
+        if ((e.name ?? '').isNotEmpty) (e.name ?? ''): (e.code ?? '')
+    };
+
+    setState(() {
+      _countries = names;
+      _countryCodes = codes;
+      _selectedCountry = _countries.isNotEmpty ? _countries.first : '';
+    });
+
+    // 如果本地已保存了选择，则优先使用本地记录
     _loadSelectedCountry();
   }
-  
   /// 加载保存的国家选择
   void _loadSelectedCountry() {
     final String? savedCountry = SpUtil.getString(_selectedCountryKey);
@@ -155,6 +168,10 @@ class _WaActivationPageState extends State<WaActivationPage>
   void _getWaNumber() {
     if (_isWaCooldownActive) {
       showToast('Please wait before requesting a new number.');
+      return;
+    }
+    if (_selectedCountry.isEmpty) {
+      showToast('Please select country first');
       return;
     }
     _waActivationPresenter.getWaNumber(country: _selectedCountry);
@@ -317,11 +334,14 @@ class _WaActivationPageState extends State<WaActivationPage>
                         border: Border.all(color: Colours.line),
                       ),
                       child: DropdownButton<String>(
-                        value: _selectedCountry,
+                        value: _countries.contains(_selectedCountry)
+                            ? _selectedCountry
+                            : (_countries.isNotEmpty ? _countries.first : null),
                         isExpanded: true,
                         underline: const SizedBox.shrink(),
                         icon: const Icon(Icons.arrow_drop_down),
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Theme.of(context).textTheme.titleSmall?.color),
+                        dropdownColor: Theme.of(context).colorScheme.surface,
                         items: _countries
                             .map<DropdownMenuItem<String>>((String country) {
                           return DropdownMenuItem<String>(

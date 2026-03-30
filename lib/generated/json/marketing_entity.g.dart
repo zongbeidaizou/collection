@@ -166,6 +166,15 @@ MarketingData $MarketingDataFromJson(Map<String, dynamic> json) {
   if (aLFlowedCount != null) {
     marketingData.aLFlowedCount = aLFlowedCount;
   }
+  final int? aMRegAdminId = jsonConvert.convert<int>(json['a_m_reg_admin_id']);
+  if (aMRegAdminId != null) {
+    marketingData.aMRegAdminId = aMRegAdminId;
+  }
+  final int? aNApplyAdminId = jsonConvert.convert<int>(
+      json['a_n_apply_admin_id']);
+  if (aNApplyAdminId != null) {
+    marketingData.aNApplyAdminId = aNApplyAdminId;
+  }
   final List<
       MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = (json['a_a_a_a_a_s_l_telemarketing_detail_logs'] as List<
       dynamic>?)?.map(
@@ -198,6 +207,8 @@ Map<String, dynamic> $MarketingDataToJson(MarketingData entity) {
   data['a_i_fifth_register_bonus'] = entity.aIFifthRegisterBonus;
   data['a_j_fifth_apply_bonus'] = entity.aJFifthApplyBonus;
   data['a_l_flowed_count'] = entity.aLFlowedCount;
+  data['a_m_reg_admin_id'] = entity.aMRegAdminId;
+  data['a_n_apply_admin_id'] = entity.aNApplyAdminId;
   data['a_a_a_a_a_s_l_telemarketing_detail_logs'] =
       entity.aAAAASLTelemarketingDetailLogs?.map((v) => v.toJson()).toList();
   return data;
@@ -222,6 +233,8 @@ extension MarketingDataExtension on MarketingData {
     int? aIFifthRegisterBonus,
     int? aJFifthApplyBonus,
     int? aLFlowedCount,
+    int? aMRegAdminId,
+    int? aNApplyAdminId,
     List<
         MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs,
   }) {
@@ -245,6 +258,8 @@ extension MarketingDataExtension on MarketingData {
       ..aIFifthRegisterBonus = aIFifthRegisterBonus ?? this.aIFifthRegisterBonus
       ..aJFifthApplyBonus = aJFifthApplyBonus ?? this.aJFifthApplyBonus
       ..aLFlowedCount = aLFlowedCount ?? this.aLFlowedCount
+      ..aMRegAdminId = aMRegAdminId ?? this.aMRegAdminId
+      ..aNApplyAdminId = aNApplyAdminId ?? this.aNApplyAdminId
       ..aAAAASLTelemarketingDetailLogs = aAAAASLTelemarketingDetailLogs ??
           this.aAAAASLTelemarketingDetailLogs;
   }

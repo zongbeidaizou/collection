@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
+import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../mvp/base_page.dart';
 import '../../widgets/load_image.dart';
@@ -1184,7 +1186,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString(),
+                                    widget.item.aMRegAdminId ==null || widget.item.aMRegAdminId == 0 || widget.item.aMRegAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId ? (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString() : '',
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color:Colors.red,

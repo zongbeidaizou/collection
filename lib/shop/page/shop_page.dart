@@ -123,8 +123,14 @@ class _ShopPageState extends State<ShopPage>
     double result = number / 1000;
     // 处理小数部分（避免四舍五入后显示.0时仍保留一位小数）
     if (result == result.truncate()) {
+      if(result.truncate() == 0) {
+        return '0';
+      }
       return '${result.truncate()}K'; // 无小数的情况
     } else {
+      if(result.toStringAsFixed(0) == '0') {
+        return '0';
+      }
       return '${result.toStringAsFixed(0)}K'; // 保留一位小数
     }
   }

@@ -62,6 +62,10 @@ class MarketingData {
 	int? aJFifthApplyBonus = 0;
 	@JSONField(name: 'a_l_flowed_count')
 	int? aLFlowedCount = 0;
+	@JSONField(name: 'a_m_reg_admin_id')
+	int? aMRegAdminId = 0;
+	@JSONField(name: 'a_n_apply_admin_id')
+	int? aNApplyAdminId = 0;    
 	@JSONField(name: 'a_a_a_a_a_s_l_telemarketing_detail_logs')
 	List<MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = [];
 

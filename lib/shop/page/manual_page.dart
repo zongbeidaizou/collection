@@ -120,11 +120,12 @@ class _ScreenshotImage extends StatelessWidget {
   const _ScreenshotImage({
     required this.asset,
     required this.hint,
+    this.fit = BoxFit.fitWidth,
   });
 
   final String asset;
   final String hint;
-
+  final BoxFit fit;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -142,13 +143,13 @@ class _ScreenshotImage extends StatelessWidget {
               onTap: () => _openPreview(context),
               child: LoadAssetImage(
                 asset,
-                fit: BoxFit.fitHeight,
+                fit: fit,
               ),
             ),
           ),
         ),
         const SizedBox(height: 8),
-        Text(
+        if (hint.isNotEmpty) Text(
           hint,
           style: TextStyle(
             color: Colors.grey.shade700,
@@ -211,11 +212,11 @@ class _ManualStep extends StatelessWidget {
           Row(
             children: <Widget>[
               CircleAvatar(
-                radius: 11,
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                radius: 14,
+                backgroundColor: const Color.fromARGB(255, 247, 179, 8),
                 child: Text(
                   '$no',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
+                  style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
                 ),
               ),
               const SizedBox(width: 8),
@@ -228,13 +229,8 @@ class _ManualStep extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Text(description),
+          if (description.isNotEmpty) Text(description),
           if (icons.isNotEmpty) ...<Widget>[
-            const SizedBox(height: 8),
-            const Text(
-              'Icon explanations',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-            ),
             const SizedBox(height: 4),
             ...icons,
           ],
@@ -356,13 +352,13 @@ class _StepItem {
   const _StepItem({
     required this.no,
     required this.title,
-    required this.description,
-    required this.icons,
+    this.description,
+    this.icons,
   });
   final int no;
   final String title;
-  final String description;
-  final List<_StepIcon> icons;
+  final String? description;
+  final List<_StepIcon>? icons;
 }
 
 class _StepEntity {
@@ -371,11 +367,13 @@ class _StepEntity {
     required this.image,
     required this.instruction,
     required this.steps,
+    this.fit = BoxFit.fitWidth,
   });
   final String title;
   final String image;
   final String instruction;
   final List<_StepItem> steps;
+  final BoxFit fit;
 }
 
 class _StepSectionCard extends StatelessWidget {
@@ -389,7 +387,7 @@ class _StepSectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _ScreenshotImage(asset: entity.image, hint: entity.instruction),
+          _ScreenshotImage(asset: entity.image, hint: entity.instruction, fit: entity.fit),
           const SizedBox(height: 12),
           const Text(
             'Step-by-Step Instructions',
@@ -407,8 +405,8 @@ _ManualStep _toManualStep(_StepItem item) {
   return _ManualStep(
     no: item.no,
     title: item.title,
-    description: item.description,
-    icons: item.icons
+    description: item.description ?? '',
+    icons: (item.icons ?? const <_StepIcon>[])
         .map((e) => _IconExplain(icon: e.icon, text: e.text))
         .toList(),
   );
@@ -427,85 +425,61 @@ List<_StepEntity> _buildCaseEntities() {
         _StepItem(
           no: 1,
           title: 'Loan product',
-          description:
-              'Shows the loan product of the case.',
-          icons: <_StepIcon>[
-            
-          ],
+
         ),
         _StepItem(
           no: 2,
-          title: 'Commission/Rate indicator',
-          description:
-              'Shows current applicable rate or commission percentage.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.percent), text: 'Rate'),
-          ],
+          title: 'Transferred case additional bonus',
         ),
         _StepItem(
           no: 3,
-          title: 'Tag and count area',
-          description:
-              'Displays tags such as attempts or group labels with counts.',
+          title: 'Case source',
           icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.sell_outlined), text: 'Tag'),
-            _StepIcon(
-                icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
+            _StepIcon(icon: Icon(Icons.miscellaneous_services,color: Colors.blue,), text: 'System assigned'),
+            _StepIcon(icon: Icon(Icons.loupe,color: Colors.red,), text: 'Admin added'),
+            _StepIcon(icon: Icon(Icons.repeat_one,color: Colors.green,), text: 'Retained'),
+            _StepIcon(icon: Icon(Icons.move_up,color: Colors.purple,), text: 'Received'),
           ],
         ),
         _StepItem(
           no: 4,
-          title: 'Borrower basic info',
-          description: 'Includes masked name and masked phone number.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.person_outline), text: 'Masked name'),
-            _StepIcon(icon: Icon(Icons.phone_android), text: 'Masked phone'),
-          ],
+          title: 'Loan count',
+          description: '例如：（10）代表客户是第十次贷款 ',
+          
         ),
         _StepItem(
           no: 5,
-          title: 'Last record and countdown',
+          title: '案件时间',
           description:
-              'Shows remaining time and last record timestamp for the case.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.timer), text: 'Remaining time'),
-            _StepIcon(icon: Icon(Icons.history), text: 'Last record'),
-          ],
+              '案件剩余处理时间和案件创建时间',
+          
         ),
         _StepItem(
           no: 6,
-          title: 'Bonus panel',
-          description: 'Displays expected bonus summary with level and amount.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.attach_money), text: 'Bonus'),
-            _StepIcon(icon: Icon(Icons.star_border), text: 'Level'),
-          ],
+          title: '案件金额',
+          description: '案件可以获得的奖金和奖金比例（催回金额的百分比）',
         ),
         _StepItem(
           no: 7,
-          title: 'Latest note preview',
-          description: 'Shows the latest communication note content inline.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.notes), text: 'Note'),
-          ],
+          title: '最新日志',
+          description: '最新日志的记录时间和内容',
+          
         ),
         _StepItem(
           no: 8,
-          title: 'Action buttons',
+          title: '保留按钮',
           description:
-              'Perform quick actions such as Retain or open Detail page.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.repeat_one), text: 'Retain'),
-            _StepIcon(icon: Icon(Icons.info_outline), text: 'Detail'),
-          ],
+              '当案件处理剩余时间小于24小时时，可以点击保留按钮，点击后可以再保留一天的处理时间',
+          
         ),
       ],
     ),
-    _StepEntity(
-      title: 'Example Screenshot - Cases Main Workflow',
-      image: 'manual/case_search',
+    const _StepEntity(
+      title: '案件列表',
+      image: 'manual/case_list',
+      fit: BoxFit.fitHeight,
       instruction:
-          'This screenshot marks steps 1~8. See the list below for detailed meanings.',
+          '',
       steps: const <_StepItem>[
         _StepItem(
           no: 1,

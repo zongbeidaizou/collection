@@ -418,22 +418,19 @@ List<_StepEntity> _buildCaseEntities() {
   // Example with one entity using the current screenshot and steps.
   // You can append more _StepEntity to this list for multiple images + explanations.
   return <_StepEntity>[
-    _StepEntity(
-      title: 'Example Screenshot - Cases Main Workflow',
-      image: 'manual/case_search',
+    const _StepEntity(
+      title: 'Cases in the list',
+      image: 'manual/case_item',
       instruction:
-          'This screenshot marks steps 1~8. See the list below for detailed meanings.',
-      steps: const <_StepItem>[
+          'This screenshot marks the case in the list.',
+      steps:  <_StepItem>[
         _StepItem(
           no: 1,
-          title: 'Header and segment indicator',
+          title: 'Loan product',
           description:
-              'Shows leading segment or priority label of the case list item.',
+              'Shows the loan product of the case.',
           icons: <_StepIcon>[
-            _StepIcon(
-              icon: Icon(Icons.label_important_outline),
-              text: 'Segment/priority badge',
-            ),
+            
           ],
         ),
         _StepItem(

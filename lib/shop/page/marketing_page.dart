@@ -777,7 +777,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
     return const SizedBox.shrink();
   }
 
-  Future<void> launchAction(int type) async {
+  Future<void> launchAction(int type, {bool doubleTap = false}) async {
     //type 1:whatsapp 2:call 3:sms
 
     // 显示模板选择对话框
@@ -785,7 +785,19 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
       // 默认展开第一条模板
       Set<int> expandedIndices = {0};
 
-      final String? selectedTemplate = await showModalBottomSheet<String>(
+      String? selectedTemplate;
+      if (doubleTap) {
+        try {
+          // 双击/长按：优先直接使用“消息为空”的模板，绕过模板选择弹窗
+          selectedTemplate = widget.templates
+              .firstWhere((t) => (t.message ?? '').trim().isEmpty)
+              .message;
+        } catch (_) {
+          selectedTemplate = null;
+        }
+      }
+
+      selectedTemplate ??= await showModalBottomSheet<String>(
         context: context,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
@@ -1381,6 +1393,22 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                 goodsMenuType = 1;
                               });
                               launchAction(1);
+                            },
+                            onDoubleTap: () {
+                              widget.onTap(widget.index);
+                              setState(() {
+                                method = 'whatsapp';
+                                goodsMenuType = 1;
+                              });
+                              launchAction(1, doubleTap: true);
+                            },
+                            onLongPress: () {
+                              widget.onTap(widget.index);
+                              setState(() {
+                                method = 'whatsapp';
+                                goodsMenuType = 1;
+                              });
+                              launchAction(1, doubleTap: true);
                             },
                             borderRadius: BorderRadius.circular(8),
                             child: Stack(

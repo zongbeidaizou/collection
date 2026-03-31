@@ -17,6 +17,7 @@ import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/commission_entity.dart';
 import 'package:bounty_hunter/models/countrys_entity.dart';
 import 'package:bounty_hunter/models/h_k_contact_sms_entity.dart';
+import 'package:bounty_hunter/models/help_entity.dart';
 import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
@@ -409,6 +410,30 @@ class JsonConvert {
       return data.map<HKContactSmsData>((Map<String, dynamic> e) =>
           HKContactSmsData.fromJson(e)).toList() as M;
     }
+    if (<HelpEntity>[] is M) {
+      return data.map<HelpEntity>((Map<String, dynamic> e) =>
+          HelpEntity.fromJson(e)).toList() as M;
+    }
+    if (<HelpData>[] is M) {
+      return data.map<HelpData>((Map<String, dynamic> e) =>
+          HelpData.fromJson(e)).toList() as M;
+    }
+    if (<HelpDataItems>[] is M) {
+      return data.map<HelpDataItems>((Map<String, dynamic> e) =>
+          HelpDataItems.fromJson(e)).toList() as M;
+    }
+    if (<HelpDataItemsSteps>[] is M) {
+      return data.map<HelpDataItemsSteps>((Map<String, dynamic> e) =>
+          HelpDataItemsSteps.fromJson(e)).toList() as M;
+    }
+    if (<HelpDataItemsStepsIcons>[] is M) {
+      return data.map<HelpDataItemsStepsIcons>((Map<String, dynamic> e) =>
+          HelpDataItemsStepsIcons.fromJson(e)).toList() as M;
+    }
+    if (<HelpOther>[] is M) {
+      return data.map<HelpOther>((Map<String, dynamic> e) =>
+          HelpOther.fromJson(e)).toList() as M;
+    }
     if (<MarketingEntity>[] is M) {
       return data.map<MarketingEntity>((Map<String, dynamic> e) =>
           MarketingEntity.fromJson(e)).toList() as M;
@@ -661,6 +686,12 @@ class JsonConvertClassCollection {
     (CountrysData).toString(): CountrysData.fromJson,
     (HKContactSmsEntity).toString(): HKContactSmsEntity.fromJson,
     (HKContactSmsData).toString(): HKContactSmsData.fromJson,
+    (HelpEntity).toString(): HelpEntity.fromJson,
+    (HelpData).toString(): HelpData.fromJson,
+    (HelpDataItems).toString(): HelpDataItems.fromJson,
+    (HelpDataItemsSteps).toString(): HelpDataItemsSteps.fromJson,
+    (HelpDataItemsStepsIcons).toString(): HelpDataItemsStepsIcons.fromJson,
+    (HelpOther).toString(): HelpOther.fromJson,
     (MarketingEntity).toString(): MarketingEntity.fromJson,
     (MarketingData).toString(): MarketingData.fromJson,
     (MarketingDataAAAAASLTelemarketingDetailLogs)

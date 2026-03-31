@@ -34,7 +34,7 @@ final List<IconData> _iconList = [
     Colors.green, //2承诺还款
     Colors.orange, //3承诺未还
     Colors.red, //4无法联系
-    Colors.red, //5部分还款
+    Colors.red, //5
     const Color.fromARGB(255, 137, 139, 141), //6部分还款
     Colors.green, //7已还款
     Colors.grey, //8短信

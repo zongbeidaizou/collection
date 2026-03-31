@@ -1,13 +1,93 @@
 ﻿import 'package:bounty_hunter/res/colors.dart';
+import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/util/device_utils.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:bounty_hunter/widgets/load_image.dart';
+import 'package:bounty_hunter/models/help_entity.dart';
+import 'package:bounty_hunter/net/net.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
-
+const Map<String, Icon> icons = {
+  'case_item_source_system': Icon(Icons.miscellaneous_services,color: Colors.blue,),
+  'case_item_source_admin': Icon(Icons.loupe,color: Colors.red,),
+  'case_item_source_retain': Icon(Icons.repeat_one,color: Colors.green,),
+  'case_item_source_receive': Icon(Icons.move_up,color: Colors.purple,),
+  'case_item_discount': Icon(Icons.discount,color: Colors.green,),
+  'case_item_coupon_chance': Icon(Icons.auto_fix_normal,color: Colors.orange,),
+  'case_item_coupon_count': Icon(Icons.confirmation_number_rounded,color: Colors.green,),
+  'case_item_extention_count': Icon(Icons.extension_outlined,color: Color.fromARGB(255, 128, 188, 225),),
+  'case_item_transfer': Icon(Icons.transfer_within_a_station,color: Colors.red,),
+  'case_item_last_login': Icon(Icons.login,color: Colors.blue,),
+  'marketing_uninterested': Icon(Icons.sentiment_dissatisfied_outlined,color: Colors.red,),
+  'marketing_unknown': Icon(Icons.sentiment_neutral_rounded,color: Colors.orange,),
+  'marketing_interested': Icon(Icons.sentiment_satisfied_sharp,color: Colors.green,),
+  'unable_to_contact': Icon(Icons.close,color: Colors.red,),
+  'no_response': Icon(Icons.access_time_outlined,color: Colors.grey,),
+  'responded': Icon(Icons.done_all,color: Colors.green,),
+  'log_sync': Icon(Icons.sync,color: Colors.grey,),
+  'log_ptp': Icon(Icons.more_time,color: Colors.green,),
+  'log_bp': Icon(Icons.hourglass_disabled,color: Colors.orange,),
+  'log_no_answer': Icon(Icons.phone_disabled,color: Colors.red,),
+  'log_part': Icon(Icons.nightlight,color: Color.fromARGB(255, 137, 139, 141),),
+  'log_settled': Icon(Icons.lens,color: Colors.green,),
+  'log_extend': Icon(Icons.extension_outlined,color: Color.fromARGB(255, 128, 188, 225),),
+  'log_retain': Icon(Icons.repeat_one,color: Colors.green,),
+  'log_receive': Icon(Icons.move_up,color: Colors.purple,),
+  'log_admin': Icon(Icons.loupe,color: Colors.red,),
+  'log_transfer_out': Icon(Icons.delete_forever_outlined,color: Colors.orange,),
+  'bonus_money_off_csred_outlined': Icon(Icons.money_off_csred_outlined,color: Color.fromARGB(255, 65, 83, 0),),
+  'bonus_lens': Icon(Icons.lens,color: Colors.green,),
+  'bonus_my_location': Icon(Icons.my_location,color: Colors.purpleAccent,),
+  'bonus_nightlight': Icon(Icons.nightlight,color: Color.fromARGB(255, 137, 139, 141),),
+  'bonus_bar_chart_rounded': Icon(Icons.bar_chart_rounded,color: Color.fromARGB(218, 218, 125, 4),),
+  'bonus_golf_course': Icon(Icons.golf_course,color: Color.fromARGB(255, 244, 0, 159),),
+  'bonus_transfer_within_a_station': Icon(Icons.transfer_within_a_station,color: Colors.red,),
+  'bonus_extension_outlined': Icon(Icons.extension_outlined,color: Color.fromARGB(255, 128, 188, 225),),
+  'bonus_person_outline_outlined': Icon(Icons.person_outline_outlined,color: Color.fromARGB(255, 244, 234, 52),),
+  'bonus_how_to_reg_outlined': Icon(Icons.how_to_reg_outlined,color: Color.fromARGB(255, 187, 230, 118),),
+  'bonus_build_outlined': Icon(Icons.build_outlined,color: Color.fromARGB(255, 180, 182, 177),),
+};
+const Map<String, BoxFit> fit = {
+  'width': BoxFit.fitWidth,
+  'height': BoxFit.fitHeight,
+  'fill': BoxFit.fill,
+  'cover': BoxFit.cover,
+  'contain': BoxFit.contain,
+};
 class ManualPage extends StatelessWidget {
   const ManualPage({super.key});
+
+  static Future<HelpEntity?>? _helpFuture;
+
+  static Future<HelpEntity?> _fetchHelp() async {
+    final Completer<HelpEntity?> completer = Completer<HelpEntity?>();
+    try {
+      await DioUtils.instance.requestNetwork<HelpEntity>(
+        Method.get,
+        HttpApi.helps,
+        onSuccess: (data) {
+          if (!completer.isCompleted) {
+            completer.complete(data);
+          }
+        },
+        onError: (_, __) {
+          if (!completer.isCompleted) {
+            completer.complete(null);
+          }
+        },
+      );
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    } catch (_) {
+      if (!completer.isCompleted) {
+        completer.complete(null);
+      }
+    }
+    return completer.future;
+  }
 
 
   @override
@@ -23,63 +103,165 @@ class ManualPage extends StatelessWidget {
       }
     }
 
-    return DefaultTabController(
-      length: 5,
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            tooltip: 'Back',
-            onPressed: () => NavigatorUtils.goBack(context),
-            icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
-          ),
-          centerTitle: true,
-          title: Text('Help Center', style: TextStyle(color: ThemeUtils.getIconColor(context))),
-          flexibleSpace:  isDark
-            ? Container(
-                height: 115.0,
-                color: Colours.dark_bg_color,
-              )
-            : LoadAssetImage(
-                'statistic/statistic_bg',
-                height: 115.0,
-                fit: BoxFit.fill,
+    final Future<HelpEntity?> future = _helpFuture ??= _fetchHelp();
+    return FutureBuilder<HelpEntity?>(
+      future: future,
+      builder: (BuildContext context, AsyncSnapshot<HelpEntity?> snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                tooltip: 'Back',
+                onPressed: () => NavigatorUtils.goBack(context),
+                icon: Icon(Icons.arrow_back,
+                    color: iconColor ?? Colors.white),
               ),
+              centerTitle: true,
+              title: Text(
+                'Help Center',
+                style: TextStyle(color: ThemeUtils.getIconColor(context)),
+              ),
+              flexibleSpace: isDark
+                  ? Container(
+                      height: 115.0,
+                      color: Colours.dark_bg_color,
+                    )
+                  : LoadAssetImage(
+                      'statistic/statistic_bg',
+                      height: 115.0,
+                      fit: BoxFit.fitWidth,
+                    ),
               actions: <Widget>[
                 IconButton(
-                  onPressed: () {_launchWebURL('Help Center',
-                                    'https://api.dasewan.cn/collection_h5/help.html');},
-                  icon: Icon(Icons.question_mark_outlined,color: Colors.white,),
+                  onPressed: () {
+                    _launchWebURL(
+                        'Help Center',
+                        snapshot.data?.other?.h5?? '');
+                  },
+                  icon: const Icon(Icons.question_mark_outlined,
+                      color: Colors.white),
                 ),
               ],
-          bottom: const TabBar(
-            isScrollable: true,
-            labelColor: Colours.app_main,
-            unselectedLabelColor: Colours.text_gray,
-            indicatorColor: Colours.app_main,
-            tabs: <Tab>[
-              Tab(text: 'Cases'),
-              Tab(text: 'Marketing'),
-              Tab(text: 'Receive'),
-              Tab(text: 'Bonus'),
-              Tab(text: 'Account'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            ListView(
-              padding: const EdgeInsets.all(16),
-              children: _buildCaseEntities()
-                  .map((e) => _StepSectionCard(entity: e))
-                  .toList(),
             ),
-            
-            
-            
-          ],
-        ),
-      ),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        final HelpEntity? help = snapshot.data;
+        final List<HelpData> tabsData = (help?.data ?? [])
+            .where((e) => (e.tab ?? '').trim().isNotEmpty)
+            .toList();
+
+        if (tabsData.isEmpty) {
+          return Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                tooltip: 'Back',
+                onPressed: () => NavigatorUtils.goBack(context),
+                icon: Icon(Icons.arrow_back,
+                    color: iconColor ?? Colors.white),
+              ),
+              centerTitle: true,
+              title: Text(
+                'Help Center',
+                style: TextStyle(color: ThemeUtils.getIconColor(context)),
+              ),
+              flexibleSpace: isDark
+                  ? Container(
+                      height: 115.0,
+                      color: Colours.dark_bg_color,
+                    )
+                  : LoadAssetImage(
+                      'statistic/statistic_bg',
+                      height: 115.0,
+                      fit: BoxFit.fill,
+                    ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    _launchWebURL(
+                        'Help Center',
+                        snapshot.data?.other?.h5?? '');
+                  },
+                  icon: const Icon(Icons.question_mark_outlined,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+            body: const Center(
+              child: Text('No help data'),
+            ),
+          );
+        }
+
+        final List<Tab> tabs = tabsData
+            .map((e) => Tab(text: (e.tab ?? '').trim()))
+            .toList();
+
+        return DefaultTabController(
+          length: tabsData.length,
+          child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                tooltip: 'Back',
+                onPressed: () => NavigatorUtils.goBack(context),
+                icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
+              ),
+              centerTitle: true,
+              title: Text(
+                'Help Center',
+                style: TextStyle(color: ThemeUtils.getIconColor(context)),
+              ),
+              flexibleSpace: isDark
+                  ? Container(
+                      height: 115.0,
+                      color: Colours.dark_bg_color,
+                    )
+                  : LoadAssetImage(
+                      'statistic/statistic_bg',
+                      height: 115.0,
+                      fit: BoxFit.fill,
+                    ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    _launchWebURL(
+                        'Help Center',
+                        snapshot.data?.other?.h5?? '');
+                  },
+                  icon: const Icon(Icons.question_mark_outlined,
+                      color: Colors.white),
+                ),
+              ],
+              bottom: TabBar(
+                isScrollable: true,
+                labelColor: Colours.app_main,
+                unselectedLabelColor: Colours.text_gray,
+                indicatorColor: Colours.app_main,
+                tabs: tabs,
+              ),
+            ),
+            body: TabBarView(
+              children: tabsData.map((tab) {
+                final List<HelpDataItems> items = tab.items ?? <HelpDataItems>[];
+                return ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: items
+                      .map((it) => _StepSectionCard(
+                            entity: _toStepEntity(it),
+                          ))
+                      .toList(),
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -103,11 +285,14 @@ class _SectionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
+            // Text(
+            //   title,
+            //   style: Theme.of(context)
+            //                       .textTheme
+            //                       .titleLarge
+            //                       ?.copyWith(fontSize: Dimens.font_sp16, fontWeight: FontWeight.w600),
+            // ),
+            // const SizedBox(height: 8),
             child,
           ],
         ),
@@ -151,10 +336,9 @@ class _ScreenshotImage extends StatelessWidget {
         const SizedBox(height: 8),
         if (hint.isNotEmpty) Text(
           hint,
-          style: TextStyle(
-            color: Colors.grey.shade700,
-            fontSize: 12,
-          ),
+            style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall?.copyWith(color: Colors.red),
         ),
       ],
     );
@@ -219,20 +403,28 @@ class _ManualStep extends StatelessWidget {
                   style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge?.copyWith(fontSize: Dimens.font_sp18),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 6),
-          if (description.isNotEmpty) Text(description),
+          const SizedBox(height: 4),
+          if (description.isNotEmpty) Padding(padding: const EdgeInsets.only(left: 32), child: Text(description,style: TextStyle(fontSize: Dimens.font_sp12),)),
           if (icons.isNotEmpty) ...<Widget>[
             const SizedBox(height: 4),
-            ...icons,
+            Padding(
+              padding: const EdgeInsets.only(left: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: icons,
+              ),
+            ),
           ],
         ],
       ),
@@ -257,86 +449,16 @@ class _IconExplain extends StatelessWidget {
         children: <Widget>[
           SizedBox(width: 22, child: Center(child: icon)),
           const SizedBox(width: 8),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 12))),
+          Expanded(child: Text(text, style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge?.copyWith(fontSize: Dimens.font_sp12))),
         ],
       ),
     );
   }
 }
 
-List<_ManualStep> _buildCaseSteps() {
-  return const <_ManualStep>[
-    _ManualStep(
-      no: 1,
-      title: 'Header and segment indicator',
-      description: 'Shows leading segment or priority label of the case list item.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.label_important_outline), text: 'Segment/priority badge'),
-      ],
-    ),
-    _ManualStep(
-      no: 2,
-      title: 'Commission/Rate indicator',
-      description: 'Shows current applicable rate or commission percentage.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.percent), text: 'Rate'),
-      ],
-    ),
-    _ManualStep(
-      no: 3,
-      title: 'Tag and count area',
-      description: 'Displays tags such as attempts or group labels with counts.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.sell_outlined), text: 'Tag'),
-        _IconExplain(icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
-      ],
-    ),
-    _ManualStep(
-      no: 4,
-      title: 'Borrower basic info',
-      description: 'Includes masked name and masked phone number.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.person_outline), text: 'Masked name'),
-        _IconExplain(icon: Icon(Icons.phone_android), text: 'Masked phone'),
-      ],
-    ),
-    _ManualStep(
-      no: 5,
-      title: 'Last record and countdown',
-      description: 'Shows remaining time and last record timestamp for the case.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.timer), text: 'Remaining time'),
-        _IconExplain(icon: Icon(Icons.history), text: 'Last record'),
-      ],
-    ),
-    _ManualStep(
-      no: 6,
-      title: 'Bonus panel',
-      description: 'Displays expected bonus summary with level and amount.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.attach_money), text: 'Bonus'),
-        _IconExplain(icon: Icon(Icons.star_border), text: 'Level'),
-      ],
-    ),
-    _ManualStep(
-      no: 7,
-      title: 'Latest note preview',
-      description: 'Shows the latest communication note content inline.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.notes), text: 'Note'),
-      ],
-    ),
-    _ManualStep(
-      no: 8,
-      title: 'Action buttons',
-      description: 'Perform quick actions such as Retain or open Detail page.',
-      icons: <_IconExplain>[
-        _IconExplain(icon: Icon(Icons.repeat_one), text: 'Retain'),
-        _IconExplain(icon: Icon(Icons.info_outline), text: 'Detail'),
-      ],
-    ),
-  ];
-}
+
 
 /// Data models the user asked for:
 /// stepEntity: title, image, instruction, steps[]
@@ -388,11 +510,6 @@ class _StepSectionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _ScreenshotImage(asset: entity.image, hint: entity.instruction, fit: entity.fit),
-          const SizedBox(height: 12),
-          const Text(
-            'Step-by-Step Instructions',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
           const SizedBox(height: 8),
           ...entity.steps.map(_toManualStep),
         ],
@@ -412,154 +529,47 @@ _ManualStep _toManualStep(_StepItem item) {
   );
 }
 
-List<_StepEntity> _buildCaseEntities() {
-  // Example with one entity using the current screenshot and steps.
-  // You can append more _StepEntity to this list for multiple images + explanations.
-  return <_StepEntity>[
-    const _StepEntity(
-      title: 'Cases in the list',
-      image: 'manual/case_item',
-      instruction:
-          'This screenshot marks the case in the list.',
-      steps:  <_StepItem>[
-        _StepItem(
-          no: 1,
-          title: 'Loan product',
+BoxFit _mapFit(String? fitValue) {
+  final String v = (fitValue ?? '').trim().toLowerCase();
+  if (v.isEmpty) return BoxFit.fitWidth;
+  return fit[v] ??
+      (v == 'fitwidth'
+          ? BoxFit.fitWidth
+          : v == 'fitheight'
+              ? BoxFit.fitHeight
+              : BoxFit.fitWidth);
+}
 
-        ),
-        _StepItem(
-          no: 2,
-          title: 'Transferred case additional bonus',
-        ),
-        _StepItem(
-          no: 3,
-          title: 'Case source',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.miscellaneous_services,color: Colors.blue,), text: 'System assigned'),
-            _StepIcon(icon: Icon(Icons.loupe,color: Colors.red,), text: 'Admin added'),
-            _StepIcon(icon: Icon(Icons.repeat_one,color: Colors.green,), text: 'Retained'),
-            _StepIcon(icon: Icon(Icons.move_up,color: Colors.purple,), text: 'Received'),
-          ],
-        ),
-        _StepItem(
-          no: 4,
-          title: 'Loan count',
-          description: '例如：（10）代表客户是第十次贷款 ',
-          
-        ),
-        _StepItem(
-          no: 5,
-          title: '案件时间',
-          description:
-              '案件剩余处理时间和案件创建时间',
-          
-        ),
-        _StepItem(
-          no: 6,
-          title: '案件金额',
-          description: '案件可以获得的奖金和奖金比例（催回金额的百分比）',
-        ),
-        _StepItem(
-          no: 7,
-          title: '最新日志',
-          description: '最新日志的记录时间和内容',
-          
-        ),
-        _StepItem(
-          no: 8,
-          title: '保留按钮',
-          description:
-              '当案件处理剩余时间小于24小时时，可以点击保留按钮，点击后可以再保留一天的处理时间',
-          
-        ),
-      ],
-    ),
-    const _StepEntity(
-      title: '案件列表',
-      image: 'manual/case_list',
-      fit: BoxFit.fitHeight,
-      instruction:
-          '',
-      steps: const <_StepItem>[
-        _StepItem(
-          no: 1,
-          title: 'Header and segment indicator',
-          description:
-              'Shows leading segment or priority label of the case list item.',
-          icons: <_StepIcon>[
-            _StepIcon(
-              icon: Icon(Icons.label_important_outline),
-              text: 'Segment/priority badge',
-            ),
-          ],
-        ),
-        _StepItem(
-          no: 2,
-          title: 'Commission/Rate indicator',
-          description:
-              'Shows current applicable rate or commission percentage.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.percent), text: 'Rate'),
-          ],
-        ),
-        _StepItem(
-          no: 3,
-          title: 'Tag and count area',
-          description:
-              'Displays tags such as attempts or group labels with counts.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.sell_outlined), text: 'Tag'),
-            _StepIcon(
-                icon: Icon(Icons.confirmation_number_outlined), text: 'Count'),
-          ],
-        ),
-        _StepItem(
-          no: 4,
-          title: 'Borrower basic info',
-          description: 'Includes masked name and masked phone number.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.person_outline), text: 'Masked name'),
-            _StepIcon(icon: Icon(Icons.phone_android), text: 'Masked phone'),
-          ],
-        ),
-        _StepItem(
-          no: 5,
-          title: 'Last record and countdown',
-          description:
-              'Shows remaining time and last record timestamp for the case.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.timer), text: 'Remaining time'),
-            _StepIcon(icon: Icon(Icons.history), text: 'Last record'),
-          ],
-        ),
-        _StepItem(
-          no: 6,
-          title: 'Bonus panel',
-          description: 'Displays expected bonus summary with level and amount.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.attach_money), text: 'Bonus'),
-            _StepIcon(icon: Icon(Icons.star_border), text: 'Level'),
-          ],
-        ),
-        _StepItem(
-          no: 7,
-          title: 'Latest note preview',
-          description: 'Shows the latest communication note content inline.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.notes), text: 'Note'),
-          ],
-        ),
-        _StepItem(
-          no: 8,
-          title: 'Action buttons',
-          description:
-              'Perform quick actions such as Retain or open Detail page.',
-          icons: <_StepIcon>[
-            _StepIcon(icon: Icon(Icons.repeat_one), text: 'Retain'),
-            _StepIcon(icon: Icon(Icons.info_outline), text: 'Detail'),
-          ],
-        ),
-      ],
-    ),
-  ];
+Widget _mapIcon(String? iconKey) {
+  final String key = (iconKey ?? '').trim();
+  if (key.isEmpty) {
+    return const Icon(Icons.help_outline, color: Colors.grey);
+  }
+  return icons[key] ?? const Icon(Icons.help_outline, color: Colors.grey);
+}
+
+_StepItem _toStepItem(HelpDataItemsSteps step) {
+  return _StepItem(
+    no: step.no ?? 0,
+    title: step.title ?? '',
+    description: step.description ?? '',
+    icons: (step.icons ?? <HelpDataItemsStepsIcons>[])
+        .map((e) => _StepIcon(
+              icon: _mapIcon(e.icon),
+              text: e.text ?? '',
+            ))
+        .toList(),
+  );
+}
+
+_StepEntity _toStepEntity(HelpDataItems item) {
+  return _StepEntity(
+    title: item.title ?? '',
+    image: item.image ?? '',
+    instruction: item.instruction ?? '',
+    fit: _mapFit(item.fit),
+    steps: (item.steps ?? <HelpDataItemsSteps>[])
+        .map(_toStepItem)
+        .toList(),
+  );
 }

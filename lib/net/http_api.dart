@@ -30,4 +30,5 @@ class HttpApi {
   static const String receives = '/collection/b-l-collection-orders-receive';
   static const String coupon = '/collection/r-k-coupons';
   static const String adminActions = '/collection/e-d-collection-admin-actions';
+  static const String helps = '/collection/b-l-helps';
 }

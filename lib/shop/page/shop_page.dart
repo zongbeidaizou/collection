@@ -135,6 +135,42 @@ class _ShopPageState extends State<ShopPage>
     }
   }
 
+  Future<void> _showMonthRawDialog(ShopDataMonthData item) async {
+    final int value = item.value ?? 0;
+    final int addition = item.addition ?? 0;
+    final int? addition2 = item.addition2;
+
+    String formatSigned(int v) => v >= 0 ? '+$v' : v.toString();
+    String formatSignedNullable(int? v) {
+      if (v == null) return '';
+      return v >= 0 ? '+$v' : v.toString();
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Detail'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(' $value'),
+              Text(' ${formatSigned(addition)}'),
+              if (addition2 != null) Text(' ${formatSignedNullable(addition2)}'),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _onRefresh() async {
     _shopPagePresenter.show(true);
   }
@@ -244,19 +280,51 @@ class _ShopPageState extends State<ShopPage>
                                   ],
                                 ),
                                 const SizedBox(height: 2.0),
-                                  RichText(text: TextSpan(children: [
-                                    TextSpan(text: formatNumberToK(monthData[index].value!)),
-                                    if (monthData[index].addition! > 0)
-                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),
-                                    if (monthData[index].addition! > 0)
-                                      TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
-                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
-                                      const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),  
-                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
-                                      TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),       
-                                    if (monthData[index].addition2 != null &&  monthData[index].addition2! < 0)
-                                      TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.red,fontWeight: FontWeight.bold)),       
-                                  ]))
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () => _showMonthRawDialog(monthData[index]),
+                                    child: RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: formatNumberToK(
+                                                monthData[index].value!)),
+                                        if (monthData[index].addition! > 0)
+                                          const TextSpan(
+                                              text: '+',
+                                              style: TextStyle(
+                                                  color: Colors.green)),
+                                        if (monthData[index].addition! > 0)
+                                          TextSpan(
+                                              text: formatNumberToK(
+                                                  monthData[index].addition!),
+                                              style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold)),
+                                        if (monthData[index].addition2 != null &&
+                                            monthData[index].addition2! > 0)
+                                          const TextSpan(
+                                              text: '+',
+                                              style: TextStyle(
+                                                  color: Colors.green)),
+                                        if (monthData[index].addition2 != null &&
+                                            monthData[index].addition2! > 0)
+                                          TextSpan(
+                                              text: formatNumberToK(
+                                                  monthData[index].addition2!),
+                                              style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold)),
+                                        if (monthData[index].addition2 != null &&
+                                            monthData[index].addition2! < 0)
+                                          TextSpan(
+                                              text: formatNumberToK(
+                                                  monthData[index].addition2!),
+                                              style: const TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold)),
+                                      ]),
+                                    ),
+                                  )
                               ],
                             ),
                           );
@@ -296,19 +364,53 @@ class _ShopPageState extends State<ShopPage>
                               ],
                             ),
                             const SizedBox(height: 2.0),
-                            RichText(text: TextSpan(children: [
-                              TextSpan(text: formatNumberToK(monthData[index].value!)),
-                              if (monthData[index].addition! > 0)
-                                TextSpan(text: ' + ', style: const TextStyle(color:  Colors.green)),
-                              if (monthData[index].addition! > 0)
-                                TextSpan(text: formatNumberToK(monthData[index].addition!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),
-                              if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
-                                  const TextSpan(text: '+', style: TextStyle(color:  Colors.green)),  
-                              if (monthData[index].addition2 != null &&  monthData[index].addition2! > 0)
-                                TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.green,fontWeight: FontWeight.bold)),       
-                              if (monthData[index].addition2 != null &&  monthData[index].addition2! < 0)
-                                TextSpan(text: formatNumberToK(monthData[index].addition2!), style: const TextStyle(color:  Colors.red,fontWeight: FontWeight.bold)),       
-                            ])),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => _showMonthRawDialog(
+                                monthData[index],
+                              ),
+                              child: RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                      text: formatNumberToK(
+                                          monthData[index].value!)),
+                                  if (monthData[index].addition! > 0)
+                                    TextSpan(
+                                        text: ' + ',
+                                        style: const TextStyle(
+                                            color: Colors.green)),
+                                  if (monthData[index].addition! > 0)
+                                    TextSpan(
+                                        text: formatNumberToK(
+                                            monthData[index].addition!),
+                                        style: const TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold)),
+                                  if (monthData[index].addition2 != null &&
+                                      monthData[index].addition2! > 0)
+                                    const TextSpan(
+                                        text: '+',
+                                        style: TextStyle(
+                                            color: Colors.green)),
+                                  if (monthData[index].addition2 != null &&
+                                      monthData[index].addition2! > 0)
+                                    TextSpan(
+                                        text: formatNumberToK(
+                                            monthData[index].addition2!),
+                                        style: const TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold)),
+                                  if (monthData[index].addition2 != null &&
+                                      monthData[index].addition2! < 0)
+                                    TextSpan(
+                                        text: formatNumberToK(
+                                            monthData[index].addition2!),
+                                        style: const TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold)),
+                                ]),
+                              ),
+                            ),
                           ],
                         ),
                       );

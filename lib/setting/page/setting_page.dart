@@ -1,3 +1,5 @@
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
+import 'package:bounty_hunter/setting/setting_router.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bounty_hunter/res/constant.dart';
@@ -49,12 +51,17 @@ class _SettingPageState extends State<SettingPage> {
               //   },
               // ),
               ClickItem(
-                title: 'Sign out',
-                onTap: _showExitDialog,
+                title: 'Dark Theme',
+                content: _getCurrentTheme(),
+                onTap: () => NavigatorUtils.push(context, SettingRouter.themePage),
               ),
               ClickItem(
                 title: 'Update Password',
                 onTap: _showChangePasswordDialog,
+              ),
+               ClickItem(
+                title: 'Sign out',
+                onTap: _showExitDialog,
               ),
             ],
           );
@@ -68,13 +75,13 @@ class _SettingPageState extends State<SettingPage> {
     String themeMode;
     switch (theme) {
       case 'Dark':
-        themeMode = '开启';
+        themeMode = 'On';
         break;
       case 'Light':
-        themeMode = '关闭';
+        themeMode = 'Off';
         break;
       default:
-        themeMode = '跟随系统';
+        themeMode = 'System';
         break;
     }
     return themeMode;
@@ -91,7 +98,7 @@ class _SettingPageState extends State<SettingPage> {
         localeMode = 'English';
         break;
       default:
-        localeMode = '跟随系统';
+        localeMode = 'System';
         break;
     }
     return localeMode;
@@ -126,6 +133,23 @@ class _SettingPageState extends State<SettingPage> {
           return false;
         }
 
+        // 连续相同数字（>=3位）不允许，如：111 / 0000
+        bool hasConsecutiveSameDigit(String s) {
+          if (s.length < 3) return false;
+          final List<int> digits =
+              s.split('').map((String e) => int.tryParse(e) ?? 0).toList();
+          int run = 1;
+          for (int i = 1; i < digits.length; i++) {
+            if (digits[i] == digits[i - 1]) {
+              run++;
+              if (run >= 3) return true;
+            } else {
+              run = 1;
+            }
+          }
+          return false;
+        }
+
         void validate(String v) {
           final String pwd = v.trim();
           errorText = null;
@@ -138,6 +162,11 @@ class _SettingPageState extends State<SettingPage> {
 
           if (hasConsecutiveRun(pwd)) {
             errorText = 'Password cannot contain 4 consecutive digits';
+            return;
+          }
+
+          if (hasConsecutiveSameDigit(pwd)) {
+            errorText = 'Password cannot contain 3+ consecutive same digits';
             return;
           }
 
@@ -156,7 +185,7 @@ class _SettingPageState extends State<SettingPage> {
                 children: <Widget>[
                   TextField(
                     controller: controller,
-                    obscureText: true,
+                    obscureText: false,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
                     inputFormatters: <TextInputFormatter>[

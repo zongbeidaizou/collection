@@ -15,7 +15,7 @@ class ThemePage extends StatefulWidget {
 
 class _ThemePageState extends State<ThemePage> {
 
-  final List<String> _list = <String>['跟随系统', '开启', '关闭'];
+  final List<String> _list = <String>['System', 'On', 'Off'];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _ThemePageState extends State<ThemePage> {
     }
     return Scaffold(
       appBar: const MyAppBar(
-        title: '夜间模式',
+        title: 'Theme',
       ),
       body: ListView.separated(
         itemCount: _list.length,

@@ -44,7 +44,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
         'page': page,
         'keyword': keyword,
         'keyword2': keyword2,
-        'version': '4'
+        'version': '5'
       },
       onSuccess: (data) async {
         if (data != null) {

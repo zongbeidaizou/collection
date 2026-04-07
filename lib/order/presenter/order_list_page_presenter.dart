@@ -16,8 +16,10 @@ import '../../models/product_entity.dart';
 import '../../providers/order_list_provider.dart';
 import '../../providers/refresh_provider.dart';
 import '../../providers/user_provider.dart';
+import '../../routers/fluro_navigator.dart';
 import '../../util/cache.dart';
 import '../iview/order_list_page_iview.dart';
+import '../order_router.dart';
 
 class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
   @override
@@ -68,6 +70,10 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
           // After a successful index call, show the admin info dialog
           // once per day, only for the first page and non-search requests.
           await _maybeShowAdminInfoDialog(
+            view.getContext(),
+            data.other?.profile,
+          );
+          await _maybeShowReceiveReminderDialog(
             view.getContext(),
             data.other?.profile,
           );
@@ -219,6 +225,8 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
 
   static const String _kAdminInfoDialogLastShownKey =
       'order_list_admin_info_dialog_last_shown_date';
+  static const String _kReceiveReminderDialogLastShownKey =
+      'order_list_receive_reminder_dialog_last_shown_date';
 
   Future<void> _maybeShowAdminInfoDialog(
       BuildContext context, CollectionOrderOtherProfile? profile) async {
@@ -307,6 +315,44 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
               onPressed: () => Navigator.of(ctx).pop(),
               child: const Text('OK'),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _maybeShowReceiveReminderDialog(
+      BuildContext context, CollectionOrderOtherProfile? profile) async {
+    final now = DateTime.now();
+    if (now.hour < 12) return;
+
+    final todayReceiveCount = profile?.cYTodayReceiveCount ?? 0;
+    if (todayReceiveCount != 0) return;
+
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    final lastShown =
+        await Cache().getString(_kReceiveReminderDialogLastShownKey);
+    if (lastShown == today) return;
+
+    await Cache().setString(_kReceiveReminderDialogLastShownKey, today);
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Reminder'),
+          content: const Text(
+            'You have received 0 cases today. Please receive cases to improve your performance.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Later'),
+            ),
+
           ],
         );
       },

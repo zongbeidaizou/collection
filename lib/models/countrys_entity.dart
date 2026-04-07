@@ -31,6 +31,7 @@ class CountrysEntity {
 class CountrysData {
 	String? code = '';
 	String? name = '';
+  int? rate = 0;
 
 	CountrysData();
 

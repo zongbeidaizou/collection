@@ -398,11 +398,12 @@ class _WaActivationPageState extends State<WaActivationPage>
                                 style: TextStyles.textBold16,
                               ),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.content_copy),
-                              onPressed: _copyWaNumber,
-                              tooltip: 'Copy number',
-                            ),
+                            SizedBox(width: 160, child: MyButton(onPressed: _copyWaNumber, text: 'Copy number',icon: Icons.content_copy,)),
+                            // IconButton(
+                            //   icon: const Icon(Icons.content_copy),
+                            //   onPressed: _copyWaNumber,
+                            //   tooltip: 'Copy number',
+                            // ),
                           ],
                         ),
                       ),

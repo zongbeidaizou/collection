@@ -701,7 +701,7 @@ class _OrderItemState extends State<OrderItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: InkWell(
                 child: Row(
                   children: [
@@ -797,7 +797,7 @@ class _OrderItemState extends State<OrderItem> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: InkWell(
                 child: Row(
                   children: [
@@ -1118,24 +1118,14 @@ class _OrderItemState extends State<OrderItem> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               OrderItemButton(
-                key: Key('order_bill'),
-                text: "Bill",
-                icon: Icon(Icons.receipt,
-                    size: 15, color: Colors.white),
+                key: Key('order_button_more_${widget.index}'),
+                text: "Actions",
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-                onTap: () {
-          showDialog<void>(
-                            context: context,
-                            builder: (context) {
-                              return RepaymentBillDialog(
-                                avatar: widget.avatar,
-                                repayInfo: widget.repayInfo,
-                                period: widget.period,
-                                track: widget.track,
-                              );
-                            },
-                          );
+                icon: Icon(Icons.more_vert,
+                    size: 15, color: Colors.white),
+                onTap: () async {
+                  _showSendTypeDialog();
                 },
               ),
               OrderItemButton(
@@ -1225,6 +1215,27 @@ class _OrderItemState extends State<OrderItem> {
                   _showContactListModal(allContacts: true);
                 },
               ),
+              OrderItemButton(
+                key: Key('order_bill'),
+                text: "Bill",
+                icon: Icon(Icons.receipt,
+                    size: 15, color: Colors.white),
+                textColor: isDark ? Colours.dark_button_text : Colors.white,
+                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
+                onTap: () {
+          showDialog<void>(
+                            context: context,
+                            builder: (context) {
+                              return RepaymentBillDialog(
+                                avatar: widget.avatar,
+                                repayInfo: widget.repayInfo,
+                                period: widget.period,
+                                track: widget.track,
+                              );
+                            },
+                          );
+                },
+              ),
               // Gaps.hGap4,
               OrderItemButton(
                 key: Key('order_button_2_${widget.index}'),
@@ -1238,17 +1249,7 @@ class _OrderItemState extends State<OrderItem> {
                 },
               ),
               // Gaps.hGap4,
-              OrderItemButton(
-                key: Key('order_button_more_${widget.index}'),
-                text: "Actions",
-                textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
-                icon: Icon(Icons.more_vert,
-                    size: 15, color: Colors.white),
-                onTap: () async {
-                  _showSendTypeDialog();
-                },
-              ),
+              
               // Gaps.hGap4,
               // InkWell(
               //     onTap: () {
@@ -1425,13 +1426,13 @@ class OrderItemButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+        padding: const EdgeInsets.symmetric(horizontal: 2.2),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4.0),
         ),
         constraints: BoxConstraints(
-          minWidth: icon != null ? 56 : 44,
+          minWidth: icon != null ? 50 : 44,
           maxHeight: 30.0,
           minHeight: 30.0,
         ),
@@ -1440,7 +1441,7 @@ class OrderItemButton extends StatelessWidget {
                 children: [
                   Text(text,
                       style: TextStyle(
-                          fontSize: fontSize ?? 12, color: textColor)),
+                          fontSize: fontSize ?? 11.8, color: textColor)),
                   Gaps.hGap1,
                   icon!,
                 ],

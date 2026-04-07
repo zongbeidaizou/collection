@@ -331,32 +331,32 @@ class _AddNoteState extends State<AddNote>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    // backgroundImage: NetworkImage(_avatar?? '',),
-                    // backgroundImage:
-                    //     ImageUtils.getAssetImage('order/icon_avatar'),
-                    radius: 24,
-                    backgroundColor: Colors.transparent,
-                    child: ClipOval(
-                      child: CachedNetworkImage(
-                        imageUrl: _avatar ?? '',
-                        fit: BoxFit.cover,
-                        width: 48,
-                        height: 48,
-                        placeholder: (context, url) => Image.asset(
-                          'assets/images/order/icon_avatar.png', // 加载中的占位图
-                          fit: BoxFit.cover,
-                        ),
-                        errorWidget: (context, url, error) {
-                          return Image.asset(
-                            'assets/images/order/order_delete.png',
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Gaps.hGap10,
+                  // CircleAvatar(
+                  //   // backgroundImage: NetworkImage(_avatar?? '',),
+                  //   // backgroundImage:
+                  //   //     ImageUtils.getAssetImage('order/icon_avatar'),
+                  //   radius: 24,
+                  //   backgroundColor: Colors.transparent,
+                  //   child: ClipOval(
+                  //     child: CachedNetworkImage(
+                  //       imageUrl: _avatar ?? '',
+                  //       fit: BoxFit.cover,
+                  //       width: 48,
+                  //       height: 48,
+                  //       placeholder: (context, url) => Image.asset(
+                  //         'assets/images/order/icon_avatar.png', // 加载中的占位图
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //       errorWidget: (context, url, error) {
+                  //         return Image.asset(
+                  //           'assets/images/order/order_delete.png',
+                  //           fit: BoxFit.cover,
+                  //         );
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+                  // Gaps.hGap10,
                   Text(_repayInfo?.var8 ?? '',
                       style: TextStyle(
                           color: ThemeUtils.getIconColor(context),

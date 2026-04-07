@@ -351,13 +351,22 @@ class _WaActivationPageState extends State<WaActivationPage>
                         icon: const Icon(Icons.arrow_drop_down),
                         style: TextStyle(color: Theme.of(context).textTheme.titleSmall?.color),
                         dropdownColor: Theme.of(context).colorScheme.surface,
-                        items: _countries
-                            .map<DropdownMenuItem<String>>((String country) {
+                        items: _countries.asMap().entries
+                            .map<DropdownMenuItem<String>>((entry) {
+                          final int index = entry.key;
+                          final String country = entry.value;
                           return DropdownMenuItem<String>(
                             value: country,
-                            child: Text(_countryCodes[country] != null
-                                ? '$country (${_countryCodes[country]})  Success: ${_countryRates[country] ?? 0}%'
-                                : '$country  Success: ${_countryRates[country] ?? 0}%'),
+                            child: Text(
+                              _countryCodes[country] != null
+                                  ? '$country (${_countryCodes[country]})  Success: ${_countryRates[country] ?? 0}%'
+                                  : '$country  Success: ${_countryRates[country] ?? 0}%',
+                              style: TextStyle(
+                                color: index < 2
+                                    ? Colors.green
+                                    : Theme.of(context).textTheme.titleSmall?.color,
+                              ),
+                            ),
                           );
                         }).toList(),
                         onChanged: (String? newCountry) {
@@ -483,6 +492,7 @@ class _WaActivationPageState extends State<WaActivationPage>
                     ),
                     Gaps.vGap16,
                     MyButton(
+                      fontSize: 14,
                       text: _isPolling
                           ? 'Polling...'
                           : 'I have sent WhatsApp verification code',

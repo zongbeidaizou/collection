@@ -105,7 +105,7 @@ class _AddNoteState extends State<AddNote>
     const Color.fromARGB(255, 128, 188, 225), //10展期
     Colors.green, //11保留
     Colors.purple, //12领取
-    Colors.blue, //13管理员
+    Colors.red, //13管理员
   ];
   late AddNotePresenter _addNotePresenter;
   late CollectionOrderData item;

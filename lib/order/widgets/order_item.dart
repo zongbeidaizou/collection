@@ -964,7 +964,7 @@ class _OrderItemState extends State<OrderItem> {
                           Text(
                               widget.item.rFlowInTime != null &&
                                       widget.item.rFlowInTime!.isNotEmpty && widget.source == 'order'
-                                  ? ' ${DateFormat('MMM d, hh:mm', 'en_US').format(DateTime.parse(widget.item.rFlowInTime!))}'
+                                  ? ' ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.rFlowInTime!).toUtc().add(const Duration(hours: 1)))}'
                                   : '',
                               style: Theme.of(context)
                                   .textTheme
@@ -1033,7 +1033,7 @@ class _OrderItemState extends State<OrderItem> {
                         Text(
                                   widget.item.aDLastLogTime != null &&
                                           widget.item.aDLastLogTime!.isNotEmpty
-                                      ? ' ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.aDLastLogTime!))}'
+                                      ? ' ${DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(widget.item.aDLastLogTime!).toUtc().add(const Duration(hours: 1)))}'
                                       : '',
                                   style: Theme.of(context)
                                       .textTheme
@@ -1055,22 +1055,28 @@ class _OrderItemState extends State<OrderItem> {
               ),
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
               Gaps.hGap4,
-              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained && widget.source == 'order')
+              if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24  && widget.source == 'order')
               OrderItemButton(
                 key: Key('order_button_4_${widget.index}'),
-                icon: Icon(Icons.repeat_one,size: 16,color: Colors.white),
-                text: 'Retain',
+                icon: _isRetained ? null : Icon(Icons.repeat_one,size: 16,color: Colors.white),
+                text: _isRetained ? 'Retained' : 'Retain',
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: Colors.green,
+                bgColor: _isRetained ? Colors.green.withOpacity(0.3) : Colors.green,
+                fontSize: _isRetained ? 11 : null,
                 onTap: () {
-                  _retainOrder();
+                  if(_isRetained){
+                    showToast('Order already retained',backgroundColor: Colors.green);
+                  }else{
+                    _retainOrder();
+                  }
                 },
               ),
               Gaps.hGap4,
               if(widget.source == 'order')
                 OrderItemButton(
                   key: Key('order_button_3_${widget.index}'),
-                  text: 'Detail',
+                  text: 'Not viewed, not called, no WA',
+                  fontSize: 11,
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   bgColor: Colours.app_main,
                   onTap: () {
@@ -1388,14 +1394,15 @@ class OrderItemButton extends StatelessWidget {
       this.textColor,
       required this.text,
       this.onTap,
-      this.icon});
+      this.icon,
+      this.fontSize});
 
   final Color? bgColor;
   final Color? textColor;
   final GestureTapCallback? onTap;
   final String text;
   final Widget? icon;
-
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -1417,14 +1424,14 @@ class OrderItemButton extends StatelessWidget {
                 children: [
                   Text(text,
                       style: TextStyle(
-                          fontSize: 12, color: textColor)),
+                          fontSize: fontSize ?? 12, color: textColor)),
                   Gaps.hGap1,
                   icon!,
                 ],
               )
             : Text(
                 text,
-                style: TextStyle(fontSize: Dimens.font_sp14, color: textColor),
+                style: TextStyle(fontSize: fontSize ?? Dimens.font_sp14, color: textColor),
               ),
       ),
     );

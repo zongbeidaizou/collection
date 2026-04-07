@@ -65,6 +65,10 @@ class CollectionOrderData {
 	int? aNCurrentDayLogCount = 0;
 	@JSONField(name: 'a_o_current_day_call_count')
 	int? aOCurrentDayCallCount = 0;
+	@JSONField(name: 'x_current_view_times')
+	int? xCurrentViewTimes = 0;
+	@JSONField(name: 'b_f_current_day_wa')
+	int? bFCurrentDayWa = 0;    
 	@JSONField(name: 'a_v_tmp_collection_admin_id')
 	int? aVTmpCollectionAdminId = 0;
 	@JSONField(name: 'a_z_package')

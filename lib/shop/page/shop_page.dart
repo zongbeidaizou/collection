@@ -135,7 +135,7 @@ class _ShopPageState extends State<ShopPage>
     }
   }
 
-  Future<void> _showMonthRawDialog(ShopDataMonthData item) async {
+  Future<void> _showMonthRawDialog(ShopDataMonthData item, {int type = 0}) async {
     final int value = item.value ?? 0;
     final int addition = item.addition ?? 0;
     final int? addition2 = item.addition2;
@@ -145,12 +145,30 @@ class _ShopPageState extends State<ShopPage>
       if (v == null) return '';
       return v >= 0 ? '+$v' : v.toString();
     }
+    String title = '';
+    switch (type) {
+      case 0:
+        title = 'Monthly Bonus';
+        break;
+      case 1:
+        title = 'Monthly Repayment Count';
+        break;
+        case 2:
+        title = 'Monthly Registration Count';
+        break;
+        case 3:
+        title = 'Monthly Application Count';
+        break;
+        default:
+        title = 'Monthly Bonus ';
+        break;
+    } 
 
     await showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: const Text('Detail'),
+          title: Text('${item.name} $title'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +194,7 @@ class _ShopPageState extends State<ShopPage>
   }
 
 
-  Widget _buildMonthHallOfFame(List<ShopDataMonthData> monthData, String title) {
+  Widget _buildMonthHallOfFame(List<ShopDataMonthData> monthData, String title, {int type = 0}) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white70),
@@ -215,161 +233,169 @@ class _ShopPageState extends State<ShopPage>
                   iconColor = const Color(0xFFB87333).withOpacity(0.8);
                 }
                 return index < 1
-                    ? AnimatedBuilder(
-                        animation: _controller,
-                        builder: (context, child) {
-                          return Container(
-                            padding: const EdgeInsets.all(2.0),
-                            width: 112,
-                            child: Column(
-                              children: <Widget>[
-                                Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: <Widget>[
-                                    /*                                Animate(
-                              effects: [MoveEffect(), ScaleEffect()],
-                              child: flashingBorder,
-                            ),*/
-                                    Animate(
-                                      effects: const [
-                                        FadeEffect(),
-                                        ScaleEffect()
-                                      ],
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.transparent,
-                                              /*color: _colorAnimation.value!,*/
-                                      width: 4.0,
-                                              ),
-                                        ),
-                                        child: CircleAvatar(
-                                          radius: 26.0,
-                                          backgroundColor: Colors.transparent,
-                                          // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
-                                          backgroundImage: ImageUtils
-                                              .getImageProvider(
-                                                  monthData[index].avatar,
-                                                  holderImg: 'store/icon_zj'),
-                                          // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
-                                        ),
-                                      )
-                                          .animate(
-                                              onPlay: (controller) =>
-                                                  controller.repeat())
-                                          .shimmer(
-                                              duration: 2200.ms,
-                                              color:
-                                                  Colors.white.withOpacity(0.5))
-                                          .animate() // this wraps the previous Animate in another Animate
-                                          .fadeIn(
-                                              duration: 2200.ms,
-                                              curve: Curves.easeOutQuad)
-                                          .slide(),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      left: 0,
-                                      child: Icon(
-                                        Icons.emoji_events_rounded,
-                                        color: iconColor,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 2.0),
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () => _showMonthRawDialog(monthData[index]),
-                                    child: RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                            text: formatNumberToK(
-                                                monthData[index].value!)),
-                                        if (monthData[index].addition! > 0)
-                                          const TextSpan(
-                                              text: '+',
-                                              style: TextStyle(
-                                                  color: Colors.green)),
-                                        if (monthData[index].addition! > 0)
-                                          TextSpan(
-                                              text: formatNumberToK(
-                                                  monthData[index].addition!),
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold)),
-                                        if (monthData[index].addition2 != null &&
-                                            monthData[index].addition2! > 0)
-                                          const TextSpan(
-                                              text: '+',
-                                              style: TextStyle(
-                                                  color: Colors.green)),
-                                        if (monthData[index].addition2 != null &&
-                                            monthData[index].addition2! > 0)
-                                          TextSpan(
-                                              text: formatNumberToK(
-                                                  monthData[index].addition2!),
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.bold)),
-                                        if (monthData[index].addition2 != null &&
-                                            monthData[index].addition2! < 0)
-                                          TextSpan(
-                                              text: formatNumberToK(
-                                                  monthData[index].addition2!),
-                                              style: const TextStyle(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.bold)),
-                                      ]),
-                                    ),
-                                  )
-                              ],
-                            ),
-                          );
-                        })
-                    : Container(
-                        padding: const EdgeInsets.all(2.0),
-                        width: 88,
-                        child: Column(
-                          children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.transparent,
-                                      width: 4.0,
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 26.0,
-                                    backgroundColor: Colors.transparent,
-                                    backgroundImage: ImageUtils.getImageProvider(
-                                        monthData[index].avatar,
-                                        holderImg: 'store/icon_zj'),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Icon(
-                                    Icons.emoji_events_rounded,
-                                    color: iconColor,
-                                    size: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 2.0),
-                            GestureDetector(
+                    ? GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () => _showMonthRawDialog(
                                 monthData[index],
+                                type: type,
                               ),
-                              child: RichText(
+                      child: AnimatedBuilder(
+                          animation: _controller,
+                          builder: (context, child) {
+                            return Container(
+                              padding: const EdgeInsets.all(2.0),
+                              width: 112,
+                              child: Column(
+                                children: <Widget>[
+                                  Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    children: <Widget>[
+                                      /*                                Animate(
+                                effects: [MoveEffect(), ScaleEffect()],
+                                child: flashingBorder,
+                              ),*/
+                                      Animate(
+                                        effects: const [
+                                          FadeEffect(),
+                                          ScaleEffect()
+                                        ],
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Colors.transparent,
+                                                /*color: _colorAnimation.value!,*/
+                                        width: 4.0,
+                                                ),
+                                          ),
+                                          child: CircleAvatar(
+                                            radius: 26.0,
+                                            backgroundColor: Colors.transparent,
+                                            // backgroundImage: ImageUtils.getAssetImage('avater/avater${index + 1}'),
+                                            backgroundImage: ImageUtils
+                                                .getImageProvider(
+                                                    monthData[index].avatar,
+                                                    holderImg: 'store/icon_zj'),
+                                            // backgroundImage: LoadImage(item.icon, width: 72.0, height: 72.0),,
+                                          ),
+                                        )
+                                            .animate(
+                                                onPlay: (controller) =>
+                                                    controller.repeat())
+                                            .shimmer(
+                                                duration: 2200.ms,
+                                                color:
+                                                    Colors.white.withOpacity(0.5))
+                                            .animate() // this wraps the previous Animate in another Animate
+                                            .fadeIn(
+                                                duration: 2200.ms,
+                                                curve: Curves.easeOutQuad)
+                                            .slide(),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        child: Icon(
+                                          Icons.emoji_events_rounded,
+                                          color: iconColor,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 2.0),
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () => _showMonthRawDialog(monthData[index], type: type),
+                                      child: RichText(
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                              text: formatNumberToK(
+                                                  monthData[index].value!)),
+                                          if (monthData[index].addition! > 0)
+                                            const TextSpan(
+                                                text: '+',
+                                                style: TextStyle(
+                                                    color: Colors.green)),
+                                          if (monthData[index].addition! > 0)
+                                            TextSpan(
+                                                text: formatNumberToK(
+                                                    monthData[index].addition!),
+                                                style: const TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.bold)),
+                                          if (monthData[index].addition2 != null &&
+                                              monthData[index].addition2! > 0)
+                                            const TextSpan(
+                                                text: '+',
+                                                style: TextStyle(
+                                                    color: Colors.green)),
+                                          if (monthData[index].addition2 != null &&
+                                              monthData[index].addition2! > 0)
+                                            TextSpan(
+                                                text: formatNumberToK(
+                                                    monthData[index].addition2!),
+                                                style: const TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.bold)),
+                                          if (monthData[index].addition2 != null &&
+                                              monthData[index].addition2! < 0)
+                                            TextSpan(
+                                                text: formatNumberToK(
+                                                    monthData[index].addition2!),
+                                                style: const TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.bold)),
+                                        ]),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            );
+                          }),
+                    )
+                    : GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => _showMonthRawDialog(
+                                monthData[index],
+                                type: type,
+                              ),
+                      child: Container(
+                          padding: const EdgeInsets.all(2.0),
+                          width: 88,
+                          child: Column(
+                            children: <Widget>[
+                              Stack(
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.transparent,
+                                        width: 4.0,
+                                      ),
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 26.0,
+                                      backgroundColor: Colors.transparent,
+                                      backgroundImage: ImageUtils.getImageProvider(
+                                          monthData[index].avatar,
+                                          holderImg: 'store/icon_zj'),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    child: Icon(
+                                      Icons.emoji_events_rounded,
+                                      color: iconColor,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 2.0),
+                              RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
                                       text: formatNumberToK(
@@ -410,10 +436,10 @@ class _ShopPageState extends State<ShopPage>
                                             fontWeight: FontWeight.bold)),
                                 ]),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      );
+                    );
               },
             ),
           ),
@@ -611,13 +637,13 @@ class _ShopPageState extends State<ShopPage>
                 else
                   Gaps.empty,
                   // 名人堂
-                _buildMonthHallOfFame(_data.monthData!, 'Monthly Bonus Ranking'),
+                _buildMonthHallOfFame(_data.monthData!, 'Monthly Bonus Ranking', type: 0),
                 Gaps.vGap4,
-                _buildMonthHallOfFame(_data.monthRepayData!, 'Monthly Repayment Ranking'),
+                _buildMonthHallOfFame(_data.monthRepayData!, 'Monthly Repayment Ranking', type: 1),
                 Gaps.vGap4,
-                _buildMonthHallOfFame(_data.monthRegBonusData!, 'Monthly Registration Bonus Ranking'),
+                _buildMonthHallOfFame(_data.monthRegBonusData!, 'Monthly Registration Bonus Ranking', type: 2),
                 Gaps.vGap4,
-                _buildMonthHallOfFame(_data.monthApplyBonusData!, 'Monthly Application Bonus Ranking'),
+                _buildMonthHallOfFame(_data.monthApplyBonusData!, 'Monthly Application Bonus Ranking', type: 3),
                 Gaps.vGap4,
                 if (_data.showMonthAdditionData!)
                   Column(

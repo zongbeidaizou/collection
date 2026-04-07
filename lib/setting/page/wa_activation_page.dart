@@ -29,6 +29,7 @@ class _WaActivationPageState extends State<WaActivationPage>
   static const String _waCooldownKey = 'wa_activation_next_request_time';
   static const String _waDataKey = 'wa_activation_last_data';
   static const String _selectedCountryKey = 'wa_activation_selected_country';
+  static const String _weeklyNoticeAckKey = 'wa_activation_weekly_notice_ack';
   
 
   
@@ -61,6 +62,57 @@ class _WaActivationPageState extends State<WaActivationPage>
     super.initState();
     _loadWaCooldown();
     _loadStoredWaData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeShowWeeklyNotice();
+    });
+  }
+
+  Future<void> _maybeShowWeeklyNotice() async {
+    if (!mounted) return;
+    final DateTime now = DateTime.now();
+    // DateTime.weekday: Monday=1 ... Sunday=7
+    // if (now.weekday != DateTime.monday) return;
+
+    final DateTime monday = DateUtils.dateOnly(
+      now.subtract(Duration(days: now.weekday - DateTime.monday)),
+    );
+    final String weekId =
+        '${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
+    final String? ackWeekId = SpUtil.getString(_weeklyNoticeAckKey);
+    if (ackWeekId == weekId) return;
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('WhatsApp Account Anti-Ban & Recovery Instructions'),
+          content: const SingleChildScrollView(
+            child: Text(
+              'I. Daily WhatsApp Anti-Ban Rules\n'
+              '1. Do not frequently switch WhatsApp accounts, add contacts in bulk, or send identical copied messages in WhatsApp.\n'
+              '2. Do not send external links, payment information, sensitive words, or promotional advertisements via WhatsApp.\n'
+              '3. Avoid frequent logouts and logins on WhatsApp; keep a stable network environment.\n'
+              '4. After logging in with a new WhatsApp number, start with light messaging and avoid sending mass messages immediately.\n\n'
+              'II. Actions After WhatsApp Is Banned\n'
+              '1. Once WhatsApp shows a ban, stop all activity on that device immediately.\n'
+              '2. If another mobile phone is available, use the new device to log in to the company APP and obtain a new WhatsApp number.\n'
+              '3. The new device used for logging into the new WhatsApp account must use a separate network / IP address and must not share the same network or IP as the banned device.',
+              style: TextStyle(height: 1.45),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                SpUtil.putString(_weeklyNoticeAckKey, weekId);
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('Notice acknowledged'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

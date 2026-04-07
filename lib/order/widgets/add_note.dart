@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
@@ -24,6 +25,7 @@ import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
 import '../../mvp/base_page.dart';
 import '../../providers/order_list_provider.dart';
+import '../../providers/user_provider.dart';
 import '../../res/colors.dart';
 import '../../res/dimens.dart';
 import '../../res/gaps.dart';
@@ -114,6 +116,9 @@ class _AddNoteState extends State<AddNote>
   List<CollectionLogOtherContactInfo2Data> _contact2List = [];
   List<CollectionLogOtherContactInfo2Data> _allContactList = [];
   int _showContactDays = 0;
+  int _finesAmount = 0;
+  bool _showFinesBanner = false;
+  Timer? _finesBannerTimer;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -167,6 +172,7 @@ class _AddNoteState extends State<AddNote>
     _period = _data!.other!.period;
     _avatar = _data!.other!.avatar;
     _showContactDays = _data!.other!.showContactDays!;
+    _updateFinesBanner();
 
     _contact2List = SpUtil.getObjectList("contact2List:${widget.orderId}")
             ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
@@ -185,6 +191,46 @@ class _AddNoteState extends State<AddNote>
     _scrollToBottom();
   }
 
+  void _updateFinesBanner() {
+    int finesAmount = 0;
+    final finesList = context.read<UserProvider>().userEntity.fines;
+    final overdueDays = _repayInfo?.overdueDays;
+    final borrowCount = item.aEBorrowCount ?? 0;
+
+    if (finesList == null || overdueDays == null || overdueDays >= 10) {
+      _finesBannerTimer?.cancel();
+      if (_finesAmount != 0 || _showFinesBanner) {
+        _finesAmount = 0;
+        _showFinesBanner = false;
+      }
+      return;
+    }
+
+    for (final fine in finesList) {
+      if (fine.borrowCount == null || fine.borrowCount!.length < 2) {
+        continue;
+      }
+      if (borrowCount >= fine.borrowCount![0] &&
+          borrowCount <= fine.borrowCount![1]) {
+        finesAmount = fine.fines?[overdueDays] ?? 0;
+        break;
+      }
+    }
+
+    _finesBannerTimer?.cancel();
+    _finesAmount = finesAmount;
+    _showFinesBanner = finesAmount > 0;
+
+    if (_showFinesBanner) {
+      _finesBannerTimer = Timer(const Duration(milliseconds: 1200), () {
+        if (!mounted) return;
+        setState(() {
+          _showFinesBanner = false;
+        });
+      });
+    }
+  }
+
   @override
   AddNotePresenter createPresenter() {
     _addNotePresenter = AddNotePresenter();
@@ -194,6 +240,16 @@ class _AddNoteState extends State<AddNote>
   @override
   void onRefresh() {
     _onRefresh();
+  }
+
+  @override
+  void dispose() {
+    _finesBannerTimer?.cancel();
+    commentController.dispose();
+    dateController.dispose();
+    typeController.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -375,6 +431,26 @@ class _AddNoteState extends State<AddNote>
             color: Colors.grey.withOpacity(0.2),
             child: Column(
               children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 2200),
+                  child: _showFinesBanner && _finesAmount > 0
+                      ? Container(
+                          key: const ValueKey('fines_banner'),
+                          color: Colors.orange,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Severe threat or insult, Fines: $_finesAmount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
                 OrderItem(
                   key: Key('order_item_${item.id}'),
                   index: 1,

@@ -115,10 +115,10 @@ class _OrderItemState extends State<OrderItem> {
         buttonText = 'Not viewed';
       } 
             if (widget.item.aOCurrentDayCallCount! == 0) {
-        buttonText =  buttonText.isEmpty ? 'Not called.' : '$buttonText, Not called.';
+        buttonText =  buttonText.isEmpty ? 'Not called' : '$buttonText, Not called';
       }
       if (widget.item.bFCurrentDayWa! == 0) {
-        buttonText = buttonText.isEmpty ? 'WA unsent.' : '$buttonText, WA unsent.';
+        buttonText = buttonText.isEmpty ? 'WA unsent' : '$buttonText, WA unsent';
       }
 
       if (buttonText.isEmpty) {

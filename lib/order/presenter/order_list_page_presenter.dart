@@ -223,6 +223,8 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
   Future<void> _maybeShowAdminInfoDialog(
       BuildContext context, CollectionOrderOtherProfile? profile) async {
     final now = DateTime.now();
+    if (now.hour < 9) return;
+
     final today =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 

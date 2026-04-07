@@ -98,6 +98,7 @@ class _OrderItemState extends State<OrderItem> {
     Color shadowColor = Colors.transparent;
     Color buttonColor = isDark ? Colours.dark_app_main : Colours.app_main;
     Color backgroundColor = Colors.white;
+    String buttonText = '';
 
     if (widget.inList) {
       if (widget.item.aNCurrentDayLogCount! == 0) {
@@ -107,6 +108,21 @@ class _OrderItemState extends State<OrderItem> {
         shadowColor =
             isDark ? Colors.white : Color(0xFF3BA28D).withOpacity(0.2);
         buttonColor = Color(0xFF3BA28D);
+      }
+    }
+    if (widget.inList) {
+      if (widget.item.xCurrentViewTimes! == 0) {
+        buttonText = 'Not viewed';
+      } 
+            if (widget.item.aOCurrentDayCallCount! == 0) {
+        buttonText =  buttonText.isEmpty ? 'Not called.' : '$buttonText, Not called.';
+      }
+      if (widget.item.bFCurrentDayWa! == 0) {
+        buttonText = buttonText.isEmpty ? 'WA unsent.' : '$buttonText, WA unsent.';
+      }
+
+      if (buttonText.isEmpty) {
+        buttonText = 'Detail';
       }
     }
 
@@ -122,7 +138,7 @@ class _OrderItemState extends State<OrderItem> {
           color: backgroundColor,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
-            child: _buildContent(context, buttonColor),
+            child: _buildContent(context, buttonColor, buttonText),
           ),
         ));
   }
@@ -155,7 +171,7 @@ class _OrderItemState extends State<OrderItem> {
     }
   }
 
-  Widget _buildContent(BuildContext context, Color buttonColor) {
+  Widget _buildContent(BuildContext context, Color buttonColor, String buttonText) {
     final bool isDark = context.isDark;
     final TextStyle? textTextStyle = Theme.of(context)
         .textTheme
@@ -1075,7 +1091,7 @@ class _OrderItemState extends State<OrderItem> {
               if(widget.source == 'order')
                 OrderItemButton(
                   key: Key('order_button_3_${widget.index}'),
-                  text: 'Not viewed, not called, no WA',
+                  text: buttonText,
                   fontSize: 11,
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
                   bgColor: Colours.app_main,

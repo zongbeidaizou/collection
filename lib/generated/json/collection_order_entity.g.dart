@@ -169,6 +169,16 @@ CollectionOrderData $CollectionOrderDataFromJson(Map<String, dynamic> json) {
   if (aOCurrentDayCallCount != null) {
     collectionOrderData.aOCurrentDayCallCount = aOCurrentDayCallCount;
   }
+  final int? xCurrentViewTimes = jsonConvert.convert<int>(
+      json['x_current_view_times']);
+  if (xCurrentViewTimes != null) {
+    collectionOrderData.xCurrentViewTimes = xCurrentViewTimes;
+  }
+  final int? bFCurrentDayWa = jsonConvert.convert<int>(
+      json['b_f_current_day_wa']);
+  if (bFCurrentDayWa != null) {
+    collectionOrderData.bFCurrentDayWa = bFCurrentDayWa;
+  }
   final int? aVTmpCollectionAdminId = jsonConvert.convert<int>(
       json['a_v_tmp_collection_admin_id']);
   if (aVTmpCollectionAdminId != null) {
@@ -223,6 +233,8 @@ Map<String, dynamic> $CollectionOrderDataToJson(CollectionOrderData entity) {
   data['a_l_last_log'] = entity.aLLastLog;
   data['a_n_current_day_log_count'] = entity.aNCurrentDayLogCount;
   data['a_o_current_day_call_count'] = entity.aOCurrentDayCallCount;
+  data['x_current_view_times'] = entity.xCurrentViewTimes;
+  data['b_f_current_day_wa'] = entity.bFCurrentDayWa;
   data['a_v_tmp_collection_admin_id'] = entity.aVTmpCollectionAdminId;
   data['a_z_package'] = entity.aZPackage;
   data['a_d_last_log_time'] = entity.aDLastLogTime;
@@ -253,6 +265,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
     String? aLLastLog,
     int? aNCurrentDayLogCount,
     int? aOCurrentDayCallCount,
+    int? xCurrentViewTimes,
+    int? bFCurrentDayWa,
     int? aVTmpCollectionAdminId,
     String? aZPackage,
     String? aDLastLogTime,
@@ -281,6 +295,8 @@ extension CollectionOrderDataExtension on CollectionOrderData {
       ..aNCurrentDayLogCount = aNCurrentDayLogCount ?? this.aNCurrentDayLogCount
       ..aOCurrentDayCallCount = aOCurrentDayCallCount ??
           this.aOCurrentDayCallCount
+      ..xCurrentViewTimes = xCurrentViewTimes ?? this.xCurrentViewTimes
+      ..bFCurrentDayWa = bFCurrentDayWa ?? this.bFCurrentDayWa
       ..aVTmpCollectionAdminId = aVTmpCollectionAdminId ??
           this.aVTmpCollectionAdminId
       ..aZPackage = aZPackage ?? this.aZPackage

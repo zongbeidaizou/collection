@@ -47,6 +47,9 @@ class _WaActivationPageState extends State<WaActivationPage>
   // 国家名 -> 国家区号（后续由后台接口填充）
   Map<String, String> _countryCodes = <String, String>{};
 
+  // 国家名 -> 成功率（后续由后台接口填充）
+  Map<String, int> _countryRates = <String, int>{};
+
   @override
   WaActivationPresenter createPresenter() {
     _waActivationPresenter = WaActivationPresenter();
@@ -75,9 +78,15 @@ class _WaActivationPageState extends State<WaActivationPage>
         if ((e.name ?? '').isNotEmpty) (e.name ?? ''): (e.code ?? '')
     };
 
+    final Map<String, int> rates = <String, int>{
+      for (final CountrysData e in list)
+        if ((e.name ?? '').isNotEmpty) (e.name ?? ''): (e.rate ?? 0)
+    };
+
     setState(() {
       _countries = names;
       _countryCodes = codes;
+      _countryRates = rates;
       _selectedCountry = _countries.isNotEmpty ? _countries.first : '';
     });
 
@@ -347,8 +356,8 @@ class _WaActivationPageState extends State<WaActivationPage>
                           return DropdownMenuItem<String>(
                             value: country,
                             child: Text(_countryCodes[country] != null
-                                ? '$country (${_countryCodes[country]})'
-                                : country),
+                                ? '$country (${_countryCodes[country]})  Success: ${_countryRates[country] ?? 0}%'
+                                : '$country  Success: ${_countryRates[country] ?? 0}%'),
                           );
                         }).toList(),
                         onChanged: (String? newCountry) {

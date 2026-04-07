@@ -94,6 +94,10 @@ CountrysData $CountrysDataFromJson(Map<String, dynamic> json) {
   if (name != null) {
     countrysData.name = name;
   }
+  final int? rate = jsonConvert.convert<int>(json['rate']);
+  if (rate != null) {
+    countrysData.rate = rate;
+  }
   return countrysData;
 }
 
@@ -101,6 +105,7 @@ Map<String, dynamic> $CountrysDataToJson(CountrysData entity) {
   final Map<String, dynamic> data = <String, dynamic>{};
   data['code'] = entity.code;
   data['name'] = entity.name;
+  data['rate'] = entity.rate;
   return data;
 }
 
@@ -108,9 +113,11 @@ extension CountrysDataExtension on CountrysData {
   CountrysData copyWith({
     String? code,
     String? name,
+    int? rate,
   }) {
     return CountrysData()
       ..code = code ?? this.code
-      ..name = name ?? this.name;
+      ..name = name ?? this.name
+      ..rate = rate ?? this.rate;
   }
 }

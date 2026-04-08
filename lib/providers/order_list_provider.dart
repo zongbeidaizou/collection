@@ -12,8 +12,7 @@ class OrderListProvider extends ChangeNotifier {
   void changeList(CollectionOrderData order) {
     final int index = _list.indexWhere((item) => item.id == order.id);
     if (index != -1) {
-      _list.removeAt(index);
-      _list.add(order);
+      _list[index] = order;
       notifyListeners();
     }
     // _list = _list.map((item) {

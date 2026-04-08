@@ -464,6 +464,8 @@ class _AddNoteState extends State<AddNote>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    item.xCurrentViewTimes = 1;
+    context.read<OrderListProvider>().changeList(item);
 
     Map<String, Object> logData;
     return Scaffold(
@@ -610,9 +612,9 @@ class _AddNoteState extends State<AddNote>
                   // track: ,
                 ),
                 // Text('My Collection Log'),
-                Gaps.vGap8,
+                Gaps.vGap2,
                 _buildCaseSummaryCard(),
-                Gaps.vGap8,
+                Gaps.vGap2,
                 Expanded(
                   child: Container(
                     // margin: EdgeInsets.only(left: 4, right: 4),

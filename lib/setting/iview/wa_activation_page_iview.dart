@@ -7,4 +7,5 @@ abstract class WaActivationPageMvpView implements IMvpView {
   void setWaData(WaData? data);
   void setWacodeData(WacodeData? data);
   void setCountryData(List<CountrysData>? data);
+  Future<void> showWeeklyNotice();
 }

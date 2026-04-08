@@ -20,7 +20,7 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
     if (country != null && country.isNotEmpty) {
       queryParams['country'] = country;
     }
-    
+
     await requestNetwork<WaEntity>(
       Method.get,
       url: HttpApi.waActivation,
@@ -37,6 +37,8 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
         view.showToast(__);
       },
     );
+
+    
   }
   Future<void> getWaCountry() async {
     await requestNetwork<CountrysEntity>(
@@ -46,6 +48,7 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
       onSuccess: (data) async {
         if (data != null && data.success == true) {
           view.setCountryData(data.data ?? []);
+          await view.showWeeklyNotice();
         } else {
           view.showToast(data?.errorMessage ?? 'Failed to get WhatsApp country');
         }

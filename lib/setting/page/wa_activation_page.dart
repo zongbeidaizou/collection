@@ -62,12 +62,10 @@ class _WaActivationPageState extends State<WaActivationPage>
     super.initState();
     _loadWaCooldown();
     _loadStoredWaData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _maybeShowWeeklyNotice();
-    });
   }
 
-  Future<void> _maybeShowWeeklyNotice() async {
+  @override
+  Future<void> showWeeklyNotice() async {
     if (!mounted) return;
     final DateTime now = DateTime.now();
     // DateTime.weekday: Monday=1 ... Sunday=7
@@ -77,7 +75,7 @@ class _WaActivationPageState extends State<WaActivationPage>
       now.subtract(Duration(days: now.weekday - DateTime.monday)),
     );
     final String weekId =
-        '${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
+        '1${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
     final String? ackWeekId = SpUtil.getString(_weeklyNoticeAckKey);
     if (ackWeekId == weekId) return;
 

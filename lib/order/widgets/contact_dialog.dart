@@ -1,5 +1,7 @@
+import 'package:bounty_hunter/models/collection_order_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/order/widgets/sms_dialog.dart';
+import 'package:bounty_hunter/providers/order_list_provider.dart';
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/res/colors.dart';
 import 'package:bounty_hunter/res/dimens.dart';
@@ -36,6 +38,7 @@ class ContactDialog extends StatefulWidget {
     required this.showContactDays,
     required this.isAllContacts,
     required this.borrowCount,
+    required this.orderItem,
   });
   final int collectionOrderId;
   final List<CollectionLogOtherContactInfo2Data> contactList;
@@ -45,6 +48,7 @@ class ContactDialog extends StatefulWidget {
   final int showContactDays;
   final bool isAllContacts;
   final int borrowCount;
+  final CollectionOrderData orderItem;
   @override
   State<ContactDialog> createState() => _ContactDialogState();
 }
@@ -257,6 +261,7 @@ class _ContactDialogState extends State<ContactDialog> {
                       });
                     },
                     contactIndex: index,
+                    orderItem: widget.orderItem,
                     isAllContacts: widget.isAllContacts,
                     isSelectionMode: _isSelectionMode,
                     isSelectedForCopy: _selectedContactIndices.contains(index),
@@ -292,6 +297,7 @@ class ContactCard extends StatefulWidget {
   final bool isSelectionMode;
   final bool isSelectedForCopy;
   final void Function(int, bool)? onSelectionChanged;
+  final CollectionOrderData? orderItem;
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
@@ -304,6 +310,7 @@ class ContactCard extends StatefulWidget {
     this.isSelectionMode = false,
     this.isSelectedForCopy = false,
     this.onSelectionChanged,
+    this.orderItem,
   });
 
   @override
@@ -320,7 +327,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
   Timer? _cleanupTimer; // 清理定时器
   String? _lastActionSource; // 记录最后一次操作来源：'call', 'sms', 'whatsapp'
   int method = 0;
-
+  CollectionOrderData? orderItem;
   Future<void> _addContactToPhone() async {
     final phone = widget.contact.gPhone ?? '';
     if (phone.isEmpty) {
@@ -390,8 +397,12 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
           // 如果是从WhatsApp返回且停留时间超过5秒，记录点击事件
           if (_isWhatsAppLaunched && timeSpentOutside.inSeconds > 1) {
             _recordWhatsAppClick();
+            widget.orderItem?.bFCurrentDayWa = 1;
+            context.read<OrderListProvider>().changeList(widget.orderItem ?? CollectionOrderData());
           }
           if (_isCallLaunched && timeSpentOutside.inSeconds > 2) {
+            widget.orderItem?.aOCurrentDayCallCount = 1;
+            context.read<OrderListProvider>().changeList(widget.orderItem ?? CollectionOrderData());
             _recordCallClick();
           }
           if (_isSmsLaunched && timeSpentOutside.inSeconds > 1) {

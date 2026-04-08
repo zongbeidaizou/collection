@@ -227,6 +227,7 @@ class _OrderItemState extends State<OrderItem> {
                 period: widget.period!,
                 showContactDays: widget.showContactDays,
                 borrowCount: widget.item.aEBorrowCount ?? 0,
+                orderItem: widget.item,
                 onSendSms: (templateId, smsContent,
                     {String? phone, int? contactId}) {
                   widget.onSendSms?.call(templateId, smsContent,

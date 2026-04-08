@@ -248,6 +248,7 @@ class AddNotePresenter extends BasePagePresenter<AddNoteIMvpView> {
         item.kStatus = int.parse(data['g_type'] as String);
         item.aDLastLogTime = DateTime.now().toIso8601String();
         item.aLLastLog = data['j_content'] as String;
+        item.xCurrentViewTimes = 1;
         view.getContext().read<OrderListProvider>().changeList(item);
       }
     }, onError: (_, __) async {

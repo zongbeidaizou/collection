@@ -17,7 +17,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../../goods/goods_router.dart';
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
 import '../../models/collection_order_entity.dart';
@@ -340,14 +339,14 @@ class _OrderPageState extends State<OrderPage>
             ),
             IconButton(
               onPressed: () {
-                NavigatorUtils.push(context, GoodsRouter.goodsPage);
+                NavigatorUtils.push(context, OrderRouter.orderBookmarksPage);
               },
               tooltip: 'Bookmark',
               icon: Icon(Icons.bookmark_add_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),
             ),
              IconButton(
               onPressed: () {
-                NavigatorUtils.push(context, GoodsRouter.goodsPage);
+                NavigatorUtils.push(context, OrderRouter.orderTrackPage);
               },
               tooltip: 'Log',
               icon: Icon(Icons.description_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),

@@ -3,6 +3,7 @@ import 'package:fluro/fluro.dart';
 import 'package:bounty_hunter/routers/i_router.dart';
 
 import 'page/order_info_page.dart';
+import 'page/bookmarks_page.dart';
 import 'page/order_page.dart';
 import 'page/order_search_page.dart';
 import 'page/order_receive_page.dart';
@@ -15,6 +16,7 @@ class OrderRouter implements IRouterProvider{
   static String orderSearchPage = '/order/search';
   static String orderReceivePage = '/order/receive';
   static String orderTrackPage = '/order/track';
+  static String orderBookmarksPage = '/order/bookmarks';
   static String notePage = '/order/note';
 
   @override
@@ -48,6 +50,7 @@ class OrderRouter implements IRouterProvider{
     router.define(orderSearchPage, handler: Handler(handlerFunc: (_, __) => const OrderSearchPage()));
     router.define(orderReceivePage, handler: Handler(handlerFunc: (_, __) => const OrderReceivePage()));
     router.define(orderTrackPage, handler: Handler(handlerFunc: (_, __) => const OrderTrackPage()));
+    router.define(orderBookmarksPage, handler: Handler(handlerFunc: (_, __) => const BookmarksPage()));
   }
   
 }

@@ -329,16 +329,22 @@ class _OrderPageState extends State<OrderPage>
                 _addAllContacts(context);
               },
               tooltip: 'Add Contact',
-              icon: Icon(Icons.group_add, size: 26.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.group_add, size: 24.0, color: ThemeUtils.getIconColor(context)),
             ),
              IconButton(
               onPressed: () {
                 NavigatorUtils.push(context, OrderRouter.orderSearchPage);
               },
               tooltip: 'Search',
-              icon: Icon(Icons.search, size: 26.0, color: ThemeUtils.getIconColor(context)),
+              icon: Icon(Icons.search, size: 23.0, color: ThemeUtils.getIconColor(context)),
             ),
-            
+            IconButton(
+              onPressed: () {
+                NavigatorUtils.push(context, GoodsRouter.goodsPage);
+              },
+              tooltip: 'Bookmark',
+              icon: Icon(Icons.bookmark_add_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),
+            ),
              IconButton(
               onPressed: () {
                 NavigatorUtils.push(context, GoodsRouter.goodsPage);

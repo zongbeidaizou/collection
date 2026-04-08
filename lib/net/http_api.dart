@@ -32,4 +32,5 @@ class HttpApi {
   static const String adminActions = '/collection/e-d-collection-admin-actions';
   static const String helps = '/collection/b-l-helps';
   static const String updatePassword = '/collection/b-l-update-password';
+  static const String bookmarks = '/collection/b-s-bookmarks';
 }

@@ -1,0 +1,102 @@
+{
+  "success": true,
+  "data": {
+    "show_week_salary": true,
+    "week_salary_comment": "每周一下午4点前发放",
+    "week_salary_total": 0,
+    "week_salary_data": [
+      {
+        "title": "airtime",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "催回数排名奖金",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "奖金排名奖金",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "营销注册排名奖金",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "营销申请排名奖金",
+        "value": 70000,
+        "comment": ""
+      }
+    ],
+    "show_month_salary": true,
+    "month_salary_comment": "每月5号下午4点前发放",
+    "month_salary_total": 0,
+    "month_salary_data": [
+      {
+        "title": "基础工资",
+        "value": 70000,
+        "comment": "每月25号发放"
+      },
+      {
+        "title": "总案件奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "催回数排名奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "奖金排名奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "月度计划完成奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "月度计划未完成罚款",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "案件差异奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "营销注册奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "营销申请奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "营销注册排名奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "营销申请排名奖金",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "其他奖金",
+        "value": 0,
+        "comment": ""
+      }
+    ]
+  },
+  "other": [],
+  "message": "Salary retrieved successfully"
+}

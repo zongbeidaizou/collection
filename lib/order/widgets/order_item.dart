@@ -56,6 +56,8 @@ class OrderItem extends StatefulWidget {
     this.source = 'order',
     this.avatar = '',
     required this.allContactList,
+    this.isLatestClicked = false,
+    this.onCaseDetailTap,
   });
 
   final int tabIndex;
@@ -76,6 +78,8 @@ class OrderItem extends StatefulWidget {
   final void Function(int, String, {String? phone, int? contactId})? onSendSms;
   final void Function(int)? moreAction;
   final String avatar;
+  final bool isLatestClicked;
+  final VoidCallback? onCaseDetailTap;
   @override
   State<OrderItem> createState() => _OrderItemState();
 }
@@ -109,6 +113,12 @@ class _OrderItemState extends State<OrderItem> {
             isDark ? Colors.white : Color(0xFF3BA28D).withOpacity(0.2);
         buttonColor = Color(0xFF3BA28D);
       }
+    }
+
+    if (widget.isLatestClicked) {
+      shadowColor = isDark
+          ? Colors.amberAccent
+          : Colors.amber;
     }
     if (widget.inList) {
       if (widget.item.xCurrentViewTimes! == 0) {
@@ -1094,8 +1104,9 @@ class _OrderItemState extends State<OrderItem> {
                   text: buttonText,
                   fontSize: 11,
                   textColor: isDark ? Colours.dark_button_text : Colors.white,
-                  bgColor: Colours.app_main,
+                  bgColor: widget.isLatestClicked ? Colors.deepOrange : Colours.app_main,
                   onTap: () {
+                    widget.onCaseDetailTap?.call();
                     _showModalBottomSheet();
                   },
                 ),

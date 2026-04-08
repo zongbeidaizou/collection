@@ -61,6 +61,7 @@ class _OrderListPageState extends State<OrderListPage>
   Timer? _statisticsTimer;
   bool _isCheckingStaleRefresh = false;
   static const Duration _staleDuration = Duration(minutes: 30);
+  int? _latestClickedOrderId;
 
   @override
   void initState() {
@@ -187,6 +188,13 @@ class _OrderListPageState extends State<OrderListPage>
                                   contactList: [],
                                   allContactList: [],
                                   smsHistory: [],
+                                  isLatestClicked:
+                                      _latestClickedOrderId == filteredList[index].id,
+                                  onCaseDetailTap: () {
+                                    setState(() {
+                                      _latestClickedOrderId = filteredList[index].id;
+                                    });
+                                  },
                                 )
                               : MoreWidget(filteredList.length, _hasMore(), 10);
                         },

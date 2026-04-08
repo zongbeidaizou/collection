@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'package:bounty_hunter/res/styles.dart';
 import 'package:bounty_hunter/util/image_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/util/theme_utils.dart';
@@ -119,6 +120,9 @@ class _AddNoteState extends State<AddNote>
   int _finesAmount = 0;
   bool _showFinesBanner = false;
   Timer? _finesBannerTimer;
+  bool _isCaseSummaryExpanded = true;
+  bool _hasCaseSummaryAutoCollapsed = false;
+  Timer? _caseSummaryAutoCollapseTimer;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -158,6 +162,20 @@ class _AddNoteState extends State<AddNote>
     });
   }
 
+  void _startCaseSummaryAutoCollapse() {
+    if (_hasCaseSummaryAutoCollapsed) return;
+    _caseSummaryAutoCollapseTimer?.cancel();
+    _caseSummaryAutoCollapseTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (!mounted) return;
+      if (_isCaseSummaryExpanded) {
+        setState(() {
+          _isCaseSummaryExpanded = false;
+          _hasCaseSummaryAutoCollapsed = true;
+        });
+      }
+    });
+  }
+
   Future<void> _onRefresh() async {
     _data = await _addNotePresenter.index(1, widget.orderId, true);
     _list = _data!.data!;
@@ -173,6 +191,7 @@ class _AddNoteState extends State<AddNote>
     _avatar = _data!.other!.avatar;
     _showContactDays = _data!.other!.showContactDays!;
     _updateFinesBanner();
+    _startCaseSummaryAutoCollapse();
 
     _contact2List = SpUtil.getObjectList("contact2List:${widget.orderId}")
             ?.map((e) => CollectionLogOtherContactInfo2Data.fromJson(
@@ -245,6 +264,7 @@ class _AddNoteState extends State<AddNote>
   @override
   void dispose() {
     _finesBannerTimer?.cancel();
+    _caseSummaryAutoCollapseTimer?.cancel();
     commentController.dispose();
     dateController.dispose();
     typeController.dispose();
@@ -336,6 +356,107 @@ class _AddNoteState extends State<AddNote>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _infoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 170,
+            child: Text(
+              label,
+              style: TextStyles.textBold14,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value.isEmpty ? '--' : value,
+              style: TextStyles.textBold14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCaseSummaryCard() {
+    final List<CollectionLogOtherCouponList> couponList =
+        _data?.other?.couponList ?? const [];
+    final String couponText = couponList.isEmpty
+        ? ''
+        : couponList
+            .asMap()
+            .entries
+            .map((entry) {
+              final int index = entry.key + 1;
+              final CollectionLogOtherCouponList coupon = entry.value;
+              return 'Discount:${coupon.fDiscountRate ?? 0}% '
+                  ' Expire:${DateFormat('MMM d').format(DateTime.parse(coupon.iExpireAt!).toUtc().add(const Duration(hours: 1)))}\n';
+            })
+            .join('\n');
+
+    return MyCard(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () {
+          setState(() {
+            _isCaseSummaryExpanded = !_isCaseSummaryExpanded;
+          });
+          if (!_isCaseSummaryExpanded) {
+            _caseSummaryAutoCollapseTimer?.cancel();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text('Case Summary', style: TextStyles.textBold16),
+                  const Spacer(),
+                  Text(
+                    _isCaseSummaryExpanded ? 'Tap to collapse' : 'Tap to expand',
+                    style: TextStyles.textGray12,
+                  ),
+                  Gaps.hGap8,
+                  Icon(
+                    _isCaseSummaryExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    size: 18,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+              AnimatedCrossFade(
+                firstChild: const SizedBox.shrink(),
+                secondChild: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _infoRow('Last login time', DateFormat('MMM d, hh:mm a', 'en_US').format(DateTime.parse(_track?.lastActiveTime ?? '2000-07-10T18:58:39.000000Z').toUtc().add(const Duration(hours: 1)))),
+                      if ((_repayInfo?.var3 ?? 0) > 0) _infoRow('Extension times left', '${_repayInfo?.var3 ?? 0}') else Gaps.empty,
+                      if ((_repayInfo?.var5 ?? 0) > 0) _infoRow('Lottery chances', '${_repayInfo?.var5 ?? 0}') else Gaps.empty,
+                      if (int.parse(_repayInfo?.var7 ?? '0') > 0) _infoRow('Max discount ratio', '${_repayInfo?.var7 ?? '0'}%') else Gaps.empty,
+                      if (couponText.isNotEmpty) _infoRow('Coupon details', couponText) else Gaps.empty,
+                    ],
+                  ),
+                ),
+                crossFadeState: _isCaseSummaryExpanded
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 220),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -489,7 +610,9 @@ class _AddNoteState extends State<AddNote>
                   // track: ,
                 ),
                 // Text('My Collection Log'),
-                Gaps.vGap4,
+                Gaps.vGap8,
+                _buildCaseSummaryCard(),
+                Gaps.vGap8,
                 Expanded(
                   child: Container(
                     // margin: EdgeInsets.only(left: 4, right: 4),

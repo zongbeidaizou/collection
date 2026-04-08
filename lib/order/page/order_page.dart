@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import '../../goods/goods_router.dart';
 
 import '../../providers/order_list_provider.dart';
 import '../order_router.dart';
@@ -346,7 +347,7 @@ class _OrderPageState extends State<OrderPage>
             ),
              IconButton(
               onPressed: () {
-                NavigatorUtils.push(context, OrderRouter.orderTrackPage);
+                NavigatorUtils.push(context, GoodsRouter.goodsPage);
               },
               tooltip: 'Log',
               icon: Icon(Icons.description_outlined, size: 22.0, color: ThemeUtils.getIconColor(context)),

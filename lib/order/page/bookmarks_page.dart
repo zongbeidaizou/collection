@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bounty_hunter/models/bookmarks_entity.dart';
 import 'package:bounty_hunter/net/net.dart';
-import 'package:bounty_hunter/res/colors.dart';
-import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/my_search_bar.dart';
 import 'package:flutter/material.dart';
 
 class BookmarksPage extends StatefulWidget {
@@ -16,6 +15,7 @@ class BookmarksPage extends StatefulWidget {
 class _BookmarksPageState extends State<BookmarksPage> {
   final ScrollController _scrollController = ScrollController();
   final List<BookmarksData> _list = <BookmarksData>[];
+  String _keyword = '';
   int _currentPage = 1;
   bool _hasMorePages = true;
   bool _isFirstLoading = true;
@@ -30,11 +30,17 @@ class _BookmarksPageState extends State<BookmarksPage> {
 
   Future<BookmarksEntity?> _fetchBookmarks({required int page}) async {
     final Completer<BookmarksEntity?> completer = Completer<BookmarksEntity?>();
+    final Map<String, dynamic> queryParameters = <String, dynamic>{
+      'page': page,
+    };
+    if (_keyword.trim().isNotEmpty) {
+      queryParameters['b_phone'] = _keyword.trim();
+    }
     try {
       await DioUtils.instance.requestNetwork<BookmarksEntity>(
         Method.get,
         HttpApi.bookmarks,
-        queryParameters: <String, dynamic>{'page': page},
+        queryParameters: queryParameters,
         onSuccess: (BookmarksEntity? data) {
           if (!completer.isCompleted) {
             completer.complete(data);
@@ -103,6 +109,15 @@ class _BookmarksPageState extends State<BookmarksPage> {
     await _loadPage(reset: true);
   }
 
+  void _onSearch(String text) {
+    final String newKeyword = text.trim();
+    if (newKeyword == _keyword) return;
+    setState(() {
+      _keyword = newKeyword;
+    });
+    _loadPage(reset: true);
+  }
+
   @override
   void dispose() {
     _scrollController
@@ -114,16 +129,10 @@ class _BookmarksPageState extends State<BookmarksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Bookmarks',
-          style: TextStyle(color: ThemeUtils.getIconColor(context)),
-        ),
-        flexibleSpace: Container(
-          height: 115.0,
-          color: context.isDark ? Colours.dark_bg_color : Colours.app_main,
-        ),
+      appBar: MySearchBar(
+        // showBack: false,
+        hintText: 'Search by phone',
+        onPressed: _onSearch,
       ),
       body: _isFirstLoading
           ? const Center(child: CircularProgressIndicator())

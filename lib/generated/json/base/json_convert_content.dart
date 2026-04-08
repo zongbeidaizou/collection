@@ -10,6 +10,7 @@ import 'package:bounty_hunter/goods/models/goods_sort_entity.dart';
 import 'package:bounty_hunter/models/admin_entity.dart';
 import 'package:bounty_hunter/models/authoriz_store_entity.dart';
 import 'package:bounty_hunter/models/b_f_review_borrow_entity.dart';
+import 'package:bounty_hunter/models/bookmarks_entity.dart';
 import 'package:bounty_hunter/models/collection_log2_entity.dart';
 import 'package:bounty_hunter/models/collection_log_entity.dart';
 import 'package:bounty_hunter/models/collection_notification_entity.dart';
@@ -22,6 +23,7 @@ import 'package:bounty_hunter/models/marketing_entity.dart';
 import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
+import 'package:bounty_hunter/models/salary_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
@@ -200,6 +202,14 @@ class JsonConvert {
     if (<BFReviewBorrowData>[] is M) {
       return data.map<BFReviewBorrowData>((Map<String, dynamic> e) =>
           BFReviewBorrowData.fromJson(e)).toList() as M;
+    }
+    if (<BookmarksEntity>[] is M) {
+      return data.map<BookmarksEntity>((Map<String, dynamic> e) =>
+          BookmarksEntity.fromJson(e)).toList() as M;
+    }
+    if (<BookmarksData>[] is M) {
+      return data.map<BookmarksData>((Map<String, dynamic> e) =>
+          BookmarksData.fromJson(e)).toList() as M;
     }
     if (<CollectionLog2Entity>[] is M) {
       return data.map<CollectionLog2Entity>((Map<String, dynamic> e) =>
@@ -490,6 +500,22 @@ class JsonConvert {
       return data.map<SGContactOther>((Map<String, dynamic> e) =>
           SGContactOther.fromJson(e)).toList() as M;
     }
+    if (<SalaryEntity>[] is M) {
+      return data.map<SalaryEntity>((Map<String, dynamic> e) =>
+          SalaryEntity.fromJson(e)).toList() as M;
+    }
+    if (<SalaryData>[] is M) {
+      return data.map<SalaryData>((Map<String, dynamic> e) =>
+          SalaryData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataWeekSalaryData>[] is M) {
+      return data.map<SalaryDataWeekSalaryData>((Map<String, dynamic> e) =>
+          SalaryDataWeekSalaryData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataMonthSalaryData>[] is M) {
+      return data.map<SalaryDataMonthSalaryData>((Map<String, dynamic> e) =>
+          SalaryDataMonthSalaryData.fromJson(e)).toList() as M;
+    }
     if (<ShopEntity>[] is M) {
       return data.map<ShopEntity>((Map<String, dynamic> e) =>
           ShopEntity.fromJson(e)).toList() as M;
@@ -611,6 +637,8 @@ class JsonConvertClassCollection {
     (AuthorizStorePassport).toString(): AuthorizStorePassport.fromJson,
     (BFReviewBorrowEntity).toString(): BFReviewBorrowEntity.fromJson,
     (BFReviewBorrowData).toString(): BFReviewBorrowData.fromJson,
+    (BookmarksEntity).toString(): BookmarksEntity.fromJson,
+    (BookmarksData).toString(): BookmarksData.fromJson,
     (CollectionLog2Entity).toString(): CollectionLog2Entity.fromJson,
     (CollectionLog2Data).toString(): CollectionLog2Data.fromJson,
     (CollectionLog2DataAAAAAABLCollectionOrder)
@@ -707,6 +735,10 @@ class JsonConvertClassCollection {
     (SGContactDataAAAAANIAdminRecordings)
         .toString(): SGContactDataAAAAANIAdminRecordings.fromJson,
     (SGContactOther).toString(): SGContactOther.fromJson,
+    (SalaryEntity).toString(): SalaryEntity.fromJson,
+    (SalaryData).toString(): SalaryData.fromJson,
+    (SalaryDataWeekSalaryData).toString(): SalaryDataWeekSalaryData.fromJson,
+    (SalaryDataMonthSalaryData).toString(): SalaryDataMonthSalaryData.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
     (ShopDataOther).toString(): ShopDataOther.fromJson,

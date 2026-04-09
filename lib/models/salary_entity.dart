@@ -24,6 +24,12 @@ class SalaryEntity {
 
 @JsonSerializable()
 class SalaryData {
+	@JSONField(name: 'show_month_basic_salary')
+	bool? showMonthBasicSalary = false;
+	@JSONField(name: 'month_basic_salary_value')
+	int? monthBasicSalaryValue = 0;
+	@JSONField(name: 'month_basic_salary_comment')
+	String? monthBasicSalaryComment = '';
 	@JSONField(name: 'show_week_salary')
 	bool? showWeekSalary = false;
 	@JSONField(name: 'week_salary_comment')

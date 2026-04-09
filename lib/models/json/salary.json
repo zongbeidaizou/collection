@@ -1,0 +1,340 @@
+{
+  "success": true,
+  "data": {
+    "show_month_basic_salary": true,
+    "month_basic_salary_value": 70000,
+    "month_basic_salary_comment": "Disbursed every month on the 25th before 4:00 PM",
+    "show_week_salary": true,
+    "week_salary_comment": "Disbursed every Monday before 4:00 PM",
+    "week_salary_total": 0,
+    "week_salary_data": [
+      {
+        "title": "airtime",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "Repayment Count Ranking Bonus",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "Bonus Ranking Bonus",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Registration Ranking Bonus",
+        "value": 70000,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Application Ranking Bonus",
+        "value": 70000,
+        "comment": ""
+      }
+    ],
+    "show_month_salary": true,
+    "month_salary_comment": "Disbursed every month on the 5th before 4:00 PM",
+    "month_salary_total": 0,
+    "month_salary_data": [
+      {
+        "title": "Total Case Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Repayment Count Ranking Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Bonus Ranking Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Monthly Target Achievement Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Monthly Target Miss Penalty",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Case Variance Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Registration Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Application Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Registration Ranking Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Marketing Application Ranking Bonus",
+        "value": 0,
+        "comment": ""
+      },
+      {
+        "title": "Other Bonus",
+        "value": 0,
+        "comment": ""
+      }
+    ],
+    "show_week_bonus_rank_rule": true,
+    "week_bonus_rank_rule_title": "Weekly Bonus Ranking Bonus Rules",
+    "week_bonus_rank_rule_comment": "(1st place weekly bonus - 2nd place weekly bonus) / 2nd place weekly bonus",
+    "week_bonus_rank_rule_data": [
+      {
+        "title": "Difference Ratio",
+        "value1": "\u003c\u003d25%",
+        "value2": "\u003e25%",
+        "comment": ""
+      },
+      {
+        "title": "1st",
+        "value1": "10k",
+        "value2": "15k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value1": "5k",
+        "value2": "0",
+        "comment": ""
+      }
+    ],
+    "show_week_repayment_rank_rule": true,
+    "week_repayment_rank_rule_title": "Weekly Repayment Count Ranking Bonus",
+    "week_repayment_rank_rule_comment": "(1st place weekly repayment count - 2nd place weekly repayment count) / 2nd place weekly repayment count",
+    "week_repayment_rank_rule_data": [
+      {
+        "title": "Difference Ratio",
+        "value1": "\u003c\u003d20%",
+        "value2": "\u003e20%",
+        "comment": ""
+      },
+      {
+        "title": "1st",
+        "value1": "15k",
+        "value2": "25k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value1": "10k",
+        "value2": "0",
+        "comment": ""
+      }
+    ],
+    "show_week_register_rank_rule": true,
+    "week_register_rank_rule_title": "Weekly Marketing Registration Ranking Bonus",
+    "week_register_rank_rule_comment": "",
+    "week_register_rank_rule_data": [
+      {
+        "title": "Registration Count",
+        "value1": "\u003e\u003d5",
+        "value2": "\u003e\u003d10",
+        "value3": "\u003e\u003d15",
+        "comment": ""
+      },
+      {
+        "title": "1st",
+        "value1": "5k",
+        "value2": "10k",
+        "value3": "17k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value1": "4k",
+        "value2": "8k",
+        "value3": "15k",
+        "comment": ""
+      },
+      {
+        "title": "3rd",
+        "value1": "3k",
+        "value2": "6k",
+        "value3": "13k",
+        "comment": ""
+      }
+    ],
+    "show_week_apply_rank_rule": true,
+    "week_apply_rank_rule_title": "Weekly Marketing Application Ranking Bonus",
+    "week_apply_rank_rule_comment": "",
+    "week_apply_rank_rule_data": [
+      {
+        "title": "Application Count",
+        "value1": "\u003e\u003d5",
+        "value2": "\u003e\u003d10",
+        "value3": "\u003e\u003d15",
+        "comment": ""
+      },
+      {
+        "title": "1st",
+        "value1": "6k",
+        "value2": "13k",
+        "value3": "22k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value1": "5k",
+        "value2": "10k",
+        "value3": "22k",
+        "comment": ""
+      },
+      {
+        "title": "3rd",
+        "value1": "4k",
+        "value2": "8k",
+        "value3": "18k",
+        "comment": ""
+      }
+    ],
+    "show_month_bonus_rank_rule": true,
+    "month_bonus_rank_rule_title": "Monthly Bonus Ranking Bonus",
+    "month_bonus_rank_rule_comment": "",
+    "month_bonus_rank_rule_data": [
+      {
+        "title": "1st",
+        "value": "10k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value": "0",
+        "comment": ""
+      }
+    ],
+    "show_month_repayment_rank_rule": true,
+    "month_repayment_rank_rule_title": "Monthly Repayment Count Ranking Bonus",
+    "month_repayment_rank_rule_comment": "",
+    "month_repayment_rank_rule_data": [
+      {
+        "title": "1st",
+        "value": "30k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value": "0",
+        "comment": ""
+      }
+    ],
+    "show_month_register_rank_rule": true,
+    "month_register_rank_rule_title": "Monthly Marketing Registration Ranking Bonus",
+    "month_register_rank_rule_comment": "",
+    "month_register_rank_rule_data": [
+      {
+        "title": "1st",
+        "value": "10k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value": "6k",
+        "comment": ""
+      }
+    ],
+    "show_month_apply_rank_rule": true,
+    "month_apply_rank_rule_title": "Monthly Marketing Application Ranking Bonus",
+    "month_apply_rank_rule_comment": "",
+    "month_apply_rank_rule_data": [
+      {
+        "title": "1st",
+        "value": "50k",
+        "comment": ""
+      },
+      {
+        "title": "2nd",
+        "value": "20k",
+        "comment": ""
+      }
+    ],
+    "show_feedback_bonus": true,
+    "feedback_bonus_title": "Feedback Bonus",
+    "feedback_bonus_comment": "",
+    "feedback_bonus_data": [
+      {
+        "title": "No Profile Photo",
+        "value": "300",
+        "comment": ""
+      },
+      {
+        "title": "No Contacts List",
+        "value": "300",
+        "comment": ""
+      },
+      {
+        "title": "Customer Feedback",
+        "value": "300-1000",
+        "comment": ""
+      },
+      {
+        "title": "bug",
+        "value": "500-2000",
+        "comment": ""
+      },
+      {
+        "title": "Suggestion",
+        "value": "100-5000",
+        "comment": ""
+      },
+      {
+        "title": "Other",
+        "value": "No limit",
+        "comment": ""
+      }
+    ],
+    "show_fine": true,
+    "fine_title": "Fine",
+    "fine_comment": "",
+    "fine_data": [
+      {
+        "title": "",
+        "value1": "Repayment Date",
+        "value2": "1 Day Overdue",
+        "value3": "2 Days Overdue",
+        "comment": ""
+      },
+      {
+        "title": "\u003e\u003d10",
+        "value1": "-1000",
+        "value2": "-800",
+        "value3": "-300",
+        "comment": ""
+      },
+      {
+        "title": "\u003e\u003d5",
+        "value1": "-800",
+        "value2": "-200",
+        "value3": "-100",
+        "comment": ""
+      },
+      {
+        "title": "\u003e\u003d1",
+        "value1": "-100",
+        "value2": "0",
+        "value3": "0",
+        "comment": ""
+      }
+    ]
+  },
+  "other": [],
+  "message": "Salary retrieved successfully"
+}

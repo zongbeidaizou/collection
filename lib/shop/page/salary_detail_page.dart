@@ -193,6 +193,19 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
+          if (salary.showMonthBasicSalary == true) ...<Widget>[
+            _sectionTitle('Monthly Basic Salary'),
+            Text('Value: ${salary.monthBasicSalaryValue ?? 0}'),
+            if ((salary.monthBasicSalaryComment ?? '').trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  salary.monthBasicSalaryComment ?? '',
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
+              ),
+            const SizedBox(height: 8),
+          ],
           if (salary.showWeekSalary == true) ...<Widget>[
             _sectionTitle('Weekly Salary'),
             Text('Total: ${salary.weekSalaryTotal ?? 0}'),
@@ -384,7 +397,8 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
                 .toList(),
           ),
 
-          if (salary.showWeekSalary != true &&
+          if (salary.showMonthBasicSalary != true &&
+              salary.showWeekSalary != true &&
               salary.showMonthSalary != true &&
               salary.showWeekBonusRankRule != true &&
               salary.showWeekRepaymentRankRule != true &&

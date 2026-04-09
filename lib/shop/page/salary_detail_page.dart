@@ -90,6 +90,82 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     );
   }
 
+  Widget _ruleRow({
+    required String title,
+    String? value,
+    String? value1,
+    String? value2,
+    String? value3,
+    String? comment,
+  }) {
+    final List<String> values = <String>[
+      if ((value ?? '').trim().isNotEmpty) value!.trim(),
+      if ((value1 ?? '').trim().isNotEmpty) value1!.trim(),
+      if ((value2 ?? '').trim().isNotEmpty) value2!.trim(),
+      if ((value3 ?? '').trim().isNotEmpty) value3!.trim(),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+              if (values.isNotEmpty)
+                Flexible(
+                  child: Text(
+                    values.join(' / '),
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+            ],
+          ),
+          if ((comment ?? '').trim().isNotEmpty) ...<Widget>[
+            const SizedBox(height: 3),
+            Text(
+              comment!.trim(),
+              style: TextStyle(color: Colors.grey[700], fontSize: 12),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRuleSection({
+    required bool show,
+    required String title,
+    required String comment,
+    required List<Widget> rows,
+  }) {
+    if (!show) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _sectionTitle(title),
+        if (comment.trim().isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              comment,
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+          ),
+        ...rows,
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
   Widget _buildContent() {
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
@@ -149,8 +225,177 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
             ...((salary.monthSalaryData ?? <SalaryDataMonthSalaryData>[])
                 .map((SalaryDataMonthSalaryData e) =>
                     _dataRow(e.title ?? '-', e.value ?? 0, e.comment ?? ''))),
+            const SizedBox(height: 8),
           ],
-          if (salary.showWeekSalary != true && salary.showMonthSalary != true)
+
+          _buildRuleSection(
+            show: salary.showWeekBonusRankRule == true,
+            title: salary.weekBonusRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.weekBonusRankRuleTitle!
+                : 'Weekly Bonus Rank Rule',
+            comment: salary.weekBonusRankRuleComment ?? '',
+            rows: (salary.weekBonusRankRuleData ?? <SalaryDataWeekBonusRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value1: e.value1,
+                      value2: e.value2,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showWeekRepaymentRankRule == true,
+            title: salary.weekRepaymentRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.weekRepaymentRankRuleTitle!
+                : 'Weekly Repayment Rank Rule',
+            comment: salary.weekRepaymentRankRuleComment ?? '',
+            rows: (salary.weekRepaymentRankRuleData ??
+                    <SalaryDataWeekRepaymentRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value1: e.value1,
+                      value2: e.value2,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showWeekRegisterRankRule == true,
+            title: salary.weekRegisterRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.weekRegisterRankRuleTitle!
+                : 'Weekly Register Rank Rule',
+            comment: salary.weekRegisterRankRuleComment ?? '',
+            rows: (salary.weekRegisterRankRuleData ??
+                    <SalaryDataWeekRegisterRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value1: e.value1,
+                      value2: e.value2,
+                      value3: e.value3,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showWeekApplyRankRule == true,
+            title: salary.weekApplyRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.weekApplyRankRuleTitle!
+                : 'Weekly Apply Rank Rule',
+            comment: salary.weekApplyRankRuleComment ?? '',
+            rows: (salary.weekApplyRankRuleData ??
+                    <SalaryDataWeekApplyRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value1: e.value1,
+                      value2: e.value2,
+                      value3: e.value3,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showMonthBonusRankRule == true,
+            title: salary.monthBonusRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.monthBonusRankRuleTitle!
+                : 'Monthly Bonus Rank Rule',
+            comment: salary.monthBonusRankRuleComment ?? '',
+            rows: (salary.monthBonusRankRuleData ??
+                    <SalaryDataMonthBonusRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value: e.value,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showMonthRepaymentRankRule == true,
+            title: salary.monthRepaymentRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.monthRepaymentRankRuleTitle!
+                : 'Monthly Repayment Rank Rule',
+            comment: salary.monthRepaymentRankRuleComment ?? '',
+            rows: (salary.monthRepaymentRankRuleData ??
+                    <SalaryDataMonthRepaymentRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value: e.value,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showMonthRegisterRankRule == true,
+            title: salary.monthRegisterRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.monthRegisterRankRuleTitle!
+                : 'Monthly Register Rank Rule',
+            comment: salary.monthRegisterRankRuleComment ?? '',
+            rows: (salary.monthRegisterRankRuleData ??
+                    <SalaryDataMonthRegisterRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value: e.value,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showMonthApplyRankRule == true,
+            title: salary.monthApplyRankRuleTitle?.trim().isNotEmpty == true
+                ? salary.monthApplyRankRuleTitle!
+                : 'Monthly Apply Rank Rule',
+            comment: salary.monthApplyRankRuleComment ?? '',
+            rows: (salary.monthApplyRankRuleData ??
+                    <SalaryDataMonthApplyRankRuleData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value: e.value,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showFeedbackBonus == true,
+            title: salary.feedbackBonusTitle?.trim().isNotEmpty == true
+                ? salary.feedbackBonusTitle!
+                : 'Feedback Bonus Rule',
+            comment: salary.feedbackBonusComment ?? '',
+            rows: (salary.feedbackBonusData ?? <SalaryDataFeedbackBonusData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value: e.value,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+          _buildRuleSection(
+            show: salary.showFine == true,
+            title: salary.fineTitle?.trim().isNotEmpty == true
+                ? salary.fineTitle!
+                : 'Fine Rule',
+            comment: salary.fineComment ?? '',
+            rows: (salary.fineData ?? <SalaryDataFineData>[])
+                .map((e) => _ruleRow(
+                      title: e.title ?? '-',
+                      value1: e.value1,
+                      value2: e.value2,
+                      value3: e.value3,
+                      comment: e.comment,
+                    ))
+                .toList(),
+          ),
+
+          if (salary.showWeekSalary != true &&
+              salary.showMonthSalary != true &&
+              salary.showWeekBonusRankRule != true &&
+              salary.showWeekRepaymentRankRule != true &&
+              salary.showWeekRegisterRankRule != true &&
+              salary.showWeekApplyRankRule != true &&
+              salary.showMonthBonusRankRule != true &&
+              salary.showMonthRepaymentRankRule != true &&
+              salary.showMonthRegisterRankRule != true &&
+              salary.showMonthApplyRankRule != true &&
+              salary.showFeedbackBonus != true &&
+              salary.showFine != true)
             const Padding(
               padding: EdgeInsets.only(top: 8),
               child: Text('No salary data available.'),

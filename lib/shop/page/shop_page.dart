@@ -32,6 +32,7 @@ import '../widgets/bar2.dart';
 import '../widgets/level_bar.dart';
 import '../widgets/line.dart';
 import 'manual_page.dart';
+import 'salary_detail_page.dart';
 import '../widgets/pie.dart';
 import '../widgets/resources/bar_chart_sample6.dart';
 
@@ -193,138 +194,6 @@ class _ShopPageState extends State<ShopPage>
 
   Future<void> _onRefresh() async {
     _shopPagePresenter.show(true);
-  }
-
-  Future<void> _showSalaryDialog(SalaryData salary) async {
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        Widget sectionTitle(String text) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 6),
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-            ),
-          );
-        }
-
-        Widget dataRow(String title, int value, String comment) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Text(
-                  value.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
-                if (comment.trim().isNotEmpty) ...<Widget>[
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      comment,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(color: Colors.grey[700], fontSize: 12),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          );
-        }
-
-        return AlertDialog(
-          title: const Text('Salary Details'),
-          content: SizedBox(
-            width: 420,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  if (salary.showWeekSalary == true) ...<Widget>[
-                    sectionTitle('Weekly Salary'),
-                    Text('Total: ${salary.weekSalaryTotal ?? 0}'),
-                    if ((salary.weekSalaryComment ?? '').trim().isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          salary.weekSalaryComment ?? '',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                    const SizedBox(height: 6),
-                    ...((salary.weekSalaryData ?? <SalaryDataWeekSalaryData>[])
-                        .map((SalaryDataWeekSalaryData e) => dataRow(
-                              e.title ?? '-',
-                              e.value ?? 0,
-                              e.comment ?? '',
-                            ))),
-                  ],
-                  if (salary.showMonthSalary == true) ...<Widget>[
-                    sectionTitle('Monthly Salary'),
-                    Text('Total: ${salary.monthSalaryTotal ?? 0}'),
-                    if ((salary.monthSalaryComment ?? '').trim().isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          salary.monthSalaryComment ?? '',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                    const SizedBox(height: 6),
-                    ...((salary.monthSalaryData ?? <SalaryDataMonthSalaryData>[])
-                        .map((SalaryDataMonthSalaryData e) => dataRow(
-                              e.title ?? '-',
-                              e.value ?? 0,
-                              e.comment ?? '',
-                            ))),
-                  ],
-                  if (salary.showWeekSalary != true &&
-                      salary.showMonthSalary != true)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text('No salary data available.'),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _requestAndShowSalary() async {
-    await DioUtils.instance.requestNetwork<SalaryEntity>(
-      Method.get,
-      HttpApi.salary,
-      onSuccess: (SalaryEntity? entity) async {
-        if (!mounted) return;
-        final SalaryData? salary = entity?.data;
-        if (salary == null) {
-          showToast('No salary data.');
-          return;
-        }
-        await _showSalaryDialog(salary);
-      },
-      onError: (_, String msg) {
-        showToast(msg.isNotEmpty ? msg : 'Failed to load salary.');
-      },
-    );
   }
 
 
@@ -652,9 +521,13 @@ class _ShopPageState extends State<ShopPage>
             ),
           ),
           IconButton(
-            tooltip: 'Manual',
+            tooltip: 'Salary Details',
             onPressed: () {
-              _requestAndShowSalary();
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const SalaryDetailPage(),
+                ),
+              );
             },
             icon: Icon(
               Icons.payments_outlined,

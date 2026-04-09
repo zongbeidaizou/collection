@@ -799,6 +799,10 @@ CollectionLogOtherRepayInfo $CollectionLogOtherRepayInfoFromJson(
   if (var10 != null) {
     collectionLogOtherRepayInfo.var10 = var10;
   }
+  final int? isBookmarked = jsonConvert.convert<int>(json['is_bookmarked']);
+  if (isBookmarked != null) {
+    collectionLogOtherRepayInfo.isBookmarked = isBookmarked;
+  }
   return collectionLogOtherRepayInfo;
 }
 
@@ -840,6 +844,7 @@ Map<String, dynamic> $CollectionLogOtherRepayInfoToJson(
   data['var8'] = entity.var8;
   data['var9'] = entity.var9;
   data['var10'] = entity.var10;
+  data['is_bookmarked'] = entity.isBookmarked;
   return data;
 }
 
@@ -880,6 +885,7 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
     String? var8,
     String? var9,
     String? var10,
+    int? isBookmarked,
   }) {
     return CollectionLogOtherRepayInfo()
       ..expectRepayAmount = expectRepayAmount ?? this.expectRepayAmount
@@ -916,7 +922,8 @@ extension CollectionLogOtherRepayInfoExtension on CollectionLogOtherRepayInfo {
       ..var7 = var7 ?? this.var7
       ..var8 = var8 ?? this.var8
       ..var9 = var9 ?? this.var9
-      ..var10 = var10 ?? this.var10;
+      ..var10 = var10 ?? this.var10
+      ..isBookmarked = isBookmarked ?? this.isBookmarked;
   }
 }
 

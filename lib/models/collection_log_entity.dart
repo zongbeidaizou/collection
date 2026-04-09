@@ -263,6 +263,8 @@ class CollectionLogOtherRepayInfo {
 	String? var8 = '';
 	String? var9 = '';
 	String? var10 = '';
+  @JSONField(name: 'is_bookmarked')
+	int? isBookmarked = 0;
 
 	CollectionLogOtherRepayInfo();
 

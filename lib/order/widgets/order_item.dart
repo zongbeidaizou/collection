@@ -925,6 +925,7 @@ class _OrderItemState extends State<OrderItem> {
               flex: 5,
               child: Row(
                 children: [
+                  if(widget.inList)
                   Container(
                     margin: const EdgeInsets.only(right: 1.4),
                     height: 8.0,
@@ -934,6 +935,20 @@ class _OrderItemState extends State<OrderItem> {
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
+                  if(!widget.inList && widget.source == 'order' && widget.repayInfo?.isBookmarked == 0)
+                    InkWell(onTap: () {
+                      _bookmarkOrder();
+                    }, child: Icon(Icons.bookmark_add_outlined,size: 15,color: Colours.app_main.withOpacity(0.6))),
+                  if(!widget.inList && widget.source == 'order' && widget.repayInfo?.isBookmarked == 1)
+                    Container(
+                    margin: const EdgeInsets.only(right: 1.4),
+                    height: 8.0,
+                    width: 8.0,
+                    decoration: BoxDecoration(
+                      color: Colours.app_main.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ), 
                   RichText(
                     text: TextSpan(
                       style: textTextStyle,
@@ -1278,6 +1293,35 @@ class _OrderItemState extends State<OrderItem> {
             ],
           )
       ],
+    );
+  }
+
+  Future<void> _bookmarkOrder() async {
+    final String phone = (widget.item.uPhone ?? '').trim();
+    if (phone.isEmpty) {
+      showToast('Phone is empty');
+      return;
+    }
+    final formData = FormData.fromMap({
+      'b_phone': phone,
+    });
+
+    await DioUtils.instance.requestNetwork<dynamic>(
+      Method.post,
+      HttpApi.bookmarks,
+      params: formData,
+      onSuccess: (dynamic data) {
+        if (!mounted) return;
+        setState(() {
+          if (widget.repayInfo != null) {
+            widget.repayInfo!.isBookmarked = 1;
+          }
+        });
+        showToast('Bookmarked');
+      },
+      onError: (_, String msg) {
+        showToast(msg.isNotEmpty ? msg : 'Bookmark failed');
+      },
     );
   }
 

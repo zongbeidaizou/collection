@@ -516,6 +516,54 @@ class JsonConvert {
       return data.map<SalaryDataMonthSalaryData>((Map<String, dynamic> e) =>
           SalaryDataMonthSalaryData.fromJson(e)).toList() as M;
     }
+    if (<SalaryDataWeekBonusRankRuleData>[] is M) {
+      return data.map<SalaryDataWeekBonusRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataWeekBonusRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataWeekRepaymentRankRuleData>[] is M) {
+      return data.map<SalaryDataWeekRepaymentRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataWeekRepaymentRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataWeekRegisterRankRuleData>[] is M) {
+      return data.map<SalaryDataWeekRegisterRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataWeekRegisterRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataWeekApplyRankRuleData>[] is M) {
+      return data.map<SalaryDataWeekApplyRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataWeekApplyRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataMonthBonusRankRuleData>[] is M) {
+      return data.map<SalaryDataMonthBonusRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataMonthBonusRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataMonthRepaymentRankRuleData>[] is M) {
+      return data.map<SalaryDataMonthRepaymentRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataMonthRepaymentRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataMonthRegisterRankRuleData>[] is M) {
+      return data.map<SalaryDataMonthRegisterRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataMonthRegisterRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataMonthApplyRankRuleData>[] is M) {
+      return data.map<SalaryDataMonthApplyRankRuleData>((
+          Map<String, dynamic> e) =>
+          SalaryDataMonthApplyRankRuleData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataFeedbackBonusData>[] is M) {
+      return data.map<SalaryDataFeedbackBonusData>((Map<String, dynamic> e) =>
+          SalaryDataFeedbackBonusData.fromJson(e)).toList() as M;
+    }
+    if (<SalaryDataFineData>[] is M) {
+      return data.map<SalaryDataFineData>((Map<String, dynamic> e) =>
+          SalaryDataFineData.fromJson(e)).toList() as M;
+    }
     if (<ShopEntity>[] is M) {
       return data.map<ShopEntity>((Map<String, dynamic> e) =>
           ShopEntity.fromJson(e)).toList() as M;
@@ -739,6 +787,25 @@ class JsonConvertClassCollection {
     (SalaryData).toString(): SalaryData.fromJson,
     (SalaryDataWeekSalaryData).toString(): SalaryDataWeekSalaryData.fromJson,
     (SalaryDataMonthSalaryData).toString(): SalaryDataMonthSalaryData.fromJson,
+    (SalaryDataWeekBonusRankRuleData)
+        .toString(): SalaryDataWeekBonusRankRuleData.fromJson,
+    (SalaryDataWeekRepaymentRankRuleData)
+        .toString(): SalaryDataWeekRepaymentRankRuleData.fromJson,
+    (SalaryDataWeekRegisterRankRuleData)
+        .toString(): SalaryDataWeekRegisterRankRuleData.fromJson,
+    (SalaryDataWeekApplyRankRuleData)
+        .toString(): SalaryDataWeekApplyRankRuleData.fromJson,
+    (SalaryDataMonthBonusRankRuleData)
+        .toString(): SalaryDataMonthBonusRankRuleData.fromJson,
+    (SalaryDataMonthRepaymentRankRuleData)
+        .toString(): SalaryDataMonthRepaymentRankRuleData.fromJson,
+    (SalaryDataMonthRegisterRankRuleData)
+        .toString(): SalaryDataMonthRegisterRankRuleData.fromJson,
+    (SalaryDataMonthApplyRankRuleData)
+        .toString(): SalaryDataMonthApplyRankRuleData.fromJson,
+    (SalaryDataFeedbackBonusData).toString(): SalaryDataFeedbackBonusData
+        .fromJson,
+    (SalaryDataFineData).toString(): SalaryDataFineData.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
     (ShopDataOther).toString(): ShopDataOther.fromJson,

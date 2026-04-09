@@ -224,6 +224,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                 }, child: const Icon(Icons.move_up, size: 16,color: Colors.purple,)) else const SizedBox.shrink(),
                                 if (item.cReceiveCount != null && item.cReceiveCount! > 0) const SizedBox(width: 4) else const SizedBox.shrink(),
                                 if (item.cReceiveCount != null && item.cReceiveCount! > 0) Text('${item.cReceiveCount ?? 0}') else const SizedBox.shrink(),
+                                const SizedBox(width: 12),
                                 IconButton(
                                   icon: const Icon(Icons.copy, size: 16),
                                   padding: EdgeInsets.zero,

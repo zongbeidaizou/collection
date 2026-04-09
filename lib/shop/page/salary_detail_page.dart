@@ -49,40 +49,89 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     );
   }
 
-  Widget _sectionTitle(String text) {
+  Widget _sectionTitle(String text, {Color? color}) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 16,
+            decoration: BoxDecoration(
+              color: color ?? Colors.indigo,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  Widget _sectionCard({
+    required Widget child,
+    Color? borderColor,
+    Color? backgroundColor,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor ?? Colors.indigo.withOpacity(0.15)),
+      ),
+      child: child,
+    );
+  }
+
   Widget _dataRow(String title, int value, String comment) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.indigo.withOpacity(0.04),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-          ),
-          Text(
-            value.toString(),
-            style: const TextStyle(fontWeight: FontWeight.w700),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  value.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.indigo,
+                  ),
+                ),
+              ),
+            ],
           ),
           if (comment.trim().isNotEmpty) ...<Widget>[
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                comment,
-                textAlign: TextAlign.right,
-                style: TextStyle(color: Colors.grey[700], fontSize: 12),
-              ),
+            const SizedBox(height: 6),
+            Text(
+              comment,
+              style: TextStyle(color: Colors.grey[700], fontSize: 12),
             ),
           ],
         ],
@@ -148,21 +197,24 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     required List<Widget> rows,
   }) {
     if (!show) return const SizedBox.shrink();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _sectionTitle(title),
-        if (comment.trim().isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
-              comment,
-              style: TextStyle(color: Colors.grey[700]),
+    return _sectionCard(
+      borderColor: Colors.teal.withOpacity(0.2),
+      backgroundColor: Colors.teal.withOpacity(0.03),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _sectionTitle(title, color: Colors.teal),
+          if (comment.trim().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                comment,
+                style: TextStyle(color: Colors.grey[700]),
+              ),
             ),
-          ),
-        ...rows,
-        const SizedBox(height: 8),
-      ],
+          ...rows,
+        ],
+      ),
     );
   }
 
@@ -193,53 +245,92 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          if (salary.showMonthBasicSalary == true) ...<Widget>[
-            _sectionTitle('Monthly Basic Salary'),
-            Text('Value: ${salary.monthBasicSalaryValue ?? 0}'),
-            if ((salary.monthBasicSalaryComment ?? '').trim().isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  salary.monthBasicSalaryComment ?? '',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
+          if (salary.showMonthBasicSalary == true)
+            _sectionCard(
+              borderColor: Colors.deepPurple.withOpacity(0.2),
+              backgroundColor: Colors.deepPurple.withOpacity(0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionTitle('Monthly Basic Salary', color: Colors.deepPurple),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      '${salary.monthBasicSalaryValue ?? 0}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.deepPurple,
+                      ),
+                    ),
+                  ),
+                  if ((salary.monthBasicSalaryComment ?? '').trim().isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        salary.monthBasicSalaryComment ?? '',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                ],
               ),
-            const SizedBox(height: 8),
-          ],
-          if (salary.showWeekSalary == true) ...<Widget>[
-            _sectionTitle('Weekly Salary'),
-            Text('Total: ${salary.weekSalaryTotal ?? 0}'),
-            if ((salary.weekSalaryComment ?? '').trim().isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  salary.weekSalaryComment ?? '',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
+            ),
+          if (salary.showWeekSalary == true)
+            _sectionCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionTitle('Weekly Salary'),
+                  Text(
+                    'Total: ${salary.weekSalaryTotal ?? 0}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  if ((salary.weekSalaryComment ?? '').trim().isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        salary.weekSalaryComment ?? '',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                  const SizedBox(height: 6),
+                  ...((salary.weekSalaryData ?? <SalaryDataWeekSalaryData>[])
+                      .map((SalaryDataWeekSalaryData e) =>
+                          _dataRow(e.title ?? '-', e.value ?? 0, e.comment ?? ''))),
+                ],
               ),
-            const SizedBox(height: 6),
-            ...((salary.weekSalaryData ?? <SalaryDataWeekSalaryData>[])
-                .map((SalaryDataWeekSalaryData e) =>
-                    _dataRow(e.title ?? '-', e.value ?? 0, e.comment ?? ''))),
-            const SizedBox(height: 8),
-          ],
-          if (salary.showMonthSalary == true) ...<Widget>[
-            _sectionTitle('Monthly Salary'),
-            Text('Total: ${salary.monthSalaryTotal ?? 0}'),
-            if ((salary.monthSalaryComment ?? '').trim().isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  salary.monthSalaryComment ?? '',
-                  style: TextStyle(color: Colors.grey[700]),
-                ),
+            ),
+          if (salary.showMonthSalary == true)
+            _sectionCard(
+              borderColor: Colors.blueGrey.withOpacity(0.2),
+              backgroundColor: Colors.blueGrey.withOpacity(0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionTitle('Monthly Salary', color: Colors.blueGrey),
+                  Text(
+                    'Total: ${salary.monthSalaryTotal ?? 0}',
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  if ((salary.monthSalaryComment ?? '').trim().isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        salary.monthSalaryComment ?? '',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                  const SizedBox(height: 6),
+                  ...((salary.monthSalaryData ?? <SalaryDataMonthSalaryData>[])
+                      .map((SalaryDataMonthSalaryData e) =>
+                          _dataRow(e.title ?? '-', e.value ?? 0, e.comment ?? ''))),
+                ],
               ),
-            const SizedBox(height: 6),
-            ...((salary.monthSalaryData ?? <SalaryDataMonthSalaryData>[])
-                .map((SalaryDataMonthSalaryData e) =>
-                    _dataRow(e.title ?? '-', e.value ?? 0, e.comment ?? ''))),
-            const SizedBox(height: 8),
-          ],
+            ),
 
           _buildRuleSection(
             show: salary.showWeekBonusRankRule == true,

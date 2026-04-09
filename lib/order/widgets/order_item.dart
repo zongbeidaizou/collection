@@ -34,6 +34,8 @@ import 'contact_dialog.dart';
 const MethodChannel _contactChannel = MethodChannel('contact_channel');
 const List<IconData> sourceIcon = [Icons.miscellaneous_services,Icons.loupe, Icons.repeat_one,Icons.move_up];
 const List<Color> sourceColor = [Colors.blue,Colors.red, Colors.green,Colors.purple];
+final List<Color> itemBackgroundColors = [Colors.blue.shade50,Colors.green.shade50, Colors.orange.shade50, Colors.purple.shade50, Colors.red.shade50, Colors.pink.shade50];
+final List<Color> itemBackgroundDarkColors = [const Color.fromARGB(255, 6, 81, 134),const Color.fromARGB(255, 22, 24, 22), const Color.fromARGB(255, 129, 117, 97), const Color.fromARGB(255, 194, 73, 241), const Color.fromARGB(255, 202, 43, 43), const Color.fromARGB(255, 233, 54, 203)];
 
 class OrderItem extends StatefulWidget {
   const OrderItem({
@@ -155,18 +157,11 @@ class _OrderItemState extends State<OrderItem> {
 
   // 根据报名状态返回对应的背景颜色
   Color _getBackgroundColorByStatus(CollectionOrderData item, bool isDark) {
-    final appName = item.aZPackage?.toLowerCase() ?? '';
-    if (appName.contains('kaka')) {
-      return isDark ? const Color.fromARGB(255, 6, 81, 134) : Colors.blue.shade50;
-    } else if (appName.contains('leading')) {
-      return isDark ? const Color.fromARGB(255, 22, 24, 22) : Colors.green.shade50;
-    } else if (appName.contains('moimoi')) {
-      return isDark ? const Color.fromARGB(255, 129, 117, 97) : Colors.orange.shade50;
+    final colorIndex = item.aJProductId != null? item.aJProductId! - 1 : 0;
+    if(colorIndex > itemBackgroundColors.length) {
+      return isDark ? itemBackgroundDarkColors[0] : itemBackgroundColors[0];
     }
-    // 默认颜色
-    return isDark ? Colors.green.shade50 : Colors.green.shade50;
-
-    // 默认背景颜色
+    return isDark ? itemBackgroundDarkColors[colorIndex] : itemBackgroundColors[colorIndex];
   }
   _getAdditionBonus(BuildContext context) {
     if(widget.item.eCollectionAdminId == widget.item.aVTmpCollectionAdminId && widget.source != 'receive'){

@@ -4,6 +4,8 @@ import 'package:bounty_hunter/models/bookmarks_entity.dart';
 import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/widgets/my_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:oktoast/oktoast.dart';
 
 class BookmarksPage extends StatefulWidget {
   const BookmarksPage({super.key});
@@ -109,6 +111,28 @@ class _BookmarksPageState extends State<BookmarksPage> {
     await _loadPage(reset: true);
   }
 
+  String _maskPhone(String phone) {
+    final String digits = phone.trim();
+    if (digits.length <= 4) return digits;
+    if (digits.length <= 7) {
+      final int maskLen = digits.length - 3;
+      return '${digits.substring(0, 3)}${'*' * maskLen}';
+    }
+    return '${digits.substring(0, 3)}****${digits.substring(digits.length - 4)}';
+  }
+
+  String _formatNigeriaTime(String? value) {
+    if (value == null || value.trim().isEmpty) return '-';
+    final DateTime? parsed = DateTime.tryParse(value);
+    if (parsed == null) return value;
+    final DateTime nigeria = parsed.toUtc().add(const Duration(hours: 1));
+    return '${nigeria.year.toString().padLeft(4, '0')}-'
+        '${nigeria.month.toString().padLeft(2, '0')}-'
+        '${nigeria.day.toString().padLeft(2, '0')} '
+        '${nigeria.hour.toString().padLeft(2, '0')}:'
+        '${nigeria.minute.toString().padLeft(2, '0')}';
+  }
+
   void _onSearch(String text) {
     final String newKeyword = text.trim();
     if (newKeyword == _keyword) return;
@@ -173,14 +197,55 @@ class _BookmarksPageState extends State<BookmarksPage> {
                         return Card(
                           margin: EdgeInsets.zero,
                           child: ListTile(
-                            leading: const Icon(Icons.bookmark_added_outlined),
-                            title: Text(item.bPhone?.trim().isNotEmpty == true
-                                ? item.bPhone!
-                                : '-'),
-                            subtitle: Text(
-                              'Receive Count: ${item.cReceiveCount ?? 0}\nCreated: ${item.createdAt ?? '-'}',
+                            title: Row(
+                              children: <Widget>[
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  flex: 3,
+                                  child: Text(
+                                    item.bPhone?.trim().isNotEmpty == true
+                                        ? _maskPhone(item.bPhone!)
+                                        : '-',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    _formatNigeriaTime(item.createdAt),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) InkWell(onTap: () {
+                                  showToast('Please copy the number, then search the number in the receive page to see the details');
+                                }, child: const Icon(Icons.move_up, size: 16,color: Colors.purple,)) else const SizedBox.shrink(),
+                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) const SizedBox(width: 4) else const SizedBox.shrink(),
+                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) Text('${item.cReceiveCount ?? 0}') else const SizedBox.shrink(),
+                                IconButton(
+                                  icon: const Icon(Icons.copy, size: 16),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  tooltip: 'Copy phone',
+                                  onPressed: () async {
+                                    final String phone =
+                                        _maskPhone(item.bPhone?.trim() ?? '');
+                                    if (phone.isEmpty) return;
+                                    await Clipboard.setData(
+                                        ClipboardData(text: phone));
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Phone copied'),
+                                        duration: Duration(milliseconds: 900),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
-                            isThreeLine: true,
                           ),
                         );
                       },

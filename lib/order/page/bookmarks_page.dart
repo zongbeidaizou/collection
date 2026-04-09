@@ -22,6 +22,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
   bool _hasMorePages = true;
   bool _isFirstLoading = true;
   bool _isLoadingMore = false;
+  String _sortField = 'created_at';
+  String _sortOrder = 'desc';
 
   @override
   void initState() {
@@ -34,6 +36,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
     final Completer<BookmarksEntity?> completer = Completer<BookmarksEntity?>();
     final Map<String, dynamic> queryParameters = <String, dynamic>{
       'page': page,
+      'sort_field': _sortField,
+      'sort_order': _sortOrder,
     };
     if (_keyword.trim().isNotEmpty) {
       queryParameters['b_phone'] = _keyword.trim();
@@ -142,6 +146,58 @@ class _BookmarksPageState extends State<BookmarksPage> {
     _loadPage(reset: true);
   }
 
+  String _sortLabel() {
+    final String fieldLabel =
+        _sortField == 'created_at' ? 'CreatedAt' : 'ReceiveCount';
+    final String orderLabel = _sortOrder == 'asc' ? 'ASC' : 'DESC';
+    return '$fieldLabel $orderLabel';
+  }
+
+  Future<void> _showSortSheet() async {
+    final String? selected = await showModalBottomSheet<String>(
+      context: context,
+      builder: (BuildContext context) {
+        Widget optionTile(String field, String order, String text) {
+          final bool selected = _sortField == field && _sortOrder == order;
+          return ListTile(
+            title: Text(text),
+            trailing: selected ? const Icon(Icons.check, color: Colors.green) : null,
+            onTap: () => Navigator.of(context).pop('$field|$order'),
+          );
+        }
+
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const SizedBox(height: 8),
+              const Text('Sort by', style: TextStyle(fontWeight: FontWeight.bold)),
+              optionTile('created_at', 'asc', 'CreatedAt ASC'),
+              optionTile('created_at', 'desc', 'CreatedAt DESC'),
+              optionTile('c_receive_count', 'asc', 'ReceiveCount ASC'),
+              optionTile('c_receive_count', 'desc', 'ReceiveCount DESC'),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selected == null || selected.isEmpty) return;
+    final List<String> parts = selected.split('|');
+    if (parts.length != 2) return;
+    final String newField = parts[0];
+    final String newOrder = parts[1];
+
+    if (newField == _sortField && newOrder == _sortOrder) return;
+
+    setState(() {
+      _sortField = newField;
+      _sortOrder = newOrder;
+    });
+    _loadPage(reset: true);
+  }
+
   @override
   void dispose() {
     _scrollController
@@ -160,97 +216,128 @@ class _BookmarksPageState extends State<BookmarksPage> {
       ),
       body: _isFirstLoading
           ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: _refresh,
-              child: _list.isEmpty
-                  ? ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: const <Widget>[
-                        SizedBox(height: 180),
-                        Center(child: Text('No bookmarks yet')),
-                      ],
-                    )
-                  : ListView.separated(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
-                      itemCount: _list.length + 1,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == _list.length) {
-                          return _isLoadingMore
-                              ? const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 12),
-                                  child: Center(
-                                    child: SizedBox(
-                                      height: 18,
-                                      width: 18,
-                                      child: CircularProgressIndicator(
-                                          strokeWidth: 2),
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox.shrink();
-                        }
+          : Column(
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+                  child: Wrap(
+                    alignment: WrapAlignment.end,
+                    children: <Widget>[
+                      OutlinedButton.icon(
+                        onPressed: _showSortSheet,
+                        icon: const Icon(Icons.sort, size: 16),
+                        label: Text(_sortLabel()),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: _list.isEmpty
+                        ? ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            children: const <Widget>[
+                              SizedBox(height: 180),
+                              Center(child: Text('No bookmarks yet')),
+                            ],
+                          )
+                        : ListView.separated(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10),
+                            itemCount: _list.length + 1,
+                            separatorBuilder: (_, __) => const SizedBox(height: 8),
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index == _list.length) {
+                                return _isLoadingMore
+                                    ? const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: 12),
+                                        child: Center(
+                                          child: SizedBox(
+                                            height: 18,
+                                            width: 18,
+                                            child: CircularProgressIndicator(
+                                                strokeWidth: 2),
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink();
+                              }
 
-                        final BookmarksData item = _list[index];
-                        return Card(
-                          margin: EdgeInsets.zero,
-                          child: ListTile(
-                            title: Row(
-                              children: <Widget>[
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    item.bPhone?.trim().isNotEmpty == true
-                                        ? _maskPhone(item.bPhone!)
-                                        : '-',
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    _formatNigeriaTime(item.createdAt),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) InkWell(onTap: () {
-                                  showToast('Please copy the number, then search the number in the receive page to see the details');
-                                }, child: const Icon(Icons.move_up, size: 16,color: Colors.purple,)) else const SizedBox.shrink(),
-                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) const SizedBox(width: 4) else const SizedBox.shrink(),
-                                if (item.cReceiveCount != null && item.cReceiveCount! > 0) Text('${item.cReceiveCount ?? 0}') else const SizedBox.shrink(),
-                                const SizedBox(width: 12),
-                                IconButton(
-                                  icon: const Icon(Icons.copy, size: 16),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
-                                  tooltip: 'Copy phone',
-                                  onPressed: () async {
-                                    final String phone =
-                                        _maskPhone(item.bPhone?.trim() ?? '');
-                                    if (phone.isEmpty) return;
-                                    await Clipboard.setData(
-                                        ClipboardData(text: phone));
-                                    if (!mounted) return;
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Phone copied'),
-                                        duration: Duration(milliseconds: 900),
+                              final BookmarksData item = _list[index];
+                              return Card(
+                                margin: EdgeInsets.zero,
+                                child: ListTile(
+                                  title: Row(
+                                    children: <Widget>[
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Text(
+                                          item.bPhone?.trim().isNotEmpty == true
+                                              ? _maskPhone(item.bPhone!)
+                                              : '-',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    );
-                                  },
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        flex: 4,
+                                        child: Text(
+                                          _formatNigeriaTime(item.createdAt),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      if (item.cReceiveCount != null && item.cReceiveCount! > 0)
+                                        InkWell(
+                                          onTap: () {
+                                            showToast('Please copy the number, then search the number in the receive page to see the details');
+                                          },
+                                          child: const Icon(Icons.move_up, size: 16, color: Colors.purple),
+                                        )
+                                      else
+                                        const SizedBox.shrink(),
+                                      if (item.cReceiveCount != null && item.cReceiveCount! > 0)
+                                        const SizedBox(width: 4)
+                                      else
+                                        const SizedBox.shrink(),
+                                      if (item.cReceiveCount != null && item.cReceiveCount! > 0)
+                                        Text('${item.cReceiveCount ?? 0}')
+                                      else
+                                        const SizedBox.shrink(),
+                                      const SizedBox(width: 12),
+                                      IconButton(
+                                        icon: const Icon(Icons.copy, size: 16),
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        tooltip: 'Copy phone',
+                                        onPressed: () async {
+                                          final String phone =
+                                              _maskPhone(item.bPhone?.trim() ?? '');
+                                          if (phone.isEmpty) return;
+                                          await Clipboard.setData(
+                                              ClipboardData(text: phone));
+                                          if (!mounted) return;
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('Phone copied'),
+                                              duration: Duration(milliseconds: 900),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
+                  ),
+                ),
+              ],
             ),
     );
   }

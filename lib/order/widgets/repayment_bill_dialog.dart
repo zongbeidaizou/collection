@@ -13,27 +13,23 @@ class RepaymentBillDialog extends StatelessWidget {
     required this.avatar,
     required this.repayInfo,
     required this.period,
+    required this.productId,
     this.track,
   });
 
   final String? avatar;
+  final int productId;
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherPeriod? period;
   final CollectionLogOtherTrack? track;
 
-  // 获取应用名称
-  String _getAppName() {
-    return repayInfo?.appName?.toLowerCase() ?? '';
-  }
 
   @override
-  Widget build(BuildContext context) {
-    final appName = _getAppName();
-
+  Widget build(BuildContext context) {  
     // 根据不同的app返回完全不同的布局
-    if (appName.contains('kaka')) {
+    if (productId == 1) {
       return _buildKakaBill(context);
-    } else if (appName.contains('moimoi')) {
+    } else if (productId == 3) {
       return _buildMoimoiBill(context);
     } else {
       // Leading 或其他默认样式
@@ -323,12 +319,11 @@ class RepaymentBillDialog extends StatelessWidget {
 
   // 获取应用主题颜色
   Color _getAppPrimaryColor() {
-    final appName = repayInfo?.appName?.toLowerCase() ?? '';
-    if (appName.contains('kaka')) {
+    if (productId == 1) {
       return Colors.blue.shade700;
-    } else if (appName.contains('leading')) {
+    } else if (productId == 2) {
       return Colors.green.shade700;
-    } else if (appName.contains('moimoi')) {
+    } else if (productId == 3) {
       return Colors.orange.shade700;
     }
     // 默认颜色
@@ -337,12 +332,11 @@ class RepaymentBillDialog extends StatelessWidget {
 
   // 获取应用主题渐变色
   List<Color> _getAppGradientColors() {
-    final appName = repayInfo?.appName?.toLowerCase() ?? '';
-    if (appName.contains('kaka')) {
+    if (productId == 1) {
       return [Colors.blue.shade700, Colors.blue.shade500];
-    } else if (appName.contains('leading')) {
+    } else if (productId == 2) {
       return [Colors.green.shade700, Colors.green.shade500];
-    } else if (appName.contains('moimoi')) {
+    } else if (productId == 3) {
       return [Colors.orange.shade700, Colors.orange.shade500];
     }
     // 默认颜色
@@ -351,12 +345,11 @@ class RepaymentBillDialog extends StatelessWidget {
 
   // 获取应用主题浅色
   Color _getAppLightColor() {
-    final appName = repayInfo?.appName?.toLowerCase() ?? '';
-    if (appName.contains('kaka')) {
+    if (productId == 1) {
       return Colors.blue.shade50;
-    } else if (appName.contains('leading')) {
+    } else if (productId == 2) {
       return Colors.green.shade50;
-    } else if (appName.contains('moimoi')) {
+    } else if (productId == 3) {
       return Colors.orange.shade50;
     }
     // 默认颜色
@@ -365,12 +358,11 @@ class RepaymentBillDialog extends StatelessWidget {
 
   // 获取应用主题边框色
   Color _getAppBorderColor() {
-    final appName = repayInfo?.appName?.toLowerCase() ?? '';
-    if (appName.contains('kaka')) {
+    if (productId == 1) {
       return Colors.blue.shade200;
-    } else if (appName.contains('leading')) {
+    } else if (productId == 2) {
       return Colors.green.shade200;
-    } else if (appName.contains('moimoi')) {
+    } else if (productId == 3) {
       return Colors.orange.shade200;
     }
     // 默认颜色
@@ -687,12 +679,7 @@ class RepaymentBillDialog extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(6.0),
                   children: [
-                    _buildKakaQuickInfo('Borrower Name', Icons.person,
-                        repayInfo?.name ?? 'N/A'),
-                    _buildKakaQuickInfo('Borrower Phone', Icons.phone,
-                        repayInfo?.phone ?? 'N/A'),
-                    _buildKakaQuickInfo('Borrower BVN', Icons.sim_card_sharp,
-                        repayInfo?.bvn ?? 'N/A'),
+                    
                     _buildKakaQuickInfo(
                         'Disbursement Date',
                         Icons.access_time_outlined,
@@ -709,6 +696,12 @@ class RepaymentBillDialog extends StatelessWidget {
                         Utils.formatPrice2(repayInfo?.loanAmount ?? 0)),
                     _buildKakaQuickInfo('Transaction ID', Icons.description,
                         repayInfo?.var10 ?? 'N/A'),
+                        _buildKakaQuickInfo('Borrower Name', Icons.person,
+                        repayInfo?.name ?? 'N/A'),
+                    _buildKakaQuickInfo('Borrower Phone', Icons.phone,
+                        repayInfo?.phone ?? 'N/A'),
+                    _buildKakaQuickInfo('Borrower BVN', Icons.sim_card_sharp,
+                        repayInfo?.bvn ?? 'N/A'),
                   ],
                 ),
               ),

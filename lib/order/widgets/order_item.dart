@@ -1253,6 +1253,7 @@ class _OrderItemState extends State<OrderItem> {
                                 repayInfo: widget.repayInfo,
                                 period: widget.period,
                                 track: widget.track,
+                                productId: widget.item.aJProductId ?? 1,
                               );
                             },
                           );

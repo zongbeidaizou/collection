@@ -503,6 +503,7 @@ class _AddNoteState extends State<AddNote>
                       repayInfo: _repayInfo,
                       period: _period,
                       track: _track,
+                      productId: item.aJProductId ?? 1,
                     );
                   },
                 );

@@ -34,4 +34,5 @@ class HttpApi {
   static const String updatePassword = '/collection/b-l-update-password';
   static const String bookmarks = '/collection/b-s-bookmarks';
   static const String salary = '/collection/salary';
+  static const String btCallLogs = '/collection/b-t-call-logs';
 }

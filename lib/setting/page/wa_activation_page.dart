@@ -5,8 +5,13 @@ import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
 import 'package:bounty_hunter/mvp/base_page.dart';
 import 'package:bounty_hunter/res/resources.dart';
+import 'package:bounty_hunter/routers/fluro_navigator.dart';
 import 'package:bounty_hunter/setting/iview/wa_activation_page_iview.dart';
 import 'package:bounty_hunter/setting/presenter/wa_activation_presenter.dart';
+import 'package:bounty_hunter/util/device_utils.dart';
+import 'package:bounty_hunter/util/other_utils.dart';
+import 'package:bounty_hunter/util/theme_utils.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:bounty_hunter/widgets/my_button.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
@@ -65,19 +70,24 @@ class _WaActivationPageState extends State<WaActivationPage>
   }
 
   @override
-  Future<void> showWeeklyNotice() async {
-    if (!mounted) return;
+  Future<void> showWeeklyNotice(bool force) async {
+    if (!mounted ) return;
     final DateTime now = DateTime.now();
     // DateTime.weekday: Monday=1 ... Sunday=7
-    if (now.weekday != DateTime.wednesday) return;
+    if (now.weekday != DateTime.wednesday && !force) {
+      return;
+    }
+
 
     final DateTime monday = DateUtils.dateOnly(
       now.subtract(Duration(days: now.weekday - DateTime.monday)),
     );
     final String weekId =
-        '11${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
+        '${monday.year}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
     final String? ackWeekId = SpUtil.getString(_weeklyNoticeAckKey);
-    if (ackWeekId == weekId) return;
+    if (ackWeekId == weekId && !force) {
+      return;
+    }
 
     final ScrollController scrollController = ScrollController();
     Timer? countdownTimer;
@@ -410,10 +420,47 @@ class _WaActivationPageState extends State<WaActivationPage>
 
   @override
   Widget build(BuildContext context) {
+        void _launchWebURL(String title, String url) {
+      if (Device.isMobile) {
+        NavigatorUtils.goWebViewPage(context, title, url);
+      } else {
+        Utils.launchWebURL(url);
+      }
+    }
     return Scaffold(
-      appBar: const MyAppBar(
-        centerTitle: 'WhatsApp Activation',
-      ),
+      appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                tooltip: 'Back',
+                onPressed: () => NavigatorUtils.goBack(context),
+                icon: Icon(Icons.arrow_back,
+                    color: ThemeUtils.getIconColor(context) ?? Colors.white),
+              ),
+              centerTitle: true,
+              title: Text(
+                'WhatsApp Activation',
+                style: TextStyle(color: ThemeUtils.getIconColor(context)),
+              ),
+              flexibleSpace: context.isDark
+                  ? Container(
+                      height: 115.0,
+                      color: Colours.dark_bg_color,
+                    )
+                  : LoadAssetImage(
+                      'statistic/statistic_bg',
+                      height: 115.0,
+                      fit: BoxFit.fitWidth,
+                    ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    showWeeklyNotice(true);
+                  },
+                  icon: const Icon(Icons.question_mark_outlined,
+                      color: Colors.white),
+                ),
+              ],
+            ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

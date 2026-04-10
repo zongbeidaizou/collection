@@ -48,7 +48,7 @@ class WaActivationPresenter extends BasePagePresenter<WaActivationPageMvpView> {
       onSuccess: (data) async {
         if (data != null && data.success == true) {
           view.setCountryData(data.data ?? []);
-          await view.showWeeklyNotice();
+          await view.showWeeklyNotice(false);
         } else {
           view.showToast(data?.errorMessage ?? 'Failed to get WhatsApp country');
         }

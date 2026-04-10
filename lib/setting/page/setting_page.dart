@@ -13,8 +13,10 @@ import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:bounty_hunter/net/net.dart';
+import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:flutter/services.dart';
+const currentVersion = '5.0';
 
 /// design/8设置/index.html
 class SettingPage extends StatefulWidget {
@@ -31,12 +33,12 @@ class _SettingPageState extends State<SettingPage> {
       appBar: const MyAppBar(
         centerTitle: 'Setting',
       ),
-      body: Consumer2<ThemeProvider, LocaleProvider>(
-        builder:
-            (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
+      body: Consumer3<ThemeProvider, LocaleProvider, UserProvider>(
+        builder: (_, ThemeProvider provider, LocaleProvider localeProvider,
+            UserProvider userProvider, __) {
           return Column(
             children: <Widget>[
-              Gaps.vGap5,
+              
               // ClickItem(
               //   title: 'Message Template',
               //   onTap: () {
@@ -62,6 +64,24 @@ class _SettingPageState extends State<SettingPage> {
                ClickItem(
                 title: 'Sign out',
                 onTap: _showExitDialog,
+              ),
+              Gaps.vGap5,
+              ClickItem(
+                title: 'Latest Version',
+                content: (userProvider.userEntity.latestVersion ?? '').trim().isNotEmpty
+                    ? ((userProvider.userEntity.latestVersion!.trim() != currentVersion)
+                        ? '${userProvider.userEntity.latestVersion!} (Update available)'
+                        : userProvider.userEntity.latestVersion!)
+                    : '-',
+                onTap: () {
+                  final String latestVersion =
+                      (userProvider.userEntity.latestVersion ?? '').trim();
+                  if (latestVersion.isNotEmpty && latestVersion != currentVersion) {
+                    _showUpdateDialog();
+                  } else {
+                    Toast.show('Already latest version');
+                  }
+                },
               ),
             ],
           );

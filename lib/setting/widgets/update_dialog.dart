@@ -52,13 +52,6 @@ class _UpdateDialogState extends State<UpdateDialog> {
               Container(
                 height: 120.0,
                 width: 280.0,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                  image: DecorationImage(
-                    image: ImageUtils.getAssetImage('update_head', format: ImageFormat.jpg),
-                    fit: BoxFit.cover,
-                  ),
-                ),
               ),
               Container(
                 width: 280.0,
@@ -70,9 +63,9 @@ class _UpdateDialogState extends State<UpdateDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text('新版本更新', style: TextStyles.textSize16),
+                    const Text('new version available', style: TextStyles.textSize16),
                     Gaps.vGap10,
-                    const Text('1.又双叒修复了一大堆bug。\n\n2.祭天了多名程序猿。'),
+                    const Text('1. Fixed a lot of bugs.'),
                     Gaps.vGap15,
                     if (_isDownload)
                       LinearProgressIndicator(
@@ -101,7 +94,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
           width: 110.0,
           height: 36.0,
           child: MyButton(
-            text: '残忍拒绝',
+            text: 'Reject',
             fontSize: Dimens.font_sp16,
             textColor: primaryColor,
             disabledTextColor: Colors.white,
@@ -121,7 +114,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
           width: 110.0,
           height: 36.0,
           child: MyButton(
-            text: '立即更新',
+            text: 'Update',
             fontSize: Dimens.font_sp16,
             onPressed: () {
               if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -171,7 +164,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
         },
       );
     } catch (e) {
-      Toast.show('下载失败!');
+      Toast.show('Download failed!');
       debugPrint(e.toString());
       setState(() {
         _isDownload = false;

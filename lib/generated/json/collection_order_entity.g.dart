@@ -547,6 +547,11 @@ CollectionOrderOther $CollectionOrderOtherFromJson(Map<String, dynamic> json) {
   if (fines != null) {
     collectionOrderOther.fines = fines;
   }
+  final String? latestVersion = jsonConvert.convert<String>(
+      json['latestVersion']);
+  if (latestVersion != null) {
+    collectionOrderOther.latestVersion = latestVersion;
+  }
   return collectionOrderOther;
 }
 
@@ -557,6 +562,7 @@ Map<String, dynamic> $CollectionOrderOtherToJson(CollectionOrderOther entity) {
   data['monthAdditionData'] = entity.monthAdditionData;
   data['additionBonus'] = entity.additionBonus?.map((v) => v.toJson()).toList();
   data['fines'] = entity.fines?.map((v) => v.toJson()).toList();
+  data['latestVersion'] = entity.latestVersion;
   return data;
 }
 
@@ -567,13 +573,15 @@ extension CollectionOrderOtherExtension on CollectionOrderOther {
     List<dynamic>? monthAdditionData,
     List<CollectionOrderOtherAdditionBonus>? additionBonus,
     List<CollectionOrderOtherFines>? fines,
+    String? latestVersion,
   }) {
     return CollectionOrderOther()
       ..progress = progress ?? this.progress
       ..profile = profile ?? this.profile
       ..monthAdditionData = monthAdditionData ?? this.monthAdditionData
       ..additionBonus = additionBonus ?? this.additionBonus
-      ..fines = fines ?? this.fines;
+      ..fines = fines ?? this.fines
+      ..latestVersion = latestVersion ?? this.latestVersion;
   }
 }
 

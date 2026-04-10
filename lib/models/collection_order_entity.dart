@@ -163,6 +163,7 @@ class CollectionOrderOther {
 	List<dynamic>? monthAdditionData = [];
 	List<CollectionOrderOtherAdditionBonus>? additionBonus = [];
 	List<CollectionOrderOtherFines>? fines = [];
+  String? latestVersion = '';
 
 	CollectionOrderOther();
 

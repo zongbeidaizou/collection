@@ -25,12 +25,18 @@ class RepaymentBillDialog extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     // 根据不同的app返回完全不同的布局
     if (productId == 1) {
       return _buildKakaBill(context);
     } else if (productId == 3) {
       return _buildMoimoiBill(context);
+    } else if (productId == 4) {
+      return _buildProduct4Bill(context);
+    } else if (productId == 5) {
+      return _buildProduct5Bill(context);
+    } else if (productId == 6) {
+      return _buildProduct6Bill(context);
     } else {
       // Leading 或其他默认样式
       return _buildLeadingBill(context);
@@ -1198,6 +1204,240 @@ class RepaymentBillDialog extends StatelessWidget {
               'assets/images/order/FirstCentral.png',
               height: 60,
               fit: BoxFit.contain,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ==================== Product 4/5/6 Bills (Nigerian official variants) ====================
+  Widget _buildProduct4Bill(BuildContext context) {
+    return _buildOfficialNaijaBill(
+      context,
+      themeColor: const Color(0xFF0B5ED7),
+      accentColor: const Color(0xFFE9F2FF),
+      title: '${(repayInfo?.appName ?? 'Product 4').toUpperCase()} REPAYMENT NOTICE',
+      subtitle: 'Federal Republic of Nigeria - Customer Statement',
+      showStamp: true,
+    );
+  }
+
+  Widget _buildProduct5Bill(BuildContext context) {
+    return _buildOfficialNaijaBill(
+      context,
+      themeColor: const Color(0xFF0F766E),
+      accentColor: const Color(0xFFEAF7F5),
+      title: '${(repayInfo?.appName ?? 'Product 5').toUpperCase()} ACCOUNT STATEMENT',
+      subtitle: 'Lender Repayment Certificate (NG Format)',
+      showStamp: false,
+    );
+  }
+
+  Widget _buildProduct6Bill(BuildContext context) {
+    return _buildOfficialNaijaBill(
+      context,
+      themeColor: const Color(0xFF7C2D12),
+      accentColor: const Color(0xFFFAEFE9),
+      title: '${(repayInfo?.appName ?? 'Product 6').toUpperCase()} PAYMENT BILL',
+      subtitle: 'Official Debt Recovery Invoice - Nigeria',
+      showStamp: true,
+    );
+  }
+
+  Widget _buildOfficialNaijaBill(
+    BuildContext context, {
+    required Color themeColor,
+    required Color accentColor,
+    required String title,
+    required String subtitle,
+    required bool showStamp,
+  }) {
+    final int totalDue = period?.fExpectRepayTotalAmount != null
+        ? period!.fExpectRepayTotalAmount! -
+            period!.pPaidInterest! -
+            period!.qPaidServiceFee! -
+            period!.sPaidOverdueAmount! -
+            period!.oPaidBorrowAmount! -
+            period!.uDeductionTotalAmount!
+        : 0;
+
+    return Dialog(
+      insetPadding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.0)),
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14.0),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
+              decoration: BoxDecoration(
+                color: themeColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(14.0),
+                  topRight: Radius.circular(14.0),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () => _showAvatarDialog(context, avatar),
+                        child: CircleAvatar(
+                          radius: 36,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: avatar ?? '',
+                              fit: BoxFit.cover,
+                              width: 72,
+                              height: 72,
+                              placeholder: (context, url) => Image.asset(
+                                'assets/images/order/icon_avatar.png',
+                                fit: BoxFit.cover,
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/order/icon_avatar.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Gaps.hGap12,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              subtitle,
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.85),
+                                fontSize: 11,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Borrower: ${repayInfo?.name ?? 'N/A'}',
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: accentColor,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: themeColor.withOpacity(0.25)),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildNigerianStyleRow(
+                            'Borrower Phone',
+                            repayInfo?.phone ?? 'N/A',
+                          ),
+                          _buildNigerianStyleRow(
+                            'BVN',
+                            repayInfo?.bvn ?? 'N/A',
+                          ),
+                          _buildNigerianStyleRow(
+                            'Due Date',
+                            _formatDateTime(period?.aPExpectRepayTime, withTime: false),
+                          ),
+                          _buildNigerianStyleRow(
+                            'Total Amount Due',
+                            Utils.formatPrice2(totalDue),
+                            isAmount: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gaps.vGap8,
+                    _buildNigerianStyleSection(
+                      'Bank Transfer Instructions',
+                      [
+                        _buildNigerianStyleRow('Bank', repayInfo?.accountBank ?? 'N/A'),
+                        _buildNigerianStyleRow('Account No.', repayInfo?.accountNo ?? 'N/A'),
+                        _buildNigerianStyleRow(
+                          'Narration / Txn Ref',
+                          repayInfo?.var10 ?? 'N/A',
+                        ),
+                      ],
+                    ),
+                    Gaps.vGap8,
+                    _buildNigerianStyleSection(
+                      'Loan Details',
+                      [
+                        _buildNigerianStyleRow('Disbursement Date', _formatDateTime(repayInfo?.loanTime)),
+                        _buildNigerianStyleRow('Loan Amount', Utils.formatPrice2(repayInfo?.borrowAmount ?? 0), isAmount: true),
+                        _buildNigerianStyleRow('Disbursement Amount', Utils.formatPrice2(repayInfo?.loanAmount ?? 0), isAmount: true),
+                        _buildNigerianStyleRow('Penalty', Utils.formatPrice2(period?.kExpectOverdueAmount ?? 0), isAmount: true),
+                        _buildNigerianStyleRow('Amount Paid', Utils.formatPrice2(period?.nPaidAmount ?? 0), isAmount: true),
+                        _buildNigerianStyleRow('Amount Waived', Utils.formatPrice2(period?.uDeductionTotalAmount ?? 0), isAmount: true),
+                      ],
+                    ),
+                    if (showStamp) ...[
+                      Gaps.vGap8,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: themeColor, width: 1.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'OFFICIAL COPY',
+                            style: TextStyle(
+                              color: themeColor,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    Gaps.vGap8,
+                    _buildFooter(),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

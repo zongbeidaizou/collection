@@ -16,7 +16,7 @@ import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:flutter/services.dart';
-const currentVersion = '5.0';
+const currentVersion = '5.1';
 
 /// design/8设置/index.html
 class SettingPage extends StatefulWidget {
@@ -66,21 +66,26 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: _showExitDialog,
               ),
               Gaps.vGap5,
-              ClickItem(
-                title: 'Latest Version',
-                content: (userProvider.userEntity.latestVersion ?? '').trim().isNotEmpty
-                    ? ((userProvider.userEntity.latestVersion!.trim() != currentVersion)
-                        ? '${userProvider.userEntity.latestVersion!} (Update available)'
-                        : userProvider.userEntity.latestVersion!)
-                    : '-',
-                onTap: () {
+              Builder(
+                builder: (_) {
                   final String latestVersion =
                       (userProvider.userEntity.latestVersion ?? '').trim();
-                  if (latestVersion.isNotEmpty && latestVersion != currentVersion) {
-                    _showUpdateDialog();
-                  } else {
-                    Toast.show('Already latest version');
-                  }
+                  final bool hasLatest = latestVersion.isNotEmpty;
+                  final bool needUpdate = hasLatest && latestVersion != currentVersion;
+
+                  return ClickItem(
+                    title: 'Latest Version',
+                    content: !hasLatest
+                        ? '-'
+                        : needUpdate
+                            ? '$latestVersion (Update available)'
+                            : '$latestVersion (Current)',
+                    onTap: needUpdate
+                        ? () {
+                            _showUpdateDialog(latestVersion);
+                          }
+                        : null,
+                  );
                 },
               ),
             ],
@@ -277,10 +282,10 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  void _showUpdateDialog() {
+  void _showUpdateDialog(String version) {
     showDialog<void>(
         context: context,
         barrierDismissible: true,
-        builder: (_) => const UpdateDialog());
+        builder: (_) => UpdateDialog(version: version));
   }
 }

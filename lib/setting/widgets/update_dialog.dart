@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -16,7 +17,9 @@ import 'package:bounty_hunter/widgets/my_button.dart';
 
 class UpdateDialog extends StatefulWidget {
 
-  const UpdateDialog({super.key});
+  const UpdateDialog({super.key, required this.version});
+
+  final String version;
 
   @override
   _UpdateDialogState createState() => _UpdateDialogState();
@@ -64,8 +67,6 @@ class _UpdateDialogState extends State<UpdateDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const Text('new version available', style: TextStyles.textSize16),
-                    Gaps.vGap10,
-                    const Text('1. Fixed a lot of bugs.'),
                     Gaps.vGap15,
                     if (_isDownload)
                       LinearProgressIndicator(
@@ -138,6 +139,23 @@ class _UpdateDialogState extends State<UpdateDialog> {
     );
   }
 
+  String _getApkUrlByAbi() {
+    final String version = widget.version;
+    const String base = 'https://uganda.rock6.xyz/static/d';
+
+    // 通过当前运行架构选择下载包（Dart FFI Abi 枚举）
+    final Abi abi = Abi.current();
+    if (abi == Abi.androidArm64) {
+      return '$base/app-arm64-v8a-release-$version.apk';
+    }
+    if (abi == Abi.androidArm) {
+      return '$base/app-armeabi-v7a-release-$version.apk';
+    }
+
+    // 兜底：优先给 64 位包
+    return '$base/app-arm64-v8a-release-$version.apk';
+  }
+
   ///下载apk
   Future<void> _download() async {
     try {
@@ -146,16 +164,16 @@ class _UpdateDialogState extends State<UpdateDialog> {
       DirectoryUtil.createStorageDirSync(category: 'Download');
       final String path = DirectoryUtil.getStoragePath(fileName: 'dasewan', category: 'Download', format: 'apk').nullSafe;
       final File file = File(path);
-      /// 链接可能会失效
-      await Dio().download('http://imtt.dd.qq.com/16891/apk/FF9625F40FD26F015F4CDED37B6B66AE.apk',
+      final String apkUrl = _getApkUrlByAbi();
+
+      await Dio().download(
+        apkUrl,
         file.path,
         cancelToken: _cancelToken,
         onReceiveProgress: (int count, int total) {
           if (total != -1) {
             _value = count / total;
-            setState(() {
-
-            });
+            setState(() {});
             if (count == total) {
               NavigatorUtils.goBack(context);
               VersionUtils.install(path);

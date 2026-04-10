@@ -35,7 +35,7 @@ const MethodChannel _contactChannel = MethodChannel('contact_channel');
 const List<IconData> sourceIcon = [Icons.miscellaneous_services,Icons.loupe, Icons.repeat_one,Icons.move_up];
 const List<Color> sourceColor = [Colors.blue,Colors.red, Colors.green,Colors.purple];
 final List<Color> itemBackgroundColors = [Colors.blue.shade50,Colors.green.shade50, Colors.orange.shade50, Colors.purple.shade50, Colors.red.shade50, Colors.pink.shade50];
-final List<Color> itemBackgroundDarkColors = [Color.fromARGB(255, 94, 174, 231).withOpacity(0.9),Color.fromARGB(255, 22, 24, 22).withOpacity(0.9), Color.fromARGB(255, 129, 117, 97).withOpacity(0.9), Color.fromARGB(255, 226, 177, 246).withOpacity(0.9), Color.fromARGB(255, 239, 162, 162).withOpacity(0.9), Color.fromARGB(255, 236, 147, 221).withOpacity(0.9)];
+final List<Color> itemBackgroundDarkColors = [Color.fromARGB(255, 63, 63, 69),Color.fromARGB(255, 46, 67, 46),Color.fromARGB(255, 72, 66, 39),Color.fromARGB(255, 71, 58, 81),Color.fromARGB(255, 59, 42, 41),Color.fromARGB(255, 71, 50, 36)];
 
 class OrderItem extends StatefulWidget {
   const OrderItem({
@@ -161,7 +161,7 @@ class _OrderItemState extends State<OrderItem> {
     if(colorIndex > itemBackgroundColors.length) {
       return isDark ? const Color.fromARGB(255, 22, 24, 22) : itemBackgroundColors[0];
     }
-    return isDark ? const Color.fromARGB(255, 22, 24, 22) : itemBackgroundColors[colorIndex];
+    return isDark ? itemBackgroundDarkColors[colorIndex] : itemBackgroundColors[colorIndex];
   }
   _getAdditionBonus(BuildContext context) {
     if(widget.item.eCollectionAdminId == widget.item.aVTmpCollectionAdminId && widget.source != 'receive'){

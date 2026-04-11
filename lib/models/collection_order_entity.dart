@@ -356,6 +356,8 @@ class CollectionOrderOtherProfile {
 	int? dBTodayOutCount = 0;
   @JSONField(name: 'd_c_today_marketing_count')
 	int? dCTodayMarketingCount = 0;
+  @JSONField(name: 'd_o_call_log_time')
+	int? dOCallLogTime = 0;
          
 
 	CollectionOrderOtherProfile();

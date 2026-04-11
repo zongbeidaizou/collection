@@ -1068,6 +1068,11 @@ CollectionOrderOtherProfile $CollectionOrderOtherProfileFromJson(
   if (dCTodayMarketingCount != null) {
     collectionOrderOtherProfile.dCTodayMarketingCount = dCTodayMarketingCount;
   }
+  final int? dOCallLogTime = jsonConvert.convert<int>(
+      json['d_o_call_log_time']);
+  if (dOCallLogTime != null) {
+    collectionOrderOtherProfile.dOCallLogTime = dOCallLogTime;
+  }
   return collectionOrderOtherProfile;
 }
 
@@ -1152,6 +1157,7 @@ Map<String, dynamic> $CollectionOrderOtherProfileToJson(
   data['d_a_today_system_count'] = entity.dATodaySystemCount;
   data['d_b_today_out_count'] = entity.dBTodayOutCount;
   data['d_c_today_marketing_count'] = entity.dCTodayMarketingCount;
+  data['d_o_call_log_time'] = entity.dOCallLogTime;
   return data;
 }
 
@@ -1233,6 +1239,7 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
     int? dATodaySystemCount,
     int? dBTodayOutCount,
     int? dCTodayMarketingCount,
+    int? dOCallLogTime,
   }) {
     return CollectionOrderOtherProfile()
       ..id = id ?? this.id
@@ -1320,7 +1327,8 @@ extension CollectionOrderOtherProfileExtension on CollectionOrderOtherProfile {
       ..dATodaySystemCount = dATodaySystemCount ?? this.dATodaySystemCount
       ..dBTodayOutCount = dBTodayOutCount ?? this.dBTodayOutCount
       ..dCTodayMarketingCount = dCTodayMarketingCount ??
-          this.dCTodayMarketingCount;
+          this.dCTodayMarketingCount
+      ..dOCallLogTime = dOCallLogTime ?? this.dOCallLogTime;
   }
 }
 

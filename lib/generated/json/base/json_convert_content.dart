@@ -24,6 +24,7 @@ import 'package:bounty_hunter/models/message_template_entity.dart';
 import 'package:bounty_hunter/models/product_entity.dart';
 import 'package:bounty_hunter/models/s_g_contact_entity.dart';
 import 'package:bounty_hunter/models/salary_entity.dart';
+import 'package:bounty_hunter/models/setting_entity.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:bounty_hunter/models/wa_entity.dart';
 import 'package:bounty_hunter/models/wacode_entity.dart';
@@ -564,6 +565,18 @@ class JsonConvert {
       return data.map<SalaryDataFineData>((Map<String, dynamic> e) =>
           SalaryDataFineData.fromJson(e)).toList() as M;
     }
+    if (<SettingEntity>[] is M) {
+      return data.map<SettingEntity>((Map<String, dynamic> e) =>
+          SettingEntity.fromJson(e)).toList() as M;
+    }
+    if (<SettingData>[] is M) {
+      return data.map<SettingData>((Map<String, dynamic> e) =>
+          SettingData.fromJson(e)).toList() as M;
+    }
+    if (<SettingDataProducts>[] is M) {
+      return data.map<SettingDataProducts>((Map<String, dynamic> e) =>
+          SettingDataProducts.fromJson(e)).toList() as M;
+    }
     if (<ShopEntity>[] is M) {
       return data.map<ShopEntity>((Map<String, dynamic> e) =>
           ShopEntity.fromJson(e)).toList() as M;
@@ -806,6 +819,9 @@ class JsonConvertClassCollection {
     (SalaryDataFeedbackBonusData).toString(): SalaryDataFeedbackBonusData
         .fromJson,
     (SalaryDataFineData).toString(): SalaryDataFineData.fromJson,
+    (SettingEntity).toString(): SettingEntity.fromJson,
+    (SettingData).toString(): SettingData.fromJson,
+    (SettingDataProducts).toString(): SettingDataProducts.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
     (ShopDataOther).toString(): ShopDataOther.fromJson,

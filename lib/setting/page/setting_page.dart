@@ -9,6 +9,7 @@ import 'package:bounty_hunter/setting/provider/theme_provider.dart';
 import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
 import 'package:bounty_hunter/setting/widgets/update_dialog.dart';
 import 'package:bounty_hunter/widgets/click_item.dart';
+import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
@@ -16,6 +17,9 @@ import 'package:bounty_hunter/net/net.dart';
 import 'package:bounty_hunter/providers/user_provider.dart';
 import 'package:bounty_hunter/util/toast_utils.dart';
 import 'package:flutter/services.dart';
+
+import '../../models/setting_entity.dart';
+
 const currentVersion = '5.1';
 
 /// design/8设置/index.html
@@ -27,6 +31,15 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  List<SettingDataProducts> _products = <SettingDataProducts>[];
+  bool _loadingProducts = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSettingsProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +100,11 @@ class _SettingPageState extends State<SettingPage> {
                         : null,
                   );
                 },
+              ),
+              const Spacer(),
+              
+              Expanded(
+                child: _buildProductsView(),
               ),
             ],
           );
@@ -278,6 +296,117 @@ class _SettingPageState extends State<SettingPage> {
             );
           },
         );
+      },
+    );
+  }
+
+  Widget _buildProductsView() {
+    if (_loadingProducts) {
+      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+    }
+
+    if (_products.isEmpty) {
+      return const Center(
+        child: Text(
+          'No products',
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
+      itemCount: _products.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      itemBuilder: (_, int index) {
+        final SettingDataProducts item = _products[index];
+        final String title = (item.title ?? '').trim();
+        final String url = (item.value ?? '').trim();
+        final String logo = (item.logo ?? '').trim();
+
+        return Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colours.line),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: logo.isEmpty
+                    ? Container(
+                        width: 42,
+                        height: 42,
+                        color: Colours.bg_gray,
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.apps, size: 20),
+                      )
+                    : LoadImage(logo, width: 42, height: 42, fit: BoxFit.cover),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title.isEmpty ? '-' : title,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      url.isEmpty ? '-' : url,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: url.isEmpty
+                    ? null
+                    : () async {
+                        await Clipboard.setData(ClipboardData(text: url));
+                        Toast.show('Copied');
+                      },
+                child: const Text('Copy Link'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _fetchSettingsProducts() async {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _loadingProducts = true;
+    });
+
+    await DioUtils.instance.requestNetwork<SettingEntity>(
+      Method.get,
+      HttpApi.settings,
+      onSuccess: (SettingEntity? data) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _products = data?.data?.products ?? <SettingDataProducts>[];
+          _loadingProducts = false;
+        });
+      },
+      onError: (_, String msg) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _loadingProducts = false;
+        });
+        Toast.show(msg);
       },
     );
   }

@@ -443,6 +443,11 @@ MarketingOther $MarketingOtherFromJson(Map<String, dynamic> json) {
   if (templates2 != null) {
     marketingOther.templates2 = templates2;
   }
+  final List<String>? tips = (json['tips'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<String>(e) as String).toList();
+  if (tips != null) {
+    marketingOther.tips = tips;
+  }
   return marketingOther;
 }
 
@@ -451,6 +456,7 @@ Map<String, dynamic> $MarketingOtherToJson(MarketingOther entity) {
   data['url'] = entity.url;
   data['app'] = entity.app;
   data['templates2'] = entity.templates2?.map((v) => v.toJson()).toList();
+  data['tips'] = entity.tips;
   return data;
 }
 
@@ -459,11 +465,13 @@ extension MarketingOtherExtension on MarketingOther {
     String? url,
     String? app,
     List<MarketingOtherTemplates2>? templates2,
+    List<String>? tips,
   }) {
     return MarketingOther()
       ..url = url ?? this.url
       ..app = app ?? this.app
-      ..templates2 = templates2 ?? this.templates2;
+      ..templates2 = templates2 ?? this.templates2
+      ..tips = tips ?? this.tips;
   }
 }
 

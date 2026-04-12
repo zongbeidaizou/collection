@@ -16,6 +16,7 @@ abstract class MarketingPageMvpView implements IMvpView {
   void setLogs(List<MarketingData> logs, {bool clear = false});
   void setTemplates(
       List<MarketingOtherTemplates2> templates, String url, String appName);
+  void setTips(List<String> tips);
   void setPageSize(int pageSize);
   void setCurrentPage(int currentPage);
 }

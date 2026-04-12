@@ -72,6 +72,7 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
         templates.sort((a, b) => b.availableDays!.compareTo(a.availableDays!));
         view.setTemplates(
             templates, data.other!.url!, data.other!.app!);
+        view.setTips(data.other?.tips ?? const <String>[]);
       }
     }, onError: (_, __) async {
       if (_ == 200006) {

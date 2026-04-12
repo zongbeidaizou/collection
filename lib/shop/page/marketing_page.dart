@@ -119,6 +119,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
   bool _isCheckingStaleRefresh = false;
   static const String _kMarketingLastIndexTimeKey =
       'marketing_last_index_time';
+  static const String _kMarketingTipsLastShownDateKey =
+      'marketing_tips_last_shown_date';
 
   @override
   MarketingPresenter createPresenter() {
@@ -280,6 +282,64 @@ class _AccountRecordListPageState extends State<MarketingPage>
                 '');
       }).toList();
     });
+  }
+
+  @override
+  void setTips(List<String> tips) {
+    _maybeShowWeeklyTips(tips);
+  }
+
+  Future<void> _maybeShowWeeklyTips(List<String> tips) async {
+    if (!mounted || tips.isEmpty) {
+      return;
+    }
+
+    final DateTime now = DateTime.now();
+    if (now.weekday != DateTime.thursday) {
+      return;
+    }
+
+    final String today = DateFormat('yyyy-MM-dd').format(now);
+    final String? lastShownDate =
+        await Cache().getString(_kMarketingTipsLastShownDateKey);
+
+    if (lastShownDate == today) {
+      return;
+    }
+
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Tips'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: tips
+                  .where((tip) => tip.trim().isNotEmpty)
+                  .map(
+                    (tip) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text('• $tip'),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+    await Cache().setString(_kMarketingTipsLastShownDateKey, today);
   }
 
   bool _hasMore() {

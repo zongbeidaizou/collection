@@ -78,6 +78,11 @@ class ShopData {
 	bool? showMonthAdditionData = false;
 	@JSONField(name: 'month_addition_data')
 	List<ShopDataMonthAdditionData>? monthAdditionData = [];
+  @JSONField(name: 'notification_data')
+	List<String>? notificationData = [];
+  @JSONField(name: 'notification_show_date')
+	int? notificationShowDate = 0;
+
 
 	ShopData();
 

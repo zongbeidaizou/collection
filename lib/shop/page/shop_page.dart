@@ -149,21 +149,33 @@ class _ShopPageState extends State<ShopPage>
       return v >= 0 ? '+$v' : v.toString();
     }
     String title = '';
+    String valueStr = '';
+    String additionStr = '';
+    String addition2Str = '';
     switch (type) {
       case 0:
-        title = 'Monthly Bonus';
+        title = '';
+        valueStr = 'Total Case Bonus';
+        additionStr = 'Bonus Ranking Bonus';
+        addition2Str = 'Case Variance Bonus';
         break;
       case 1:
-        title = 'Monthly Repayment Count';
+        title = '';
+        valueStr = 'Repayment Count';
+        additionStr = 'Repayment Count Ranking Bonus';
         break;
         case 2:
-        title = 'Monthly Registration Count';
+        title = '';
+        valueStr = 'Marketing Registration Bonus';
+        additionStr = 'Marketing Registration Ranking Bonus';
         break;
         case 3:
-        title = 'Monthly Application Count';
+        title = '';
+        valueStr = 'Marketing Application Bonus';
+        additionStr = 'Marketing Application Ranking Bonus';
         break;
         default:
-        title = 'Monthly Bonus ';
+        title = '';
         break;
     } 
 
@@ -176,9 +188,9 @@ class _ShopPageState extends State<ShopPage>
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(' $value'),
-              Text(' ${formatSigned(addition)}'),
-              if (addition2 != null) Text(' ${formatSignedNullable(addition2)}'),
+              Text('$valueStr: $value'),
+              if (addition != null && addition != 0) Text('$additionStr: ${formatSigned(addition)}'),
+              if (addition2 != null && addition2 != 0 ) Text('$addition2Str: ${formatSignedNullable(addition2)}'),
             ],
           ),
           actions: <Widget>[

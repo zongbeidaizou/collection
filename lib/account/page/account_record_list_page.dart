@@ -320,6 +320,19 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
     return '${DateFormat('yyyy-MM-dd').format(_analysisDateRange!.start)} ~ ${DateFormat('yyyy-MM-dd').format(_analysisDateRange!.end)}';
   }
 
+  int _safeType(int? rawType) {
+    final int type = rawType ?? 0;
+    if (type < 0 || type >= typeDescriptions.length) {
+      return 0;
+    }
+    return type;
+  }
+
+  String _formatSignedAmount(int amount) {
+    if (amount > 0) return '+$amount';
+    return '$amount';
+  }
+
   Widget _buildAnalysisModeView() {
     final List<CommissionData> analysisList = _getAnalysisList();
     final int totalAmount = analysisList.fold<int>(
@@ -342,99 +355,159 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: Padding(
+          child: Container(
+            color: ThemeUtils.getBackgroundColor(context),
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    OutlinedButton.icon(
-                      onPressed: _pickAnalysisDateRange,
-                      icon: const Icon(Icons.date_range),
-                      label: Text(_analysisRangeLabel()),
-                    ),
-                    DropdownButton<int?>(
-                      value: _analysisBonusType,
-                      onChanged: (value) async {
-                        setState(() {
-                          _analysisBonusType = value;
-                          _list.clear();
-                          _currentPage = 1;
-                        });
-                        await _requestAnalysisData(showLoading: true);
-                      },
-                      items: [
-                        const DropdownMenuItem<int?>(
-                          value: null,
-                          child: Text('All bonus types'),
-                        ),
-                        ...List.generate(typeDescriptions.length, (index) {
-                          return DropdownMenuItem<int?>(
-                            value: index,
-                            child: Text(typeDescriptions[index]),
-                          );
-                        }),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        setState(() {
-                          _analysisDateRange = _currentWeekRange();
-                          _analysisBonusType = null;
-                          _list.clear();
-                          _currentPage = 1;
-                        });
-                        await _requestAnalysisData(showLoading: true);
-                      },
-                      child: const Text('Reset'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Summary', style: Theme.of(context).textTheme.titleMedium),
-                        const SizedBox(height: 6),
-                        Text('Records: ${analysisList.length}'),
-                        Text(
-                          'Total bonus: ${totalAmount >= 0 ? '+' : ''}$totalAmount',
-                          style: TextStyle(
-                            color: totalAmount >= 0 ? Colors.green : Colors.red,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ...sortedSummary.map((entry) {
-                          final int type = entry.key;
-                          final int count = entry.value['count'] ?? 0;
-                          final int amount = entry.value['amount'] ?? 0;
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              '${typeDescriptions[type]}: $count items, ${amount >= 0 ? '+' : ''}$amount',
-                              style: TextStyle(color: typeColors[type]),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.blue.withOpacity(0.2)),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _pickAnalysisDateRange,
+                              icon: const Icon(Icons.date_range, size: 18),
+                              label: Text(
+                                _analysisRangeLabel(),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          );
-                        }),
-                      ],
-                    ),
+                          ),
+                          const SizedBox(width: 8),
+                          SizedBox(
+                            width: 130,
+                            child: DropdownButtonFormField<int?>(
+                              value: _analysisBonusType,
+                              isExpanded: true,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 10,
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                              hint: const Text('Type'),
+                              onChanged: (value) async {
+                                setState(() {
+                                  _analysisBonusType = value;
+                                  _list.clear();
+                                  _currentPage = 1;
+                                });
+                                await _requestAnalysisData(showLoading: true);
+                              },
+                              items: [
+                                const DropdownMenuItem<int?>(
+                                  value: null,
+                                  child: Text('All'),
+                                ),
+                                ...List.generate(typeDescriptions.length, (index) {
+                                  return DropdownMenuItem<int?>(
+                                    value: index,
+                                    child: Text(typeDescriptions[index]),
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'Reset',
+                            onPressed: () async {
+                              setState(() {
+                                _analysisDateRange = _currentWeekRange();
+                                _analysisBonusType = null;
+                                _list.clear();
+                                _currentPage = 1;
+                              });
+                              await _requestAnalysisData(showLoading: true);
+                            },
+                            icon: const Icon(Icons.refresh),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildSummaryCard(
+                              title: 'Records',
+                              value: '${analysisList.length}',
+                              color: Colors.blue,
+                              icon: Icons.list_alt,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _buildSummaryCard(
+                              title: 'Total',
+                              value: _formatSignedAmount(totalAmount),
+                              color: totalAmount > 0
+                                  ? Colors.green
+                                  : totalAmount < 0
+                                      ? Colors.red
+                                      : Colors.grey,
+                              icon: Icons.summarize,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 8),
+                if (sortedSummary.isNotEmpty)
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: sortedSummary.map((entry) {
+                      final int safeType = _safeType(entry.key);
+                      final int count = entry.value['count'] ?? 0;
+                      final int amount = entry.value['amount'] ?? 0;
+                      return Chip(
+                        visualDensity: VisualDensity.compact,
+                        avatar: Icon(
+                          typeIcons[safeType],
+                          size: 14,
+                          color: typeColors[safeType],
+                        ),
+                        label: Text(
+                          '${typeDescriptions[safeType]} $count · ${_formatSignedAmount(amount)}',
+                          style: TextStyle(color: typeColors[safeType]),
+                        ),
+                      );
+                    }).toList(),
+                  ),
               ],
             ),
           ),
         ),
         if (analysisList.isEmpty)
-          const SliverFillRemaining(
-            child: Center(child: Text('No matched records')),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.inbox_outlined, size: 40, color: Colors.grey),
+                  SizedBox(height: 10),
+                  Text('No matched records'),
+                  SizedBox(height: 4),
+                  Text(
+                    'Try adjusting date range or bonus type.',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
           )
         else
           SliverList(
@@ -876,6 +949,45 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
     }).toList();
   }
 
+  Widget _buildSummaryCard({
+    required String title,
+    required String value,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withOpacity(0.25)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 18),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 12)),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildGoodsTag(Color color, String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -898,22 +1010,28 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   }
 
   Widget _buildItem(CommissionData log, int i) {
-    String txt = '${log.jRate}% Bonus (lv.${groupNames[log.kLevel!]})';
-    if (log.oType == 1 || log.oType == 6 ||  log.oType == 3) {
+    final int safeType = _safeType(log.oType);
+    final int safeLevel = (log.kLevel ?? 0).clamp(0, groupNames.length - 1);
+    final DateTime? createdAt = DateTime.tryParse(log.createdAt ?? '');
+    final String timeText = createdAt == null
+        ? '--'
+        : DateFormat('hh:mm a')
+            .format(createdAt.toUtc().add(const Duration(hours: 1)));
+
+    String txt = '${log.jRate ?? 0}% Bonus (lv.${groupNames[safeLevel]})';
+    if (safeType == 1 || safeType == 6 || safeType == 3) {
       txt =
-          'Acct#${log.zAccountNumber!} paid ${Utils.formatPrice2(log.vPaidAmount!)} at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}, $txt';
-    } else if (log.oType == 2) {
-      txt = 'Tiered Achievement (lv.${groupNames[log.kLevel!]})';
-    } else if (log.oType == 0 || log.oType == 4 || log.oType == 5 || log.oType == 10) {
-      txt = log.aAComment!;
-    } else if (log.oType == 7) {
-      txt = 'Extension Bonus  ';
-    } else if (log.oType == 8) {
-      txt =
-          'Registered at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
-    } else if (log.oType == 9) {
-      txt =
-          'Apply at ${DateFormat('hh:mm a').format(DateTime.parse(log.createdAt!).toUtc().add(const Duration(hours: 1)))}';
+          'Acct#${log.zAccountNumber ?? '--'} paid ${Utils.formatPrice2(log.vPaidAmount ?? 0)} at $timeText, $txt';
+    } else if (safeType == 2) {
+      txt = 'Tiered Achievement (lv.${groupNames[safeLevel]})';
+    } else if (safeType == 0 || safeType == 4 || safeType == 5 || safeType == 10) {
+      txt = log.aAComment ?? '';
+    } else if (safeType == 7) {
+      txt = 'Extension Bonus';
+    } else if (safeType == 8) {
+      txt = 'Registered at $timeText';
+    } else if (safeType == 9) {
+      txt = 'Apply at $timeText';
     }
     String maskPhoneNumber(String phone) {
       if (phone.isEmpty || phone.length < 6) {
@@ -953,7 +1071,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: maskPhoneNumber(log.pPhone!),
+                        text: maskPhoneNumber(log.pPhone ?? ''),
                         style: TextStyle(color: ThemeUtils.getTextColor(context)),
                       ),
                       if(log.nBorrowSn != null && log.nBorrowSn!.isNotEmpty)
@@ -1046,14 +1164,14 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                   //   Gaps.empty,
                   // Gaps.hGap4,
                   Text(
-                    log.hCommissionAmount!= null && log.hCommissionAmount! >= 0 ? "+${log.hCommissionAmount}" : "${log.hCommissionAmount}",
+                    _formatSignedAmount(log.hCommissionAmount ?? 0),
                     style: TextStyle(
-                      color: typeColors[log.oType!],
+                      color: typeColors[safeType],
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Gaps.hGap4,
-                  Icon(typeIcons[log.oType!], size: 14, color: typeColors[log.oType!],),
+                  Icon(typeIcons[safeType], size: 14, color: typeColors[safeType],),
                   
                 ],
               ),

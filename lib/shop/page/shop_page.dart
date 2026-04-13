@@ -131,9 +131,6 @@ class _ShopPageState extends State<ShopPage>
     final String today = _formatTodayAsIntDate();
     final String showDate = notificationShowDate.toString();
 
-    if (showDate != today) {
-      return;
-    }
 
     final String? cachedShownDate =
         await app_cache.Cache().getString(_kShopNotificationShownDateKey);
@@ -148,29 +145,135 @@ class _ShopPageState extends State<ShopPage>
     await showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('Announcement'),
-          content: SingleChildScrollView(
+        final List<String> tips = notificationData
+            .where((item) => item.trim().isNotEmpty)
+            .toList();
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                colors: [ThemeUtils.getBackgroundColor(context)!, ThemeUtils.getBackgroundColor(context)!],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: notificationData
-                  .where((item) => item.trim().isNotEmpty)
-                  .map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text('• $item'),
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3F7BFF),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.campaign, color: Colors.white, size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Announcement',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(dialogContext).size.height * 0.45,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: tips.isEmpty
+                          ? const [
+                              Text(
+                                'No content.',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ]
+                          : tips
+                              .map(
+                                (item) => Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: const Color(0xFFD9E5FF),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2),
+                                        child: Icon(
+                                          Icons.circle,
+                                          size: 8,
+                                          color: Color(0xFF3F7BFF),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            height: 1.45,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
                     ),
-                  )
-                  .toList(),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FilledButton.icon(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    icon: const Icon(Icons.check_circle_outline, size: 18),
+                    label: const Text('Got it'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('OK'),
-            ),
-          ],
         );
       },
     );

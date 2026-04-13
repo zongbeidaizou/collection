@@ -109,6 +109,33 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
   String _phoneFilterKeyword = '';
   bool _isLoading = false;
   late int _maxPage;
+  bool _isAnalysisMode = false;
+  DateTimeRange? _analysisDateRange;
+  int? _analysisBonusType;
+
+  DateTimeRange _currentWeekRange() {
+    final DateTime now = DateTime.now();
+    final DateTime monday = now.subtract(Duration(days: now.weekday - 1));
+    final DateTime sunday = monday.add(const Duration(days: 6));
+    return DateTimeRange(
+      start: DateTime(monday.year, monday.month, monday.day),
+      end: DateTime(sunday.year, sunday.month, sunday.day),
+    );
+  }
+
+  String _formatApiDate(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
+
+  Future<void> _requestAnalysisData({bool showLoading = true}) async {
+    final DateTimeRange range = _analysisDateRange ?? _currentWeekRange();
+    await _accountRecordListPresenter.index(
+      1,
+      showLoading,
+      keyword: widget.searchKeyword,
+      startDate: _formatApiDate(range.start),
+      endDate: _formatApiDate(range.end),
+      bonusType: _analysisBonusType,
+    );
+  }
   @override
   AccountRecordListPresenter createPresenter() {
     _accountRecordListPresenter = AccountRecordListPresenter();
@@ -172,6 +199,10 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       _list.clear();
       _currentPage = 1;
     });
+    if (_isAnalysisMode) {
+      await _requestAnalysisData(showLoading: true);
+      return;
+    }
     _accountRecordListPresenter.index(1, true, keyword: widget.searchKeyword);
   }
 
@@ -201,6 +232,219 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
       final String normalizedPhone = _normalizePhone(phone);
       return normalizedPhone.contains(_phoneFilterKeyword);
     }).toList();
+  }
+
+  List<CommissionData> _getAnalysisList() {
+    return _list.where((log) {
+      final DateTime? createdAt = DateTime.tryParse(log.createdAt ?? '');
+      if (createdAt == null) {
+        return false;
+      }
+
+      if (_analysisDateRange != null) {
+        final DateTime start = DateTime(
+          _analysisDateRange!.start.year,
+          _analysisDateRange!.start.month,
+          _analysisDateRange!.start.day,
+        );
+        final DateTime end = DateTime(
+          _analysisDateRange!.end.year,
+          _analysisDateRange!.end.month,
+          _analysisDateRange!.end.day,
+          23,
+          59,
+          59,
+        );
+        if (createdAt.isBefore(start) || createdAt.isAfter(end)) {
+          return false;
+        }
+      }
+
+      if (_analysisBonusType != null && log.oType != _analysisBonusType) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
+  Future<void> _pickAnalysisDateRange() async {
+    final DateTime now = DateTime.now();
+    final DateTime minSelectableDate =
+        DateTime(now.year, now.month - 2, now.day);
+    final DateTime firstDate = DateTime(
+      minSelectableDate.year,
+      minSelectableDate.month,
+      minSelectableDate.day,
+    );
+    final DateTime lastDate = DateTime(now.year + 1, 12, 31);
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialDateRange: _analysisDateRange,
+    );
+    if (picked == null || !mounted) return;
+
+    if (picked.start.isBefore(firstDate)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cannot select dates earlier than 2 months ago.'),
+        ),
+      );
+      return;
+    }
+
+    final int rangeDays = picked.end.difference(picked.start).inDays + 1;
+    if (rangeDays > 31) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Time range cannot exceed 31 days.'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _analysisDateRange = picked;
+      _list.clear();
+      _currentPage = 1;
+    });
+    await _requestAnalysisData(showLoading: true);
+  }
+
+  String _analysisRangeLabel() {
+    if (_analysisDateRange == null) {
+      return 'All dates';
+    }
+    return '${DateFormat('yyyy-MM-dd').format(_analysisDateRange!.start)} ~ ${DateFormat('yyyy-MM-dd').format(_analysisDateRange!.end)}';
+  }
+
+  Widget _buildAnalysisModeView() {
+    final List<CommissionData> analysisList = _getAnalysisList();
+    final int totalAmount = analysisList.fold<int>(
+      0,
+      (sum, item) => sum + (item.hCommissionAmount ?? 0),
+    );
+    final Map<int, Map<String, int>> typeSummary = {};
+    for (final item in analysisList) {
+      final int type = item.oType ?? 0;
+      typeSummary[type] ??= {'count': 0, 'amount': 0};
+      typeSummary[type]!['count'] = (typeSummary[type]!['count'] ?? 0) + 1;
+      typeSummary[type]!['amount'] =
+          (typeSummary[type]!['amount'] ?? 0) + (item.hCommissionAmount ?? 0);
+    }
+
+    final List<MapEntry<int, Map<String, int>>> sortedSummary =
+        typeSummary.entries.toList()
+          ..sort((a, b) => a.key.compareTo(b.key));
+
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed: _pickAnalysisDateRange,
+                      icon: const Icon(Icons.date_range),
+                      label: Text(_analysisRangeLabel()),
+                    ),
+                    DropdownButton<int?>(
+                      value: _analysisBonusType,
+                      onChanged: (value) async {
+                        setState(() {
+                          _analysisBonusType = value;
+                          _list.clear();
+                          _currentPage = 1;
+                        });
+                        await _requestAnalysisData(showLoading: true);
+                      },
+                      items: [
+                        const DropdownMenuItem<int?>(
+                          value: null,
+                          child: Text('All bonus types'),
+                        ),
+                        ...List.generate(typeDescriptions.length, (index) {
+                          return DropdownMenuItem<int?>(
+                            value: index,
+                            child: Text(typeDescriptions[index]),
+                          );
+                        }),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        setState(() {
+                          _analysisDateRange = _currentWeekRange();
+                          _analysisBonusType = null;
+                          _list.clear();
+                          _currentPage = 1;
+                        });
+                        await _requestAnalysisData(showLoading: true);
+                      },
+                      child: const Text('Reset'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Summary', style: Theme.of(context).textTheme.titleMedium),
+                        const SizedBox(height: 6),
+                        Text('Records: ${analysisList.length}'),
+                        Text(
+                          'Total bonus: ${totalAmount >= 0 ? '+' : ''}$totalAmount',
+                          style: TextStyle(
+                            color: totalAmount >= 0 ? Colors.green : Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ...sortedSummary.map((entry) {
+                          final int type = entry.key;
+                          final int count = entry.value['count'] ?? 0;
+                          final int amount = entry.value['amount'] ?? 0;
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              '${typeDescriptions[type]}: $count items, ${amount >= 0 ? '+' : ''}$amount',
+                              style: TextStyle(color: typeColors[type]),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (analysisList.isEmpty)
+          const SliverFillRemaining(
+            child: Center(child: Text('No matched records')),
+          )
+        else
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, index) => _buildItem(analysisList[index], index),
+              childCount: analysisList.length,
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -332,16 +576,30 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 ),
               ),
               actions: <Widget>[
-                // IconButton(
-                //   tooltip: 'mark all as read',
-                //   onPressed: () {
-                //     _accountRecordListPresenter.markAsRead(true);
-                //   },
-                //   icon: Icon(
-                //     Icons.auto_awesome_outlined,
-                //     color: Colors.white,
-                //   ),
-                // ),
+                IconButton(
+                  tooltip: 'Analysis Mode',
+                  onPressed: () async {
+                    final bool nextMode = !_isAnalysisMode;
+                    if (nextMode) {
+                      setState(() {
+                        _isAnalysisMode = true;
+                        _analysisDateRange = _currentWeekRange();
+                        _analysisBonusType = null;
+                        _list.clear();
+                        _currentPage = 1;
+                      });
+                      await _requestAnalysisData(showLoading: true);
+                      return;
+                    }
+                    setState(() {
+                      _isAnalysisMode = false;
+                    });
+                  },
+                  icon: Icon(
+                    _isAnalysisMode ? Icons.view_list : Icons.find_replace,
+                    color: Colors.white,
+                  ),
+                ),
                 IconButton(
                   tooltip: 'Search',
                   onPressed: () {
@@ -355,32 +613,38 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
               ],
             )
           : null,
-      body: NotificationListener(
-        onNotification: (ScrollNotification note) {
-          if (note.metrics.pixels == note.metrics.maxScrollExtent) {
-            _loadMore();
-          }
-          return true;
-        },
-        child: RefreshIndicator(
-          onRefresh: _onRefresh,
-          displacement: 20.0,
-          child: Builder(
-            builder: (_) {
-              final displayList = _getDisplayList();
-              return CustomScrollView(
-                slivers: displayList.isNotEmpty
-                    ? _buildGroups(displayList)
-                : [
-                    const SliverFillRemaining(
-                        child: Center(
-                            child: Text('no data, search by phone or sn')))
-                  ],
-              );
-            },
-          ),
-        ),
-      ),
+      body: _isAnalysisMode
+          ? RefreshIndicator(
+              onRefresh: _onRefresh,
+              displacement: 20.0,
+              child: _buildAnalysisModeView(),
+            )
+          : NotificationListener(
+              onNotification: (ScrollNotification note) {
+                if (note.metrics.pixels == note.metrics.maxScrollExtent) {
+                  _loadMore();
+                }
+                return true;
+              },
+              child: RefreshIndicator(
+                onRefresh: _onRefresh,
+                displacement: 20.0,
+                child: Builder(
+                  builder: (_) {
+                    final displayList = _getDisplayList();
+                    return CustomScrollView(
+                      slivers: displayList.isNotEmpty
+                          ? _buildGroups(displayList)
+                          : [
+                              const SliverFillRemaining(
+                                  child: Center(
+                                      child: Text('no data, search by phone or sn')))
+                            ],
+                    );
+                  },
+                ),
+              ),
+            ),
     );
   }
 

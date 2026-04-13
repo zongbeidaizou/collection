@@ -31,14 +31,28 @@ class AccountRecordListPresenter extends BasePagePresenter<AccountRecordListMvpV
     });
   }
 
-  Future<void> index(int currentPage, bool isShowDialog, {String keyword = ''}) async {
+  Future<void> index(
+    int currentPage,
+    bool isShowDialog, {
+    String keyword = '',
+    String? startDate,
+    String? endDate,
+    int? bonusType,
+  }) async {
     if (keyword == 'JJJJJJJJJJJ') {
-      return ;
+      return;
     }
     List<CommissionData> _list = <CommissionData>[];
-    CommissionEntity _data = CommissionEntity() ;
+    CommissionEntity _data = CommissionEntity();
+    final Map<String, dynamic> queryParameters = {
+      'page': currentPage,
+      'keyword': keyword,
+      if (startDate != null && startDate.isNotEmpty) 'start_date': startDate,
+      if (endDate != null && endDate.isNotEmpty) 'end_date': endDate,
+      if (bonusType != null) 'o_type': bonusType,
+    };
     //这个地方如果写isShow=true会报错'package:flutter/src/widgets/navigator.dart': Failed assertion: line 5350 po
-    await requestNetwork<CommissionEntity>(Method.get, url: HttpApi.commission, queryParameters:{"page": currentPage,  'keyword': keyword}, isShow: isShowDialog, onSuccess: (data) async {
+    await requestNetwork<CommissionEntity>(Method.get, url: HttpApi.commission, queryParameters: queryParameters, isShow: isShowDialog, onSuccess: (data) async {
       view.getContext().read<UserProvider>().setUserEntity(data!.other!);
       view.getContext().read<RefreshProvider>().setUserEntity(data!.other!);
       if (data != null) {

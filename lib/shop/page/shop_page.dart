@@ -1179,7 +1179,7 @@ class _ShopPageState extends State<ShopPage>
     final todayOutCount = profile?.dBTodayOutCount ?? 0; //今日移走案件数
     final todayAdditionCount = profile?.cDTodayAdditionCount ?? 0; //今日管理员新增案件数
     final weekCouponLeft = profile?.cLWeekCouponLeftCnt ?? 0;
-    final weekExtendCnt = profile?.cNWeekExtendCnt ?? 0;
+    final weekExtendCnt = profile?.cMWeekExtendLeftCnt ?? 0;
     final weekRetainLeft = profile?.cPWeekRetainLeftCnt ?? 0;
     final weekReceiveLeft = profile?.cQWeekReceiveLeftCnt ?? 0;
     final weekWaLeft = profile?.cJWeekWaLeftCnt ?? 0;

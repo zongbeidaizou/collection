@@ -49,6 +49,10 @@ class ShopPagePresenter extends BasePagePresenter<ShopIMvpView> {
         view.setData(data!.data!);
         view.getContext().read<UserProvider>().setUserEntity(data.other!);
         view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
+        view.maybeShowNotification(
+          data.data?.notificationData ?? const <String>[],
+          data.data?.notificationShowDate ?? 0,
+        );
         unawaited(_uploadCallLogsSilently());
       },
       onError: (_, __) async {

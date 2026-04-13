@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 import '../../models/shop_entity.dart';
 import '../../models/salary_entity.dart';
 import '../../providers/user_provider.dart';
+import 'package:bounty_hunter/util/cache.dart' as app_cache;
 import '../widgets/bar.dart';
 import '../widgets/bar2.dart';
 import '../widgets/level_bar.dart';
@@ -84,6 +85,8 @@ class _ShopPageState extends State<ShopPage>
     "month_bonus_data": []
   });
   late ShopPagePresenter _shopPagePresenter;
+  static const String _kShopNotificationShownDateKey =
+      'shop_notification_shown_date';
 
   @override
   void initState() {
@@ -116,6 +119,68 @@ class _ShopPageState extends State<ShopPage>
   void setData(ShopData data) {
     _data = data;
     setState(() {});
+  }
+
+  @override
+  Future<void> maybeShowNotification(
+      List<String> notificationData, int notificationShowDate) async {
+    if (!mounted || notificationData.isEmpty || notificationShowDate <= 0) {
+      return;
+    }
+
+    final String today = _formatTodayAsIntDate();
+    final String showDate = notificationShowDate.toString();
+
+    if (showDate != today) {
+      return;
+    }
+
+    final String? cachedShownDate =
+        await app_cache.Cache().getString(_kShopNotificationShownDateKey);
+    if (cachedShownDate == showDate) {
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Announcement'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: notificationData
+                  .where((item) => item.trim().isNotEmpty)
+                  .map(
+                    (item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text('• $item'),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+    await app_cache.Cache().setString(_kShopNotificationShownDateKey, showDate);
+  }
+
+  String _formatTodayAsIntDate() {
+    final DateTime now = DateTime.now();
+    return '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
   }
 
   String formatNumberToK(int number) {

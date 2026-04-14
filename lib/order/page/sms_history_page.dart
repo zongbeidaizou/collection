@@ -321,6 +321,11 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
       });
       // 显示模板选择对话框
       if (type != 2) {
+        if(type == 1) {
+          await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:24:${record.id}:0');
+        } else if(type == 3) {
+          await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:22:${record.id}:0');
+        }
         // 在 showModalBottomSheet 外部创建状态变量，确保在重建时保持
         int? expandedIndex;
         final CollectionLogOtherHJSmsTemplate? selectedTemplate =
@@ -368,6 +373,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
         );
         if (selectedTemplate != null) {
           if (type == 1) {
+            await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:28:${record.id}:${selectedTemplate.id}');
             // 启动WhatsApp
             final bool result = await Utils.launchWhatsAppURL(
                 '234${record.address!}',
@@ -392,6 +398,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
               setState(() {});
             }
           } else if (type == 3) {
+            await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:29:${record.id}:${selectedTemplate.id}');
             // 启动Sms
             final bool result = await launch(
                 'sms:${record.address}?body=${selectedTemplate.dTemplate}');
@@ -418,6 +425,7 @@ class _SmsHistoryPageState extends State<SmsHistoryPage>
         }
       } else if (type == 2) {
         // 启动Call
+        await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:23:${record.id}:0');
         final url = 'tel:${record.address}';
         if (await canLaunch(url)) {
           final bool result = await launch(url);

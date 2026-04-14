@@ -185,7 +185,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
           url: HttpApi.marketingStore,
           params: formData2, onSuccess: (data) async {
         SpUtil.remove('marketing_detail_logs');
-      }, onError: (_, __) async {});
+      }, onError: (_, __) async {},isShow: false);
     }
 
     final List<String>? actionContact = SpUtil.getStringList('action_contact');
@@ -219,7 +219,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
         SpUtil.remove('action_sms_history');
         SpUtil.remove('contactWeights');
         SpUtil.remove('contactWeights2');
-      }, onError: (_, __) async {});
+      }, onError: (_, __) async {},isShow: false);
     }
   }
 

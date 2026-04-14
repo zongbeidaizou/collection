@@ -192,6 +192,7 @@ class _ContactDialogState extends State<ContactDialog> {
                           }
                           final text = phones.join(',');
                           Clipboard.setData(ClipboardData(text: text));
+                          Cache().appendToStringList('app_actions','${widget.collectionOrderId}:31:${_selectedContactIndices.map((index) => widget.contactList[index].id).join(',')}:0');
                           showToast('${phones.length} phone numbers copied');
                           // 退出选择模式
                           setState(() {
@@ -227,6 +228,7 @@ class _ContactDialogState extends State<ContactDialog> {
                         ),
                       ),
                       onPressed: () {
+                        Cache().appendToStringList('app_actions','${widget.collectionOrderId}:30:0:0');
                         final lines = widget.contactList
                             .map((c) =>
                                 '${c.fName?.trim() ?? ''} ${c.gPhone?.trim() ?? ''}'
@@ -345,6 +347,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
     }
 
     try {
+      await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:35:${widget.contact.id}:0');
       //日期格式类似于 Dec 16
       final date = DateFormat('MMM dd').format(DateTime.now());
       await _contactChannel.invokeMethod('addContact', {
@@ -881,15 +884,21 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
       setState(() {
         method = type;
       });
-
+      
+      String actionId = '';
       // 记录操作来源
       if (type == 1) {
         _lastActionSource = 'whatsapp';
+        actionId = '34';
       } else if (type == 2) {
         _lastActionSource = 'call';
+        actionId = '33';
       } else if (type == 3) {
         _lastActionSource = 'sms';
+        actionId = '32';
       }
+      await Cache().appendToStringList('app_actions',
+          '${widget.collectionOrderId}:$actionId:${widget.contact.id}:0');
 
       // 显示模板选择对话框
       if (type != 2) {
@@ -987,6 +996,8 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                                   return _TemplateItem(
                                     template: template,
                                     isExpanded: isExpanded,
+                                    collectionOrderId: widget.collectionOrderId,
+                                    contactId: widget.contact.id ?? 0,
                                     onSelect: () => Navigator.pop(context, template),
                                     onToggleExpand: () {
                                       setState(() {
@@ -1014,6 +1025,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
 
         if (selectedTemplate != null) {
           if (type == 1) {
+            await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:38:${widget.contact.id}:${selectedTemplate.id}');
             // 启动WhatsApp
             final bool result = await Utils.launchWhatsAppURL(
                 '234${widget.contact.gPhone!}',
@@ -1038,6 +1050,7 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
               setState(() {});
             }
           } else if (type == 3) {
+            await Cache().appendToStringList('app_actions','${widget.collectionOrderId}:39:${widget.contact.id}:${selectedTemplate.id}');
             // 启动Sms
             final bool result = await launch(
                 'sms:${widget.contact.gPhone}?body=${selectedTemplate.dTemplate}');
@@ -1549,13 +1562,16 @@ class _TemplateItem extends StatelessWidget {
     required this.isExpanded,
     required this.onSelect,
     required this.onToggleExpand,
+    required this.collectionOrderId,
+    required this.contactId,
   });
 
   final CollectionLogOtherHJSmsTemplate template;
   final bool isExpanded;
   final VoidCallback onSelect;
   final VoidCallback onToggleExpand;
-
+  final int collectionOrderId;
+  final int contactId;
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDark;
@@ -1610,6 +1626,7 @@ class _TemplateItem extends StatelessWidget {
                     onPressed: () {
                       final text = template.dTemplate;
                       if (text != null && text.isNotEmpty) {
+                        Cache().appendToStringList('app_actions','$collectionOrderId:36:$contactId:${template.id}');
                         Clipboard.setData(ClipboardData(text: text));
                         showToast(
                           'Message copied',

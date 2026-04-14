@@ -311,6 +311,11 @@ CollectionLogOther $CollectionLogOtherFromJson(Map<String, dynamic> json) {
   if (lastContactFetchTime != null) {
     collectionLogOther.lastContactFetchTime = lastContactFetchTime;
   }
+  final List<int>? overdues = (json['overdues'] as List<dynamic>?)?.map(
+          (e) => jsonConvert.convert<int>(e) as int).toList();
+  if (overdues != null) {
+    collectionLogOther.overdues = overdues;
+  }
   return collectionLogOther;
 }
 
@@ -331,6 +336,7 @@ Map<String, dynamic> $CollectionLogOtherToJson(CollectionLogOther entity) {
       entity.hJSmsTemplate?.map((v) => v.toJson()).toList();
   data['other'] = entity.other?.toJson();
   data['last_contact_fetch_time'] = entity.lastContactFetchTime;
+  data['overdues'] = entity.overdues;
   return data;
 }
 
@@ -349,6 +355,7 @@ extension CollectionLogOtherExtension on CollectionLogOther {
     List<CollectionLogOtherHJSmsTemplate>? hJSmsTemplate,
     CollectionOrderOther? other,
     String? lastContactFetchTime,
+    List<int>? overdues,
   }) {
     return CollectionLogOther()
       ..avatar = avatar ?? this.avatar
@@ -364,8 +371,8 @@ extension CollectionLogOtherExtension on CollectionLogOther {
           this.hJSmsTemplateNewestUpdatedAt
       ..hJSmsTemplate = hJSmsTemplate ?? this.hJSmsTemplate
       ..other = other ?? this.other
-      ..lastContactFetchTime = lastContactFetchTime ??
-          this.lastContactFetchTime;
+      ..lastContactFetchTime = lastContactFetchTime ?? this.lastContactFetchTime
+      ..overdues = overdues ?? this.overdues;
   }
 }
 

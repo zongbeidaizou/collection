@@ -102,6 +102,7 @@ class CollectionLogOther {
   CollectionOrderOther? other;
 	@JSONField(name: 'last_contact_fetch_time')
 	String? lastContactFetchTime = '';
+  List<int>? overdues = [];
 
 	CollectionLogOther();
 

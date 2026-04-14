@@ -1092,7 +1092,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 Gaps.hGap4,
                 InkWell(
                   onTap: () {
-                    Cache().appendToStringList('app_actions','${log.id}:74:0:0');
+                    Cache().appendToStringList('app_actions','${log.mCollectionOrderId}:74:0:0');
                     FlutterClipboard.copy(
                         '${log.pPhone ?? ''} - ${log.nBorrowSn ?? ''}');
                   },

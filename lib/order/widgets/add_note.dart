@@ -499,6 +499,7 @@ class _AddNoteState extends State<AddNote>
                   context: context,
                   builder: (context) {
                     return RepaymentBillDialog(
+                      collectionOrderId: widget.orderId,
                       avatar: _avatar,
                       repayInfo: _repayInfo,
                       period: _period,

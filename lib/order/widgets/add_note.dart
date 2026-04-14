@@ -134,6 +134,70 @@ class _AddNoteState extends State<AddNote>
     );
   }
 
+
+
+  Widget _buildOverdueMiniChart() {
+    final List<int> values = _data?.other?.overdues ?? const <int>[];
+    if (values.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    Color colorFor(int overdue) {
+      if (overdue <= 0) return const Color(0xFF2ECC71);
+      if (overdue < 4) return const Color(0xFFF1C40F);
+      if (overdue < 10) return const Color(0xFFE74C3C);
+      return const Color(0xFFC0392B);
+    }
+
+    double heightFor(int overdue) {
+      if (overdue <= 0) return 8;
+      if (overdue < 4) return 14;
+      if (overdue < 10) return 20;
+      return 28;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.42),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          ...values.map(
+            (overdue) => Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 8,
+                    height: heightFor(overdue),
+                    decoration: BoxDecoration(
+                      color: colorFor(overdue),
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    overdue.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -512,6 +576,7 @@ class _AddNoteState extends State<AddNote>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  _buildOverdueMiniChart(),
                   // CircleAvatar(
                   //   // backgroundImage: NetworkImage(_avatar?? '',),
                   //   // backgroundImage:
@@ -538,16 +603,16 @@ class _AddNoteState extends State<AddNote>
                   //   ),
                   // ),
                   // Gaps.hGap10,
-                  Text(_repayInfo?.var8 ?? '',
-                      style: TextStyle(
-                          color: ThemeUtils.getIconColor(context),
-                          fontSize: 18)),
-                          Gaps.hGap10,
-                         if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Excellent') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
-                         if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Excellent') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
-                         if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Good') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
-                         if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Poor') Icon(Icons.thumb_down_outlined, size: 18) else Gaps.empty,
-                         if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Unknown') Icon(Icons.help_outline, size: 18) else Gaps.empty,
+                  // Text(_repayInfo?.var8 ?? '',
+                  //     style: TextStyle(
+                  //         color: ThemeUtils.getIconColor(context),
+                  //         fontSize: 18)),
+                  //         Gaps.hGap10,
+                  //        if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Excellent') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
+                  //        if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Excellent') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
+                  //        if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Good') Icon(Icons.thumb_up_outlined, size: 18) else Gaps.empty,
+                  //        if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Poor') Icon(Icons.thumb_down_outlined, size: 18) else Gaps.empty,
+                  //        if (_repayInfo?.var8 != null && _repayInfo?.var8 == 'Unknown') Icon(Icons.help_outline, size: 18) else Gaps.empty,
                 ],    
               )),
         ),

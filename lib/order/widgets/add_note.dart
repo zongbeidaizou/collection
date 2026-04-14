@@ -229,7 +229,7 @@ class _AddNoteState extends State<AddNote>
   void _startCaseSummaryAutoCollapse() {
     if (_hasCaseSummaryAutoCollapsed) return;
     _caseSummaryAutoCollapseTimer?.cancel();
-    _caseSummaryAutoCollapseTimer = Timer(const Duration(milliseconds: 2500), () {
+    _caseSummaryAutoCollapseTimer = Timer(const Duration(milliseconds: 11500), () {
       if (!mounted) return;
       if (_isCaseSummaryExpanded) {
         setState(() {
@@ -448,6 +448,28 @@ class _AddNoteState extends State<AddNote>
     );
   }
 
+  Widget _buildFinesBadge() {
+    return _finesAmount > 0
+        ? Container(
+            key: const ValueKey('fines_badge'),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(color: Colors.white.withOpacity(0.7)),
+            ),
+            child: Text(
+              '$_finesAmount',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
+  }
+
   Widget _buildCaseSummaryCard() {
     final List<CollectionLogOtherCouponList> couponList =
         _data?.other?.couponList ?? const [];
@@ -574,9 +596,12 @@ class _AddNoteState extends State<AddNote>
                 );
               },
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildOverdueMiniChart(),
+                  const SizedBox(width: 8),
+                  _buildFinesBadge(),
                   // CircleAvatar(
                   //   // backgroundImage: NetworkImage(_avatar?? '',),
                   //   // backgroundImage:

@@ -32,6 +32,7 @@ import '../../util/theme_utils.dart';
 import '../goods_router.dart';
 import '../widgets/goods_delete_bottom_sheet.dart';
 import '../widgets/goods_item.dart';
+import '../../util/cache.dart';
 
 final List<IconData> _iconList = [
   Icons.input,
@@ -403,6 +404,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                     ],
                   ),
                   onTap: () {
+                    Cache().appendToStringList('app_actions','${log.aAAAAABLCollectionOrder?.id}:71:0:0');
                     FlutterClipboard.copy(
                         log.aAAAAABLCollectionOrder!.uPhone!);
                   },
@@ -424,6 +426,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                     textColor: context.isDark ? Colours.dark_button_text : Colors.white,
                     bgColor: Colours.app_main,
                     onTap: () {
+                      Cache().appendToStringList('app_actions','${log.aAAAAABLCollectionOrder?.id}:73:0:0');
                         _showModalBottomSheet(log.aAAAAABLCollectionOrder!);
                     },
                   ),
@@ -436,6 +439,7 @@ class _GoodsListPageState extends State<GoodsListPage>
                     icon: Icon(Icons.move_up,size: 16,color: Colors.white),
                     bgColor: Colors.purple,
                     onTap: () {
+                      Cache().appendToStringList('app_actions','${log.aAAAAABLCollectionOrder?.id}:72:0:0');
                       _receiveOrder(log.aAAAAABLCollectionOrder!);
                     },
                   ),  

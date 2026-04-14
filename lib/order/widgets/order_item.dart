@@ -30,6 +30,7 @@ import 'dart:ui';
 import 'repayment_bill_dialog.dart';
 
 import 'contact_dialog.dart';
+import 'package:bounty_hunter/util/cache.dart' as app_cache;
 
 const MethodChannel _contactChannel = MethodChannel('contact_channel');
 const List<IconData> sourceIcon = [Icons.miscellaneous_services,Icons.loupe, Icons.repeat_one,Icons.move_up];
@@ -182,7 +183,8 @@ class _OrderItemState extends State<OrderItem> {
         .textTheme
         .bodyMedium
         ?.copyWith(fontSize: Dimens.font_sp12,color: isDark ? Colors.white : Colors.black);
-    void _showModalBottomSheet() {
+    void showModalBottomSheet2() {
+      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:1:0:0');
       widget.item.aLLastLog = '';
       final encodedItem = Uri.encodeComponent(widget.item.toString());
       NavigatorUtils.push(context,
@@ -337,7 +339,7 @@ class _OrderItemState extends State<OrderItem> {
         showToast('Adding to contacts is supported on Android only',backgroundColor: Colors.red);
         return;
       }
-
+      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:5:0:0');
       // 弹出输入框，允许用户自定义 label 和 company
       final labelController = TextEditingController(text: 'Collection');
       final companyController = TextEditingController(text: 'Collection');
@@ -402,7 +404,8 @@ class _OrderItemState extends State<OrderItem> {
       }
     }
 
-    Future<void> _retainOrder() async {
+    Future<void> retainOrder() async {
+      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:2:0:0');
       if (widget.item.id == null) {
         showToast('Order ID is missing',backgroundColor: Colors.red);
         return;
@@ -730,6 +733,7 @@ class _OrderItemState extends State<OrderItem> {
                 ),
                 onTap: () {
                   if(widget.source == 'order'){
+                    app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:3:0:0');
                     FlutterClipboard.copy('${widget.item.uPhone!}-${widget.item.tBorrowSn!}');
                   }
                 },
@@ -739,6 +743,7 @@ class _OrderItemState extends State<OrderItem> {
               flex: widget.inList ? 9 : 11,
               child: InkWell(
                 onTap: () {
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:4:0:0');
                   FlutterClipboard.copy(widget.item.vName ?? '');
                 },
                 child: Row(
@@ -932,6 +937,7 @@ class _OrderItemState extends State<OrderItem> {
                   ),
                   if(!widget.inList && widget.source == 'order' && widget.repayInfo?.isBookmarked == 0)
                     InkWell(onTap: () {
+                      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:6:0:0');
                       _bookmarkOrder();
                     }, child: Icon(Icons.bookmark_add_outlined,size: 15,color: Colours.app_main.withOpacity(0.6))),
                   if(!widget.inList && widget.source == 'order' && widget.repayInfo?.isBookmarked == 1)
@@ -1104,7 +1110,7 @@ class _OrderItemState extends State<OrderItem> {
                   if(_isRetained){
                     showToast('Order already retained',backgroundColor: Colors.green);
                   }else{
-                    _retainOrder();
+                    retainOrder();
                   }
                 },
               ),
@@ -1118,7 +1124,7 @@ class _OrderItemState extends State<OrderItem> {
                   bgColor: widget.isLatestClicked ? Colors.deepOrange : Colours.app_main,
                   onTap: () {
                     widget.onCaseDetailTap?.call();
-                    _showModalBottomSheet();
+                    showModalBottomSheet2();
                   },
                 ),
                 if(widget.source == 'receive')
@@ -1147,6 +1153,7 @@ class _OrderItemState extends State<OrderItem> {
                 icon: Icon(Icons.more_vert,
                     size: 15, color: Colors.white),
                 onTap: () async {
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:7:0:0');
                   _showSendTypeDialog();
                 },
               ),
@@ -1160,6 +1167,7 @@ class _OrderItemState extends State<OrderItem> {
                     ? Colors.grey
                     : (isDark ? Colours.dark_app_main : Colours.app_main),
                 onTap: () {
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:8:0:0');
                   if ((widget.period?.lOverdueDays ?? 0) <= 0) {
                     showToast('Case is not overdue, cannot be waived.');
                     return;
@@ -1201,6 +1209,7 @@ class _OrderItemState extends State<OrderItem> {
                         'Will show sms record overdue days: ${widget.showContactDays}');
                     return;
                   }
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:9:0:0');
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -1234,6 +1243,7 @@ class _OrderItemState extends State<OrderItem> {
                         'Will show all contact overdue days: ${widget.showContactDays}');
                     return;
                   }
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:10:0:0');
                   _showContactListModal(allContacts: true);
                 },
               ),
@@ -1245,6 +1255,7 @@ class _OrderItemState extends State<OrderItem> {
                 textColor: isDark ? Colours.dark_button_text : Colors.white,
                 bgColor: isDark ? Colours.dark_app_main : Colours.app_main,
                 onTap: () {
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:12:0:0');
           showDialog<void>(
                             context: context,
                             builder: (context) {
@@ -1254,6 +1265,7 @@ class _OrderItemState extends State<OrderItem> {
                                 period: widget.period,
                                 track: widget.track,
                                 productId: widget.item.aJProductId ?? 1,
+                                collectionOrderId: widget.item.id!,
                               );
                             },
                           );
@@ -1268,6 +1280,7 @@ class _OrderItemState extends State<OrderItem> {
                 icon: Icon(Icons.people_alt_outlined,
                     size: 15, color: Colors.white),
                 onTap: () async {
+                  app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:11:0:0');
                   _showContactListModal();
                 },
               ),

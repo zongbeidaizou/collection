@@ -49,6 +49,8 @@ class CommissionData {
 	int? hCommissionAmount = 0;
 	@JSONField(name: 'i_collection_kpi_id')
 	int? iCollectionKpiId = 0;
+	@JSONField(name: 'm_collection_order_id')
+	int? mCollectionOrderId = 0;
 	@JSONField(name: 'j_rate')
 	double? jRate = 0;
 	@JSONField(name: 'k_level')

@@ -23,6 +23,7 @@ import '../../providers/user_provider.dart';
 import '../../routers/fluro_navigator.dart';
 import '../../widgets/load_image.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../util/cache.dart';
 
 const List<Color> bgColors = [
   Colors.white,
@@ -1091,6 +1092,7 @@ class _AccountRecordListPageState extends State<AccountRecordListPage>
                 Gaps.hGap4,
                 InkWell(
                   onTap: () {
+                    Cache().appendToStringList('app_actions','${log.id}:74:0:0');
                     FlutterClipboard.copy(
                         '${log.pPhone ?? ''} - ${log.nBorrowSn ?? ''}');
                   },

@@ -6,6 +6,7 @@ import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/res/dimens.dart';
 import 'package:bounty_hunter/res/gaps.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:bounty_hunter/util/cache.dart';
 
 class RepaymentBillDialog extends StatelessWidget {
   const RepaymentBillDialog({
@@ -15,6 +16,7 @@ class RepaymentBillDialog extends StatelessWidget {
     required this.period,
     required this.productId,
     this.track,
+    required this.collectionOrderId,
   });
 
   final String? avatar;
@@ -22,6 +24,7 @@ class RepaymentBillDialog extends StatelessWidget {
   final CollectionLogOtherRepayInfo? repayInfo;
   final CollectionLogOtherPeriod? period;
   final CollectionLogOtherTrack? track;
+  final int collectionOrderId;
 
 
   @override
@@ -1447,6 +1450,7 @@ class RepaymentBillDialog extends StatelessWidget {
 
   /// 显示头像放大对话框
   void _showAvatarDialog(BuildContext context, String? avatarUrl) {
+    Cache().appendToStringList('app_actions','$collectionOrderId:13:0:0');
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {

@@ -1384,13 +1384,16 @@ class _OrderItemState extends State<OrderItem> {
     }
   }
 
-  /// 对联系人列表进行排序
+  /// 对联系人列表进行排序。
   ///
-  /// 排序规则：
-  /// 0. lSmsCount == 999 的记录始终排在最前
-  /// 1. 然后按 rWaStatus 优先级排序：40 最前；30/20 最后；其他居中
-  /// 2. 然后按 aAAAAHKContactSmss 的短信条数降序
-  /// 3. 最后按 tWaWeight 降序
+  /// 当前优先级从高到低：
+  /// 1. `lSmsCount == 999` 的记录始终置顶
+  /// 2. `rWaStatus`：40 最前，30/20 最后，其他居中
+  /// 3. `vWaLastAt` 倒序
+  /// 4. `eLastCallTime` 倒序
+  /// 5. 短信数量 `aAAAAHKContactSmss.length` 倒序
+  /// 6. `tWaWeight` 倒序
+  /// 7. `cRelation`：正常值在前，`other` 靠后，空值最后
   ///
   /// [contactList] 需要排序的联系人列表
   /// 返回排序后的联系人列表
@@ -1399,61 +1402,81 @@ class _OrderItemState extends State<OrderItem> {
     final List<CollectionLogOtherContactInfo2Data> sortedList =
         List.from(contactList);
 
+    int compareDesc<T extends Comparable<Object?>>(T a, T b) {
+      return b.compareTo(a);
+    }
+
+    int compareNullableDesc(String? a, String? b) {
+      return compareDesc<String>(a ?? '', b ?? '');
+    }
+
+    int compareDateTimeDesc(String? a, String? b) {
+      final DateTime? aTime = DateTime.tryParse((a ?? '').trim());
+      final DateTime? bTime = DateTime.tryParse((b ?? '').trim());
+
+      if (aTime == null && bTime == null) return 0;
+      if (aTime == null) return 1;
+      if (bTime == null) return -1;
+      return bTime.compareTo(aTime);
+    }
+
+    int statusRank(int status) {
+      if (status == 40) return 0;
+      if (status == 30 || status == 20) return 2;
+      return 1;
+    }
+
+    int relationRank(String? relation) {
+      final String value = (relation ?? '').trim().toLowerCase();
+      if (value.isEmpty) return 2;
+      if (value == 'other') return 1;
+      return 0;
+    }
+
     sortedList.sort((a, b) {
-      final aIsPriority = a.lSmsCount == 999;
-      final bIsPriority = b.lSmsCount == 999;
-      if (aIsPriority && !bIsPriority) {
-        return -1;
+      final bool aIsPriority = a.lSmsCount == 999;
+      final bool bIsPriority = b.lSmsCount == 999;
+      if (aIsPriority != bIsPriority) {
+        return aIsPriority ? -1 : 1;
       }
-      if (!aIsPriority && bIsPriority) {
-        return 1;
+
+
+
+      final String aVWaLastAt = a.aAAAAHLContactWeights?.vWaLastAt ?? '';
+      final String bVWaLastAt = b.aAAAAHLContactWeights?.vWaLastAt ?? '';
+      final int vWaLastAtResult = compareNullableDesc(aVWaLastAt, bVWaLastAt);
+      if (vWaLastAtResult != 0) {
+        return vWaLastAtResult;
+      }
+
+      final String aELastCallTime = a.aAAAAHLContactWeights?.eLastCallTime ?? '';
+      final String bELastCallTime = b.aAAAAHLContactWeights?.eLastCallTime ?? '';
+      final int lastCallResult = compareNullableDesc(aELastCallTime, bELastCallTime);
+      if (lastCallResult != 0) {
+        return lastCallResult;
       }
 
       final int aStatus = a.aAAAAHLContactWeights?.rWaStatus ?? a.rWaStatus ?? 0;
       final int bStatus = b.aAAAAHLContactWeights?.rWaStatus ?? b.rWaStatus ?? 0;
-
-      int statusRank(int status) {
-        if (status == 40) {
-          return 0;
-        }
-        if (status == 30 || status == 20) {
-          return 2;
-        }
-        return 1;
-      }
-
       final int aStatusRank = statusRank(aStatus);
       final int bStatusRank = statusRank(bStatus);
       if (aStatusRank != bStatusRank) {
         return aStatusRank.compareTo(bStatusRank);
       }
       if (aStatus != bStatus) {
-        return bStatus.compareTo(aStatus);
+        return compareDesc(aStatus, bStatus);
       }
 
       final int aSmsCount = a.aAAAAHKContactSmss?.length ?? 0;
       final int bSmsCount = b.aAAAAHKContactSmss?.length ?? 0;
       if (aSmsCount != bSmsCount) {
-        return bSmsCount.compareTo(aSmsCount);
+        return compareDesc(aSmsCount, bSmsCount);
       }
 
       final int aWaWeight = a.aAAAAHLContactWeights?.tWaWeight ?? a.tWaWeight ?? 0;
       final int bWaWeight = b.aAAAAHLContactWeights?.tWaWeight ?? b.tWaWeight ?? 0;
       if (aWaWeight != bWaWeight) {
-        return bWaWeight.compareTo(aWaWeight);
-      }
-
-      // Lowest priority:
-      // empty cRelation -> last, "other" -> second last.
-      int relationRank(String? relation) {
-        final String value = (relation ?? '').trim().toLowerCase();
-        if (value.isEmpty) {
-          return 2;
-        }
-        if (value == 'other') {
-          return 1;
-        }
-        return 0;
+        return compareDesc(aWaWeight, bWaWeight);
       }
 
       final int aRelationRank = relationRank(a.cRelation);

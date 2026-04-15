@@ -175,6 +175,11 @@ MarketingData $MarketingDataFromJson(Map<String, dynamic> json) {
   if (aNApplyAdminId != null) {
     marketingData.aNApplyAdminId = aNApplyAdminId;
   }
+  final String? rStaticsEndAt = jsonConvert.convert<String>(
+      json['r_statics_end_at']);
+  if (rStaticsEndAt != null) {
+    marketingData.rStaticsEndAt = rStaticsEndAt;
+  }
   final List<
       MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = (json['a_a_a_a_a_s_l_telemarketing_detail_logs'] as List<
       dynamic>?)?.map(
@@ -209,6 +214,7 @@ Map<String, dynamic> $MarketingDataToJson(MarketingData entity) {
   data['a_l_flowed_count'] = entity.aLFlowedCount;
   data['a_m_reg_admin_id'] = entity.aMRegAdminId;
   data['a_n_apply_admin_id'] = entity.aNApplyAdminId;
+  data['r_statics_end_at'] = entity.rStaticsEndAt;
   data['a_a_a_a_a_s_l_telemarketing_detail_logs'] =
       entity.aAAAASLTelemarketingDetailLogs?.map((v) => v.toJson()).toList();
   return data;
@@ -235,6 +241,7 @@ extension MarketingDataExtension on MarketingData {
     int? aLFlowedCount,
     int? aMRegAdminId,
     int? aNApplyAdminId,
+    String? rStaticsEndAt,
     List<
         MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs,
   }) {
@@ -260,6 +267,7 @@ extension MarketingDataExtension on MarketingData {
       ..aLFlowedCount = aLFlowedCount ?? this.aLFlowedCount
       ..aMRegAdminId = aMRegAdminId ?? this.aMRegAdminId
       ..aNApplyAdminId = aNApplyAdminId ?? this.aNApplyAdminId
+      ..rStaticsEndAt = rStaticsEndAt ?? this.rStaticsEndAt
       ..aAAAASLTelemarketingDetailLogs = aAAAASLTelemarketingDetailLogs ??
           this.aAAAASLTelemarketingDetailLogs;
   }

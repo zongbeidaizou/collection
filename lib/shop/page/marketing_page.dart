@@ -382,7 +382,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
           item.aAAAASLTelemarketingDetailLogs![0].qEndAt != null &&
           item.aAAAASLTelemarketingDetailLogs![0].qEndAt!.isNotEmpty) {
         qEndAt = item.aAAAASLTelemarketingDetailLogs![0].qEndAt;
-        createdAt = item.aAAAASLTelemarketingDetailLogs![0].createdAt ?? '';
+        createdAt = item.rStaticsEndAt?? '';
       } else if (item.qEndAt != null && item.qEndAt!.isNotEmpty) {
         qEndAt = item.qEndAt;
       }
@@ -392,7 +392,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
           final DateTime endDate = DateTime.parse(qEndAt);
           final DateTime createdDate = DateTime.parse(createdAt);
           dateKey = '${DateFormat('MMM d', 'en_US').format(createdDate)} - ${DateFormat('MMM d', 'en_US').format(endDate)}';
-          dateTime = endDate;
+          dateTime = createdDate;
         } catch (e) {
           dateKey = 'Unknown';
         }
@@ -1258,7 +1258,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    widget.item.aMRegAdminId ==null || widget.item.aMRegAdminId == 0 || widget.item.aMRegAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId ? (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString() : '',
+                                    widget.item.aMRegAdminId ==null || widget.item.aMRegAdminId == 0 || widget.item.aMRegAdminId == context.read<UserProvider>().userEntity.profile!.bAdminId ? (widget.item.aAFirstRegisterBonus! + widget.item.aCSecondRegisterBonus! + widget.item.aEThirdRegisterBonus! + widget.item.aGFourthRegisterBonus! + widget.item.aIFifthRegisterBonus!).toString() : '0',
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color:Colors.red,

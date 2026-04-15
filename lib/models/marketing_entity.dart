@@ -65,7 +65,9 @@ class MarketingData {
 	@JSONField(name: 'a_m_reg_admin_id')
 	int? aMRegAdminId = 0;
 	@JSONField(name: 'a_n_apply_admin_id')
-	int? aNApplyAdminId = 0;    
+	int? aNApplyAdminId = 0;   
+	@JSONField(name: 'r_statics_end_at')
+	String? rStaticsEndAt = '';   
 	@JSONField(name: 'a_a_a_a_a_s_l_telemarketing_detail_logs')
 	List<MarketingDataAAAAASLTelemarketingDetailLogs>? aAAAASLTelemarketingDetailLogs = [];
 

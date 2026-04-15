@@ -1410,21 +1410,7 @@ class _OrderItemState extends State<OrderItem> {
       return compareDesc<String>(a ?? '', b ?? '');
     }
 
-    int compareDateTimeDesc(String? a, String? b) {
-      final DateTime? aTime = DateTime.tryParse((a ?? '').trim());
-      final DateTime? bTime = DateTime.tryParse((b ?? '').trim());
 
-      if (aTime == null && bTime == null) return 0;
-      if (aTime == null) return 1;
-      if (bTime == null) return -1;
-      return bTime.compareTo(aTime);
-    }
-
-    int statusRank(int status) {
-      if (status == 40) return 0;
-      if (status == 30 || status == 20) return 2;
-      return 1;
-    }
 
     int relationRank(String? relation) {
       final String value = (relation ?? '').trim().toLowerCase();
@@ -1434,13 +1420,6 @@ class _OrderItemState extends State<OrderItem> {
     }
 
     sortedList.sort((a, b) {
-      final bool aIsPriority = a.lSmsCount == 999;
-      final bool bIsPriority = b.lSmsCount == 999;
-      if (aIsPriority != bIsPriority) {
-        return aIsPriority ? -1 : 1;
-      }
-
-
 
       final String aVWaLastAt = a.aAAAAHLContactWeights?.vWaLastAt ?? '';
       final String bVWaLastAt = b.aAAAAHLContactWeights?.vWaLastAt ?? '';
@@ -1456,16 +1435,6 @@ class _OrderItemState extends State<OrderItem> {
         return lastCallResult;
       }
 
-      final int aStatus = a.aAAAAHLContactWeights?.rWaStatus ?? a.rWaStatus ?? 0;
-      final int bStatus = b.aAAAAHLContactWeights?.rWaStatus ?? b.rWaStatus ?? 0;
-      final int aStatusRank = statusRank(aStatus);
-      final int bStatusRank = statusRank(bStatus);
-      if (aStatusRank != bStatusRank) {
-        return aStatusRank.compareTo(bStatusRank);
-      }
-      if (aStatus != bStatus) {
-        return compareDesc(aStatus, bStatus);
-      }
 
       final int aSmsCount = a.aAAAAHKContactSmss?.length ?? 0;
       final int bSmsCount = b.aAAAAHKContactSmss?.length ?? 0;
@@ -1487,8 +1456,16 @@ class _OrderItemState extends State<OrderItem> {
 
       return 0;
     });
+    //把aAAAAHLContactWeights?.rWaStatus 为20和30的放到最后
+    final List<CollectionLogOtherContactInfo2Data> sortedList2 = sortedList.where((element) => element.aAAAAHLContactWeights?.rWaStatus == 20 || element.aAAAAHLContactWeights?.rWaStatus == 30).toList();
+    final List<CollectionLogOtherContactInfo2Data> sortedList3 = sortedList.where((element) => element.aAAAAHLContactWeights?.rWaStatus != 20 && element.aAAAAHLContactWeights?.rWaStatus != 30).toList();
+    sortedList3.addAll(sortedList2);
+    //把lSmsCount的放在最前面
+    final List<CollectionLogOtherContactInfo2Data> sortedList4 = sortedList3.where((element) => element.lSmsCount != 999).toList();
+    final List<CollectionLogOtherContactInfo2Data> sortedList5 = sortedList3.where((element) => element.lSmsCount == 999).toList();
+    sortedList5.addAll(sortedList4);
+    return sortedList5;
 
-    return sortedList;
   }
 }
 

@@ -192,7 +192,7 @@ class _ContactDialogState extends State<ContactDialog> {
                           }
                           final text = phones.join(',');
                           Clipboard.setData(ClipboardData(text: text));
-                          Cache().appendToStringList('app_actions','${widget.collectionOrderId}:31:${_selectedContactIndices.map((index) => widget.contactList[index].id).join(',')}:0');
+                          Cache().appendToStringList('app_actions','${widget.collectionOrderId}:31:${_selectedContactIndices.map((index) => widget.contactList[index].id).join('-')}:0');
                           showToast('${phones.length} phone numbers copied');
                           // 退出选择模式
                           setState(() {

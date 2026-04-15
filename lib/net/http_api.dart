@@ -36,4 +36,5 @@ class HttpApi {
   static const String salary = '/collection/salary';
   static const String btCallLogs = '/collection/b-t-call-logs';
   static const String settings = '/collection/settings';
+  static const String hPCollectionAdminActions = '/collection/h-p-collection-admin-actions';
 }

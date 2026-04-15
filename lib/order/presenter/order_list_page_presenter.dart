@@ -181,10 +181,30 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
         if (marketingDetailLogsStr != null)
           'action_str': marketingDetailLogsStr,
       });
-      requestNetwork<CollectionOrderEntity>(Method.post,
+      requestNetwork<dynamic>(Method.post,
           url: HttpApi.marketingStore,
           params: formData2, onSuccess: (data) async {
         SpUtil.remove('marketing_detail_logs');
+      }, onError: (_, __) async {},isShow: false);
+    }
+
+
+    final List<String>? appActions =
+        SpUtil.getStringList('app_actions');
+
+    // 检查是否有需要提交的数据
+    final bool hasDataToSubmit3 = appActions?.isNotEmpty ?? false;
+    if (hasDataToSubmit3) {
+      // 将列表用逗号拼接成字符串
+      final String? appActionsStr = appActions?.join(',');
+      final formData2 = FormData.fromMap({
+        if (appActionsStr != null)
+          'action_str': appActionsStr,
+      });
+      requestNetwork<dynamic>(Method.post,
+          url: HttpApi.hPCollectionAdminActions,
+          params: formData2, onSuccess: (data) async {
+        SpUtil.remove('app_actions');
       }, onError: (_, __) async {},isShow: false);
     }
 
@@ -212,7 +232,7 @@ class OrderListPagePresenter extends BasePagePresenter<OrderListPageIMvpView> {
         if (contactWeights != null) 'contact_weights': contactWeightsStr,
         if (contactWeights2 != null) 'contact_weights2': contactWeights2Str,
       });
-      requestNetwork<Map<String, dynamic>>(Method.post,
+      requestNetwork<dynamic>(Method.post,
           url: HttpApi.qCCollectionNewsAction,
           params: formData2, onSuccess: (data) async {
         SpUtil.remove('action_contact');

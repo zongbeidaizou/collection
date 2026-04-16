@@ -296,6 +296,7 @@ class _OrderPageState extends State<OrderPage>
                       ),
                     ),
                     hintText: 'Search by phone (Local)',
+                    hintStyle: TextStyle(fontSize: 11),
                     suffixIcon: _phoneFilterKeyword.isEmpty
                         ? null
                         : Padding(

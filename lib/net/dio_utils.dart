@@ -128,7 +128,8 @@ class DioUtils {
     CancelToken? cancelToken,
     Options? options,
   }) {
-    return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19867",
+    // return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19867",
+    return _request<T>(method.value, '$url?',
       data: params,
       queryParameters: queryParameters,
       options: options,

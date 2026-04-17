@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bounty_hunter/models/bookmarks_entity.dart';
 import 'package:bounty_hunter/net/net.dart';
+import 'package:bounty_hunter/util/cache.dart';
 import 'package:bounty_hunter/widgets/my_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -318,6 +319,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                           final String phone =
                                               _maskPhone(item.bPhone?.trim() ?? '');
                                           if (phone.isEmpty) return;
+                                          Cache().appendToStringList('app_actions','0:75:0:0');
                                           await Clipboard.setData(
                                               ClipboardData(text: phone));
                                           if (!mounted) return;

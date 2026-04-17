@@ -1483,7 +1483,9 @@ class OrderItemButton extends StatelessWidget {
       required this.text,
       this.onTap,
       this.icon,
-      this.fontSize});
+      this.fontSize,
+      this.onLongPress,
+      this.onDoubleTap});
 
   final Color? bgColor;
   final Color? textColor;
@@ -1491,10 +1493,14 @@ class OrderItemButton extends StatelessWidget {
   final String text;
   final Widget? icon;
   final double? fontSize;
+  final GestureLongPressCallback? onLongPress;
+  final GestureTapCallback? onDoubleTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
+      onDoubleTap: onDoubleTap,
       child: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 2.2),

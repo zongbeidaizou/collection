@@ -51,7 +51,7 @@ class ShopPagePresenter extends BasePagePresenter<ShopIMvpView> {
         view.getContext().read<RefreshProvider>().setUserEntity(data.other!);
         view.maybeShowNotification(
           data.data?.notificationData ?? const <String>[],
-          data.data?.notificationShowDate ?? 0,
+          data.data?.notificationShowDate ?? '',
         );
         unawaited(_uploadCallLogsSilently());
       },

@@ -1,6 +1,7 @@
 import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
 import 'package:bounty_hunter/shop/widgets/bar_marketing.dart';
 import 'package:bounty_hunter/shop/widgets/pie2.dart';
+import 'package:bounty_hunter/shop/widgets/trend.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
 import 'package:bounty_hunter/util/screen_utils.dart';
 import 'package:bounty_hunter/net/net.dart';
@@ -123,13 +124,13 @@ class _ShopPageState extends State<ShopPage>
 
   @override
   Future<void> maybeShowNotification(
-      List<String> notificationData, int notificationShowDate) async {
-    if (!mounted || notificationData.isEmpty || notificationShowDate <= 0) {
+      List<String> notificationData, String notificationShowDate) async {
+    if (!mounted || notificationData.isEmpty || notificationShowDate.isEmpty) {
       return;
     }
 
     final String today = _formatTodayAsIntDate();
-    final String showDate = notificationShowDate.toString();
+    final String showDate = notificationShowDate;
 
 
     final String? cachedShownDate =
@@ -842,6 +843,14 @@ class _ShopPageState extends State<ShopPage>
                 _buildMonthHallOfFame(_data.monthRegBonusData!, 'Monthly Registration Bonus Ranking', type: 2),
                 Gaps.vGap4,
                 _buildMonthHallOfFame(_data.monthApplyBonusData!, 'Monthly Application Bonus Ranking', type: 3),
+                Gaps.vGap4,
+                Container(
+                  margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: LineChartTrend()),
                 Gaps.vGap4,
                 if (_data.showMonthAdditionData!)
                   Column(

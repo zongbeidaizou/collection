@@ -585,31 +585,21 @@ class JsonConvert {
       return data.map<ShopData>((Map<String, dynamic> e) =>
           ShopData.fromJson(e)).toList() as M;
     }
-    if (<ShopDataOther>[] is M) {
-      return data.map<ShopDataOther>((Map<String, dynamic> e) =>
-          ShopDataOther.fromJson(e)).toList() as M;
-    }
-    if (<ShopDataOtherProgress>[] is M) {
-      return data.map<ShopDataOtherProgress>((Map<String, dynamic> e) =>
-          ShopDataOtherProgress.fromJson(e)).toList() as M;
-    }
-    if (<ShopDataOtherProgressLevelProgress>[] is M) {
-      return data.map<ShopDataOtherProgressLevelProgress>((
-          Map<String, dynamic> e) =>
-          ShopDataOtherProgressLevelProgress.fromJson(e)).toList() as M;
-    }
-    if (<ShopDataOtherProgressAmountProgress>[] is M) {
-      return data.map<ShopDataOtherProgressAmountProgress>((
-          Map<String, dynamic> e) =>
-          ShopDataOtherProgressAmountProgress.fromJson(e)).toList() as M;
-    }
-    if (<ShopDataOtherProfile>[] is M) {
-      return data.map<ShopDataOtherProfile>((Map<String, dynamic> e) =>
-          ShopDataOtherProfile.fromJson(e)).toList() as M;
-    }
     if (<ShopDataMonthData>[] is M) {
       return data.map<ShopDataMonthData>((Map<String, dynamic> e) =>
           ShopDataMonthData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthRepayData>[] is M) {
+      return data.map<ShopDataMonthRepayData>((Map<String, dynamic> e) =>
+          ShopDataMonthRepayData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthRegBonusData>[] is M) {
+      return data.map<ShopDataMonthRegBonusData>((Map<String, dynamic> e) =>
+          ShopDataMonthRegBonusData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataMonthApplyBonusData>[] is M) {
+      return data.map<ShopDataMonthApplyBonusData>((Map<String, dynamic> e) =>
+          ShopDataMonthApplyBonusData.fromJson(e)).toList() as M;
     }
     if (<ShopDataWeekCaseData>[] is M) {
       return data.map<ShopDataWeekCaseData>((Map<String, dynamic> e) =>
@@ -630,6 +620,42 @@ class JsonConvert {
     if (<ShopDataMonthAdditionData>[] is M) {
       return data.map<ShopDataMonthAdditionData>((Map<String, dynamic> e) =>
           ShopDataMonthAdditionData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataWeekRegisterData>[] is M) {
+      return data.map<ShopDataWeekRegisterData>((Map<String, dynamic> e) =>
+          ShopDataWeekRegisterData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataWeekApplyData>[] is M) {
+      return data.map<ShopDataWeekApplyData>((Map<String, dynamic> e) =>
+          ShopDataWeekApplyData.fromJson(e)).toList() as M;
+    }
+    if (<ShopDataTrends>[] is M) {
+      return data.map<ShopDataTrends>((Map<String, dynamic> e) =>
+          ShopDataTrends.fromJson(e)).toList() as M;
+    }
+    if (<ShopOther>[] is M) {
+      return data.map<ShopOther>((Map<String, dynamic> e) =>
+          ShopOther.fromJson(e)).toList() as M;
+    }
+    if (<ShopOtherProgress>[] is M) {
+      return data.map<ShopOtherProgress>((Map<String, dynamic> e) =>
+          ShopOtherProgress.fromJson(e)).toList() as M;
+    }
+    if (<ShopOtherProfile>[] is M) {
+      return data.map<ShopOtherProfile>((Map<String, dynamic> e) =>
+          ShopOtherProfile.fromJson(e)).toList() as M;
+    }
+    if (<ShopOtherMonthAdditionData>[] is M) {
+      return data.map<ShopOtherMonthAdditionData>((Map<String, dynamic> e) =>
+          ShopOtherMonthAdditionData.fromJson(e)).toList() as M;
+    }
+    if (<ShopOtherAdditionBonus>[] is M) {
+      return data.map<ShopOtherAdditionBonus>((Map<String, dynamic> e) =>
+          ShopOtherAdditionBonus.fromJson(e)).toList() as M;
+    }
+    if (<ShopOtherFines>[] is M) {
+      return data.map<ShopOtherFines>((Map<String, dynamic> e) =>
+          ShopOtherFines.fromJson(e)).toList() as M;
     }
     if (<WaEntity>[] is M) {
       return data.map<WaEntity>((Map<String, dynamic> e) =>
@@ -824,19 +850,26 @@ class JsonConvertClassCollection {
     (SettingDataProducts).toString(): SettingDataProducts.fromJson,
     (ShopEntity).toString(): ShopEntity.fromJson,
     (ShopData).toString(): ShopData.fromJson,
-    (ShopDataOther).toString(): ShopDataOther.fromJson,
-    (ShopDataOtherProgress).toString(): ShopDataOtherProgress.fromJson,
-    (ShopDataOtherProgressLevelProgress)
-        .toString(): ShopDataOtherProgressLevelProgress.fromJson,
-    (ShopDataOtherProgressAmountProgress)
-        .toString(): ShopDataOtherProgressAmountProgress.fromJson,
-    (ShopDataOtherProfile).toString(): ShopDataOtherProfile.fromJson,
     (ShopDataMonthData).toString(): ShopDataMonthData.fromJson,
+    (ShopDataMonthRepayData).toString(): ShopDataMonthRepayData.fromJson,
+    (ShopDataMonthRegBonusData).toString(): ShopDataMonthRegBonusData.fromJson,
+    (ShopDataMonthApplyBonusData).toString(): ShopDataMonthApplyBonusData
+        .fromJson,
     (ShopDataWeekCaseData).toString(): ShopDataWeekCaseData.fromJson,
     (ShopDataWeekBonusData).toString(): ShopDataWeekBonusData.fromJson,
     (ShopDataMonthCaseData).toString(): ShopDataMonthCaseData.fromJson,
     (ShopDataMonthBonusData).toString(): ShopDataMonthBonusData.fromJson,
     (ShopDataMonthAdditionData).toString(): ShopDataMonthAdditionData.fromJson,
+    (ShopDataWeekRegisterData).toString(): ShopDataWeekRegisterData.fromJson,
+    (ShopDataWeekApplyData).toString(): ShopDataWeekApplyData.fromJson,
+    (ShopDataTrends).toString(): ShopDataTrends.fromJson,
+    (ShopOther).toString(): ShopOther.fromJson,
+    (ShopOtherProgress).toString(): ShopOtherProgress.fromJson,
+    (ShopOtherProfile).toString(): ShopOtherProfile.fromJson,
+    (ShopOtherMonthAdditionData).toString(): ShopOtherMonthAdditionData
+        .fromJson,
+    (ShopOtherAdditionBonus).toString(): ShopOtherAdditionBonus.fromJson,
+    (ShopOtherFines).toString(): ShopOtherFines.fromJson,
     (WaEntity).toString(): WaEntity.fromJson,
     (WaData).toString(): WaData.fromJson,
     (WacodeEntity).toString(): WacodeEntity.fromJson,

@@ -2,121 +2,297 @@
   "success": true,
   "data": {
     "web_url": "",
-    "other": {
-      "progress": {
-        "points": [0, 0.02, 0.05, 0.1, 1],
-        "levelProgress": [{
-          "level": "",
-          "type": 0
-        }, {
-          "level": 1,
-          "type": 1
-        }, {
-          "level": 2,
-          "type": 1
-        }, {
-          "level": 3,
-          "type": 1
-        }, {
-          "level": 4,
-          "type": 1
-        }],
-        "amountProgress": [{
-          "amount": 0,
-          "type": 0
-        }, {
-          "amount": 0,
-          "type": 0
-        }, {
-          "amount": 0,
-          "type": 0
-        }, {
-          "amount": 0,
-          "type": 0
-        }, {
-          "amount": 0,
-          "type": 0
-        }],
-        "amountProgress2": [0, 0, 0, 0, 0],
-        "currentLevel": 1,
-        "nextAmount": 0,
-        "nextLevel": 1,
-        "currentKey": 0
-      },
-      "profile": {
-        "id": 2,
-        "a_name": "u503au52a1u6536u5272u8005u56e2u961f(u5185uff09-2",
-        "b_admin_id": 3,
-        "c_collection_agency_id": 92,
-        "d_collection_group_id": 25,
-        "e_collection_stages": "94",
-        "f_status": 1,
-        "g_comment": "123",
-        "h_collection_ing_order_count": 0,
-        "i_today_current_kpi_level": 1,
-        "j_today_init_amount": 0,
-        "k_current_new_count": 0,
-        "l_current_negotiating_count": 0,
-        "m_currrent_promised_count": 0,
-        "n_current_broken_count": 0,
-        "o_current_refused_count": 0,
-        "p_today_current_repay_count": 0,
-        "r_today_current_repay_amount": 0,
-        "t_today_lv1_commission": 0,
-        "u_today_lv2_commission": 0,
-        "v_today_lv3_commission": 0,
-        "w_today_lv4_commission": 0,
-        "x_today_init_count": 0,
-        "y_first_log_at": null,
-        "z_last_log_at": null,
-        "a_a_month_lv1_commission": null,
-        "a_b_month_lv2_commission": 0,
-        "a_c_month_lv3_commission": null,
-        "a_d_month_lv4_commission": null,
-        "a_e_today_commission_rate": 0,
-        "a_f_last_call_at": null,
-        "a_g_collection_commission_new_count": 0,
-        "a_h_collection_notification_count": null,
-        "a_i_week_repay_count": null,
-        "a_j_week_rank": null,
-        "updated_at": "2025-03-25T09:06:27.000000Z"
-      }
-    },
     "show_month_data": true,
-    "month_data": [{
-      "avatar": "https://api.dasewan.cn/assets/avater4.png",
-      "name": "Tommi",
-      "value": 160200
-    }],
+    "month_data": [
+      {
+        "avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/s122.jpg",
+        "name": "S122",
+        "value": 94736,
+        "addition": 10000,
+        "addition2": 18780
+      }
+    ],
+    "show_month_repay_data": true,
+    "month_repay_data": [
+      {
+        "avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/s122.jpg",
+        "name": "S122",
+        "value": 150,
+        "addition": 30000,
+        "addition2": 0
+      }
+    ],
+    "show_month_reg_bonus_data": true,
+    "month_reg_bonus_data": [
+      {
+        "avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/s120.jpg",
+        "name": "S120",
+        "value": 7100,
+        "addition": 10000,
+        "addition2": 0
+      }
+    ],
+    "show_month_apply_bonus_data": true,
+    "month_apply_bonus_data": [
+      {
+        "avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/s122.jpg",
+        "name": "S122",
+        "value": 10500,
+        "addition": 50000,
+        "addition2": 0
+      }
+    ],
     "show_week_case_data": true,
-    "week_case_data": [{
-      "name": "Tommi",
-      "value": 160200
-    }],
+    "week_case_data": [
+      {
+        "name": "S122",
+        "value": 41,
+        "addition": 15000,
+        "addition2": 0
+      }
+    ],
     "show_week_bonus_data": true,
-    "week_bonus_data": [{
-      "name": "Tommi",
-      "value": 19800,
-      "gradeValues": [945,1540,4760,9340]
-    }],
+    "week_bonus_data": [
+      {
+        "name": "S122",
+        "value": 25132,
+        "gradeValues": [
+          9833,
+          8706,
+          6593,
+          0
+        ],
+        "addition": 15000
+      }
+    ],
     "show_month_case_data": true,
-    "month_case_data": [{
-      "date": "01/03",
-      "value": 12
-    }],
+    "month_case_data": [
+      {
+        "date": "2026-03-17",
+        "value": 9
+      }
+    ],
     "show_month_bonus_data": true,
-    "month_bonus_data": [{
-      "date": "01/03",
-      "value": 1200
-    }],
+    "month_bonus_data": [
+      {
+        "date": "2026-03-17",
+        "value": 6971
+      }
+    ],
     "show_month_addition_data": true,
-    "month_addition_data": [{
-      "level": "A",
-      "days": 1200,
-      "bonus": 1200,
-      "complete_days": 1200
-    }]
+    "month_addition_data": [
+      {
+        "level": "B",
+        "days": 10,
+        "bonus": 1000,
+        "complete_days": 14
+      }
+    ],
+    "show_week_register_data": true,
+    "week_register_data": [
+      {
+        "name": "S223",
+        "value": 3,
+        "addition": 0
+      }
+    ],
+    "show_week_apply_data": true,
+    "week_apply_data": [
+      {
+        "name": "S120",
+        "value": 2,
+        "addition": 0
+      }
+    ],
+    "notification_data": [
+      "New Versioin Available",
+      "New Versioin Available"
+    ],
+    "notification_show_date": "20260419",
+    "trends": [
+      {
+        "b_hour": 0,
+        "e_repayment_count": 0,
+        "c_action_count": 0
+      }
+    ],
+    "manual_update_at": "",
+    "salary_update_at": "",
+    "daily_update_at": "",
+    "template_update_at": "",
+    "settomg_update_at": ""
   },
-  "other": [],
+  "other": {
+    "progress": {
+      "points": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "counts": [
+        0,
+        5,
+        12,
+        17,
+        28
+      ],
+      "grades": [
+        "BB",
+        "B",
+        "A",
+        "AA",
+        ""
+      ],
+      "commissionRates": [
+        "(1%)",
+        "(1% + \\u20a6\\u200c 300 - \\u20a6\\u200c0)",
+        "(1.5% + \\u20a6\\u200c 1,600 - \\u20a6\\u200c0)",
+        "(2% + \\u20a6\\u200c 400 - \\u20a6\\u200c0)",
+        ""
+      ],
+      "currentGrade": "BB",
+      "currentRate": "1%",
+      "nextGrade": "B",
+      "nextRate": "1%",
+      "more": 1,
+      "currentPoint": 0.2,
+      "nextAdditionBonus": 300
+    },
+    "profile": {
+      "id": 22,
+      "a_name": "S122",
+      "b_admin_id": 22,
+      "c_collection_agency_id": 1,
+      "d_collection_group_id": 103,
+      "e_collection_stages": "93",
+      "f_status": 1,
+      "g_comment": "2",
+      "h_collection_ing_order_count": 0,
+      "i_today_current_kpi_level": 1,
+      "j_today_init_amount": 669650,
+      "k_current_new_count": 16,
+      "l_current_negotiating_count": 15,
+      "m_currrent_promised_count": 0,
+      "n_current_broken_count": 0,
+      "o_current_refused_count": 0,
+      "p_today_current_repay_count": 4,
+      "r_today_current_repay_amount": 114400,
+      "t_today_lv1_commission": 28,
+      "u_today_lv2_commission": 0,
+      "v_today_lv3_commission": 7,
+      "w_today_lv4_commission": 0,
+      "x_today_init_count": 28,
+      "y_first_log_at": "2026-04-16T03:02:18.000000Z",
+      "z_last_log_at": "2026-04-16T03:02:18.000000Z",
+      "a_a_week_lv1_commission": 9833,
+      "a_b_week_lv2_commission": 8706,
+      "a_c_week_lv3_commission": 6593,
+      "a_d_week_lv4_commission": 0,
+      "a_e_today_commission_rate": 1,
+      "a_f_last_call_at": "2026-04-14T14:53:04.000000Z",
+      "a_g_collection_commission_new_count": 0,
+      "a_h_collection_notification_count": 0,
+      "a_i_week_repay_count": 41,
+      "a_j_week_commission": 25132,
+      "a_k_month_repay_count": 150,
+      "a_l_month_commission": 94736,
+      "a_m_today_commission": 1144,
+      "a_n_month_lv1_days": 0,
+      "a_o_month_lv2_days": 14,
+      "a_p_month_lv3_days": 6,
+      "a_q_month_lv4_days": 0,
+      "a_r_today_part_count": 0,
+      "a_s_today_part_amount": 0,
+      "a_t_today_sms_count": 0,
+      "a_u_today_call_count": 0,
+      "a_v_today_log_count": 0,
+      "a_w_week_sms_count": 0,
+      "a_x_week_call_count": 43,
+      "a_y_week_log_count": 144,
+      "b_a_avatar": "https:\\/\\/api.dasewan.cn\\/assets\\/s122.jpg",
+      "a_z_today_no_log_count": 42,
+      "c_a_today_no_call_count": 43,
+      "c_b_last_call": "phone_20260414-155304_08023178037.amr",
+      "c_c_reviewing_count": null,
+      "c_d_today_addition_count": 0,
+      "c_e_today_delete_count": 0,
+      "c_f_week_reg_cnt": 0,
+      "c_g_week_apply_cnt": 1,
+      "c_h_week_waive_left_cnt": 20,
+      "c_i_week_block_left_cnt": 10,
+      "updated_at": "2026-04-16T06:59:15.000000Z",
+      "c_j_week_wa_left_cnt": 19,
+      "c_k_day_wa_left_cnt": 1,
+      "c_l_week_coupon_left_cnt": 5,
+      "c_m_week_extend_left_cnt": 1,
+      "c_n_week_extend_cnt": 99,
+      "c_o_month_extend_cnt": 99,
+      "c_p_week_retain_left_cnt": 5,
+      "c_q_week_receive_left_cnt": 30,
+      "c_r_today_marketing_cnt": 0,
+      "c_s_week_reg_bonus": 0,
+      "c_t_week_apply_bonus": 900,
+      "c_u_month_reg_bonus": 5850,
+      "c_v_month_apply_bonus": 10500,
+      "c_w_month_reg_cnt": 18,
+      "c_x_month_apply_cnt": 13,
+      "c_y_today_receive_count": 0,
+      "c_z_today_retain_count": 7,
+      "d_a_today_system_count": 13,
+      "d_b_today_out_count": 0,
+      "d_c_today_marketing_count": 15,
+      "d_d_other_bonus": 1700,
+      "d_e_week_airtime_bonus": 0,
+      "d_f_week_airtime_cnt": 0,
+      "d_g_month_airtime_bonus": 1855,
+      "d_h_month_airtime_cnt": 2,
+      "d_i_week_airtime2_bonus": 20,
+      "d_j_week_airtime2_cnt": 4,
+      "d_k_month_airtime2_bonus": 20,
+      "d_l_month_airtime2_cnt": 4,
+      "d_m_day_airtime_bonus": 1855,
+      "d_n_day_airtime2_bonus": 20
+    },
+    "monthAdditionData": [
+      {
+        "level": "B",
+        "days": 10,
+        "bonus": 1000,
+        "complete_days": 14
+      }
+    ],
+    "additionBonus": [
+      {
+        "overdue_days": [
+          7,
+          9
+        ],
+        "rate": 5
+      }
+    ],
+    "fines": [
+      {
+        "borrow_count": [
+          0,
+          4
+        ],
+        "fines": [
+          200,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "latestVersion": "5.1"
+  },
   "message": "messages.retrieved"
 }

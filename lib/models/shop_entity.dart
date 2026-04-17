@@ -1,13 +1,16 @@
 import 'package:bounty_hunter/generated/json/base/json_field.dart';
 import 'package:bounty_hunter/generated/json/shop_entity.g.dart';
 import 'dart:convert';
+
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 export 'package:bounty_hunter/generated/json/shop_entity.g.dart';
 
 @JsonSerializable()
 class ShopEntity {
 	bool? success = false;
 	ShopData? data;
-	ShopOther? other;
+	CollectionOrderOther? other;
 	String? message = '';
 
 	ShopEntity();
@@ -33,15 +36,15 @@ class ShopData {
 	@JSONField(name: 'show_month_repay_data')
 	bool? showMonthRepayData = false;
 	@JSONField(name: 'month_repay_data')
-	List<ShopDataMonthRepayData>? monthRepayData = [];
+	List<ShopDataMonthData>? monthRepayData = [];
 	@JSONField(name: 'show_month_reg_bonus_data')
 	bool? showMonthRegBonusData = false;
 	@JSONField(name: 'month_reg_bonus_data')
-	List<ShopDataMonthRegBonusData>? monthRegBonusData = [];
+	List<ShopDataMonthData>? monthRegBonusData = [];
 	@JSONField(name: 'show_month_apply_bonus_data')
 	bool? showMonthApplyBonusData = false;
 	@JSONField(name: 'month_apply_bonus_data')
-	List<ShopDataMonthApplyBonusData>? monthApplyBonusData = [];
+	List<ShopDataMonthData>? monthApplyBonusData = [];
 	@JSONField(name: 'show_week_case_data')
 	bool? showWeekCaseData = false;
 	@JSONField(name: 'week_case_data')
@@ -65,11 +68,11 @@ class ShopData {
 	@JSONField(name: 'show_week_register_data')
 	bool? showWeekRegisterData = false;
 	@JSONField(name: 'week_register_data')
-	List<ShopDataWeekRegisterData>? weekRegisterData = [];
+	List<ShopDataWeekCaseData>? weekRegisterData = [];
 	@JSONField(name: 'show_week_apply_data')
 	bool? showWeekApplyData = false;
 	@JSONField(name: 'week_apply_data')
-	List<ShopDataWeekApplyData>? weekApplyData = [];
+	List<ShopDataWeekCaseData>? weekApplyData = [];
 	@JSONField(name: 'notification_data')
 	List<String>? notificationData = [];
 	@JSONField(name: 'notification_show_date')

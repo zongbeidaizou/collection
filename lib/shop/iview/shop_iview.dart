@@ -7,7 +7,7 @@ abstract class ShopIMvpView implements IMvpView {
 
   void setUser(UserEntity? user);
   void setData(ShopData data);
-  Future<void> maybeShowNotification(List<String> notificationData, int notificationShowDate);
+  Future<void> maybeShowNotification(List<String> notificationData, String notificationShowDate);
   
   bool get isAccessibilityTest;
 }

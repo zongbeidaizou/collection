@@ -1434,6 +1434,12 @@ class _OrderItemState extends State<OrderItem> {
       if (lastCallResult != 0) {
         return lastCallResult;
       }
+      final String aUSmsLastAt = a.aAAAAHLContactWeights?.uSmsLastAt ?? '';
+      final String bUSmsLastAt = b.aAAAAHLContactWeights?.uSmsLastAt ?? '';
+      final int lastSmsResult = compareNullableDesc(aUSmsLastAt, bUSmsLastAt);
+      if (lastSmsResult != 0) {
+        return lastSmsResult;
+      }
 
 
       final int aSmsCount = a.aAAAAHKContactSmss?.length ?? 0;

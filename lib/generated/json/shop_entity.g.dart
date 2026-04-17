@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/generated/json/base/json_convert_content.dart';
 import 'package:bounty_hunter/models/shop_entity.dart';
+import 'package:bounty_hunter/models/collection_order_entity.dart';
+
 
 ShopEntity $ShopEntityFromJson(Map<String, dynamic> json) {
   final ShopEntity shopEntity = ShopEntity();
@@ -11,7 +13,8 @@ ShopEntity $ShopEntityFromJson(Map<String, dynamic> json) {
   if (data != null) {
     shopEntity.data = data;
   }
-  final ShopOther? other = jsonConvert.convert<ShopOther>(json['other']);
+  final CollectionOrderOther? other = jsonConvert.convert<CollectionOrderOther>(
+      json['other']);
   if (other != null) {
     shopEntity.other = other;
   }
@@ -35,7 +38,7 @@ extension ShopEntityExtension on ShopEntity {
   ShopEntity copyWith({
     bool? success,
     ShopData? data,
-    ShopOther? other,
+    CollectionOrderOther? other,
     String? message,
   }) {
     return ShopEntity()
@@ -71,11 +74,10 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
     shopData.showMonthRepayData = showMonthRepayData;
   }
   final List<
-      ShopDataMonthRepayData>? monthRepayData = (json['month_repay_data'] as List<
+      ShopDataMonthData>? monthRepayData = (json['month_repay_data'] as List<
       dynamic>?)
       ?.map(
-          (e) =>
-      jsonConvert.convert<ShopDataMonthRepayData>(e) as ShopDataMonthRepayData)
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
       .toList();
   if (monthRepayData != null) {
     shopData.monthRepayData = monthRepayData;
@@ -86,11 +88,11 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
     shopData.showMonthRegBonusData = showMonthRegBonusData;
   }
   final List<
-      ShopDataMonthRegBonusData>? monthRegBonusData = (json['month_reg_bonus_data'] as List<
-      dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<ShopDataMonthRegBonusData>(
-          e) as ShopDataMonthRegBonusData).toList();
+      ShopDataMonthData>? monthRegBonusData = (json['month_reg_bonus_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
   if (monthRegBonusData != null) {
     shopData.monthRegBonusData = monthRegBonusData;
   }
@@ -100,11 +102,11 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
     shopData.showMonthApplyBonusData = showMonthApplyBonusData;
   }
   final List<
-      ShopDataMonthApplyBonusData>? monthApplyBonusData = (json['month_apply_bonus_data'] as List<
-      dynamic>?)?.map(
-          (e) =>
-      jsonConvert.convert<ShopDataMonthApplyBonusData>(
-          e) as ShopDataMonthApplyBonusData).toList();
+      ShopDataMonthData>? monthApplyBonusData = (json['month_apply_bonus_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
   if (monthApplyBonusData != null) {
     shopData.monthApplyBonusData = monthApplyBonusData;
   }
@@ -188,11 +190,12 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
     shopData.showWeekRegisterData = showWeekRegisterData;
   }
   final List<
-      ShopDataWeekRegisterData>? weekRegisterData = (json['week_register_data'] as List<
-      dynamic>?)?.map(
+      ShopDataWeekCaseData>? weekRegisterData = (json['week_register_data'] as List<
+      dynamic>?)
+      ?.map(
           (e) =>
-      jsonConvert.convert<ShopDataWeekRegisterData>(
-          e) as ShopDataWeekRegisterData).toList();
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
+      .toList();
   if (weekRegisterData != null) {
     shopData.weekRegisterData = weekRegisterData;
   }
@@ -202,11 +205,11 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
     shopData.showWeekApplyData = showWeekApplyData;
   }
   final List<
-      ShopDataWeekApplyData>? weekApplyData = (json['week_apply_data'] as List<
+      ShopDataWeekCaseData>? weekApplyData = (json['week_apply_data'] as List<
       dynamic>?)
       ?.map(
           (e) =>
-      jsonConvert.convert<ShopDataWeekApplyData>(e) as ShopDataWeekApplyData)
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
       .toList();
   if (weekApplyData != null) {
     shopData.weekApplyData = weekApplyData;
@@ -308,11 +311,11 @@ extension ShopDataExtension on ShopData {
     bool? showMonthData,
     List<ShopDataMonthData>? monthData,
     bool? showMonthRepayData,
-    List<ShopDataMonthRepayData>? monthRepayData,
+    List<ShopDataMonthData>? monthRepayData,
     bool? showMonthRegBonusData,
-    List<ShopDataMonthRegBonusData>? monthRegBonusData,
+    List<ShopDataMonthData>? monthRegBonusData,
     bool? showMonthApplyBonusData,
-    List<ShopDataMonthApplyBonusData>? monthApplyBonusData,
+    List<ShopDataMonthData>? monthApplyBonusData,
     bool? showWeekCaseData,
     List<ShopDataWeekCaseData>? weekCaseData,
     bool? showWeekBonusData,
@@ -324,9 +327,9 @@ extension ShopDataExtension on ShopData {
     bool? showMonthAdditionData,
     List<ShopDataMonthAdditionData>? monthAdditionData,
     bool? showWeekRegisterData,
-    List<ShopDataWeekRegisterData>? weekRegisterData,
+    List<ShopDataWeekCaseData>? weekRegisterData,
     bool? showWeekApplyData,
-    List<ShopDataWeekApplyData>? weekApplyData,
+    List<ShopDataWeekCaseData>? weekApplyData,
     List<String>? notificationData,
     String? notificationShowDate,
     List<ShopDataTrends>? trends,

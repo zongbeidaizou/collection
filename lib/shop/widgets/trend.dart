@@ -1,21 +1,21 @@
+import 'package:bounty_hunter/models/shop_entity.dart';
 import 'package:bounty_hunter/shop/widgets/resources/app_colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class _LineChart extends StatelessWidget {
-  const _LineChart({required this.isShowingMainData});
+  const _LineChart({required this.isShowingMainData, required this.trends});
 
   final bool isShowingMainData;
+  final List<ShopDataTrends> trends;
 
   @override
   Widget build(BuildContext context) {
     return LineChart(
-       sampleData2,
+      sampleData2,
       duration: const Duration(milliseconds: 250),
     );
   }
-
-
 
   LineChartData get sampleData2 => LineChartData(
         lineTouchData: lineTouchData2,
@@ -25,7 +25,9 @@ class _LineChart extends StatelessWidget {
         lineBarsData: lineBarsData2,
         minX: 0,
         maxX: 26,
-        maxY: 6,
+        maxY: trends.isEmpty
+            ? 6
+            : trends.map((trend) => trend.eRepaymentCount ?? 0).reduce((a, b) => a > b ? a : b).toDouble(),
         minY: 0,
       );
 
@@ -73,6 +75,18 @@ class _LineChart extends StatelessWidget {
   List<LineChartBarData> get lineBarsData2 => [
         lineChartBarData2_1,
       ];
+
+  List<FlSpot> get trendSpots {
+    final List<ShopDataTrends> sortedTrends = List.from(trends)
+      ..sort((a, b) => (a.bHour ?? 0).compareTo(b.bHour ?? 0));
+
+    return sortedTrends
+        .map((trend) => FlSpot(
+              (trend.bHour ?? 0).toDouble(),
+              (trend.eRepaymentCount ?? 0).toDouble(),
+            ))
+        .toList();
+  }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -151,39 +165,47 @@ class _LineChart extends StatelessWidget {
         barWidth: 4,
         isStrokeCapRound: true,
         dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(show: true, color:AppColors.contentColorGreen.withOpacity(0.5)),
-        spots: const [
-          FlSpot(1, 2),
-          FlSpot(2, 1),
-          FlSpot(3, 0),
-          FlSpot(4, 0),
-          FlSpot(5, 0),
-          FlSpot(6, 1),
-          FlSpot(7, 2),
-          FlSpot(8, 3),
-          FlSpot(9, 5),
-          FlSpot(10, 4),
-          FlSpot(11, 2),
-          FlSpot(12, 1),
-          FlSpot(13, 3),
-          FlSpot(14, 5),
-          FlSpot(15, 6),
-          FlSpot(16, 6),
-          FlSpot(17, 2),
-          FlSpot(18, 3),
-          FlSpot(19, 6),
-          FlSpot(20, 4),
-          FlSpot(21, 2),
-          FlSpot(22, 2),
-          FlSpot(23, 3),
-          FlSpot(24, 1),
-        ],
+        belowBarData: BarAreaData(
+          show: true,
+          color: AppColors.contentColorGreen.withOpacity(0.5),
+        ),
+        spots: trendSpots.isEmpty
+            ? const [
+                FlSpot(1, 2),
+                FlSpot(2, 1),
+                FlSpot(3, 0),
+                FlSpot(4, 0),
+                FlSpot(5, 0),
+                FlSpot(6, 1),
+                FlSpot(7, 2),
+                FlSpot(8, 3),
+                FlSpot(9, 5),
+                FlSpot(10, 4),
+                FlSpot(11, 2),
+                FlSpot(12, 1),
+                FlSpot(13, 3),
+                FlSpot(14, 5),
+                FlSpot(15, 6),
+                FlSpot(16, 6),
+                FlSpot(17, 2),
+                FlSpot(18, 3),
+                FlSpot(19, 6),
+                FlSpot(20, 4),
+                FlSpot(21, 2),
+                FlSpot(22, 2),
+                FlSpot(23, 3),
+                FlSpot(24, 1),
+              ]
+            : trendSpots,
       );
 
 }
 
 class LineChartTrend extends StatefulWidget {
-  const LineChartTrend({super.key});
+  const LineChartTrend({super.key, required this.trends, required this.title});
+
+  final List<ShopDataTrends> trends;
+  final String title;
 
   @override
   State<StatefulWidget> createState() => LineChartTrendState();
@@ -210,8 +232,8 @@ class LineChartTrendState extends State<LineChartTrend> {
               const SizedBox(
                 height: 3,
               ),
-              const Text(
-                'Monthly Sales',
+               Text(
+                widget.title,
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 12,
@@ -226,7 +248,10 @@ class LineChartTrendState extends State<LineChartTrend> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: _LineChart(isShowingMainData: false),
+                  child: _LineChart(
+                    isShowingMainData: false,
+                    trends: widget.trends,
+                  ),
                 ),
               ),
               const SizedBox(

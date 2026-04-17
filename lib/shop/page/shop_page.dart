@@ -850,7 +850,7 @@ class _ShopPageState extends State<ShopPage>
                       border: Border.all(color: Colors.white70),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: LineChartTrend()),
+                    child: LineChartTrend(trends:_data.trends!, title:"Today's Repayment Trend")),
                 Gaps.vGap4,
                 if (_data.showMonthAdditionData!)
                   Column(

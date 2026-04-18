@@ -318,6 +318,7 @@ class _OrderItemState extends State<OrderItem> {
       if (phoneChars.length > 2) phoneChars[2] = '*';
       if (phoneChars.length > 3) phoneChars[3] = '*';
       if (phoneChars.length > 4) phoneChars[4] = '*';
+      if (widget.source == 'receive' && phoneChars.length > 5) phoneChars[5] = '*';
 
       return phoneChars.join();
     }
@@ -790,7 +791,7 @@ class _OrderItemState extends State<OrderItem> {
                         style: textTextStyle,
                         children: <TextSpan>[
                           // TextSpan(text: 'SN:', style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp10)),
-                          TextSpan(text: widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black,fontSize: (widget.item.vName?.nullSafe.length ?? 0) > 22 ? ((widget.item.vName?.nullSafe.length ?? 0) > 26 ? 8 : 9) : 11)),
+                          TextSpan(text: widget.source == 'receive' ? maskPhoneNumber(widget.item.vName!) : widget.item.vName, style: TextStyle(color: isDark ? Colors.white : Colors.black,fontSize: (widget.item.vName?.nullSafe.length ?? 0) > 22 ? ((widget.item.vName?.nullSafe.length ?? 0) > 26 ? 8 : 9) : 11)),
                         ],
                       ),
                     ),
@@ -801,7 +802,7 @@ class _OrderItemState extends State<OrderItem> {
             Expanded(
               flex: 5,
               child: InkWell(
-                onTap: _addContactToPhone,
+                onTap: widget.source == 'receive' ? null : _addContactToPhone,
                 child: Row(
                   children: [
                     Container(

@@ -4,10 +4,11 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class _LineChart extends StatelessWidget {
-  const _LineChart({required this.isShowingMainData, required this.trends});
+  const _LineChart({required this.isShowingMainData, required this.trends, required this.type});
 
   final bool isShowingMainData;
   final List<ShopDataTrends> trends;
+  final int type;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,16 @@ class _LineChart extends StatelessWidget {
       sampleData2,
       duration: const Duration(milliseconds: 250),
     );
+  }
+
+  int getTrendValue(ShopDataTrends trend) {
+    if (type == 1) {
+      return trend.eRepaymentCount ?? 0;
+    }
+    if (type == 2) {
+      return trend.cActionCount ?? 0;
+    }
+    return trend.eRepaymentCount ?? 0;
   }
 
   LineChartData get sampleData2 => LineChartData(
@@ -27,7 +38,7 @@ class _LineChart extends StatelessWidget {
         maxX: 26,
         maxY: trends.isEmpty
             ? 6
-            : trends.map((trend) => trend.eRepaymentCount ?? 0).reduce((a, b) => a > b ? a : b).toDouble(),
+            : trends.map(getTrendValue).reduce((a, b) => a > b ? a : b).toDouble(),
         minY: 0,
       );
 
@@ -83,7 +94,7 @@ class _LineChart extends StatelessWidget {
     return sortedTrends
         .map((trend) => FlSpot(
               (trend.bHour ?? 0).toDouble(),
-              (trend.eRepaymentCount ?? 0).toDouble(),
+              getTrendValue(trend).toDouble(),
             ))
         .toList();
   }
@@ -202,22 +213,23 @@ class _LineChart extends StatelessWidget {
 }
 
 class LineChartTrend extends StatefulWidget {
-  const LineChartTrend({super.key, required this.trends, required this.title});
+  const LineChartTrend({super.key, required this.trends, required this.title, required this.type});
 
   final List<ShopDataTrends> trends;
   final String title;
-
+  final int type;
   @override
   State<StatefulWidget> createState() => LineChartTrendState();
 }
 
 class LineChartTrendState extends State<LineChartTrend> {
   late bool isShowingMainData;
-
+  late int type;
   @override
   void initState() {
     super.initState();
     isShowingMainData = true;
+    type = widget.type;
   }
 
   @override
@@ -232,16 +244,19 @@ class LineChartTrendState extends State<LineChartTrend> {
               const SizedBox(
                 height: 3,
               ),
-               Text(
-                widget.title,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
-                textAlign: TextAlign.center,
-              ),
+               Padding(
+                 padding: const EdgeInsets.only(left: 16),
+                 child: Text(
+                  widget.title,
+                  style: TextStyle(
+                    // color: AppColors.primary,
+                    fontSize: 14,
+                    // fontWeight: FontWeight.bold,
+                    // letterSpacing: 2,
+                  ),
+                  // textAlign: TextAlign.center,
+                               ),
+               ),
               const SizedBox(
                 height: 8,
               ),
@@ -251,6 +266,7 @@ class LineChartTrendState extends State<LineChartTrend> {
                   child: _LineChart(
                     isShowingMainData: false,
                     trends: widget.trends,
+                    type: widget.type,
                   ),
                 ),
               ),

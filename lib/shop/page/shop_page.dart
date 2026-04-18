@@ -850,7 +850,15 @@ class _ShopPageState extends State<ShopPage>
                       border: Border.all(color: Colors.white70),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: LineChartTrend(trends:_data.trends!, title:"Today's Repayment Trend")),
+                    child: LineChartTrend(trends:_data.trends!, title:'Repayment Trend', type: 1)),
+                Gaps.vGap4,
+                Container(
+                  margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: LineChartTrend(trends:_data.trends!, title:'Marketing Trend', type: 2)),
                 Gaps.vGap4,
                 if (_data.showMonthAdditionData!)
                   Column(

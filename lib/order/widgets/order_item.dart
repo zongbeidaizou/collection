@@ -282,7 +282,7 @@ class _OrderItemState extends State<OrderItem> {
             actions: <Widget>[
               TextButton(
                 onPressed: () => NavigatorUtils.goBack(context),
-                child: const Text('取消'),
+                child: const Text('Cancel'),
               ),
               TextButton(
                 onPressed: () {
@@ -404,8 +404,8 @@ class _OrderItemState extends State<OrderItem> {
       }
     }
 
-    Future<void> retainOrder() async {
-      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:2:0:0');
+    Future<void> retainOrder({int days = 0}) async {
+      app_cache.Cache().appendToStringList('app_actions','${widget.item.id}:2:0:$days');
       if (widget.item.id == null) {
         showToast('Order ID is missing',backgroundColor: Colors.red);
         return;
@@ -414,6 +414,7 @@ class _OrderItemState extends State<OrderItem> {
       try {
         final formData = FormData.fromMap({
           'collection_order_id': widget.item.id,
+          'd_delay_days': days,
         });
 
         await DioUtils.instance.requestNetwork<Map<String, dynamic>>(
@@ -439,7 +440,7 @@ class _OrderItemState extends State<OrderItem> {
       }
     }
 
-    Future<void> _receiveOrder() async {
+    Future<void> _receiveOrder({int days = 0}) async {
       if (widget.item.id == null) {
         showToast('Order ID is missing',backgroundColor: Colors.red);
         return;
@@ -448,6 +449,7 @@ class _OrderItemState extends State<OrderItem> {
       try {
         final formData = FormData.fromMap({
           'collection_order_id': widget.item.id,
+          'days': days,
         });
 
         await DioUtils.instance.requestNetwork<Map<String, dynamic>>(
@@ -1113,6 +1115,20 @@ class _OrderItemState extends State<OrderItem> {
                     retainOrder();
                   }
                 },
+                onLongPress: () async {
+                  final int? days = await _showDaysPickerDialog(context);
+                  if (days == null) {
+                    return;
+                  }
+                  await retainOrder(days: days);
+                },
+                onDoubleTap: () async {
+                  final int? days = await _showDaysPickerDialog(context);
+                  if (days == null) {
+                    return;
+                  }
+                  await retainOrder(days: days);
+                },
               ),
               Gaps.hGap4,
               if(widget.source == 'order')
@@ -1472,6 +1488,37 @@ class _OrderItemState extends State<OrderItem> {
     sortedList5.addAll(sortedList4);
     return sortedList5;
 
+  }
+
+  Future<int?> _showDaysPickerDialog(BuildContext context) async {
+    final List<int> daysOptions = [1, 2, 3, 4];
+
+    return showDialog<int>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Please select retention days'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: daysOptions
+                .map(
+                  (int days) => ListTile(
+                    dense: true,
+                    title: Text('$days days'),
+                    onTap: () => Navigator.of(dialogContext).pop(days),
+                  ),
+                )
+                .toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

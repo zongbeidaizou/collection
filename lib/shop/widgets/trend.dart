@@ -28,6 +28,16 @@ class _LineChart extends StatelessWidget {
     return trend.eRepaymentCount ?? 0;
   }
 
+  double get chartMaxY {
+    if (trends.isEmpty) {
+      return 6;
+    }
+
+    final double maxValue =
+        trends.map(getTrendValue).reduce((a, b) => a > b ? a : b).toDouble();
+    return maxValue <= 0 ? 6 : maxValue;
+  }
+
   LineChartData get sampleData2 => LineChartData(
         lineTouchData: lineTouchData2,
         gridData: gridData,
@@ -36,9 +46,7 @@ class _LineChart extends StatelessWidget {
         lineBarsData: lineBarsData2,
         minX: 0,
         maxX: 26,
-        maxY: trends.isEmpty
-            ? 6
-            : trends.map(getTrendValue).reduce((a, b) => a > b ? a : b).toDouble(),
+        maxY: chartMaxY,
         minY: 0,
       );
 

@@ -874,20 +874,26 @@ class _ShopPageState extends State<ShopPage>
                             children: [
                               Container(
                                 width: double.infinity,
-                                color: Color(0xFF50E4FF), // 表头背景色
+                                color: const Color(0xFF50E4FF),
                                 child: _buildHeaderCell('My Monthly Target Bonus'),
                               ),
                               Gaps.line,
                               // 表头 - 带背景色
                               Container(
-                                color: Color(0xFF50E4FF), // 表头背景色
+                                color: const Color(0xFF50E4FF),
                                 child: Row(
                                   children: [
-                                    _buildHeaderCell('Performance Target',
-                                        flex: 3),
-                                    _buildHeaderCell('Bonus'),
-                                    _buildHeaderCell('Progress Status',
-                                        flex: 3),
+                                    Expanded(
+                                      flex: 3,
+                                      child: _buildHeaderCell('Performance Target'),
+                                    ),
+                                    Expanded(
+                                      child: _buildHeaderCell('Bonus'),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: _buildHeaderCell('Progress Status'),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -909,17 +915,29 @@ class _ShopPageState extends State<ShopPage>
                                     ),
                                     child: Row(
                                       children: [
-                                        _buildDataCell(
+                                        Expanded(
+                                          flex: 3,
+                                          child: _buildDataCell(
                                             'Reach ${item.days} days at Grade ${item.level}',
-                                            flex: 3),
-                                        _buildDataCell(
-                                            Utils.formatPrice2(item.bonus!)),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: _buildDataCell(
+                                            Utils.formatPrice2(item.bonus!),
+                                          ),
+                                        ),
                                         if (item.completeDays! >= item.days!)
-                                          _buildDataCell('Achieved! ✅', flex: 3)
+                                          Expanded(
+                                            flex: 3,
+                                            child: _buildDataCell('Achieved! ✅'),
+                                          )
                                         else
-                                          _buildDataCell(
+                                          Expanded(
+                                            flex: 3,
+                                            child: _buildDataCell(
                                               '${item.completeDays}/${item.days}(${item.days! - item.completeDays!} days left for ${Utils.formatPrice2(item.bonus!)})',
-                                              flex: 3),
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   );
@@ -1267,39 +1285,33 @@ class _ShopPageState extends State<ShopPage>
     );
   }
 
-  // 构建表头单元格
-  Widget _buildHeaderCell(String text, {int flex = 1}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(color: Colors.white70), // 单元格右侧边框
-          ),
+  // 构建表头单元格内容
+  Widget _buildHeaderCell(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.white70),
         ),
-        child: Text(
-          text,
-          style: TextStyle(fontWeight: FontWeight.w400,color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.white),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
-  // 构建数据单元格
-  Widget _buildDataCell(String text, {int flex = 1}) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(color: Colors.white70), // 单元格右侧边框
-          ),
+  // 构建数据单元格内容
+  Widget _buildDataCell(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Colors.white70),
         ),
-        child: Text(text, style: TextStyle(fontSize: 11,color: Colors.white)),
       ),
+      child: Text(text, style: const TextStyle(fontSize: 11, color: Colors.white)),
     );
   }
 }

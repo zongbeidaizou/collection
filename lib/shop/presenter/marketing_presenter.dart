@@ -60,7 +60,7 @@ class MarketingPresenter extends BasePagePresenter<MarketingPageMvpView> {
     MarketingEntity _data = MarketingEntity();
     await requestNetwork<MarketingEntity>(Method.get,
         url: HttpApi.marketing,
-        queryParameters: {"page": currentPage, 'keyword': keyword, 'version': 5},
+        queryParameters: {"page": currentPage, 'keyword': keyword},
         isShow: isShowDialog, onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;

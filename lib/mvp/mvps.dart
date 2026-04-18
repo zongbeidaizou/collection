@@ -14,6 +14,7 @@ abstract class IMvpView {
 
   /// 展示Toast
   void showToast(String string);
+  void showErrorToast(String string);
 }
 
 abstract class IPresenter extends ILifecycle {}

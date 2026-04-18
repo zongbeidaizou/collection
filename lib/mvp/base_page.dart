@@ -57,7 +57,12 @@ mixin BasePageMixin<T extends StatefulWidget, P extends BasePresenter> on State<
 
   @override
   void showToast(String string) {
-    Toast.show(string);
+    Toast.show(string,);
+  }
+
+    @override
+  void showErrorToast(String string) {
+    Toast.show(string,backgroundColor: Colors.red);
   }
   
   /// 可自定义Progress

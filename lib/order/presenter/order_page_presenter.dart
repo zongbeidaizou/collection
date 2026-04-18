@@ -33,10 +33,10 @@ class OrderPagePresenter extends BasePagePresenter<OrderPageIMvpView> {
       int page, int status, bool isShowDialog) async {
     List<CollectionOrderData> _list = <CollectionOrderData>[];
     FormData formData =
-        FormData.fromMap({"page": page, 'k_status': status, 'version': 5});
+        FormData.fromMap({"page": page, 'k_status': status});
     await requestNetwork<CollectionOrderEntity>(Method.get,
         url: HttpApi.collectionOrders,
-        queryParameters: {"page": page, 'k_status': status, 'version': 5},
+        queryParameters: {"page": page, 'k_status': status},
         onSuccess: (data) async {
       if (data != null) {
         _list = data.data!;

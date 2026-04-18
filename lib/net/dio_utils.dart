@@ -129,7 +129,7 @@ class DioUtils {
     Options? options,
   }) {
     // return _request<T>(method.value, url + "?XDEBUG_SESSION_START=19867",
-    return _request<T>(method.value, '$url?',
+    return _request<T>(method.value, '$url?version=6',
       data: params,
       queryParameters: queryParameters,
       options: options,

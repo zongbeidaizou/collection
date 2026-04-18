@@ -532,6 +532,7 @@ class _AddNoteState extends State<AddNote>
                       if ((_repayInfo?.var5 ?? 0) > 0) _infoRow('Lottery chances', '${_repayInfo?.var5 ?? 0}') else Gaps.empty,
                       if (int.parse(_repayInfo?.var7 ?? '0') > 0) _infoRow('Max discount ratio', '${_repayInfo?.var7 ?? '0'}%') else Gaps.empty,
                       if (couponText.isNotEmpty) _infoRow('Coupon details', couponText) else Gaps.empty,
+                      if ((_repayInfo?.receiveCount ?? 0) > 0) _infoRow('Receive cases left', '${_repayInfo?.receiveCount ?? 0}') else Gaps.empty,
                     ],
                   ),
                 ),

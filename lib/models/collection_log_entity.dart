@@ -266,6 +266,8 @@ class CollectionLogOtherRepayInfo {
 	String? var10 = '';
   @JSONField(name: 'is_bookmarked')
 	int? isBookmarked = 0;
+  @JSONField(name: 'receive_count')
+	int? receiveCount = 0;
 
 	CollectionLogOtherRepayInfo();
 

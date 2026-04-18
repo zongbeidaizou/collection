@@ -545,6 +545,32 @@ class _OrderItemState extends State<OrderItem> {
               )
             else
               Gaps.empty,
+
+            if (!widget.inList &&
+                widget.repayInfo != null &&
+                widget.repayInfo!.receiveCount!.toInt() > 0)
+              InkWell(
+                onTap: () {
+                    showToast('This client still has ${widget.repayInfo!.receiveCount!} cases that can be received.');
+                    return;
+                  },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.move_up,
+                      color: Colors.purple,
+                      size: 14,
+                    ),
+                    Text(
+                      "${widget.repayInfo!.receiveCount!.toInt()}",
+                      style: TextStyle(color: Colors.purple, fontSize: 14),
+                    ),
+                    Gaps.hGap12,
+                  ],
+                ),
+              )
+            else
+              Gaps.empty,  
             if (!widget.inList &&
                 widget.repayInfo != null &&
                 widget.repayInfo!.var6!.toInt() > 0)

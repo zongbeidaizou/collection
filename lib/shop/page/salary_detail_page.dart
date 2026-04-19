@@ -14,6 +14,13 @@ class SalaryDetailPage extends StatefulWidget {
 class _SalaryDetailPageState extends State<SalaryDetailPage> {
   SalaryData? _salary;
   bool _loading = true;
+  final TextEditingController _adminSearchController = TextEditingController();
+  int? _selectedAdminId;
+  List<SalaryDataAdmins> _adminList = <SalaryDataAdmins>[];
+  List<SalaryDataAdmins> _filteredAdminList = <SalaryDataAdmins>[];
+  OverlayEntry? _adminDropdownEntry;
+  final LayerLink _adminLayerLink = LayerLink();
+  final GlobalKey _adminFieldKey = GlobalKey();
 
   @override
   void initState() {
@@ -21,7 +28,14 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     _loadSalary();
   }
 
-  Future<void> _loadSalary() async {
+  @override
+  void dispose() {
+    _hideAdminDropdown();
+    _adminSearchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadSalary({int? adminId}) async {
     setState(() {
       _loading = true;
     });
@@ -29,10 +43,13 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     await DioUtils.instance.requestNetwork<SalaryEntity>(
       Method.get,
       HttpApi.salary,
+      queryParameters: adminId != null ? {'admin_id': adminId} : null,
       onSuccess: (SalaryEntity? entity) async {
         if (!mounted) return;
         setState(() {
           _salary = entity?.data;
+          _adminList = entity?.data?.admins ?? <SalaryDataAdmins>[];
+          _filteredAdminList = List<SalaryDataAdmins>.from(_adminList);
           _loading = false;
         });
         if (_salary == null) {
@@ -47,6 +64,81 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
         showToast(msg.isNotEmpty ? msg : 'Failed to load salary.');
       },
     );
+  }
+
+  void _hideAdminDropdown() {
+    _adminDropdownEntry?.remove();
+    _adminDropdownEntry = null;
+  }
+
+  void _filterAdmins(String keyword) {
+    final String lower = keyword.trim().toLowerCase();
+    setState(() {
+      _filteredAdminList = lower.isEmpty
+          ? List<SalaryDataAdmins>.from(_adminList)
+          : _adminList
+              .where((SalaryDataAdmins item) =>
+                  (item.aName ?? '').toLowerCase().contains(lower))
+              .toList();
+    });
+    _adminDropdownEntry?.markNeedsBuild();
+  }
+
+  Future<void> _selectAdmin(SalaryDataAdmins admin) async {
+    _selectedAdminId = admin.id;
+    _adminSearchController.text = admin.aName ?? '';
+    _hideAdminDropdown();
+    await _loadSalary(adminId: admin.id);
+  }
+
+  void _showAdminDropdown() {
+    if (_adminDropdownEntry != null) {
+      _adminDropdownEntry!.remove();
+    }
+
+    final BuildContext? fieldContext = _adminFieldKey.currentContext;
+    if (fieldContext == null) return;
+
+    final RenderBox box = fieldContext.findRenderObject() as RenderBox;
+    final Size size = box.size;
+    final Offset offset = box.localToGlobal(Offset.zero);
+
+    _adminDropdownEntry = OverlayEntry(
+      builder: (BuildContext context) {
+        return Positioned(
+          left: offset.dx,
+          top: offset.dy + size.height + 4,
+          width: size.width,
+          child: Material(
+            elevation: 6,
+            borderRadius: BorderRadius.circular(12),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 280),
+              child: _filteredAdminList.isEmpty
+                  ? const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text('No admins found.'),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (BuildContext context, int index) {
+                        final SalaryDataAdmins admin = _filteredAdminList[index];
+                        return ListTile(
+                          title: Text(admin.aName ?? '-'),
+                          onTap: () => _selectAdmin(admin),
+                        );
+                      },
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemCount: _filteredAdminList.length,
+                    ),
+            ),
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_adminDropdownEntry!);
   }
 
   Widget _sectionTitle(String text, {Color? color}) {
@@ -241,10 +333,33 @@ class _SalaryDetailPageState extends State<SalaryDetailPage> {
     }
 
     return RefreshIndicator(
-      onRefresh: _loadSalary,
+      onRefresh: () => _loadSalary(adminId: _selectedAdminId),
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
+          _sectionCard(
+            child: CompositedTransformTarget(
+              link: _adminLayerLink,
+              child: Container(
+                key: _adminFieldKey,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.indigo.withOpacity(0.2)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: _adminSearchController,
+                  decoration: const InputDecoration(
+                    labelText: 'Please select agent',
+                    border: InputBorder.none,
+                    suffixIcon: Icon(Icons.arrow_drop_down),
+                  ),
+                  onTap: _showAdminDropdown,
+                  onChanged: _filterAdmins,
+                ),
+              ),
+            ),
+          ),
           if (salary.showMonthBasicSalary == true)
             _sectionCard(
               borderColor: Colors.deepPurple.withOpacity(0.2),

@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -58,13 +59,22 @@ class _ContactDialogState extends State<ContactDialog> {
   bool _isSelectionMode = false;
   Set<int> _selectedContactIndices = <int>{};
   int _finesAmount = 0;
+  final SuperTooltipController _tooltipController = SuperTooltipController();
+  static const String _tooltipShownDateKey = 'contact_dialog_tooltip_shown_date4';
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showFinesDialog(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showFinesDialog(context);
+      _showTooltipIfNeeded();
     });
+  }
+
+  @override
+  void dispose() {
+    _tooltipController.hideTooltip();
+    super.dispose();
   }
   
   void _showSmsDialog(BuildContext context, int contactId, String phone) {
@@ -93,6 +103,39 @@ class _ContactDialogState extends State<ContactDialog> {
       }
     });
     
+  }
+
+  bool _shouldShowTooltipToday() {
+    final int day = DateTime.now().day;
+    return day == 19 || day == 25;
+  }
+
+  Future<bool> _hasShownTooltipToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String? cachedDate = await Cache().getString(_tooltipShownDateKey);
+    return cachedDate == todayKey;
+  }
+
+  Future<void> _markTooltipShownToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    await Cache().setString(_tooltipShownDateKey, todayKey);
+  }
+
+  Future<void> _showTooltipIfNeeded() async {
+    if (!mounted || !_shouldShowTooltipToday()) {
+      return;
+    }
+    final bool alreadyShown = await _hasShownTooltipToday();
+    if (alreadyShown || !mounted ) {
+      return;
+    }
+    _tooltipController.showTooltip();
+    await _markTooltipShownToday();
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        _tooltipController.hideTooltip();
+      }
+    });
   }
 
   @override
@@ -136,8 +179,6 @@ class _ContactDialogState extends State<ContactDialog> {
             else
               Container(
                 color: Colors.green[400],
-                // width: double.infinity,
-                // height: 30,
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(left: 6, right: 6, top: 6, bottom: 6),
                 child: Text(
@@ -267,6 +308,7 @@ class _ContactDialogState extends State<ContactDialog> {
                     isAllContacts: widget.isAllContacts,
                     isSelectionMode: _isSelectionMode,
                     isSelectedForCopy: _selectedContactIndices.contains(index),
+                    tooltipController:_tooltipController,
                     onSelectionChanged: (int index, bool selected) {
                       setState(() {
                         if (selected) {
@@ -300,6 +342,7 @@ class ContactCard extends StatefulWidget {
   final bool isSelectedForCopy;
   final void Function(int, bool)? onSelectionChanged;
   final CollectionOrderData? orderItem;
+  final SuperTooltipController? tooltipController;
   ContactCard({
     required this.contact,
     required this.onCallOrSms,
@@ -312,6 +355,7 @@ class ContactCard extends StatefulWidget {
     this.isSelectionMode = false,
     this.isSelectedForCopy = false,
     this.onSelectionChanged,
+    this.tooltipController,
     this.orderItem,
   });
 
@@ -1317,74 +1361,98 @@ class _ContactCardState extends State<ContactCard> with WidgetsBindingObserver {
                         ],
                       ),
                     ),
-                    InkWell(
-                      onTap: () => launchAction(1),
-                      onDoubleTap: () => launchAction(1, doubleTap: true),
-                      onLongPress: () => launchAction(1, doubleTap: true),
-                      child: Column(
+                    SuperTooltip(
+                      controller: widget.contactIndex == 0
+                          ? widget.tooltipController
+                          : null,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Stack(
-                            children: [
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 3, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: widget.contact.aAAAAHLContactWeights
-                                                    ?.wWaCt !=
-                                                null &&
-                                            widget.contact.aAAAAHLContactWeights!
-                                                    .wWaCt! >
-                                                0
-                                        ? const Color.fromARGB(255, 236, 182, 180)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    widget.contact.aAAAAHLContactWeights?.wWaCt !=
-                                                null &&
-                                            widget.contact.aAAAAHLContactWeights!
-                                                    .wWaCt! >
-                                                0
-                                        ? getDisplayText(widget
-                                            .contact.aAAAAHLContactWeights!.wWaCt!)
-                                        : '',
-                                    style: const TextStyle(
-                                      fontSize: 9,
-                                      color: Colors.white,
+                          const Text(
+                            'Long press or double-click \nto jump directly to WhatsApp.',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () =>
+                                  widget.tooltipController?.hideTooltip(),
+                              child: const Text('I know'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      child: InkWell(
+                        onTap: () => launchAction(1),
+                        onDoubleTap: () => launchAction(1, doubleTap: true),
+                        onLongPress: () => launchAction(1, doubleTap: true),
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: widget.contact.aAAAAHLContactWeights
+                                                      ?.wWaCt !=
+                                                  null &&
+                                              widget.contact.aAAAAHLContactWeights!
+                                                      .wWaCt! >
+                                                  0
+                                          ? const Color.fromARGB(255, 236, 182, 180)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      widget.contact.aAAAAHLContactWeights?.wWaCt !=
+                                                  null &&
+                                              widget.contact.aAAAAHLContactWeights!
+                                                      .wWaCt! >
+                                                  0
+                                          ? getDisplayText(widget
+                                              .contact.aAAAAHLContactWeights!.wWaCt!)
+                                          : '',
+                                      style: const TextStyle(
+                                        fontSize: 9,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    top: 7, bottom: 0, left: 14, right: 13),
-                                child: const Icon(
-                                  FontAwesomeIcons.whatsapp,
-                                  size: 16,
-                                  color: Colors.blue,
+                                Container(
+                                  padding: const EdgeInsets.only(
+                                      top: 7, bottom: 0, left: 14, right: 13),
+                                  child: const Icon(
+                                    FontAwesomeIcons.whatsapp,
+                                    size: 16,
+                                    color: Colors.blue,
+                                  ),
                                 ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: getIcon('whatsapp'),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                              width: 60,
-                              child: Text(
-                                getLastClickTime('whatsapp'),
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey,
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: getIcon('whatsapp'),
                                 ),
-                                textAlign: TextAlign.center,
-                              ))
-                        ],
+                              ],
+                            ),
+                            SizedBox(
+                                width: 60,
+                                child: Text(
+                                  getLastClickTime('whatsapp'),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ))
+                          ],
+                        ),
                       ),
                     ),
                   ],

@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 import '../../models/admin_entity.dart';
 import '../../models/collection_log_entity.dart';
 import '../../models/collection_order_entity.dart';
@@ -90,12 +91,63 @@ class OrderItem extends StatefulWidget {
 class _OrderItemState extends State<OrderItem> {
   bool _isRetained = false;
   int _additionBonus = 0;
+  final _controller = SuperTooltipController();
+
   @override
   void initState() {
     super.initState();
     _isRetained = (widget.item.bBHasRetain ?? 0) == 1;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-        _getAdditionBonus(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getAdditionBonus(context);
+      _showRetainTooltipIfNeeded();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.hideTooltip();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  static const String _retainTooltipShownDateKey = 'retain_tooltip_shown_date5';
+
+  bool _shouldShowRetainTooltipToday() {
+    final int day = DateTime.now().day;
+    return day == 19 || day == 25;
+  }
+
+  Future<bool> _hasShownRetainTooltipToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String? cachedDate = await app_cache.Cache().getString(_retainTooltipShownDateKey);
+    return cachedDate == todayKey;
+  }
+
+  Future<void> _markRetainTooltipShownToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    await app_cache.Cache().setString(_retainTooltipShownDateKey, todayKey);
+  }
+
+  Future<void> _showRetainTooltipIfNeeded() async {
+    if (!mounted) {
+      return;
+    }
+    if (!_shouldShowRetainTooltipToday()) {
+      return;
+    }
+    if (widget.source != 'order' || _isRetained || widget.index != 0) {
+      return;
+    }
+    final bool alreadyShown = await _hasShownRetainTooltipToday();
+    if (alreadyShown || !mounted) {
+      return;
+    }
+    _controller.showTooltip();
+    await _markRetainTooltipShownToday();
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        _controller.hideTooltip();
+      }
     });
   }
 
@@ -1128,34 +1180,56 @@ class _OrderItemState extends State<OrderItem> {
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24 && !_isRetained)
               Gaps.hGap4,
               if(DateTime.parse(widget.item.sFlowOutTime!).difference(DateTime.now()).inHours< 24  && widget.source == 'order')
-              OrderItemButton(
-                key: Key('order_button_4_${widget.index}'),
-                icon: _isRetained ? null : Icon(Icons.repeat_one,size: 16,color: Colors.white),
-                text: _isRetained ? 'Retained' : 'Retain',
-                textColor: isDark ? Colours.dark_button_text : Colors.white,
-                bgColor: _isRetained ? Colors.green.withOpacity(0.3) : Colors.green,
-                fontSize: _isRetained ? 11 : null,
-                onTap: () {
-                  if(_isRetained){
-                    showToast('Order already retained',backgroundColor: Colors.green);
-                  }else{
-                    retainOrder();
-                  }
-                },
-                onLongPress: () async {
-                  final int? days = await _showDaysPickerDialog(context);
-                  if (days == null) {
-                    return;
-                  }
-                  await retainOrder(days: days);
-                },
-                onDoubleTap: () async {
-                  final int? days = await _showDaysPickerDialog(context);
-                  if (days == null) {
-                    return;
-                  }
-                  await retainOrder(days: days);
-                },
+              SuperTooltip(
+                controller: _controller,
+                showBarrier: true,
+                showCloseButton: false,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Long press the button to select \nhow many days to keep the order.',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => _controller.hideTooltip(),
+                        child: const Text('I know'),
+                      ),
+                    ),
+                  ],
+                ),
+                child: OrderItemButton(
+                  key: Key('order_button_4_${widget.index}'),
+                  icon: _isRetained ? null : Icon(Icons.repeat_one,size: 16,color: Colors.white),
+                  text: _isRetained ? 'Retained' : 'Retain',
+                  textColor: isDark ? Colours.dark_button_text : Colors.white,
+                  bgColor: _isRetained ? Colors.green.withOpacity(0.3) : Colors.green,
+                  fontSize: _isRetained ? 11 : null,
+                  onTap: () {
+                    if(_isRetained){
+                      showToast('Order already retained',backgroundColor: Colors.green);
+                    }else{
+                      retainOrder();
+                    }
+                  },
+                  onLongPress: () async {
+                    final int? days = await _showDaysPickerDialog(context);
+                    if (days == null) {
+                      return;
+                    }
+                    await retainOrder(days: days);
+                  },
+                  onDoubleTap: () async {
+                    final int? days = await _showDaysPickerDialog(context);
+                    if (days == null) {
+                      return;
+                    }
+                    await retainOrder(days: days);
+                  },
+                ),
               ),
               Gaps.hGap4,
               if(widget.source == 'order')

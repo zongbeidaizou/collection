@@ -13,9 +13,12 @@ import 'package:bounty_hunter/widgets/load_image.dart';
 import 'package:bounty_hunter/widgets/my_card.dart';
 import 'package:bounty_hunter/widgets/my_flexible_space_bar.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:super_tooltip/super_tooltip.dart';
+import 'package:bounty_hunter/util/cache.dart' as app_cache;
 import '../../goods/goods_router.dart';
 
 import '../../providers/order_list_provider.dart';
@@ -53,6 +56,8 @@ class _OrderPageState extends State<OrderPage>
   TabController? _tabController;
   OrderPageProvider provider = OrderPageProvider();
   OrderListProvider provider3 = OrderListProvider();
+  final _controller = SuperTooltipController();
+  static const String _tooltipShownDateKey = 'order_page_tooltip_shown_date';
 
   int _lastReportedPage = 0;
   int _sloganIndex = 0;
@@ -67,6 +72,7 @@ class _OrderPageState extends State<OrderPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       /// 预先缓存剩余切换图片
       _preCacheImage();
+      _showTooltipIfNeeded();
     });
   }
 
@@ -169,9 +175,43 @@ class _OrderPageState extends State<OrderPage>
 
   @override
   void dispose() {
+    _controller.hideTooltip();
     _tabController?.dispose();
     _phoneFilterController.dispose();
     super.dispose();
+  }
+
+  bool _shouldShowTooltipToday() {
+    final int day = DateTime.now().day;
+    return day == 19 || day == 25;
+  }
+
+  Future<bool> _hasShownTooltipToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String? cachedDate = await app_cache.Cache().getString(_tooltipShownDateKey);
+    return cachedDate == todayKey;
+  }
+
+  Future<void> _markTooltipShownToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    await app_cache.Cache().setString(_tooltipShownDateKey, todayKey);
+  }
+
+  Future<void> _showTooltipIfNeeded() async {
+    if (!mounted || !_shouldShowTooltipToday()) {
+      return;
+    }
+    final bool alreadyShown = await _hasShownTooltipToday();
+    if (alreadyShown || !mounted) {
+      return;
+    }
+    _controller.showTooltip();
+    await _markTooltipShownToday();
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        _controller.hideTooltip();
+      }
+    });
   }
 
   /// https://github.com/simplezhli/bounty_hunter/issues/194
@@ -261,63 +301,86 @@ class _OrderPageState extends State<OrderPage>
             builder: (context) {
               final Color iconColor =
                   isDark ? Colours.dark_text_gray : Colours.text_gray_c;
-              return Container(
-                height: 32.0,
-                decoration: BoxDecoration(
-                  color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
-                  borderRadius: BorderRadius.circular(4.0),
+              return SuperTooltip(
+                controller: _controller,
+                showBarrier: true,
+                showCloseButton: false,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'You can search today\'s cases \nby entering the full or partial number.',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    const SizedBox(height: 12),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => _controller.hideTooltip(),
+                        child: const Text('I know'),
+                      ),
+                    ),
+                  ],
                 ),
-                child: TextField(
-                  autofocus: false,
-                  controller: _phoneFilterController,
-                  textInputAction: TextInputAction.search,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (val) {
-                    setState(() {
-                      _phoneFilterKeyword = val;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(
-                      left: -8.0,
-                      right: -16.0,
-                      bottom: 14.0,
-                    ),
-                    border: InputBorder.none,
-                    icon: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8.0,
-                        bottom: 8.0,
-                        left: 8.0,
+                child: Container(
+                  height: 32.0,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colours.dark_material_bg : Colours.bg_gray,
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: TextField(
+                    autofocus: false,
+                    controller: _phoneFilterController,
+                    textInputAction: TextInputAction.search,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (val) {
+                      setState(() {
+                        _phoneFilterKeyword = val;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                        left: -8.0,
+                        right: -16.0,
+                        bottom: 14.0,
                       ),
-                      child: LoadAssetImage(
-                        'order/order_search',
-                        color: iconColor,
+                      border: InputBorder.none,
+                      icon: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8.0,
+                          bottom: 8.0,
+                          left: 8.0,
+                        ),
+                        child: LoadAssetImage(
+                          'order/order_search',
+                          color: iconColor,
+                        ),
                       ),
-                    ),
-                    hintText: 'Search by phone (Local)',
-                    hintStyle: TextStyle(fontSize: 11),
-                    suffixIcon: _phoneFilterKeyword.isEmpty
-                        ? null
-                        : Padding(
-                            padding: const EdgeInsets.only(
-                              left: 16.0,
-                              top: 8.0,
-                              bottom: 8.0,
-                            ),
-                            child: GestureDetector(
-                              child: LoadAssetImage(
-                                'order/order_delete',
-                                color: iconColor,
+                      hintText: 'Search by phone (Local)',
+                      hintStyle: TextStyle(fontSize: 11),
+                      suffixIcon: _phoneFilterKeyword.isEmpty
+                          ? null
+                          : Padding(
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                top: 8.0,
+                                bottom: 8.0,
                               ),
-                              onTap: () {
-                                _phoneFilterController.clear();
-                                setState(() {
-                                  _phoneFilterKeyword = '';
-                                });
-                              },
+                              child: GestureDetector(
+                                child: LoadAssetImage(
+                                  'order/order_delete',
+                                  color: iconColor,
+                                ),
+                                onTap: () {
+                                  _phoneFilterController.clear();
+                                  setState(() {
+                                    _phoneFilterKeyword = '';
+                                  });
+                                },
+                              ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
               );

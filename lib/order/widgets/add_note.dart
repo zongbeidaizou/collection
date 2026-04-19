@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 import 'package:timelines/timelines.dart';
 import 'package:clipboard/clipboard.dart';
 
@@ -40,6 +41,7 @@ import '../presenter/add_note_presenter.dart';
 import 'MyCommentBox.dart';
 import 'order_item.dart';
 import 'repayment_bill_dialog.dart';
+import 'package:bounty_hunter/util/cache.dart' as app_cache;
 
 void main() {}
 
@@ -78,6 +80,7 @@ class _AddNoteState extends State<AddNote>
   String? _avatar;
   CollectionLogOtherTrack? _track;
   CollectionLogOtherPeriod? _period;
+    final _controller = SuperTooltipController();
   final List<IconData> _iconList = [
     Icons.miscellaneous_services, //0系统分配
     Icons.sync, //1协商中
@@ -209,6 +212,7 @@ class _AddNoteState extends State<AddNote>
       await Permission.manageExternalStorage.request();
       // await Permission.audio.request();
       await Permission.storage.request();
+      _showMiniCahrtTooltipIfNeeded();
     });
   }
 
@@ -333,7 +337,48 @@ class _AddNoteState extends State<AddNote>
     dateController.dispose();
     typeController.dispose();
     _scrollController.dispose();
+        _controller.hideTooltip();
+    _controller.dispose();
     super.dispose();
+  }
+
+  static const String _miniChartTooltipShownDateKey = 'mini_chart_tooltip_shown_date4123';
+
+  bool _shouldShowMiniCahrtTooltipToday() {
+    final int day = DateTime.now().day;
+    return day == 19 || day == 25;
+  }
+
+  Future<bool> _hasShownMiniChartTooltipToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String? cachedDate = await app_cache.Cache().getString(_miniChartTooltipShownDateKey);
+    return cachedDate == todayKey;
+  }
+
+  Future<void> _markMiniChartTooltipShownToday() async {
+    final String todayKey = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    await app_cache.Cache().setString(_miniChartTooltipShownDateKey, todayKey);
+  }
+
+  Future<void> _showMiniCahrtTooltipIfNeeded() async {
+    if (!mounted) {
+      return;
+    }
+    if (!_shouldShowMiniCahrtTooltipToday()) {
+      return;
+    }
+
+    final bool alreadyShown = await _hasShownMiniChartTooltipToday();
+    if (alreadyShown || !mounted) {
+      return;
+    }
+    _controller.showTooltip();
+    await _markMiniChartTooltipShownToday();
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        _controller.hideTooltip();
+      }
+    });
   }
 
   @override
@@ -600,7 +645,28 @@ class _AddNoteState extends State<AddNote>
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildOverdueMiniChart(),
+                  SuperTooltip(
+                    controller: _controller,
+                showBarrier: true,
+                showCloseButton: true,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      "Analysis of overdue days for the customer's \nrecent several loans. Please maintain \nan appropriate collection intensity.",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => _controller.hideTooltip(),
+                        child: const Text('I know'),
+                      ),
+                    ),
+                  ],
+                ),
+                    child: _buildOverdueMiniChart()),
                   const SizedBox(width: 8),
                   _buildFinesBadge(),
                   // CircleAvatar(

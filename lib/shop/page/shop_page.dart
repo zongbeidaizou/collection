@@ -1,5 +1,7 @@
 import 'package:bounty_hunter/setting/widgets/exit_dialog.dart';
+import 'package:bounty_hunter/shop/widgets/bar_extend.dart';
 import 'package:bounty_hunter/shop/widgets/bar_marketing.dart';
+import 'package:bounty_hunter/shop/widgets/bar_receive.dart';
 import 'package:bounty_hunter/shop/widgets/pie2.dart';
 import 'package:bounty_hunter/shop/widgets/trend.dart';
 import 'package:bounty_hunter/util/other_utils.dart';
@@ -832,6 +834,53 @@ class _ShopPageState extends State<ShopPage>
                     ),
                     child: BarMarketing(
                         weekCaseData: _data.weekApplyData!, isRegister: false),
+                  )
+                else
+                  Gaps.empty,
+
+                if (_data.showWeekRetainData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarReceive(
+                        weekCaseData: _data.weekRetainData!, isReceive: false),
+                  )
+                else
+                  Gaps.empty,   
+                if (_data.showWeekReceiveData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarReceive(
+                        weekCaseData: _data.weekReceiveData!, isReceive: true),
+                  )
+                else
+                  Gaps.empty,    
+                if (_data.showWeekExtendData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarExtend(weekCaseData: _data.weekExtendData!, isExtend: true),
+                  )
+                else
+                  Gaps.empty,
+                if (_data.showWeekCouponData!)
+                  Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white70),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: BarExtend(weekCaseData: _data.weekCouponData!, isExtend: false),
                   )
                 else
                   Gaps.empty,

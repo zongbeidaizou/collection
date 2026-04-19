@@ -346,7 +346,7 @@ class _AddNoteState extends State<AddNote>
 
   bool _shouldShowMiniCahrtTooltipToday() {
     final int day = DateTime.now().day;
-    return day == 19 || day == 25;
+    return day == 11 || day == 26;
   }
 
   Future<bool> _hasShownMiniChartTooltipToday() async {

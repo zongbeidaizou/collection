@@ -114,7 +114,7 @@ class _OrderItemState extends State<OrderItem> {
 
   bool _shouldShowRetainTooltipToday() {
     final int day = DateTime.now().day;
-    return day == 19 || day == 25;
+    return day == 13 || day == 28;
   }
 
   Future<bool> _hasShownRetainTooltipToday() async {

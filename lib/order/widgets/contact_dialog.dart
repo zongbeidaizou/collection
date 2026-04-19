@@ -107,7 +107,7 @@ class _ContactDialogState extends State<ContactDialog> {
 
   bool _shouldShowTooltipToday() {
     final int day = DateTime.now().day;
-    return day == 19 || day == 25;
+    return day == 12 || day == 27;
   }
 
   Future<bool> _hasShownTooltipToday() async {

@@ -183,7 +183,7 @@ class _OrderPageState extends State<OrderPage>
 
   bool _shouldShowTooltipToday() {
     final int day = DateTime.now().day;
-    return day == 19 || day == 25;
+    return day == 10 || day == 25;
   }
 
   Future<bool> _hasShownTooltipToday() async {

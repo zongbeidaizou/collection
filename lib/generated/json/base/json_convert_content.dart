@@ -509,6 +509,10 @@ class JsonConvert {
       return data.map<SalaryData>((Map<String, dynamic> e) =>
           SalaryData.fromJson(e)).toList() as M;
     }
+    if (<SalaryDataAdmins>[] is M) {
+      return data.map<SalaryDataAdmins>((Map<String, dynamic> e) =>
+          SalaryDataAdmins.fromJson(e)).toList() as M;
+    }
     if (<SalaryDataWeekSalaryData>[] is M) {
       return data.map<SalaryDataWeekSalaryData>((Map<String, dynamic> e) =>
           SalaryDataWeekSalaryData.fromJson(e)).toList() as M;
@@ -824,6 +828,7 @@ class JsonConvertClassCollection {
     (SGContactOther).toString(): SGContactOther.fromJson,
     (SalaryEntity).toString(): SalaryEntity.fromJson,
     (SalaryData).toString(): SalaryData.fromJson,
+    (SalaryDataAdmins).toString(): SalaryDataAdmins.fromJson,
     (SalaryDataWeekSalaryData).toString(): SalaryDataWeekSalaryData.fromJson,
     (SalaryDataMonthSalaryData).toString(): SalaryDataMonthSalaryData.fromJson,
     (SalaryDataWeekBonusRankRuleData)

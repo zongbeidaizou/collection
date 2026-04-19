@@ -1,6 +1,11 @@
 {
   "success": true,
   "data": {
+    "admins":  [
+      {
+        "id": 70000,
+        "a_name": ""
+      }],
     "show_month_basic_salary": true,
     "month_basic_salary_value": 70000,
     "month_basic_salary_comment": "Disbursed every month on the 25th before 4:00 PM",

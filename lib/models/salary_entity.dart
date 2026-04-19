@@ -24,6 +24,7 @@ class SalaryEntity {
 
 @JsonSerializable()
 class SalaryData {
+	List<SalaryDataAdmins>? admins = [];
 	@JSONField(name: 'show_month_basic_salary')
 	bool? showMonthBasicSalary = false;
 	@JSONField(name: 'month_basic_salary_value')
@@ -132,6 +133,24 @@ class SalaryData {
 	factory SalaryData.fromJson(Map<String, dynamic> json) => $SalaryDataFromJson(json);
 
 	Map<String, dynamic> toJson() => $SalaryDataToJson(this);
+
+	@override
+	String toString() {
+		return jsonEncode(this);
+	}
+}
+
+@JsonSerializable()
+class SalaryDataAdmins {
+	int? id = 0;
+	@JSONField(name: 'a_name')
+	String? aName = '';
+
+	SalaryDataAdmins();
+
+	factory SalaryDataAdmins.fromJson(Map<String, dynamic> json) => $SalaryDataAdminsFromJson(json);
+
+	Map<String, dynamic> toJson() => $SalaryDataAdminsToJson(this);
 
 	@override
 	String toString() {

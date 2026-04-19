@@ -89,6 +89,26 @@ class ShopData {
 	@JSONField(name: 'settomg_update_at')
 	String? settomgUpdateAt = '';
 
+  @JSONField(name: 'show_week_coupon_data')
+	bool? showWeekCouponData = false;
+	@JSONField(name: 'week_coupon_data')
+	List<ShopDataWeekCaseData>? weekCouponData = [];
+
+  	@JSONField(name: 'show_week_extend_data')
+	bool? showWeekExtendData = false;
+	@JSONField(name: 'week_extend_data')
+	List<ShopDataWeekCaseData>? weekExtendData = [];
+
+  	@JSONField(name: 'show_week_retain_data')
+	bool? showWeekRetainData = false;
+	@JSONField(name: 'week_retain_data')
+	List<ShopDataWeekCaseData>? weekRetainData = [];
+
+  	@JSONField(name: 'show_week_receive_data')
+	  bool? showWeekReceiveData = false;
+	@JSONField(name: 'week_receive_data')
+	List<ShopDataWeekCaseData>? weekReceiveData = [];
+
 	ShopData();
 
 	factory ShopData.fromJson(Map<String, dynamic> json) => $ShopDataFromJson(json);

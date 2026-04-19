@@ -257,6 +257,66 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
   if (settomgUpdateAt != null) {
     shopData.settomgUpdateAt = settomgUpdateAt;
   }
+  final bool? showWeekCouponData = jsonConvert.convert<bool>(
+      json['show_week_coupon_data']);
+  if (showWeekCouponData != null) {
+    shopData.showWeekCouponData = showWeekCouponData;
+  }
+  final List<
+      ShopDataWeekCaseData>? weekCouponData = (json['week_coupon_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) =>
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
+      .toList();
+  if (weekCouponData != null) {
+    shopData.weekCouponData = weekCouponData;
+  }
+  final bool? showWeekExtendData = jsonConvert.convert<bool>(
+      json['show_week_extend_data']);
+  if (showWeekExtendData != null) {
+    shopData.showWeekExtendData = showWeekExtendData;
+  }
+  final List<
+      ShopDataWeekCaseData>? weekExtendData = (json['week_extend_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) =>
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
+      .toList();
+  if (weekExtendData != null) {
+    shopData.weekExtendData = weekExtendData;
+  }
+  final bool? showWeekRetainData = jsonConvert.convert<bool>(
+      json['show_week_retain_data']);
+  if (showWeekRetainData != null) {
+    shopData.showWeekRetainData = showWeekRetainData;
+  }
+  final List<
+      ShopDataWeekCaseData>? weekRetainData = (json['week_retain_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) =>
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
+      .toList();
+  if (weekRetainData != null) {
+    shopData.weekRetainData = weekRetainData;
+  }
+  final bool? showWeekReceiveData = jsonConvert.convert<bool>(
+      json['show_week_receive_data']);
+  if (showWeekReceiveData != null) {
+    shopData.showWeekReceiveData = showWeekReceiveData;
+  }
+  final List<
+      ShopDataWeekCaseData>? weekReceiveData = (json['week_receive_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) =>
+      jsonConvert.convert<ShopDataWeekCaseData>(e) as ShopDataWeekCaseData)
+      .toList();
+  if (weekReceiveData != null) {
+    shopData.weekReceiveData = weekReceiveData;
+  }
   return shopData;
 }
 
@@ -302,6 +362,18 @@ Map<String, dynamic> $ShopDataToJson(ShopData entity) {
   data['daily_update_at'] = entity.dailyUpdateAt;
   data['template_update_at'] = entity.templateUpdateAt;
   data['settomg_update_at'] = entity.settomgUpdateAt;
+  data['show_week_coupon_data'] = entity.showWeekCouponData;
+  data['week_coupon_data'] =
+      entity.weekCouponData?.map((v) => v.toJson()).toList();
+  data['show_week_extend_data'] = entity.showWeekExtendData;
+  data['week_extend_data'] =
+      entity.weekExtendData?.map((v) => v.toJson()).toList();
+  data['show_week_retain_data'] = entity.showWeekRetainData;
+  data['week_retain_data'] =
+      entity.weekRetainData?.map((v) => v.toJson()).toList();
+  data['show_week_receive_data'] = entity.showWeekReceiveData;
+  data['week_receive_data'] =
+      entity.weekReceiveData?.map((v) => v.toJson()).toList();
   return data;
 }
 
@@ -338,6 +410,14 @@ extension ShopDataExtension on ShopData {
     String? dailyUpdateAt,
     String? templateUpdateAt,
     String? settomgUpdateAt,
+    bool? showWeekCouponData,
+    List<ShopDataWeekCaseData>? weekCouponData,
+    bool? showWeekExtendData,
+    List<ShopDataWeekCaseData>? weekExtendData,
+    bool? showWeekRetainData,
+    List<ShopDataWeekCaseData>? weekRetainData,
+    bool? showWeekReceiveData,
+    List<ShopDataWeekCaseData>? weekReceiveData,
   }) {
     return ShopData()
       ..webUrl = webUrl ?? this.webUrl
@@ -373,7 +453,15 @@ extension ShopDataExtension on ShopData {
       ..salaryUpdateAt = salaryUpdateAt ?? this.salaryUpdateAt
       ..dailyUpdateAt = dailyUpdateAt ?? this.dailyUpdateAt
       ..templateUpdateAt = templateUpdateAt ?? this.templateUpdateAt
-      ..settomgUpdateAt = settomgUpdateAt ?? this.settomgUpdateAt;
+      ..settomgUpdateAt = settomgUpdateAt ?? this.settomgUpdateAt
+      ..showWeekCouponData = showWeekCouponData ?? this.showWeekCouponData
+      ..weekCouponData = weekCouponData ?? this.weekCouponData
+      ..showWeekExtendData = showWeekExtendData ?? this.showWeekExtendData
+      ..weekExtendData = weekExtendData ?? this.weekExtendData
+      ..showWeekRetainData = showWeekRetainData ?? this.showWeekRetainData
+      ..weekRetainData = weekRetainData ?? this.weekRetainData
+      ..showWeekReceiveData = showWeekReceiveData ?? this.showWeekReceiveData
+      ..weekReceiveData = weekReceiveData ?? this.weekReceiveData;
   }
 }
 

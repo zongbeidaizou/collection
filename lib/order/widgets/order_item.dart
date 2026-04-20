@@ -1060,7 +1060,7 @@ class _OrderItemState extends State<OrderItem> {
           Row(
             children: [
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
                   height: 52,
@@ -1102,7 +1102,7 @@ class _OrderItemState extends State<OrderItem> {
               ),
               Gaps.hGap4,
               Expanded(
-                flex: 1,
+                flex: 4,
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 11, horizontal: 1),
                   height: 52,

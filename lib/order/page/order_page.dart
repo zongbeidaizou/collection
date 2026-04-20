@@ -304,7 +304,7 @@ class _OrderPageState extends State<OrderPage>
               return SuperTooltip(
                 controller: _controller,
                 showBarrier: true,
-                showCloseButton: false,
+                showCloseButton: true,
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,

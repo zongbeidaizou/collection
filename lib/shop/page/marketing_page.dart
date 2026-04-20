@@ -19,6 +19,7 @@ import 'package:bounty_hunter/util/theme_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../mvp/base_page.dart';
 import '../../widgets/load_image.dart';
@@ -111,6 +112,9 @@ class _AccountRecordListPageState extends State<MarketingPage>
   late List<MarketingOtherTemplates2> _templates = [];
 
   final TextEditingController _searchController = TextEditingController();
+  final SuperTooltipController _tooltipController = SuperTooltipController();
+  static const String _kMarketingCopyTooltipShownDateKey =
+      'marketing_copy_tooltip_shown_date';
   String _searchKeyword = '';
 
   // 定时器，每10秒请求一次 statistics
@@ -134,6 +138,9 @@ class _AccountRecordListPageState extends State<MarketingPage>
     _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _maybeForceRefreshIfStale();
+      Future.delayed(const Duration(seconds: 5), () {
+          _showCopyTooltipIfNeeded();
+        });
     });
 
     // 启动定时器，每10秒调用一次 statistics
@@ -147,6 +154,8 @@ class _AccountRecordListPageState extends State<MarketingPage>
 
   @override
   void dispose() {
+    _tooltipController.hideTooltip();
+    _tooltipController.dispose();
     _searchController.dispose();
     _statisticsTimer?.cancel();
     _staleCheckTimer?.cancel();
@@ -250,7 +259,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
       _filteredList.clear();
       _currentPage = 1;
     });
-    _accountRecordListPresenter.index(1, true);
+    await _accountRecordListPresenter.index(1, true);
   }
 
   @override
@@ -346,6 +355,40 @@ class _AccountRecordListPageState extends State<MarketingPage>
     return _currentPage < _maxPage;
   }
 
+  bool _shouldShowCopyTooltipToday() {
+    final int day = DateTime.now().day;
+    return day == 14 || day == 29;
+  }
+
+  Future<bool> _hasShownCopyTooltipToday() async {
+    final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final String? cachedDate =
+        await Cache().getString(_kMarketingCopyTooltipShownDateKey);
+    return cachedDate == today;
+  }
+
+  Future<void> _markCopyTooltipShownToday() async {
+    final String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    await Cache().setString(_kMarketingCopyTooltipShownDateKey, today);
+  }
+
+  Future<void> _showCopyTooltipIfNeeded() async {
+    if (!mounted || !_shouldShowCopyTooltipToday()) {
+      return;
+    }
+    final bool alreadyShown = await _hasShownCopyTooltipToday();
+    if (alreadyShown || !mounted) {
+      return;
+    }
+    _tooltipController.showTooltip();
+    await _markCopyTooltipShownToday();
+    Future.delayed(const Duration(seconds: 30), () {
+      if (mounted) {
+        _tooltipController.hideTooltip();
+      }
+    });
+  }
+
   Future<void> _loadMore() async {
     if (_isLoading) {
       return;
@@ -420,6 +463,7 @@ class _AccountRecordListPageState extends State<MarketingPage>
         return a.key.compareTo(b.key);
       });
 
+
     // 生成Sliver列表
     int currentGlobalIndex = 0;
     return sortedEntries.map((entry) {
@@ -466,31 +510,54 @@ class _AccountRecordListPageState extends State<MarketingPage>
                         ),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.copy, size: 18),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () {
-                        final phones = itemList
-                            .where((item) => item.aPhone != null && item.aPhone!.isNotEmpty)
-                            .map((item) => item.aPhone!)
-                            .toList();
-                        if (phones.isEmpty) {
+                    SuperTooltip(
+                      controller: groupStartIndex == 0 ? _tooltipController : null,
+                      showCloseButton: true,
+                      showBarrier: true,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text(
+                            'Click the copy button to batch copy \nall marketing numbers of the day, \nfacilitating bulk SMS sending.',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () => _tooltipController.hideTooltip(),
+                              child: const Text('I know'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.copy, size: 18),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          final phones = itemList
+                              .where((item) => item.aPhone != null && item.aPhone!.isNotEmpty)
+                              .map((item) => item.aPhone!)
+                              .toList();
+                          if (phones.isEmpty) {
+                            showToast(
+                              'No phone numbers to copy',
+                              position: ToastPosition.center,
+                              duration: const Duration(seconds: 1),
+                            );
+                            return;
+                          }
+                          final text = phones.join(',');
+                          Clipboard.setData(ClipboardData(text: text));
                           showToast(
-                            'No phone numbers to copy',
+                            '${phones.length} phone numbers copied',
                             position: ToastPosition.center,
                             duration: const Duration(seconds: 1),
                           );
-                          return;
-                        }
-                        final text = phones.join(',');
-                        Clipboard.setData(ClipboardData(text: text));
-                        showToast(
-                          '${phones.length} phone numbers copied',
-                          position: ToastPosition.center,
-                          duration: const Duration(seconds: 1),
-                        );
-                      },
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -1233,7 +1300,7 @@ class _ItemState extends State<_Item> with WidgetsBindingObserver {
                                   ? Colors.orange[700]
                                   : interested == 40
                                       ? Colors.green
-                                      : Colors.grey[100]),
+                                      : ThemeUtils.getBackgroundColor(context)),
                       Gaps.hGap4,
                       Expanded(
                         flex: 2,

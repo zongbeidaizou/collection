@@ -96,8 +96,8 @@ class BarReceiveState extends State<BarReceive> {
           IconButton(
             icon: Icon(
               widget.isReceive
-                  ? Icons.person_outline_outlined
-                  : Icons.how_to_reg_outlined,
+                  ? Icons.move_up
+                  : Icons.repeat_one,
               color: Colors.white.withOpacity(0.6),
             ),
             onPressed: () {},

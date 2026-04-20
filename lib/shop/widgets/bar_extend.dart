@@ -65,7 +65,7 @@ class BarExtendState extends State<BarExtend> {
                   Expanded(
                     child: Text(
                       widget.isExtend
-                          ? 'Number of rollovers initiated this week'
+                          ? 'Number of extensions initiated this week'
                           : 'Number of discount coupons issued this week',
                       style: const TextStyle(
                         color: Colors.white,
@@ -96,8 +96,8 @@ class BarExtendState extends State<BarExtend> {
           IconButton(
             icon: Icon(
               widget.isExtend
-                  ? Icons.person_outline_outlined
-                  : Icons.how_to_reg_outlined,
+                  ? Icons.extension_outlined
+                  : Icons.confirmation_number_rounded,
               color: Colors.white.withOpacity(0.6),
             ),
             onPressed: () {},

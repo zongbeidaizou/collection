@@ -345,6 +345,12 @@ class _ShopPageState extends State<ShopPage>
         valueStr = 'Marketing Application Bonus';
         additionStr = 'Marketing Application Ranking Bonus';
         break;
+        case 4:
+        title = '';
+        valueStr = 'Monthly Addition Bonus';
+        additionStr = 'Monthly Addition Bonus Ranking';
+        addition2Str = 'Addition Bonus Variance';
+        break;
         default:
         title = '';
         break;
@@ -888,6 +894,8 @@ class _ShopPageState extends State<ShopPage>
                 _buildMonthHallOfFame(_data.monthData!, 'Monthly Bonus Ranking', type: 0),
                 Gaps.vGap4,
                 _buildMonthHallOfFame(_data.monthRepayData!, 'Monthly Repayment Ranking', type: 1),
+                Gaps.vGap4,
+                _buildMonthHallOfFame(_data.monthAdditionBonusData!, 'Monthly Addition Bonus Ranking', type: 4),
                 Gaps.vGap4,
                 _buildMonthHallOfFame(_data.monthRegBonusData!, 'Monthly Registration Bonus Ranking', type: 2),
                 Gaps.vGap4,

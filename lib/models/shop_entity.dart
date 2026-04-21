@@ -37,6 +37,10 @@ class ShopData {
 	bool? showMonthRepayData = false;
 	@JSONField(name: 'month_repay_data')
 	List<ShopDataMonthData>? monthRepayData = [];
+	@JSONField(name: 'show_month_addition_bonus_data')
+	bool? showMonthAdditionBonusData = false;
+	@JSONField(name: 'month_addition_bonus_data')
+	List<ShopDataMonthData>? monthAdditionBonusData = [];  
 	@JSONField(name: 'show_month_reg_bonus_data')
 	bool? showMonthRegBonusData = false;
 	@JSONField(name: 'month_reg_bonus_data')

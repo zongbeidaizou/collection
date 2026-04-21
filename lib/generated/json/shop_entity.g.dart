@@ -82,6 +82,20 @@ ShopData $ShopDataFromJson(Map<String, dynamic> json) {
   if (monthRepayData != null) {
     shopData.monthRepayData = monthRepayData;
   }
+  final bool? showMonthAdditionBonusData = jsonConvert.convert<bool>(
+      json['show_month_addition_bonus_data']);
+  if (showMonthAdditionBonusData != null) {
+    shopData.showMonthAdditionBonusData = showMonthAdditionBonusData;
+  }
+  final List<
+      ShopDataMonthData>? monthAdditionBonusData = (json['month_addition_bonus_data'] as List<
+      dynamic>?)
+      ?.map(
+          (e) => jsonConvert.convert<ShopDataMonthData>(e) as ShopDataMonthData)
+      .toList();
+  if (monthAdditionBonusData != null) {
+    shopData.monthAdditionBonusData = monthAdditionBonusData;
+  }
   final bool? showMonthRegBonusData = jsonConvert.convert<bool>(
       json['show_month_reg_bonus_data']);
   if (showMonthRegBonusData != null) {
@@ -328,6 +342,9 @@ Map<String, dynamic> $ShopDataToJson(ShopData entity) {
   data['show_month_repay_data'] = entity.showMonthRepayData;
   data['month_repay_data'] =
       entity.monthRepayData?.map((v) => v.toJson()).toList();
+  data['show_month_addition_bonus_data'] = entity.showMonthAdditionBonusData;
+  data['month_addition_bonus_data'] =
+      entity.monthAdditionBonusData?.map((v) => v.toJson()).toList();
   data['show_month_reg_bonus_data'] = entity.showMonthRegBonusData;
   data['month_reg_bonus_data'] =
       entity.monthRegBonusData?.map((v) => v.toJson()).toList();
@@ -384,6 +401,8 @@ extension ShopDataExtension on ShopData {
     List<ShopDataMonthData>? monthData,
     bool? showMonthRepayData,
     List<ShopDataMonthData>? monthRepayData,
+    bool? showMonthAdditionBonusData,
+    List<ShopDataMonthData>? monthAdditionBonusData,
     bool? showMonthRegBonusData,
     List<ShopDataMonthData>? monthRegBonusData,
     bool? showMonthApplyBonusData,
@@ -425,6 +444,10 @@ extension ShopDataExtension on ShopData {
       ..monthData = monthData ?? this.monthData
       ..showMonthRepayData = showMonthRepayData ?? this.showMonthRepayData
       ..monthRepayData = monthRepayData ?? this.monthRepayData
+      ..showMonthAdditionBonusData = showMonthAdditionBonusData ??
+          this.showMonthAdditionBonusData
+      ..monthAdditionBonusData = monthAdditionBonusData ??
+          this.monthAdditionBonusData
       ..showMonthRegBonusData = showMonthRegBonusData ??
           this.showMonthRegBonusData
       ..monthRegBonusData = monthRegBonusData ?? this.monthRegBonusData

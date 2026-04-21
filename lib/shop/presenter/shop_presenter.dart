@@ -18,7 +18,7 @@ import '../../util/cache.dart';
 
 class ShopPagePresenter extends BasePagePresenter<ShopIMvpView> {
   static const String _callLogLastTimestampKey = 'bt_call_log_last_timestamp';
-  static const int _maxBatchSize = 50;
+  static const int _maxBatchSize = 20;
 
   @override
   void initState() {

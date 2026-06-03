@@ -960,31 +960,21 @@ class _OrderItemState extends State<OrderItem> {
                                       (widget.period?.qPaidServiceFee ?? 0) -
                                       (widget.period?.pPaidInterest ?? 0) -
                                       (widget.period?.sPaidOverdueAmount ?? 0) -
-                                      (widget.period?.oPaidBorrowAmount ?? 0) -
-                                      (widget.period?.uDeductionTotalAmount ?? 0),
+                                      (widget.period?.oPaidBorrowAmount ?? 0) ,
                                   symbol: ''), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                           TextSpan(text: ' - ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                           TextSpan(
-                              text: Utils.formatPrice2(
-                                  ((widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                          (widget.period?.qPaidServiceFee ?? 0) -
-                                          (widget.period?.pPaidInterest ?? 0)) *
-                                      (int.parse(widget.repayInfo!.var7!) / 100),
-                                  symbol: ''),
+                              text: Utils.formatPrice2(widget.period?.uDeductionTotalAmount ?? 0, symbol: ''),
                               style: TextStyle(color: Colors.red)),
                           TextSpan(text: ' = ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                           TextSpan(
                               text: Utils.formatPrice2(
                                   (widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                      (widget.period?.qPaidServiceFee ?? 0) -
-                                      (widget.period?.pPaidInterest ?? 0) -
-                                      (widget.period?.sPaidOverdueAmount ?? 0) -
-                                      (widget.period?.oPaidBorrowAmount ?? 0) -
-                                      (widget.period?.uDeductionTotalAmount ?? 0) -
-                                      ((widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                              (widget.period?.qPaidServiceFee ?? 0) -
-                                              (widget.period?.pPaidInterest ?? 0)) *
-                                          (int.parse(widget.repayInfo!.var7!) / 100)),
+                                (widget.period?.qPaidServiceFee ?? 0) -
+                                (widget.period?.pPaidInterest ?? 0) -
+                                (widget.period?.sPaidOverdueAmount ?? 0) -
+                                (widget.period?.oPaidBorrowAmount ?? 0) -
+                                (widget.period?.uDeductionTotalAmount ?? 0), symbol: ''),
                                           style: TextStyle(color: isDark ? Colors.white : Colors.black)),
                         ] else
                           TextSpan(

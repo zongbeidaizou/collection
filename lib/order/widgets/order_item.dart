@@ -92,7 +92,7 @@ class _OrderItemState extends State<OrderItem> {
   bool _isRetained = false;
   int _additionBonus = 0;
   final _controller = SuperTooltipController();
-
+  final _waiveController = SuperTooltipController();
   @override
   void initState() {
     super.initState();
@@ -107,6 +107,8 @@ class _OrderItemState extends State<OrderItem> {
   void dispose() {
     _controller.hideTooltip();
     _controller.dispose();
+    _waiveController.hideTooltip();
+    _waiveController.dispose();
     super.dispose();
   }
 
@@ -930,66 +932,100 @@ class _OrderItemState extends State<OrderItem> {
             ),
             Expanded(
               flex: widget.inList ? 9 : 11,
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 1.4),
-                    height: 8.0,
-                    width: 8.0,
-                    decoration: BoxDecoration(
-                      color: Colours.app_main.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(4.0),
+              child: InkWell(
+                onTap: () {
+                  _waiveController.showTooltip();
+                  return;
+                },
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 1.4),
+                      height: 8.0,
+                      width: 8.0,
+                      decoration: BoxDecoration(
+                        color: Colours.app_main.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
                     ),
+                    SuperTooltip(
+                      controller: _waiveController,
+                  showBarrier: true,
+                  showCloseButton: true,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'A total of ${Utils.formatPrice2(widget.period?.uDeductionTotalAmount ?? 0, symbol: '')} has been waived.\n The customer only needs to pay ${Utils.formatPrice2(
+                                      (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                    (widget.period?.qPaidServiceFee ?? 0) -
+                                    (widget.period?.pPaidInterest ?? 0) -
+                                    (widget.period?.sPaidOverdueAmount ?? 0) -
+                                    (widget.period?.oPaidBorrowAmount ?? 0) -
+                                    (widget.period?.uDeductionTotalAmount ?? 0), symbol: '')} \nto fully settle the outstanding balance.',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => _waiveController.hideTooltip(),
+                          child: const Text('I know'),
+                        ),
+                      ),
+                    ],
                   ),
-                  RichText(
-                    text: TextSpan(
-                      style: textTextStyle?.copyWith(fontSize: 11),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Left:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
-                        if (!widget.inList &&
-                            widget.repayInfo != null &&
-                            int.parse(widget.repayInfo!.var7!) > 0) ...[
-                          TextSpan(
-                              text: Utils.formatPrice2(
-                                  (widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                      (widget.period?.qPaidServiceFee ?? 0) -
-                                      (widget.period?.pPaidInterest ?? 0) -
-                                      (widget.period?.sPaidOverdueAmount ?? 0) -
-                                      (widget.period?.oPaidBorrowAmount ?? 0) ,
-                                  symbol: ''), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                          TextSpan(text: ' - ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                          TextSpan(
-                              text: Utils.formatPrice2(widget.period?.uDeductionTotalAmount ?? 0, symbol: ''),
-                              style: TextStyle(color: Colors.red)),
-                          TextSpan(text: ' = ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                          TextSpan(
-                              text: Utils.formatPrice2(
-                                  (widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                (widget.period?.qPaidServiceFee ?? 0) -
-                                (widget.period?.pPaidInterest ?? 0) -
-                                (widget.period?.sPaidOverdueAmount ?? 0) -
-                                (widget.period?.oPaidBorrowAmount ?? 0) -
-                                (widget.period?.uDeductionTotalAmount ?? 0), symbol: ''),
-                                          style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                        ] else
-                          TextSpan(
-                              text: Utils.formatPrice2(
-                            (widget.period?.fExpectRepayTotalAmount ?? 0) -
-                                (widget.period?.qPaidServiceFee ?? 0) -
-                                (widget.period?.pPaidInterest ?? 0) -
-                                (widget.period?.sPaidOverdueAmount ?? 0) -
-                                (widget.period?.oPaidBorrowAmount ?? 0) -
-                                (widget.period?.uDeductionTotalAmount ?? 0),
-                          ), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                      ],
+                      child: RichText(
+                        text: TextSpan(
+                          style: textTextStyle?.copyWith(fontSize: 11),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Left:',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(fontSize: Dimens.font_sp10, color: isDark ? Colors.white : Colors.black)),
+                            if (!widget.inList &&
+                                widget.repayInfo != null &&
+                                int.parse(widget.repayInfo!.var7!) > 0) ...[
+                              TextSpan(
+                                  text: Utils.formatPrice2(
+                                      (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                          (widget.period?.qPaidServiceFee ?? 0) -
+                                          (widget.period?.pPaidInterest ?? 0) -
+                                          (widget.period?.sPaidOverdueAmount ?? 0) -
+                                          (widget.period?.oPaidBorrowAmount ?? 0) ,
+                                      symbol: ''), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                              TextSpan(text: ' - ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                              TextSpan(
+                                  text: Utils.formatPrice2(widget.period?.uDeductionTotalAmount ?? 0, symbol: ''),
+                                  style: TextStyle(color: Colors.red)),
+                              TextSpan(text: ' = ', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                              TextSpan(
+                                  text: Utils.formatPrice2(
+                                      (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                    (widget.period?.qPaidServiceFee ?? 0) -
+                                    (widget.period?.pPaidInterest ?? 0) -
+                                    (widget.period?.sPaidOverdueAmount ?? 0) -
+                                    (widget.period?.oPaidBorrowAmount ?? 0) -
+                                    (widget.period?.uDeductionTotalAmount ?? 0), symbol: ''),
+                                              style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                            ] else
+                              TextSpan(
+                                  text: Utils.formatPrice2(
+                                (widget.period?.fExpectRepayTotalAmount ?? 0) -
+                                    (widget.period?.qPaidServiceFee ?? 0) -
+                                    (widget.period?.pPaidInterest ?? 0) -
+                                    (widget.period?.sPaidOverdueAmount ?? 0) -
+                                    (widget.period?.oPaidBorrowAmount ?? 0) -
+                                    (widget.period?.uDeductionTotalAmount ?? 0),
+                              ), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Expanded(

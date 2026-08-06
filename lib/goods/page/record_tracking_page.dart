@@ -11,7 +11,7 @@ import '../../res/colors.dart';
 import '../../res/dimens.dart';
 import '../../res/gaps.dart';
 
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 
 import '../../routers/fluro_navigator.dart';
 

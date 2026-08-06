@@ -19,7 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:super_tooltip/super_tooltip.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 import 'package:clipboard/clipboard.dart';
 
 import '../../models/admin_entity.dart';
@@ -206,13 +206,16 @@ class _AddNoteState extends State<AddNote>
     super.initState();
     item = CollectionOrderData.fromJson(
         jsonDecode(widget.item) as Map<String, dynamic>);
-    // 在初始化时自动滚动到底部
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+
+      item.xCurrentViewTimes = 1;
+      context.read<OrderListProvider>().changeList(item);
+
       typeController.text = '1';
       await Permission.manageExternalStorage.request();
-      // await Permission.audio.request();
       await Permission.storage.request();
-      _showMiniCahrtTooltipIfNeeded();
+      await _showMiniCahrtTooltipIfNeeded();
     });
   }
 
@@ -299,7 +302,7 @@ class _AddNoteState extends State<AddNote>
       }
       if (borrowCount >= fine.borrowCount![0] &&
           borrowCount <= fine.borrowCount![1]) {
-        finesAmount = fine.fines?[overdueDays] ?? 0;
+        finesAmount = overdueDays != null && overdueDays >= 0 ? (fine.fines?[overdueDays] ?? 0) : 0;
         break;
       }
     }
@@ -596,8 +599,6 @@ class _AddNoteState extends State<AddNote>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    item.xCurrentViewTimes = 1;
-    context.read<OrderListProvider>().changeList(item);
 
     Map<String, Object> logData;
     return Scaffold(

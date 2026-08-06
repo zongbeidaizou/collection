@@ -2,7 +2,6 @@
   "dart.debugExternalLibraries": true,
   "dart.debugSdkLibraries": true,
   "dart.lineLength": 80,
-  // "editor.formatOnSave": true,
   "editor.rulers": [
     80
   ],
@@ -12,4 +11,5 @@
   "workbench.preferredHighContrastColorTheme": "Deep Blue",
   "workbench.preferredHighContrastLightColorTheme": "Deep Blue",
   "workbench.colorTheme": "Quiet Light",
+  "dart.flutterSdkPath": ".fvm/versions/3.27.0"
 }

@@ -19,7 +19,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sp_util/sp_util.dart';
 import 'package:super_tooltip/super_tooltip.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timelines_plus/timelines_plus.dart';
 import 'package:clipboard/clipboard.dart';
 
 import '../../models/admin_entity.dart';
@@ -299,7 +299,7 @@ class _AddNoteState extends State<AddNote>
       }
       if (borrowCount >= fine.borrowCount![0] &&
           borrowCount <= fine.borrowCount![1]) {
-        finesAmount = fine.fines?[overdueDays] ?? 0;
+        finesAmount = overdueDays > 0 ? (fine.fines?[overdueDays] ?? 0) : 0;
         break;
       }
     }

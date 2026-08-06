@@ -206,13 +206,16 @@ class _AddNoteState extends State<AddNote>
     super.initState();
     item = CollectionOrderData.fromJson(
         jsonDecode(widget.item) as Map<String, dynamic>);
-    // 在初始化时自动滚动到底部
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+
+      item.xCurrentViewTimes = 1;
+      context.read<OrderListProvider>().changeList(item);
+
       typeController.text = '1';
       await Permission.manageExternalStorage.request();
-      // await Permission.audio.request();
       await Permission.storage.request();
-      _showMiniCahrtTooltipIfNeeded();
+      await _showMiniCahrtTooltipIfNeeded();
     });
   }
 
@@ -299,7 +302,7 @@ class _AddNoteState extends State<AddNote>
       }
       if (borrowCount >= fine.borrowCount![0] &&
           borrowCount <= fine.borrowCount![1]) {
-        finesAmount = overdueDays > 0 ? (fine.fines?[overdueDays] ?? 0) : 0;
+        finesAmount = overdueDays != null && overdueDays >= 0 ? (fine.fines?[overdueDays] ?? 0) : 0;
         break;
       }
     }
@@ -596,8 +599,6 @@ class _AddNoteState extends State<AddNote>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    item.xCurrentViewTimes = 1;
-    context.read<OrderListProvider>().changeList(item);
 
     Map<String, Object> logData;
     return Scaffold(

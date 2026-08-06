@@ -96,7 +96,7 @@ class _ContactDialogState extends State<ContactDialog> {
     int finesAmount = 0;
     context.read<UserProvider>().userEntity.fines!.forEach((fine) {
       if(widget.borrowCount >= fine.borrowCount![0] && widget.borrowCount <= fine.borrowCount![1] && widget.repayInfo?.overdueDays != null && widget.repayInfo!.overdueDays! < 10) {
-        finesAmount = fine.fines![widget.repayInfo?.overdueDays ?? 0] ?? 0;
+        finesAmount = widget.repayInfo?.overdueDays != null && widget.repayInfo!.overdueDays! >= 0 ? fine.fines![widget.repayInfo?.overdueDays ?? 0] ?? 0 : 0;
         setState(() {
           _finesAmount = finesAmount;
         });
